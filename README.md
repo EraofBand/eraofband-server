@@ -8,8 +8,8 @@
 
 #코드 주석 규칙 (java 파일에 사용)
 1. 코드 위에 어떤 기능인지 설명  ex) 유저 삭제, 유저 추가
-2.공통적으로 사용하는 변수를 제외한 애들은 선언 옆에  // 이 주석을 사용해서 설명해주기
-3.각 함수 옆에 실제 url 경로 사용 예시 주석으로 추가 ex) //https://eraofband.shop/users/2
+2. 공통적으로 사용하는 변수를 제외한 애들은 선언 옆에  // 이 주석을 사용해서 설명해주기
+3. 각 함수 옆에 실제 url 경로 사용 예시 주석으로 추가 ex) //https://eraofband.shop/users/2
 
 
 #메소드 네이밍 룰
@@ -23,10 +23,10 @@
 이 Res, Req 모델은 `(도메인명) / models` 폴더에 만들면 됨
 
 #Provider와 Service 메소드 네이밍 룰
-C → createXXX `createInfo`
-R → readXXX `readInfoList`
-U → updateXXX `updateInfo`
-D → deleteXXX `deleteInfo`
+ C → createXXX `createInfo`
+ R → readXXX `readInfoList`
+ U → updateXXX `updateInfo`
+ D → deleteXXX `deleteInfo`
 
 
 #카카오 로그인 API
