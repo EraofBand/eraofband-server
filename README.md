@@ -23,10 +23,10 @@
 이 Res, Req 모델은 `(도메인명) / models` 폴더에 만들면 됨
 
 #Provider와 Service 메소드 네이밍 룰
- C → createXXX `createInfo`
- R → readXXX `readInfoList`
- U → updateXXX `updateInfo`
- D → deleteXXX `deleteInfo`
+1. C → createXXX `createInfo`
+2. R → readXXX `readInfoList`
+3. U → updateXXX `updateInfo`
+4. D → deleteXXX `deleteInfo`
 
 
 #카카오 로그인 API
