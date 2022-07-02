@@ -1,4 +1,4 @@
-##commit 규칙
+#commit 규칙
 1. type : [파일명] 수정한 내용
 2. type 
     - add : 새로운 기능을 추가할 때
@@ -17,12 +17,12 @@
 - **GET** `/users` 를 처리하는 메소드명 → getUsers
 - **PATCH** `/users` 를 처리하는 메소드명 →patchUsers
 
-클래스 네이밍 룰
+#클래스 네이밍 룰
 > HTTP Method + 핵심 URI +**Res/Req**
 - **Patch** `/users/:userId` → PatchUserRes / PatchUserReq
 이 Res, Req 모델은 `(도메인명) / models` 폴더에 만들면 됨
 
-Provider와 Service 메소드 네이밍 룰
+#Provider와 Service 메소드 네이밍 룰
 C → createXXX `createInfo`
 R → readXXX `readInfoList`
 U → updateXXX `updateInfo`
