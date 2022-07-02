@@ -1,4 +1,4 @@
-#commit 규칙
+##commit 규칙
 1. type : [파일명] 수정한 내용
 2. type 
     - add : 새로운 기능을 추가할 때
