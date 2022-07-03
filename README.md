@@ -13,6 +13,6 @@ commit 규칙
 클래스 및 함수명 : 앞글자들만 대문자 ex) UserController
 
 카카오 로그인 API
-클라이언트로부터 access token을 받거나, 이메일을 직접 받는 방식 예정
+클라이언트로부터 access token을 받거나, 이메일을 직접 받는 방식 사용 예정
 
 API는 스웨거 이용 - 잼의 추천
