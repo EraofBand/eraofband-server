@@ -54,9 +54,10 @@ public class UserDao {
                 getUsersByIdxParams);
     }
 
-    public int createUser(PostUserReq postUserReq){
-        String createUserQuery = "insert into User (name, nickName, phone, email, password) VALUES (?,?,?,?,?)";
-        Object[] createUserParams = new Object[]{postUserReq.getName(), postUserReq.getNickName(),postUserReq.getPhone(), postUserReq.getEmail(), postUserReq.getPassword()};
+    public int createUser(PostUserReq postUserReq, String[] info){
+        String createUserQuery = "insert into User (nickName,email,birth,gender,profileImgUrl,session,region) VALUES (?,?,?,?,?,?,?)";
+        Object[] createUserParams = new Object[]{info[0],info[1],postUserReq.getBirth(), postUserReq.getGender(),
+                postUserReq.getProfileImgUrl(),postUserReq.getSession(),postUserReq.getRegion()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
         String lastInserIdQuery = "select last_insert_id()";
