@@ -43,10 +43,10 @@ public class UserService {
     }
 
 
-    public String[] getKakaoInfo(String token) throws BaseException {
+    public String getKakaoInfo(String token) throws BaseException {
 
         String reqURL = "https://kapi.kakao.com/v2/user/me";
-        String[] info=new String[2];
+        String email = "";
         //access_token을 이용하여 사용자 정보 조회
         try {
 
@@ -76,29 +76,25 @@ public class UserService {
             JsonElement element = parser.parse(result);
             //JsonElement element =  Jsonparser.parseString(result);
 
-            String nickName = element.getAsJsonObject().get("nickname").getAsString();
             boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
-            String email = "";
+
             if(hasEmail){
                 email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
             }
 
-            System.out.println("nickname : " + nickName);
-            info[0]=nickName;
             System.out.println("email : " + email);
-            info[1]=email;
 
             br.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return info;
+        return email;
     }
 
-    public PostUserRes createUser(PostUserReq postUserReq, String[] info) throws BaseException {
+    public PostUserRes createUser(PostUserReq postUserReq, String email) throws BaseException {
         try{
-            int userIdx = userDao.createUser(postUserReq, info);
+            int userIdx = userDao.createUser(postUserReq, email);
             //jwt 발급.
             // TODO: jwt는 다음주차에서 배울 내용입니다!
             String jwt = jwtService.createJwt(userIdx);

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PostUserReq {
+    private String nickName;
     private String birth;
     private String gender;
     private String profileImgUrl;
