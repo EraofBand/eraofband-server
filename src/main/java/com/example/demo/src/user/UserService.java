@@ -2,16 +2,25 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
-
 import com.example.demo.src.user.model.PatchUserReq;
 import com.example.demo.src.user.model.PostUserReq;
 import com.example.demo.src.user.model.PostUserRes;
 import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -34,21 +43,62 @@ public class UserService {
     }
 
 
-    public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
-        // 이메일 중복 확인
-        if(userProvider.checkEmail(postUserReq.getEmail()) ==1){
-            throw new BaseException(POST_USERS_EXISTS_EMAIL);
-        }
+    public String[] getKakaoInfo(String token) throws BaseException {
 
-        String pwd;
-        try{
-            //암호화
-            pwd = new SHA256().encrypt(postUserReq.getPassword());  postUserReq.setPassword(pwd);
-        } catch (Exception ignored) {
-            throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+        String reqURL = "https://kapi.kakao.com/v2/user/me";
+        String[] info=new String[2];
+        //access_token을 이용하여 사용자 정보 조회
+        try {
+
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Authorization", "Bearer " + token); //전송할 header 작성, access_token전송
+
+            //결과 코드가 200이라면 성공
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode : " + responseCode);
+
+            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println("response body : " + result);
+
+            //Gson 라이브러리로 JSON파싱
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+            //JsonElement element =  Jsonparser.parseString(result);
+
+            String nickName = element.getAsJsonObject().get("nickname").getAsString();
+            boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
+            String email = "";
+            if(hasEmail){
+                email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
+            }
+
+            System.out.println("nickname : " + nickName);
+            info[0]=nickName;
+            System.out.println("email : " + email);
+            info[1]=email;
+
+            br.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return info;
+    }
+
+    public PostUserRes createUser(PostUserReq postUserReq, String[] info) throws BaseException {
         try{
-            int userIdx = userDao.createUser(postUserReq);
+            int userIdx = userDao.createUser(postUserReq, info);
             //jwt 발급.
             // TODO: jwt는 다음주차에서 배울 내용입니다!
             String jwt = jwtService.createJwt(userIdx);

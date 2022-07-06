@@ -25,6 +25,9 @@ repositories {
 dependencies {
     implementation 'org.jetbrains:annotations:19.0.0'
 
+    //Gson
+    implementation'com.google.code.gson:gson:2.8.7'
+
     //Swagger
     implementation("io.springfox:springfox-boot-starter:3.0.0")
 
