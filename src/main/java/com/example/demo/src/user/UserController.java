@@ -82,14 +82,13 @@ public class UserController {
      */
     // Body
     @ResponseBody
-    @PostMapping("/make/{access-token}") // (POST) 127.0.0.1:9000/users/make/dsfdsbfuewhiuwf...
+    @PostMapping("/signin/{access-token}") // (POST) 127.0.0.1:9000/users/make/dsfdsbfuewhiuwf...
     public BaseResponse<PostUserRes> createKakaoUser(@PathVariable("access-token") String token, @RequestBody PostUserReq postUserReq){
         // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
-        String[] info;
-
+        String email="";
         try{
-            info=userService.getKakaoInfo(token);
-            PostUserRes postUserRes = userService.createUser(postUserReq,info);
+            email=userService.getKakaoInfo(token);
+            PostUserRes postUserRes = userService.createUser(postUserReq,email);
             return new BaseResponse<>(postUserRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
