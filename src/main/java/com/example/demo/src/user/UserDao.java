@@ -54,9 +54,9 @@ public class UserDao {
                 getUsersByIdxParams);
     }
 
-    public int createUser(PostUserReq postUserReq, String[] info){
+    public int createUser(PostUserReq postUserReq, String email){
         String createUserQuery = "insert into User (nickName,email,birth,gender,profileImgUrl,session,region) VALUES (?,?,?,?,?,?,?)";
-        Object[] createUserParams = new Object[]{info[0],info[1],postUserReq.getBirth(), postUserReq.getGender(),
+        Object[] createUserParams = new Object[]{postUserReq.getNickName(),email,postUserReq.getBirth(), postUserReq.getGender(),
                 postUserReq.getProfileImgUrl(),postUserReq.getSession(),postUserReq.getRegion()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
