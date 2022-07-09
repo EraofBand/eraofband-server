@@ -9,9 +9,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class User {
     private int userIdx;
-    private String name;
     private String nickName;
-    private String phone;
-    private String email;
-    private String password;
+    private String birth;
+    private String gender;
+    private String introduction;
+    private String profileImgUrl;
+    private int session;
+    private String region;
 }

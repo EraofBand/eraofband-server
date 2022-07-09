@@ -42,7 +42,7 @@ public class UserService {
 
     }
 
-
+    /**카카오 서버에서 이메일 가져오기*/
     public String getKakaoInfo(String token) throws BaseException {
 
         String reqURL = "https://kapi.kakao.com/v2/user/me";
@@ -92,11 +92,11 @@ public class UserService {
         return email;
     }
 
+    /**회원가입 및 jwt 생성*/
     public PostUserRes createUser(PostUserReq postUserReq, String email) throws BaseException {
         try{
             int userIdx = userDao.createUser(postUserReq, email);
-            //jwt 발급.
-            // TODO: jwt는 다음주차에서 배울 내용입니다!
+            //jwt 발급
             String jwt = jwtService.createJwt(userIdx);
             return new PostUserRes(jwt,userIdx);
         } catch (Exception exception) {
