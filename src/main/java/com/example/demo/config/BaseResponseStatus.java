@@ -32,6 +32,12 @@ public enum BaseResponseStatus {
 
     POST_BANDS_EMPTY_CONTENTS(false,2018,"내용 입력값을 확인해주세요."),
     POST_BANDS_EMPTY_IMG(false,2019,"이미지를 입력해주세요."),
+    // pofol
+    POSTS_EMPTY_POFOL_ID(false,2020,"포트폴리오 아이디 값을 확인해주세요."),
+    POST_POSTS_INVALID_CONTENTS(false,2021,"내용의 글자수를 확인해주세요."),
+
+    POST_POSTS_EMPTY_VIDEOURL(false,2021,"포트폴리오 동영상을 입력해주세요."),
+
 
 
     /**
