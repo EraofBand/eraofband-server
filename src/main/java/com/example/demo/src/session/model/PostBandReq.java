@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostBandReq {
     private int userIdx;
-    private String bandName;
+    private String bandTitle;
     private String bandIntroduction;
     private String bandRegion;
     private String bandContent;

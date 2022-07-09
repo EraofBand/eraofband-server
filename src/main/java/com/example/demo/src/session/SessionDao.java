@@ -18,9 +18,8 @@ public class SessionDao {
 
     // 밴드 생성
     public int insertBand(int userIdx, PostBandReq postBandReq){
-        String insertBandQuery =
-                "       INSERT INTO Band(userIdx, bandName, bandIntroduction, bandRegion, bandContent, vocal, guitar, base, keyboard, drum, bandImgUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        Object[] insertBandParams = new Object[]{ userIdx, postBandReq.getBandName(), postBandReq.getBandIntroduction(),
+        String insertBandQuery = "INSERT INTO Band(userIdx, bandTitle, bandIntroduction, bandRegion, bandContent, vocal, guitar, base, keyboard, drum, bandImgUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Object[] insertBandParams = new Object[]{ userIdx, postBandReq.getBandTitle(), postBandReq.getBandIntroduction(),
                 postBandReq.getBandRegion(), postBandReq.getBandContent(), postBandReq.getVocal(), postBandReq.getGuitar(),
                 postBandReq.getBase(), postBandReq.getKeyboard(), postBandReq.getDrum(), postBandReq.getBandImgUrl()
         };

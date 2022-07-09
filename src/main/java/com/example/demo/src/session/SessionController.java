@@ -30,10 +30,10 @@ public class SessionController {
     @ResponseBody
     @PostMapping("")
     public BaseResponse<PostBandRes> createBands(@RequestBody PostBandReq postBandReq) {
-        if(postBandReq.getBandName() == null){
+        if(postBandReq.getBandTitle() == null){
             return new BaseResponse<>(POST_BANDS_EMPTY_CONTENTS);
         }
-        if(postBandReq.getBandName().length()>40){
+        if(postBandReq.getBandTitle().length()>40){
             return new BaseResponse<>(POST_BANDS_EMPTY_CONTENTS);
         }
 
