@@ -1,6 +1,7 @@
 package com.example.demo.src.session;
 
 import com.example.demo.src.session.model.PostBandReq;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +11,7 @@ import javax.sql.DataSource;
 public class SessionDao {
 
     private JdbcTemplate jdbcTemplate;
-
+    @Autowired
     public void setDataSource(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
@@ -18,10 +19,8 @@ public class SessionDao {
     // 밴드 생성
     public int insertBand(int userIdx, PostBandReq postBandReq){
         String insertBandQuery =
-                "       INSERT INTO Band(userIdx, bandTitle, bandIntroduction, bandRegion, bandContent, " +
-                        "vocal, guitar, base, keyboard, drum, bandImgUrl)\n" +
-                "        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        Object[] insertBandParams = new Object[]{ userIdx, postBandReq.getBandTitle(), postBandReq.getBandIntroduction(),
+                "       INSERT INTO Band(userIdx, bandName, bandIntroduction, bandRegion, bandContent, vocal, guitar, base, keyboard, drum, bandImgUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Object[] insertBandParams = new Object[]{ userIdx, postBandReq.getBandName(), postBandReq.getBandIntroduction(),
                 postBandReq.getBandRegion(), postBandReq.getBandContent(), postBandReq.getVocal(), postBandReq.getGuitar(),
                 postBandReq.getBase(), postBandReq.getKeyboard(), postBandReq.getDrum(), postBandReq.getBandImgUrl()
         };
