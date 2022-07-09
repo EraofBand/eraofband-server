@@ -9,8 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.demo.config.BaseResponseStatus.POST_USERS_EMPTY_EMAIL;
-import static com.example.demo.config.BaseResponseStatus.POST_USERS_INVALID_EMAIL;
+import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexEmail;
 
 @RestController
@@ -70,7 +69,7 @@ public class UserController {
      * @return BaseResponse<GetUserRes>
      */
     @ResponseBody
-    @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/users/:userIdx
+    @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/users/userIdx
     public BaseResponse<GetUserRes> getUserByIdx(@PathVariable("userIdx")int userIdx) {
         try{
             GetUserRes getUsersRes = userProvider.getUsersByIdx(userIdx);
@@ -87,7 +86,7 @@ public class UserController {
      */
     // Body
     @ResponseBody
-    @PostMapping("/signin/{access-token}") // (POST) 127.0.0.1:9000/users/make/dsfdsbfuewhiuwf...
+    @PostMapping("/signin/{access-token}") // (POST) 127.0.0.1:9000/users/signin/dsfdsbfuewhiuwf...
     public BaseResponse<PostUserRes> createKakaoUser(@PathVariable("access-token") String token, @RequestBody PostUserReq postUserReq){
         try{
             String email=userService.getKakaoInfo(token);
@@ -100,26 +99,22 @@ public class UserController {
 
     /**
      * 유저정보변경 API
-     * [PATCH] /users/:userIdx
+     * [PATCH] /users/{userIdx}
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/{userIdx}") // (PATCH) 127.0.0.1:9000/users/:userIdx
-    public BaseResponse<String> modifyUserName(@PathVariable("userIdx") int userIdx, @RequestBody User user){
+    @PatchMapping("/modiInfo") // (PATCH) 127.0.0.1:9000/users/userIdx
+    public BaseResponse<String> modifyUserInfo(@RequestBody PatchUserReq patchUserReq){
         try {
-            /* TODO: jwt는 다음주차에서 배울 내용입니다!
-            jwt에서 idx 추출.
+            //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
-            userIdx와 접근한 유저가 같은지 확인
-            if(userIdx != userIdxByJwt){
+            //userIdx와 접근한 유저가 같은지 확인
+            if(patchUserReq.getUserIdx() != userIdxByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            */
+            userService.modifyUserInfo(patchUserReq);
 
-            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getNickName());
-            userService.modifyUserName(patchUserReq);
-
-            String result = "";
+            String result = "회원 정보 수정을 완료했습니다.";
         return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
