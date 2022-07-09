@@ -33,5 +33,4 @@ public class SessionService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
 }

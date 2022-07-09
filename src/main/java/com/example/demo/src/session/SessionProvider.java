@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SessionProvider {
-
     private final SessionDao sessionDao;
     private final JwtService jwtService;
 

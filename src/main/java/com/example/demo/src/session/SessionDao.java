@@ -2,9 +2,11 @@ package com.example.demo.src.session;
 
 import com.example.demo.src.session.model.PostBandReq;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 
+@Repository
 public class SessionDao {
 
     private JdbcTemplate jdbcTemplate;
@@ -16,10 +18,10 @@ public class SessionDao {
     // 밴드 생성
     public int insertBand(int userIdx, PostBandReq postBandReq){
         String insertBandQuery =
-                "       INSERT INTO Band(userIdx, bandName, bandIntroduction, bandRegion, bandContent, " +
+                "       INSERT INTO Band(userIdx, bandTitle, bandIntroduction, bandRegion, bandContent, " +
                         "vocal, guitar, base, keyboard, drum, bandImgUrl)\n" +
                 "        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        Object[] insertBandParams = new Object[]{ userIdx, postBandReq.getBandName(),postBandReq.getBandIntroduction(),
+        Object[] insertBandParams = new Object[]{ userIdx, postBandReq.getBandTitle(), postBandReq.getBandIntroduction(),
                 postBandReq.getBandRegion(), postBandReq.getBandContent(), postBandReq.getVocal(), postBandReq.getGuitar(),
                 postBandReq.getBase(), postBandReq.getKeyboard(), postBandReq.getDrum(), postBandReq.getBandImgUrl()
         };
