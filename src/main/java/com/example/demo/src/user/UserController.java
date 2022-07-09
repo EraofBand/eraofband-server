@@ -44,30 +44,35 @@ public class UserController {
      * @return BaseResponse<GetUserRes>
      */
     //Query String
-    @ResponseBody
-    @GetMapping("") // (GET) 127.0.0.1:9000/users
-    public BaseResponse<GetUserRes> getUsers(@RequestParam(required = true) String Email) {
-        try{
-            // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
-            if(Email.length()==0){
-                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-            }
-            // 이메일 정규표현
-            if(!isRegexEmail(Email)){
-                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
-            }
-            GetUserRes getUsersRes = userProvider.getUsersByEmail(Email);
-            return new BaseResponse<>(getUsersRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>((exception.getStatus()));
-        }
-    }
+//    @ResponseBody
+//    @GetMapping("") // (GET) 127.0.0.1:9000/users
+//    public BaseResponse<GetUserRes> getUsers(@RequestParam(required = true) String Email) {
+//        try{
+//            // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
+//            if(Email.length()==0){
+//                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+//            }
+//            // 이메일 정규표현
+//            if(!isRegexEmail(Email)){
+//                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+//            }
+//            GetUserRes getUsersRes = userProvider.getUsersByEmail(Email);
+//            return new BaseResponse<>(getUsersRes);
+//        } catch(BaseException exception){
+//            return new BaseResponse<>((exception.getStatus()));
+//        }
+//    }
 
+    /**
+     * 회원 페이지 조회 API
+     * [GET] /users/{userIdx}
+     * 유저 인덱스 검색 조회 API
+     * @return BaseResponse<GetUserRes>
+     */
     @ResponseBody
     @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/users/:userIdx
     public BaseResponse<GetUserRes> getUserByIdx(@PathVariable("userIdx")int userIdx) {
         try{
-
             GetUserRes getUsersRes = userProvider.getUsersByIdx(userIdx);
             return new BaseResponse<>(getUsersRes);
         } catch(BaseException exception){
@@ -76,18 +81,16 @@ public class UserController {
     }
 
     /**
-     * 회원가입 API
-     * [POST] /users
+     * 카카오 회원가입 API
+     * [POST] /users/signin/{access-token}
      * @return BaseResponse<PostUserRes>
      */
     // Body
     @ResponseBody
     @PostMapping("/signin/{access-token}") // (POST) 127.0.0.1:9000/users/make/dsfdsbfuewhiuwf...
     public BaseResponse<PostUserRes> createKakaoUser(@PathVariable("access-token") String token, @RequestBody PostUserReq postUserReq){
-        // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
-        String email="";
         try{
-            email=userService.getKakaoInfo(token);
+            String email=userService.getKakaoInfo(token);
             PostUserRes postUserRes = userService.createUser(postUserReq,email);
             return new BaseResponse<>(postUserRes);
         } catch(BaseException exception){
