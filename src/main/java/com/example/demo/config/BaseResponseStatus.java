@@ -37,6 +37,8 @@ public enum BaseResponseStatus {
     POST_POSTS_INVALID_CONTENTS(false,2021,"내용의 글자수를 확인해주세요."),
 
     POST_POSTS_EMPTY_VIDEOURL(false,2021,"포트폴리오 동영상을 입력해주세요."),
+    MODIFY_FAIL_POFOL(false,2021,"포트폴리오 변경에 실패했습니다."),
+    DELETE_FAIL_POFOL(false,2021,"포트폴리오 삭제에 실패했습니다."),
 
 
 
