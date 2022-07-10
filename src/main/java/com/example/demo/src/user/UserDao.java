@@ -89,22 +89,19 @@ public class UserDao {
     }
 
 
-        public int modifyUserInfo(PatchUserReq patchUserReq){
-            String modifyUserInfoQuery = "update User set nickName=?, birth=?, gender=?, introduction=?, profileImgUrl=?, region=? where userIdx = ?";
-            Object[] modifyUserInfoParams = new Object[]{patchUserReq.getNickName(), patchUserReq.getBirth(),
-                    patchUserReq.getGender(), patchUserReq.getIntroduction(), patchUserReq.getProfileImgUrl(), patchUserReq.getRegion(),patchUserReq.getUserIdx()};
+    public int modifyUserInfo(PatchUserReq patchUserReq){
+        String modifyUserInfoQuery = "update User set nickName=?, birth=?, gender=?, introduction=?, profileImgUrl=?, region=? where userIdx = ?";
+        Object[] modifyUserInfoParams = new Object[]{patchUserReq.getNickName(), patchUserReq.getBirth(),
+                patchUserReq.getGender(), patchUserReq.getIntroduction(), patchUserReq.getProfileImgUrl(), patchUserReq.getRegion(),patchUserReq.getUserIdx()};
 
+        return this.jdbcTemplate.update(modifyUserInfoQuery,modifyUserInfoParams);
+    }
 
-            return this.jdbcTemplate.update(modifyUserInfoQuery,modifyUserInfoParams);
-        }
+    public int deleteUser(int userIdx){
+        String deleteUserQuery = "update User set status='INACTIVE' where userIdx = ?";
+        Object[] deleteUserParams = new Object[]{userIdx};
 
-        public int deleteUser(int userIdx){
-            String deleteUserQuery = "update User set status='INACTIVE' where userIdx = ?";
-            Object[] deleteUserParams = new Object[]{userIdx};
-
-            return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
-        }
-
-
+        return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
+    }
 
     }

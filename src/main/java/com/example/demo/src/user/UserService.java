@@ -42,7 +42,9 @@ public class UserService {
 
     }
 
-    /**카카오 서버에서 이메일 가져오기*/
+    /**
+     * 카카오 서버에서 이메일 가져오기
+     */
     public String getKakaoInfo(String token) throws BaseException {
 
         String reqURL = "https://kapi.kakao.com/v2/user/me";
@@ -78,7 +80,7 @@ public class UserService {
 
             boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
 
-            if(hasEmail){
+            if (hasEmail) {
                 email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
             }
 
@@ -92,40 +94,41 @@ public class UserService {
         return email;
     }
 
-    /**회원가입 및 jwt 생성*/
+    /**
+     * 회원가입 및 jwt 생성
+     */
     public PostUserRes createUser(PostUserReq postUserReq, String email) throws BaseException {
-        try{
+        try {
             int userIdx = userDao.createUser(postUserReq, email);
             //jwt 발급
             String jwt = jwtService.createJwt(userIdx);
-            return new PostUserRes(jwt,userIdx);
+            return new PostUserRes(jwt, userIdx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
 
-        public void modifyUserInfo(PatchUserReq patchUserReq) throws BaseException {
-            try{
-                int result = userDao.modifyUserInfo(patchUserReq);
-                if(result == 0){
-                    throw new BaseException(MODIFY_FAIL_USERNAME);
-                }
-            } catch(Exception exception){
-                throw new BaseException(DATABASE_ERROR);
-            }
+    public void modifyUserInfo(PatchUserReq patchUserReq) throws BaseException {
+        try {
+            int result = userDao.modifyUserInfo(patchUserReq);
+            if (result == 0) {
+                throw new BaseException(MODIFY_FAIL_USERNAME);
+            }} catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
         }
+    }
 
 
-            public void deleteUser(int userIdx) throws BaseException {
-                try{
-                    int result = userDao.deleteUser(userIdx);
+    public void deleteUser ( int userIdx) throws BaseException {
+        try {
+            int result = userDao.deleteUser(userIdx);
 //            if(result == 0){
 //                throw new BaseException(DELETE_FAIL);
 //            }
-                } catch(Exception exception){
-                    throw new BaseException(DATABASE_ERROR);
-                }
-            }
-
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+}
