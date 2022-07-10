@@ -75,8 +75,8 @@ public class UserDao {
                 postUserReq.getProfileImgUrl(),postUserReq.getSession(),postUserReq.getRegion()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
-        String lastInserIdQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
 
     public int checkEmail(String email){
@@ -87,6 +87,7 @@ public class UserDao {
                 checkEmailParams);
 
     }
+
 
     public int modifyUserInfo(PatchUserReq patchUserReq){
         String modifyUserInfoQuery = "update User set nickName=?, birth=?, gender=?, introduction=?, profileImgUrl=?, region=? where userIdx = ?";
@@ -103,6 +104,4 @@ public class UserDao {
         return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
     }
 
-
-
-}
+    }

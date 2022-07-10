@@ -1,0 +1,14 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: demo
+
+  datasource:
+    platform: mysql
+    url:  jdbc:mysql://eob-db.cwdcdldpdi5b.ap-northeast-2.rds.amazonaws.com/EOB_Server?autoReconnect=true # 변경해주세요
+    username:  eob
+    password:  eob1234!
+    driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8버전
+    # driver-class-name: com.mysql.jdbc.Driver # mysql 5버전

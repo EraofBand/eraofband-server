@@ -1,5 +1,4 @@
 package com.example.demo.src.user;
-
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.user.model.*;
@@ -9,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexEmail;
 
@@ -17,25 +15,17 @@ import static com.example.demo.utils.ValidationRegex.isRegexEmail;
 @RequestMapping("/users")
 public class UserController {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     private final UserProvider userProvider;
     @Autowired
     private final UserService userService;
     @Autowired
     private final JwtService jwtService;
-
-
-
-
     public UserController(UserProvider userProvider, UserService userService, JwtService jwtService){
         this.userProvider = userProvider;
         this.userService = userService;
         this.jwtService = jwtService;
     }
-
-
-
     /**
      * 회원 조회 API
      * [GET] /users
@@ -62,23 +52,24 @@ public class UserController {
 //            return new BaseResponse<>((exception.getStatus()));
 //        }
 //    }
-
     /**
      * 회원 페이지 조회 API
      * [GET] /users/{userIdx}
      * 유저 인덱스 검색 조회 API
      * @return BaseResponse<GetUserRes>
      */
+
+
     @ResponseBody
     @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/users/userIdx
     public BaseResponse<GetUserRes> getUserByIdx(@PathVariable("userIdx")int userIdx) {
-        try{
-            GetUserRes getUsersRes = userProvider.getUsersByIdx(userIdx);
-            return new BaseResponse<>(getUsersRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>((exception.getStatus()));
+            try{
+                GetUserRes getUsersRes = userProvider.getUsersByIdx(userIdx);
+                return new BaseResponse<>(getUsersRes);
+            } catch(BaseException exception){
+                return new BaseResponse<>((exception.getStatus()));
+            }
         }
-    }
 
     /**
      * 카카오 회원가입 API
