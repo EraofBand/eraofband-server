@@ -96,6 +96,12 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyUserInfoQuery,modifyUserInfoParams);
     }
 
+    public int deleteUser(int userIdx){
+        String deleteUserQuery = "update User set status='INACTIVE' where userIdx = ?";
+        Object[] deleteUserParams = new Object[]{userIdx};
+
+        return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
+    }
 
 
 

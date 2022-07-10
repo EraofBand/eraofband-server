@@ -115,4 +115,15 @@ public class UserService {
         }
     }
 
+    public void deleteUser(int userIdx) throws BaseException {
+        try{
+            int result = userDao.deleteUser(userIdx);
+            if(result == 0){
+                throw new BaseException(DELETE_FAILED);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }
