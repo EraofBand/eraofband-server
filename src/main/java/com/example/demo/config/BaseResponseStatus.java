@@ -30,6 +30,8 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
 
+    POST_BANDS_EMPTY_CONTENTS(false,2018,"내용 입력값을 확인해주세요."),
+    POST_BANDS_EMPTY_IMG(false,2019,"이미지를 입력해주세요."),
     // pofol
     POSTS_EMPTY_POFOL_ID(false,2020,"포트폴리오 아이디 값을 확인해주세요."),
     POST_POSTS_INVALID_CONTENTS(false,2021,"내용의 글자수를 확인해주세요."),
@@ -47,10 +49,6 @@ public enum BaseResponseStatus {
     // [POST] /users
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
-
-    // pofol
-    MODIFY_FAIL_POFOL(false, 3020, "포트폴리오 수정에 실패하였습니다."),
-    DELETE_FAIL_POFOL(false, 3021, "포트폴리오 삭제에 실패하였습니다."),
 
 
 
