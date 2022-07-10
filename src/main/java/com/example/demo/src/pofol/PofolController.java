@@ -8,6 +8,7 @@ import com.example.demo.src.pofol.model.PatchPofolReq;
 import com.example.demo.src.pofol.model.PostPofolReq;
 import com.example.demo.src.pofol.model.PostPofolRes;
 import com.example.demo.utils.JwtService;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class PofolController {
 
     @ResponseBody
     @GetMapping("")
+   // @ApiOperation(value = "회원 정보 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<List<GetPofolRes>> getPofol(@RequestParam int userIdx){
         try{
             //jwt에서 idx 추출.
@@ -58,9 +60,11 @@ public class PofolController {
 
 
 
+
     // 포트폴리오 생성
     @ResponseBody
     @PostMapping("") // (post) https://eraofband.shop/pofol
+    @ApiOperation(value = "포트폴리오 생성 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<PostPofolRes> createPofol(@RequestBody PostPofolReq postPofolReq) {
 
         if(postPofolReq.getContent().length()>450){
@@ -84,6 +88,7 @@ public class PofolController {
     // 포트폴리오 수정
     @ResponseBody
     @PatchMapping("/{pofolIdx}") // (patch) https://eraofband.shop/pofol/2
+    @ApiOperation(value = "포트폴리오 수정 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> modifyPofol(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PatchPofolReq patchPofolReq){
         try{
 
@@ -106,6 +111,7 @@ public class PofolController {
     // 포트폴리오 삭제
     @ResponseBody
     @PatchMapping("/{pofolIdx}/status") // (patch) https://eraofband.shop/pofol/2/status
+    @ApiOperation(value = "포트폴리오 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> deletePofol(@PathVariable("pofolIdx") int pofolIdx){
         try {
 

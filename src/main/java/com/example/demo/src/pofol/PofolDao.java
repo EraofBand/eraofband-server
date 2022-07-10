@@ -15,7 +15,6 @@ import java.util.List;
 public class PofolDao {
 
     private JdbcTemplate jdbcTemplate;
-    //private List<GetPofolVideoRes> getPofolVideoRes;
 
     @Autowired
     public void setDataSource(DataSource dataSource){
@@ -140,9 +139,9 @@ public class PofolDao {
     }
 
     // 포트폴리오 생성
-    public int  insertPofol(int userIdx, PostPofolReq postPofolReq){
-        String insertPofolQuery = "INSERT INTO Pofol(userIdx, content, videoUrl, title) VALUES (?, ?, ?, ?)";
-        Object[] insertPofolParams = new Object[]{userIdx,postPofolReq.getContent(),postPofolReq.getVideoUrl(), postPofolReq.getTitle()};
+    public int insertPofol(int userIdx, PostPofolReq postPofolReq){
+        String insertPofolQuery = "INSERT INTO Pofol(userIdx, content, videoUrl, title, imgUrl) VALUES (?, ?, ?, ?, ?)";
+        Object[] insertPofolParams = new Object[]{userIdx,postPofolReq.getContent(),postPofolReq.getVideoUrl(), postPofolReq.getTitle(),postPofolReq.getImgUrl()};
         this.jdbcTemplate.update(insertPofolQuery, insertPofolParams);
 
         String lastInsertIdQuery = "select last_insert_id()";

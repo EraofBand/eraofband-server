@@ -17,4 +17,7 @@ public class PostPofolReq {
     private String videoUrl;
 
     private String title;
+
+    private String imgUrl;
+
 }
