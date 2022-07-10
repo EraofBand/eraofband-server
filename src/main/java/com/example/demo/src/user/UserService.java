@@ -118,9 +118,9 @@ public class UserService {
     public void deleteUser(int userIdx) throws BaseException {
         try{
             int result = userDao.deleteUser(userIdx);
-            if(result == 0){
-                throw new BaseException(DELETE_FAIL);
-            }
+//            if(result == 0){
+//                throw new BaseException(DELETE_FAIL);
+//            }
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
