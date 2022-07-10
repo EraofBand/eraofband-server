@@ -57,9 +57,9 @@ public class PofolService {
 
         try{
             int result = pofolDao.updatePofol(pofolIdx,patchPofolReq);
-            if(result == 0){
-                throw new BaseException(MODIFY_FAIL_POFOL);
-            }
+//            if(result == 0){
+//                throw new BaseException(MODIFY_FAIL_POFOL);
+//            }
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
@@ -77,9 +77,9 @@ public class PofolService {
 
         try{
             int result = pofolDao.updatePofolStatus(pofolIdx);
-            if(result == 0){
-                throw new BaseException(DELETE_FAIL_POFOL);
-            }
+//            if(result == 0){
+//                throw new BaseException(DELETE_FAIL_POFOL);
+//            }
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
