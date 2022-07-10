@@ -30,6 +30,14 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
 
+    POST_BANDS_EMPTY_CONTENTS(false,2018,"내용 입력값을 확인해주세요."),
+    POST_BANDS_EMPTY_IMG(false,2019,"이미지를 입력해주세요."),
+    // pofol
+    POSTS_EMPTY_POFOL_ID(false,2020,"포트폴리오 아이디 값을 확인해주세요."),
+    POST_POSTS_INVALID_CONTENTS(false,2021,"내용의 글자수를 확인해주세요."),
+
+    POST_POSTS_EMPTY_VIDEOURL(false,2021,"포트폴리오 동영상을 입력해주세요."),
+
 
 
     /**
@@ -51,8 +59,8 @@ public enum BaseResponseStatus {
     SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다."),
 
     //[PATCH] /users/{userIdx}
-    MODIFY_FAILED(false,4014,"회전 정보 수정 실패"),
-    DELETE_FAILED(false,4015,"회전 삭제 실패"),
+    MODIFY_FAIL(false,4014,"회원 정보 수정 실패"),
+    DELETE_FAIL(false,4014,"회원 삭제 실패"),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");

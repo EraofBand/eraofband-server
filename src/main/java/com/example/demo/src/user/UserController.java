@@ -105,7 +105,7 @@ public class UserController {
      */
     @ResponseBody
     @PatchMapping("/modiInfo") // (PATCH) 127.0.0.1:9000/users/userIdx
-    @ApiOperation(value = "회원 정보 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값")
+    @ApiOperation(value = "회원 정보 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> modifyUserInfo(@RequestBody PatchUserReq patchUserReq){
         try {
             //jwt에서 idx 추출.
@@ -130,7 +130,7 @@ public class UserController {
      */
     @ResponseBody
     @PatchMapping("/{userIdx}/status") // (PATCH) 127.0.0.1:9000/users/userIdx
-    @ApiOperation(value = "회원 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값")
+    @ApiOperation(value = "회원 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> deleteUser(@PathVariable("userIdx") int userIdx){
         try {
             //jwt에서 idx 추출.
