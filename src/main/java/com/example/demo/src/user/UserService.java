@@ -104,15 +104,28 @@ public class UserService {
         }
     }
 
-    public void modifyUserName(PatchUserReq patchUserReq) throws BaseException {
-        try{
-            int result = userDao.modifyUserName(patchUserReq);
-            if(result == 0){
-                throw new BaseException(MODIFY_FAIL_USERNAME);
-            }
-        } catch(Exception exception){
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
 
-}
+        public void modifyUserInfo(PatchUserReq patchUserReq) throws BaseException {
+            try{
+                int result = userDao.modifyUserInfo(patchUserReq);
+                if(result == 0){
+                    throw new BaseException(MODIFY_FAIL_USERNAME);
+                }
+            } catch(Exception exception){
+                throw new BaseException(DATABASE_ERROR);
+            }
+        }
+
+
+            public void deleteUser(int userIdx) throws BaseException {
+                try{
+                    int result = userDao.deleteUser(userIdx);
+//            if(result == 0){
+//                throw new BaseException(DELETE_FAIL);
+//            }
+                } catch(Exception exception){
+                    throw new BaseException(DATABASE_ERROR);
+                }
+            }
+
+        }

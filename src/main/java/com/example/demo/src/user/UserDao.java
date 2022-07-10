@@ -42,7 +42,7 @@ public class UserDao {
 //                getUsersByEmailParams);
 //    }
 
-
+    /**회원 페이지 조회*/
     public GetUserRes getUsersByIdx(int userIdx){
         String getUsersByIdxQuery = "select u.userIdx as userIdx, u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.session as session,u.region as region," +
                         "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount\n"+
@@ -88,14 +88,23 @@ public class UserDao {
 
     }
 
-    public int modifyUserName(PatchUserReq patchUserReq){
-        String modifyUserNameQuery = "update User set nickName = ? where userIdx = ? ";
-        Object[] modifyUserNameParams = new Object[]{patchUserReq.getNickName(), patchUserReq.getUserIdx()};
 
-        return this.jdbcTemplate.update(modifyUserNameQuery,modifyUserNameParams);
+        public int modifyUserInfo(PatchUserReq patchUserReq){
+            String modifyUserInfoQuery = "update User set nickName=?, birth=?, gender=?, introduction=?, profileImgUrl=?, region=? where userIdx = ?";
+            Object[] modifyUserInfoParams = new Object[]{patchUserReq.getNickName(), patchUserReq.getBirth(),
+                    patchUserReq.getGender(), patchUserReq.getIntroduction(), patchUserReq.getProfileImgUrl(), patchUserReq.getRegion(),patchUserReq.getUserIdx()};
+
+
+            return this.jdbcTemplate.update(modifyUserInfoQuery,modifyUserInfoParams);
+        }
+
+        public int deleteUser(int userIdx){
+            String deleteUserQuery = "update User set status='INACTIVE' where userIdx = ?";
+            Object[] deleteUserParams = new Object[]{userIdx};
+
+            return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
+        }
+
+
+
     }
-
-
-
-
-}

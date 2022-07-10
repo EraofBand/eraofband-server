@@ -10,4 +10,9 @@ import lombok.Setter;
 public class PatchUserReq {
     private int userIdx;
     private String nickName;
+    private String birth;
+    private String gender;
+    private String introduction;
+    private String profileImgUrl;
+    private String region;
 }
