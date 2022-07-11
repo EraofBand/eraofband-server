@@ -52,7 +52,7 @@ public class PofolDao {
 
     }
 
-    // 게시글 리스트 조회 수정필요
+    // 팔로우 한 유저 포트폴리오 리스트 조회
 
     public List<GetPofolRes> selectPofol(int userIdx){
         String selectUserPofolQuery = "\n" +
@@ -101,20 +101,6 @@ public class PofolDao {
                         rs.getString("videoUrl")
                 ),selectUserPofolParam);
 
-                        /*
-                        getPofolImgRes = this.jdbcTemplate.query(
-                                "SELECT pi.postImgUrlIdx,\n"+
-                                        "            pi.imgUrl\n" +
-                                        "        FROM PostImgUrl as pi\n" +
-                                        "            join Post as p on p.postIdx = pi.postIdx\n" +
-                                        "        WHERE pi.status = 'ACTIVE' and p.postIdx = ?;\n",
-                                (rk,rownum) -> new GetPostImgRes(
-                                        rk.getInt("postImgUrlIdx"),
-                                        rk.getString("imgUrl"))
-                                ,rs.getInt("postIdx"))),selectUserPostsParam);
-
-                         */
-
 
 
     }
@@ -156,8 +142,8 @@ public class PofolDao {
 
     // 포트폴리오 수정
     public int updatePofol(int pofolIdx, PatchPofolReq patchPofolReq){
-        String updatePofolQuery = "UPDATE Pofol SET content = ? WHERE pofolIdx = ?" ;
-        Object[] updatePofolParams = new Object[]{patchPofolReq.getContent(), pofolIdx};
+        String updatePofolQuery = "UPDATE Pofol SET title = ?, content = ? WHERE pofolIdx = ?\n";
+        Object[] updatePofolParams = new Object[]{patchPofolReq.getTitle(), patchPofolReq.getContent(), pofolIdx};
 
         return this.jdbcTemplate.update(updatePofolQuery,updatePofolParams);
     }
@@ -169,9 +155,6 @@ public class PofolDao {
 
         return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
     }
-
-
-
 
 
 }

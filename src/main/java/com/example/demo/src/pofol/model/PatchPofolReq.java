@@ -11,6 +11,8 @@ public class PatchPofolReq {
 
     private int userIdx;
 
+    private String title;
+
     private String content;
 
 }
