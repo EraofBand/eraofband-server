@@ -30,13 +30,21 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
 
-    POST_BANDS_EMPTY_CONTENTS(false,2018,"내용 입력값을 확인해주세요."),
+    // band
+    POSTS_EMPTY_BAND_ID(false,2018,"밴드 아이디 값을 확인해주세요."),
+    POST_BANDS_EMPTY_CONTENTS(false,2019,"내용 입력값을 확인해주세요."),
+    POST_BANDS_INVALID_CONTENTS(false,2019,"내용의 글자수를 확인해주세요."),
     POST_BANDS_EMPTY_IMG(false,2019,"이미지를 입력해주세요."),
+    MODIFY_FAIL_BAND(false,2019,"밴드 변경에 실패했습니다."),
+    DELETE_FAIL_BAND(false,2019,"밴드 삭제에 실패했습니다."),
+
     // pofol
     POSTS_EMPTY_POFOL_ID(false,2020,"포트폴리오 아이디 값을 확인해주세요."),
     POST_POSTS_INVALID_CONTENTS(false,2021,"내용의 글자수를 확인해주세요."),
 
     POST_POSTS_EMPTY_VIDEOURL(false,2021,"포트폴리오 동영상을 입력해주세요."),
+    MODIFY_FAIL_POFOL(false,2021,"포트폴리오 변경에 실패했습니다."),
+    DELETE_FAIL_POFOL(false,2021,"포트폴리오 삭제에 실패했습니다."),
 
 
 

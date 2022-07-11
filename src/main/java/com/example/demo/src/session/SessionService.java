@@ -1,13 +1,16 @@
 package com.example.demo.src.session;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.pofol.model.PatchPofolReq;
+import com.example.demo.src.session.model.PatchBandReq;
 import com.example.demo.src.session.model.PostBandReq;
 import com.example.demo.src.session.model.PostBandRes;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.*;
+import static com.example.demo.config.BaseResponseStatus.MODIFY_FAIL_POFOL;
 
 @Service // Service Create 로직 처리
 public class SessionService {
@@ -33,4 +36,44 @@ public class SessionService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    // 밴드 수정
+    public void modifyBand(int userIdx, int bandIdx, PatchBandReq patchBandReq) throws BaseException {
+
+        if(sessionProvider.checkUserExist(userIdx) == 0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+        if(sessionProvider.checkBandExist(bandIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BAND_ID);
+        }
+
+        try{
+            int result = sessionDao.updateBand(bandIdx, patchBandReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_BAND);
+            }
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 밴드 삭제
+    public void deleteBand(int userIdx,int bandIdx) throws BaseException {
+
+        if(sessionProvider.checkBandExist(bandIdx) ==0){
+            throw new BaseException(POSTS_EMPTY_BAND_ID);
+        }
+
+        try{
+            int result = sessionDao.updateBandStatus(bandIdx);
+            if(result == 0){
+                throw new BaseException(DELETE_FAIL_BAND);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
 }
