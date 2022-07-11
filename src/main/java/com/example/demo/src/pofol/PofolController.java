@@ -42,16 +42,17 @@ public class PofolController {
     }
 
 
+    // 팔로우 한 유저 포트폴리오 리스트 조회
     @ResponseBody
-    @GetMapping("")
-   // @ApiOperation(value = "회원 정보 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @GetMapping("")  // (get) https://eraofband.shop/pofol?userIdx=12
+    @ApiOperation(value = " 팔로우 한 유저 포트폴리오 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<List<GetPofolRes>> getPofol(@RequestParam int userIdx){
         try{
-            //jwt에서 idx 추출.
-            int userIdxByJwt = jwtService.getUserIdx();
-            List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdxByJwt);
-            //List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdx);
+            //jwt 없애기
+            //int userIdxByJwt = jwtService.getUserIdx();
+            //List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdxByJwt);
 
+            List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdx);
             return new BaseResponse<>(getPofol);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
@@ -74,8 +75,12 @@ public class PofolController {
            return new BaseResponse<>(POST_POSTS_EMPTY_VIDEOURL);
         }
 
+
         try{
             int userIdxByJwt = jwtService.getUserIdx();
+            //if(PostPofolReq.getUserIdx != userIdxByJwt){
+            //    return new BaseResponse<>(INVALID_JWT);
+           // }
             PostPofolRes postPostRes = pofolService.createPofol(userIdxByJwt,postPofolReq);
             return new BaseResponse<>(postPostRes);
         } catch(BaseException exception){
@@ -100,7 +105,7 @@ public class PofolController {
             int userIdxByJwt = jwtService.getUserIdx();
 
             pofolService.modifyPofol(userIdxByJwt, pofolIdx, patchPofolReq);
-            //pofolService.modifyPofol(patchPofolReq.getUserIdx(),pofolIdx,patchPofolReq);
+
             String result = "포트폴리오 내용 수정을 완료하였습니다.";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {

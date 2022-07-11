@@ -85,11 +85,10 @@ public class PofolProvider {
         }
 
         try{
-
             List<GetPofolRes> getPofol = pofolDao.selectPofol(userIdx);
-
             return getPofol;
         } catch(Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
