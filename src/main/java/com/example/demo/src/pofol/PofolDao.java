@@ -60,7 +60,9 @@ public class PofolDao {
                 "            u.userIdx as userIdx,\n" +
                 "            u.nickName as nickName,\n" +
                 "            u.profileImgUrl as profileImgUrl,\n" +
+                "            p.title as title,\n" +
                 "            p.content as content,\n" +
+                "            p.videoUrl as videoUrl,\n" +
                 "            IF(pofolLikeCount is null, 0, pofolLikeCount) as pofolLikeCount,\n" +
                 "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                 "            case\n" +
@@ -77,8 +79,8 @@ public class PofolDao {
                 "            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "        FROM Pofol as p\n" +
                 "            join User as u on u.userIdx = p.userIdx\n" +
-                "            left join (select pofolIdx, userIdx, count(pofolLikeidx) as pofolLikeCount from PofolLike WHERE status = 'ACTIVE' group by pofolIdx) plc on plc.pofolIdx = p.pofolIdx\n" +
-                "            left join (select pofolIdx, count(commentIdx) as commentCount from Comment WHERE status = 'ACTIVE' group by pofolIdx) c on c.pofolIdx = p.pofolIdx\n" +
+                "            left join (select pofolIdx, userIdx, count(pofolLikeIdx) as pofolLikeCount from PofolLike WHERE status = 'ACTIVE' group by pofolIdx) plc on plc.pofolIdx = p.pofolIdx\n" +
+                "            left join (select pofolIdx, count(PofolCommentIdx) as commentCount from PofolComment WHERE status = 'ACTIVE' group by pofolIdx) c on c.pofolIdx = p.pofolIdx\n" +
                 "            left join Follow as f on f.followeeIdx = p.userIdx and f.status = 'ACTIVE'\n" +
                 "            left join PofolLike as pl on pl.userIdx = f.followerIdx and pl.pofolIdx = p.pofolIdx\n" +
                 "        WHERE f.followerIdx = ? and p.status = 'ACTIVE'\n" +
@@ -90,13 +92,14 @@ public class PofolDao {
                         rs.getInt("userIdx"),
                         rs.getString("nickName"),
                         rs.getString("profileImgUrl"),
+                        rs.getString("title"),
                         rs.getString("content"),
                         rs.getInt("pofolLikeCount"),
                         rs.getInt("commentCount"),
                         rs.getString("updatedAt"),
                         rs.getString("likeOrNot"),
-                        rs.getString("video")
-                ));
+                        rs.getString("videoUrl")
+                ),selectUserPofolParam);
 
                         /*
                         getPofolImgRes = this.jdbcTemplate.query(

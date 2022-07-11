@@ -19,6 +19,8 @@ public class GetPofolRes {
 
     private String profileImgUrl;
 
+    private String title;
+
     private String content;
 
     private int pofolLikeCount;
@@ -29,6 +31,6 @@ public class GetPofolRes {
 
     private String likeOrNot;
 
-    private String video;
+    private String videoUrl;
 
 }

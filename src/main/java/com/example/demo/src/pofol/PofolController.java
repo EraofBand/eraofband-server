@@ -42,15 +42,15 @@ public class PofolController {
     }
 
 
+    // 팔로우 한 유저 포트폴리오 리스트 조회
     @ResponseBody
     @GetMapping("")
-   // @ApiOperation(value = "회원 정보 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = " 팔로우 한 유저 포트폴리오 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<List<GetPofolRes>> getPofol(@RequestParam int userIdx){
         try{
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdxByJwt);
-            //List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdx);
 
             return new BaseResponse<>(getPofol);
         } catch (BaseException exception){
