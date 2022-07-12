@@ -1,7 +1,6 @@
 package com.example.demo.src.session;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.pofol.model.PatchPofolReq;
 import com.example.demo.src.session.model.PatchBandReq;
 import com.example.demo.src.session.model.PostBandReq;
 import com.example.demo.src.session.model.PostBandRes;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static com.example.demo.config.BaseResponseStatus.*;
-import static com.example.demo.config.BaseResponseStatus.MODIFY_FAIL_POFOL;
 
 @Service // Service Create 로직 처리
 public class SessionService {

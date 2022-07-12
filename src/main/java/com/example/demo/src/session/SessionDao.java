@@ -1,10 +1,8 @@
 package com.example.demo.src.session;
 
-import com.example.demo.src.pofol.model.PatchPofolReq;
 import com.example.demo.src.session.model.GetBandRes;
 import com.example.demo.src.session.model.PatchBandReq;
 import com.example.demo.src.session.model.PostBandReq;
-import com.example.demo.src.user.model.GetUserRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
