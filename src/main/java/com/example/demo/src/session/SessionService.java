@@ -40,9 +40,6 @@ public class SessionService {
     // 밴드 수정
     public void modifyBand(int userIdx, int bandIdx, PatchBandReq patchBandReq) throws BaseException {
 
-        if(sessionProvider.checkUserExist(userIdx) == 0){
-            throw new BaseException(USERS_EMPTY_USER_ID);
-        }
         if(sessionProvider.checkBandExist(bandIdx) == 0){
             throw new BaseException(POSTS_EMPTY_BAND_ID);
         }
