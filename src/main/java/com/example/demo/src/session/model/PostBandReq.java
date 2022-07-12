@@ -20,5 +20,8 @@ public class PostBandReq {
     private int keyboard;
     private int drum;
 
+    private String chatRoomLink;
+    private String performDate;
+
     private String bandImgUrl;
 }
