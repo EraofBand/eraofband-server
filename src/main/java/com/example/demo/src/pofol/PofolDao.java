@@ -157,4 +157,56 @@ public class PofolDao {
     }
 
 
+    /*
+    // 포트폴리오 좋아요
+    public int updateLikes(int userIdx, int pofolIdx){
+        String updateLikesQuery = "INSERT INTO PofolLike(userIdx, pofolIdx) VALUES (?,?) \n" +
+                                  "UPDATE PofolLike SET status = 'ACTIVE' WHERE userIdx = ? and pofolIdx = ? ";
+        Object[] updateLikesParams = new Object[]{userIdx, pofolIdx};
+
+       this.jdbcTemplate.update(updateLikesQuery,updateLikesParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+    }
+
+    // 포트폴리오 좋아요 취소
+    //public int updateUnlikes(int userIdx, int pofolIdx){
+    public int updateUnlikes(int userIdx, int pofolIdx){
+        String updateUnlikesQuery = "UPDATE PofolLike SET status = 'INACTIVE' WHERE userIdx = ? and pofolIdx = ? ";
+        Object[] updateUnlikesParams = new Object[]{userIdx, pofolIdx};
+
+        return this.jdbcTemplate.update(updateUnlikesQuery,updateUnlikesParams);
+    }
+
+     */
+
+
+
+
+
+    // 포트폴리오 좋아요
+    public int updateLikes(int userIdx, int pofolIdx){
+        String updateLikesQuery = "INSERT INTO PofolLike(userIdx, pofolIdx) VALUES (?,?)";
+        Object[] updateLikesParams = new Object[]{userIdx, pofolIdx};
+
+       this.jdbcTemplate.update(updateLikesQuery,updateLikesParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+    }
+
+    // 포트폴리오 좋아요 취소
+    //public int updateUnlikes(int userIdx, int pofolIdx){
+    public int updateUnlikes(int userIdx, int pofolIdx){
+        String updateUnlikesQuery = "DELETE FROM PofolLike WHERE userIdx = ? and pofolIdx = ?";
+        Object[] updateUnlikesParams = new Object[]{userIdx, pofolIdx};
+
+        return this.jdbcTemplate.update(updateUnlikesQuery,updateUnlikesParams);
+    }
+
+
+
+
+
 }
