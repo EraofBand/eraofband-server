@@ -48,8 +48,8 @@ com/example/demo/config/SwaggerConfig.java
  com.example.demo.config.SwaggerConfig
 com/example/demo/src/session/model/GetBandRes.java
  com.example.demo.src.session.model.GetBandRes
-com/example/demo/src/pofol/model/GetCommentReq.java
- com.example.demo.src.pofol.model.GetCommentReq
+com/example/demo/src/pofol/model/PostCommentReq.java
+ com.example.demo.src.pofol.model.PostCommentReq
 com/example/demo/src/pofol/model/PostCommentRes.java
  com.example.demo.src.pofol.model.PostCommentRes
 com/example/demo/config/secret/Secret.java
@@ -78,6 +78,8 @@ com/example/demo/src/session/SessionProvider.java
  com.example.demo.src.session.SessionProvider
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
+com/example/demo/src/pofol/model/GetCommentRes.java
+ com.example.demo.src.pofol.model.GetCommentRes
 com/example/demo/src/pofol/PofolProvider.java
  com.example.demo.src.pofol.PofolProvider
 com/example/demo/src/pofol/PofolController.java
@@ -86,5 +88,3 @@ com/example/demo/src/pofol/PofolService.java
  com.example.demo.src.pofol.PofolService
 com/example/demo/src/pofol/PofolDao.java
  com.example.demo.src.pofol.PofolDao
-com/example/demo/src/pofol/model/PostCommentReq.java
- com.example.demo.src.pofol.model.PostCommentReq

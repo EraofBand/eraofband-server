@@ -7,7 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetCommentReq {
+public class GetCommentRes {
+
+    private int pofolCommentIdx;
 
     private int pofolIdx;
 

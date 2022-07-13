@@ -231,6 +231,27 @@ public class PofolController {
 
     }
 
+    // 댓글 목록 조회
+
+    @ResponseBody
+    @GetMapping("/comment/")  // (get) https://eraofband.shop/pofol/comment
+    //@ApiOperation(value = " 댓글 목록 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<List<GetCommentRes>> getComment(@RequestParam int postIdx){
+        try{
+            //jwt 없애기
+            //int userIdxByJwt = jwtService.getUserIdx();
+            //List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdxByJwt);
+
+            List<GetCommentRes> getComment=pofolProvider.retrieveComment(postIdx);
+            return new BaseResponse<>(getComment);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
+
+
 
 
 
