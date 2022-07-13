@@ -17,14 +17,14 @@ public class PofolDao {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public void setDataSource(DataSource dataSource){
+    public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
 
     // 유저 확인
-    public int checkUserExist(int userIdx){
-        String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ?)";
+    public int checkUserExist(int userIdx) {
+        String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ? and status = 'ACTIVE')";
         int checkUserExistParams = userIdx;
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
                 int.class,
@@ -33,8 +33,8 @@ public class PofolDao {
     }
 
     // 포트폴리오 확인
-    public int checkPofolExist(int pofolIdx){
-        String checkPostExistQuery = "select exists(select pofolIdx from Pofol where pofolIdx = ?)";
+    public int checkPofolExist(int pofolIdx) {
+        String checkPostExistQuery = "select exists(select pofolIdx from Pofol where pofolIdx = ? and status = 'ACTIVE')";
         int checkPostExistParams = pofolIdx;
         return this.jdbcTemplate.queryForObject(checkPostExistQuery,
                 int.class,
@@ -42,8 +42,18 @@ public class PofolDao {
 
     }
 
+    // 포트폴리오 댓글 확인
+    public int checkCommentExist(int pofolCommentIdx) {
+        String checkCommentExistQuery = "select exists(select pofolCommentIdx from PofolComment where pofolCommentIdx = ? and status = 'ACTIVE')";
+        int checkCommentExistParams = pofolCommentIdx;
+        return this.jdbcTemplate.queryForObject(checkCommentExistQuery,
+                int.class,
+                checkCommentExistParams);
+
+    }
+
     // 이메일 확인
-    public int checkEmailExist(String email){
+    public int checkEmailExist(String email) {
         String checkEmailQuery = "select exists(select email from User where email = ?)";
         String checkEmailParams = email;
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
@@ -54,7 +64,7 @@ public class PofolDao {
 
     // 팔로우 한 유저 포트폴리오 리스트 조회
 
-    public List<GetPofolRes> selectPofol(int userIdx){
+    public List<GetPofolRes> selectPofol(int userIdx) {
         String selectUserPofolQuery = "\n" +
                 "        SELECT p.PofolIdx as PofolIdx,\n" +
                 "            u.userIdx as userIdx,\n" +
@@ -80,14 +90,14 @@ public class PofolDao {
                 "        FROM Pofol as p\n" +
                 "            join User as u on u.userIdx = p.userIdx\n" +
                 "            left join (select pofolIdx, userIdx, count(pofolLikeIdx) as pofolLikeCount from PofolLike WHERE status = 'ACTIVE' group by pofolIdx) plc on plc.pofolIdx = p.pofolIdx\n" +
-                "            left join (select pofolIdx, count(PofolCommentIdx) as commentCount from PofolComment WHERE status = 'ACTIVE' group by pofolIdx) c on c.pofolIdx = p.pofolIdx\n" +
+                "            left join (select pofolIdx, count(pofolCommentIdx) as commentCount from PofolComment WHERE status = 'ACTIVE' group by pofolIdx) c on c.pofolIdx = p.pofolIdx\n" +
                 "            left join Follow as f on f.followeeIdx = p.userIdx and f.status = 'ACTIVE'\n" +
                 "            left join PofolLike as pl on pl.userIdx = f.followerIdx and pl.pofolIdx = p.pofolIdx\n" +
                 "        WHERE f.followerIdx = ? and p.status = 'ACTIVE'\n" +
-                "        group by p.pofolIdx;\n" ;
+                "        group by p.pofolIdx;\n";
         int selectUserPofolParam = userIdx;
         return this.jdbcTemplate.query(selectUserPofolQuery,
-                (rs,rowNum) -> new GetPofolRes(
+                (rs, rowNum) -> new GetPofolRes(
                         rs.getInt("pofolIdx"),
                         rs.getInt("userIdx"),
                         rs.getString("nickName"),
@@ -99,16 +109,14 @@ public class PofolDao {
                         rs.getString("updatedAt"),
                         rs.getString("likeOrNot"),
                         rs.getString("videoUrl")
-                ),selectUserPofolParam);
-
+                ), selectUserPofolParam);
 
 
     }
 
 
-
     // 회원 확인
-    public String checkUserStatus(String email){
+    public String checkUserStatus(String email) {
         String checkUserStatusQuery = "select status from User where email = ? ";
         String checkUserStatusParams = email;
         return this.jdbcTemplate.queryForObject(checkUserStatusQuery,
@@ -118,9 +126,9 @@ public class PofolDao {
     }
 
     // 포트폴리오, 유저 확인
-    public int checkUserPofolExist(int userIdx, int pofolIdx){
+    public int checkUserPofolExist(int userIdx, int pofolIdx) {
         String checkUserPofolQuery = "select exists(select pofolIdx from Pofol where pofolIdx = ? and userIdx=?) ";
-        Object[]  checkUserPofolParams = new Object[]{pofolIdx,userIdx};
+        Object[] checkUserPofolParams = new Object[]{pofolIdx, userIdx};
         return this.jdbcTemplate.queryForObject(checkUserPofolQuery,
                 int.class,
                 checkUserPofolParams);
@@ -128,32 +136,31 @@ public class PofolDao {
     }
 
     // 포트폴리오 생성
-    public int insertPofol(int userIdx, PostPofolReq postPofolReq){
+    public int insertPofol(int userIdx, PostPofolReq postPofolReq) {
         String insertPofolQuery = "INSERT INTO Pofol(userIdx, content, videoUrl, title, imgUrl) VALUES (?, ?, ?, ?, ?)";
-        Object[] insertPofolParams = new Object[]{userIdx,postPofolReq.getContent(),postPofolReq.getVideoUrl(), postPofolReq.getTitle(),postPofolReq.getImgUrl()};
+        Object[] insertPofolParams = new Object[]{userIdx, postPofolReq.getContent(), postPofolReq.getVideoUrl(), postPofolReq.getTitle(), postPofolReq.getImgUrl()};
         this.jdbcTemplate.update(insertPofolQuery, insertPofolParams);
 
         String lastInsertIdQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
 
     }
-
 
 
     // 포트폴리오 수정
-    public int updatePofol(int pofolIdx, PatchPofolReq patchPofolReq){
+    public int updatePofol(int pofolIdx, PatchPofolReq patchPofolReq) {
         String updatePofolQuery = "UPDATE Pofol SET title = ?, content = ? WHERE pofolIdx = ?\n";
         Object[] updatePofolParams = new Object[]{patchPofolReq.getTitle(), patchPofolReq.getContent(), pofolIdx};
 
-        return this.jdbcTemplate.update(updatePofolQuery,updatePofolParams);
+        return this.jdbcTemplate.update(updatePofolQuery, updatePofolParams);
     }
 
     // 포트폴리오 삭제
-    public int updatePofolStatus(int pofolIdx){
+    public int updatePofolStatus(int pofolIdx) {
         String deleteUserQuery = "UPDATE Pofol SET status = 'INACTIVE' WHERE pofolIdx = ? ";
         Object[] deleteUserParams = new Object[]{pofolIdx};
 
-        return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
+        return this.jdbcTemplate.update(deleteUserQuery, deleteUserParams);
     }
 
 
@@ -182,31 +189,46 @@ public class PofolDao {
      */
 
 
-
-
-
     // 포트폴리오 좋아요
-    public int updateLikes(int userIdx, int pofolIdx){
+    public int updateLikes(int userIdx, int pofolIdx) {
         String updateLikesQuery = "INSERT INTO PofolLike(userIdx, pofolIdx) VALUES (?,?)";
         Object[] updateLikesParams = new Object[]{userIdx, pofolIdx};
 
-       this.jdbcTemplate.update(updateLikesQuery,updateLikesParams);
+        this.jdbcTemplate.update(updateLikesQuery, updateLikesParams);
 
         String lastInsertIdQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
     // 포트폴리오 좋아요 취소
-    //public int updateUnlikes(int userIdx, int pofolIdx){
-    public int updateUnlikes(int userIdx, int pofolIdx){
+    public int updateUnlikes(int userIdx, int pofolIdx) {
         String updateUnlikesQuery = "DELETE FROM PofolLike WHERE userIdx = ? and pofolIdx = ?";
         Object[] updateUnlikesParams = new Object[]{userIdx, pofolIdx};
 
-        return this.jdbcTemplate.update(updateUnlikesQuery,updateUnlikesParams);
+        return this.jdbcTemplate.update(updateUnlikesQuery, updateUnlikesParams);
     }
 
+    // 댓글 작성
+
+    public int insertComment(int pofolIdx, int userIdx, PostCommentReq postCommentReq) {
+
+        String insertCommentQuery = "INSERT INTO PofolComment(pofolIdx, userIdx, content) VALUES (?, ?, ?)";
+        Object[] insertCommentParams = new Object[]{pofolIdx, userIdx, postCommentReq.getContent()};
+
+        this.jdbcTemplate.update(insertCommentQuery, insertCommentParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+
+    }
+
+    // 댓글 삭제
+    public int deleteComment(int pofolCommentIdx) {
+        String deleteCommentQuery = "UPDATE PofolComment SET status = 'INACTIVE' WHERE pofolCommentIdx = ? ";
+        Object[] deleteCommentParams = new Object[]{pofolCommentIdx};
+
+        return this.jdbcTemplate.update(deleteCommentQuery, deleteCommentParams);
 
 
-
-
+    }
 }

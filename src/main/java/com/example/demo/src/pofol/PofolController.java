@@ -75,9 +75,10 @@ public class PofolController {
 
         try{
             int userIdxByJwt = jwtService.getUserIdx();
-            ///if(PostPofolReq.getUserIdx != userIdxByJwt){
-            //    return new BaseResponse<>(INVALID_JWT);
-           // }
+            if(postPofolReq.getUserIdx()!= userIdxByJwt){
+                return new BaseResponse<>(INVALID_JWT);
+            }
+
             PostPofolRes postPofolRes = pofolService.createPofol(userIdxByJwt,postPofolReq);
             return new BaseResponse<>(postPofolRes);
         } catch(BaseException exception){
@@ -99,8 +100,11 @@ public class PofolController {
                 return new BaseResponse<>(POST_POSTS_INVALID_CONTENTS);
             }
 
-            int userIdxByJwt = jwtService.getUserIdx();
 
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(patchPofolReq.getUserIdx()!= userIdxByJwt){
+                return new BaseResponse<>(INVALID_JWT);
+            }
             pofolService.modifyPofol(userIdxByJwt, pofolIdx, patchPofolReq);
 
             String result = "포트폴리오 내용 수정을 완료하였습니다.";
@@ -114,12 +118,15 @@ public class PofolController {
     @ResponseBody
     @PatchMapping("/{pofolIdx}/status") // (patch) https://eraofband.shop/pofol/2/status
     @ApiOperation(value = "포트폴리오 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<String> deletePofol(@PathVariable("pofolIdx") int pofolIdx){
+    public BaseResponse<String> deletePofol(@PathVariable("pofolIdx") int pofolIdx, int userIdx){
         try {
 
             //jwt에서 idx 추출
             int userIdxByJwt = jwtService.getUserIdx();
 
+            if(userIdx!= userIdxByJwt){
+                return new BaseResponse<>(INVALID_JWT);
+            }
             pofolService.deletePofol(userIdxByJwt,pofolIdx);
 
             String result = "포트폴리오가 삭제되었습니다.";
@@ -156,7 +163,7 @@ public class PofolController {
     // 포트폴리오 좋아요 취소
     @ResponseBody
     @DeleteMapping ("/{pofolIdx}/unlikes") // (post) https://eraofband.shop/pofol/2/unlikes
-    @ApiOperation(value = "포트폴리오 좋아요 취소", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "포트폴리오 좋아요 취소 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> unlikesPofol(@PathVariable("pofolIdx") int pofolIdx){
 
         try {
@@ -165,13 +172,72 @@ public class PofolController {
             int userIdxByJwt = jwtService.getUserIdx();
             pofolService.unlikesPofol(userIdxByJwt,pofolIdx);
 
-            String result = "포트폴리오 좋아요 취소";
+            String result = "포트폴리오 좋아요 취소를 완료하였습니다.";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
 
     }
+
+    // 댓글 등록
+    @ResponseBody
+    @PostMapping("/{pofolIdx}/comment") // (post) https://eraofband.shop/pofol/2/comment
+    @ApiOperation(value = "포트폴리오 댓글 등록 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<PostCommentRes> createComment(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PostCommentReq postCommentReq) {
+
+        if(postCommentReq.getContent().length()>100){
+            return new BaseResponse<>(POST_POSTS_INVALID_CONTENTS);
+        }
+
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            //if(postCommentReq.getUserIdx()!= userIdxByJwt){
+            //    return new BaseResponse<>(INVALID_JWT);
+            //}
+
+            PostCommentRes postCommentRes = pofolService.createComment(pofolIdx, userIdxByJwt,postCommentReq);
+            return new BaseResponse<>(postCommentRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+
+    }
+
+    // 댓글 삭제
+    @ResponseBody
+    @PatchMapping("/{pofolCommentIdx}/comment/status") // (patch) https://eraofband.shop/2/comment/status
+    @ApiOperation(value = "포트폴리오 댓글 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<String> deleteComment(@PathVariable("pofolCommentIdx") int pofolCommentIdx, int userIdx) {
+
+        try {
+
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            if(userIdx!= userIdxByJwt){
+                return new BaseResponse<>(INVALID_JWT);
+            }
+            pofolService.deleteComment(userIdxByJwt,pofolCommentIdx);
+
+            String result = "포트폴리오 댓글이 삭제되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+
+
+    }
+
+
+
+
+
+
+
+
 
 
 

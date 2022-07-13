@@ -49,6 +49,14 @@ public class PofolProvider {
         }
     }
 
+    public int checkCommentExist(int pofolCommentIdx) throws BaseException{
+        try{
+            return pofolDao.checkCommentExist(pofolCommentIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     // 유저의 포트폴리오인지 확인
     public int checkUserPofolExist(int userIdx,int pofolIdx) throws BaseException{
         try{
