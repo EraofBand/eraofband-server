@@ -40,15 +40,18 @@ public enum BaseResponseStatus {
 
     // pofol
     POSTS_EMPTY_POFOL_ID(false,2020,"포트폴리오 아이디 값을 확인해주세요."),
+    POSTS_EMPTY_POFOL_COMMENT_ID(false,2020,"포트폴리오 댓글 아이디 값을 확인해주세요."),
     POST_POSTS_INVALID_CONTENTS(false,2021,"내용의 글자수를 확인해주세요."),
 
     POST_POSTS_EMPTY_VIDEOURL(false,2021,"포트폴리오 동영상을 입력해주세요."),
     MODIFY_FAIL_POFOL(false,2021,"포트폴리오 변경에 실패했습니다."),
     DELETE_FAIL_POFOL(false,2021,"포트폴리오 삭제에 실패했습니다."),
 
+    DELETE_FAIL_POFOL_COMMENT(false,2021,"포트폴리오 댓글 삭제에 실패했습니다."),
+
     LIKES_FAIL_POFOL(false,2022,"포트폴리오 좋아요에 실패했습니다."),
 
-    UNLIKES_FAIL_POFOL(false,2023,"포트폴리오 좋아요에 실패했습니다."),
+    UNLIKES_FAIL_POFOL(false,2023,"포트폴리오 좋아요 취소에 실패했습니다."),
 
 
     /**

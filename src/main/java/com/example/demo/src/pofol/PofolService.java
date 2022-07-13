@@ -138,5 +138,39 @@ public class PofolService {
 
     }
 
+    // 댓글 등록
+    public PostCommentRes createComment(int pofolIdx, int userIdx, PostCommentReq postCommentReq) throws BaseException {
+
+        try{
+            int pofolCommentIdx = pofolDao.insertComment(pofolIdx, userIdx, postCommentReq);
+            return new PostCommentRes(pofolCommentIdx);
+        } catch (Exception exception) {
+
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 댓글 삭제
+    public void deleteComment(int userIdx, int pofolCommentIdx) throws BaseException {
+
+        if(pofolProvider.checkCommentExist(pofolCommentIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_POFOL_COMMENT_ID);
+        }
+
+        if(pofolProvider.checkUserExist(userIdx) == 0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+
+        try{
+            int result = pofolDao.deleteComment(pofolCommentIdx);
+            if(result == 0){
+                throw new BaseException(DELETE_FAIL_POFOL_COMMENT);
+            }
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 
 }
