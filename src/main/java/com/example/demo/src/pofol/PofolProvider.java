@@ -3,6 +3,7 @@ package com.example.demo.src.pofol;
 
 import com.example.demo.config.BaseException;
 
+import com.example.demo.src.pofol.model.GetCommentRes;
 import com.example.demo.src.pofol.model.GetPofolRes;
 import com.example.demo.src.pofol.*;
 import com.example.demo.utils.JwtService;
@@ -99,6 +100,25 @@ public class PofolProvider {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+
+    // 포트폴리오 댓글 리스트 조회
+    public List<GetCommentRes> retrieveComment(int pofolIdx) throws BaseException {
+
+        if(checkPofolExist(pofolIdx) ==0){
+            throw new BaseException(POSTS_EMPTY_POFOL_ID);
+        }
+
+        try{
+            List<GetCommentRes> getComment = pofolDao.selectComment(pofolIdx);
+            return getComment;
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+
     }
 
 
