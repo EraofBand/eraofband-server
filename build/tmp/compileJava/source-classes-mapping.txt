@@ -22,20 +22,18 @@ com/example/demo/src/pofol/PofolService.java
  com.example.demo.src.pofol.PofolService
 com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
+com/example/demo/src/session/model/PatchBandReq.java
+ com.example.demo.src.session.model.PatchBandReq
 com/example/demo/src/user/model/PatchUserReq.java
  com.example.demo.src.user.model.PatchUserReq
 com/example/demo/src/WebSecurityConfig.java
  com.example.demo.src.WebSecurityConfig
-com/example/demo/src/user/model/DeleteUserReq.java
- com.example.demo.src.user.model.DeleteUserReq
 com/example/demo/src/test/TestController.java
  com.example.demo.src.test.TestController
 com/example/demo/src/pofol/model/PostPofolRes.java
  com.example.demo.src.pofol.model.PostPofolRes
 com/example/demo/src/pofol/PofolProvider.java
  com.example.demo.src.pofol.PofolProvider
-com/example/demo/src/user/model/PostLoginReq.java
- com.example.demo.src.user.model.PostLoginReq
 com/example/demo/src/session/SessionService.java
  com.example.demo.src.session.SessionService
 com/example/demo/src/pofol/model/GetPofolRes.java
@@ -56,8 +54,6 @@ com/example/demo/src/pofol/PofolDao.java
  com.example.demo.src.pofol.PofolDao
 com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
-com/example/demo/src/user/model/DeleteUserRes.java
- com.example.demo.src.user.model.DeleteUserRes
 com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
 com/example/demo/src/user/UserService.java
@@ -78,3 +74,5 @@ com/example/demo/src/session/SessionProvider.java
  com.example.demo.src.session.SessionProvider
 com/example/demo/src/user/UserProvider.java
  com.example.demo.src.user.UserProvider
+com/example/demo/src/user/model/PatchSessionReq.java
+ com.example.demo.src.user.model.PatchSessionReq
