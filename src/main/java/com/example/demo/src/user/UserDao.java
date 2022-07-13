@@ -1,9 +1,7 @@
 package com.example.demo.src.user;
 
 
-import com.example.demo.src.user.model.GetUserRes;
-import com.example.demo.src.user.model.PatchUserReq;
-import com.example.demo.src.user.model.PostUserReq;
+import com.example.demo.src.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -30,17 +28,7 @@ public class UserDao {
 //                        rs.getString("nickName")
 //                ));
 //    }
-//
-//    public GetUserRes getUsersByEmail(String email){
-//        String getUsersByEmailQuery = "select userIdx,name,nickName from User where email=?";
-//        String getUsersByEmailParams = email;
-//        return this.jdbcTemplate.queryForObject(getUsersByEmailQuery,
-//                (rs, rowNum) -> new GetUserRes(
-//                        rs.getInt("userIdx"),
-//                        rs.getString("name"),
-//                        rs.getString("nickName")),
-//                getUsersByEmailParams);
-//    }
+
 
     /**회원 페이지 조회*/
     public GetUserRes getUsersByIdx(int userIdx){
@@ -68,7 +56,9 @@ public class UserDao {
                 getUsersByIdxParams);
     }
 
-    /**회원가입*/
+    /**
+     * 회원가입
+     * */
     public int createUser(PostUserReq postUserReq, String email){
         String createUserQuery = "insert into User (nickName,email,birth,gender,profileImgUrl,session,region) VALUES (?,?,?,?,?,?,?)";
         Object[] createUserParams = new Object[]{postUserReq.getNickName(),email,postUserReq.getBirth(), postUserReq.getGender(),
@@ -79,8 +69,18 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
 
+    public User getUserIdx(String email){
+        String getIdQuery = "select userIdx, email from User where email=? and status='ACTIVE'";
+        String getIdParams = email;
+        return this.jdbcTemplate.queryForObject(getIdQuery,
+                (rs, rowNum) -> new User(
+                        rs.getInt("userIdx"),
+                        rs.getString("email")),
+                getIdParams);
+    }
+
     public int checkEmail(String email){
-        String checkEmailQuery = "select exists(select email from User where email = ?)";
+        String checkEmailQuery = "select exists(select email from User where email = ? and status='ACTIVE')";
         String checkEmailParams = email;
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,
@@ -95,6 +95,13 @@ public class UserDao {
                 patchUserReq.getGender(), patchUserReq.getIntroduction(), patchUserReq.getProfileImgUrl(), patchUserReq.getRegion(),patchUserReq.getUserIdx()};
 
         return this.jdbcTemplate.update(modifyUserInfoQuery,modifyUserInfoParams);
+    }
+
+    public int modifyUserSession(PatchSessionReq patchSessionReq){
+        String modifyUserSessionQuery = "update User set session =? where userIdx = ?";
+        Object[] modifyUserSessionParams = new Object[]{patchSessionReq.getSession(),patchSessionReq.getUserIdx()};
+
+        return this.jdbcTemplate.update(modifyUserSessionQuery,modifyUserSessionParams);
     }
 
     public int deleteUser(int userIdx){

@@ -2,9 +2,7 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.user.model.PatchUserReq;
-import com.example.demo.src.user.model.PostUserReq;
-import com.example.demo.src.user.model.PostUserRes;
+import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
 import com.google.gson.JsonParser;
@@ -108,24 +106,53 @@ public class UserService {
         }
     }
 
+    /**
+     * 로그인 및 jwt 생성
+     */
+    public PostLoginRes logIn(String email) throws BaseException {
+        try {
+            if (userProvider.checkEmail(email) == 1) {
+                User user = userDao.getUserIdx(email);
+                int userIdx = user.getUserIdx();
+                String jwt = jwtService.createJwt(userIdx);
+                return new PostLoginRes(userIdx, jwt);
+            }
+
+            return new PostLoginRes(0, "NULL");
+
+        }catch(Exception exception){
+                System.out.println(exception);
+                throw new BaseException(DATABASE_ERROR);
+            }
+    }
+
 
     public void modifyUserInfo(PatchUserReq patchUserReq) throws BaseException {
         try {
             int result = userDao.modifyUserInfo(patchUserReq);
             if (result == 0) {
-                throw new BaseException(MODIFY_FAIL_USERNAME);
+                throw new BaseException(MODIFY_FAIL_USER);
             }} catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
+    public void modifyUserSession(PatchSessionReq patchSessionReq) throws BaseException {
+        try {
+            int result = userDao.modifyUserSession(patchSessionReq);
+            if (result == 0) {
+                throw new BaseException(MODIFY_FAIL_SESSION);
+            }} catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
     public void deleteUser ( int userIdx) throws BaseException {
         try {
             int result = userDao.deleteUser(userIdx);
-//            if(result == 0){
-//                throw new BaseException(DELETE_FAIL);
-//            }
+            if(result == 0){
+                throw new BaseException(DELETE_FAIL_USER);
+            }
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

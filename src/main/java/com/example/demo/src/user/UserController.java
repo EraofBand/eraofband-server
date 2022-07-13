@@ -58,8 +58,6 @@ public class UserController {
      * 유저 인덱스 검색 조회 API
      * @return BaseResponse<GetUserRes>
      */
-
-
     @ResponseBody
     @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/users/userIdx
     public BaseResponse<GetUserRes> getUserByIdx(@PathVariable("userIdx")int userIdx) {
@@ -72,6 +70,22 @@ public class UserController {
         }
 
     /**
+     * 마이 페이지 조회 API
+     * [GET] /users/myPage
+     * @return BaseResponse<GetUserRes>
+     */
+    @ResponseBody
+    @GetMapping("/myPage") // (GET) 127.0.0.1:9000/users/mypage
+    public BaseResponse<GetUserRes> getMypage(@PathVariable("userIdx")int userIdx) {
+        try{
+            GetUserRes getUsersRes = userProvider.getUsersByIdx(userIdx);
+            return new BaseResponse<>(getUsersRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
      * 카카오 회원가입 API
      * [POST] /users/signin/{access-token}
      * @return BaseResponse<PostUserRes>
@@ -82,6 +96,14 @@ public class UserController {
     public BaseResponse<PostUserRes> createKakaoUser(@PathVariable("access-token") String token, @RequestBody PostUserReq postUserReq){
         try{
             String email=userService.getKakaoInfo(token);
+            //email validation 처리
+            if(email.length()==0){
+               return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            }
+            // 이메일 정규표현
+           if(!isRegexEmail(email)){
+                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+            }
             PostUserRes postUserRes = userService.createUser(postUserReq,email);
             return new BaseResponse<>(postUserRes);
         } catch(BaseException exception){
@@ -90,12 +112,38 @@ public class UserController {
     }
 
     /**
-     * 회원정보변경 API
-     * [PATCH] /users/modiInfo
+     * 로그인(가입 여부 확인) API
+     * status 확인 필요
+     * [POST] /users/login/{kakao-email}
+     * @return BaseResponse<PostLoginRes>
+     */
+    @ResponseBody
+    @PatchMapping("/login/{kakao-email}") // (PATCH) 127.0.0.1:9000/users/login/jdshkf@gmail.com
+    public BaseResponse<PostLoginRes> UserLogin(@PathVariable("kakao-email") String email){
+        try {
+            //email validation 처리
+            if(email.length()==0){
+                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            }
+            // 이메일 정규표현
+            if(!isRegexEmail(email)){
+                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+            }
+                PostLoginRes postLoginRes = userService.logIn(email);
+                return new BaseResponse<>(postLoginRes);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 회원 정보 변경 API
+     * [PATCH] /users/modiUserInfo
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/modiInfo") // (PATCH) 127.0.0.1:9000/users/userIdx
+    @PatchMapping("/modiUserInfo") // (PATCH) 127.0.0.1:9000/users/modiUserInfo
     @ApiOperation(value = "회원 정보 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> modifyUserInfo(@RequestBody PatchUserReq patchUserReq){
         try {
@@ -115,12 +163,37 @@ public class UserController {
     }
 
     /**
+     * 회원 세션 변경 API
+     * [PATCH] /users/modiUserSession
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/modiUserSession") // (PATCH) 127.0.0.1:9000/users/modiUserSession
+    @ApiOperation(value = "회원 정보 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<String> modifyUserSession(@RequestBody PatchSessionReq patchSessionReq){
+        try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(patchSessionReq.getUserIdx() != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            userService.modifyUserSession(patchSessionReq);
+
+            String result = "세션 수정을 완료했습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
      * 회원 삭제 API
      * [PATCH] /users/{userIdx}/status
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/{userIdx}/status") // (PATCH) 127.0.0.1:9000/users/userIdx
+    @PatchMapping("/{userIdx}/delete") // (PATCH) 127.0.0.1:9000/users/2/delete
     @ApiOperation(value = "회원 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> deleteUser(@PathVariable("userIdx") int userIdx){
         try {
@@ -138,4 +211,17 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 팔로우 하기 API
+     * [PATCH] /users/follow/
+     * @return
+     */
+
+    /**
+     * 팔로우 취소 API
+     *  * status 말고 delete로
+     * [PATCH] /users/unfollow/
+     * @return
+     */
 }
