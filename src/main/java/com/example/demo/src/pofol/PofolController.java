@@ -42,7 +42,7 @@ public class PofolController {
     // 팔로우 한 유저 포트폴리오 리스트 조회
     @ResponseBody
     @GetMapping("")  // (get) https://eraofband.shop/pofol?userIdx=12
-    //@ApiOperation(value = " 팔로우 한 유저 포트폴리오 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = " 팔로우 한 유저 포트폴리오 리스트 조회")
     public BaseResponse<List<GetPofolRes>> getPofol(@RequestParam int userIdx){
         try{
             //jwt 없애기
@@ -55,6 +55,30 @@ public class PofolController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+
+
+    // 내 포트폴리오 조회
+    @ResponseBody
+    @GetMapping("/my/")   // (get) https://eraofband.shop/pofol/my?userIdx=12
+    @ApiOperation(value = " 내 포트폴리오 리스트 조회")
+    public BaseResponse<List<GetPofolRes>> getMyPofol(@RequestParam int userIdx){
+
+        try{
+            //jwt 없애기
+            //int userIdxByJwt = jwtService.getUserIdx();
+            //List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdxByJwt);
+
+            List<GetPofolRes> getMyPofol=pofolProvider.retrieveMyPofol(userIdx);
+            return new BaseResponse<>(getMyPofol);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+    }
+
+
+
 
 
 
@@ -235,7 +259,7 @@ public class PofolController {
 
     @ResponseBody
     @GetMapping("/comment/")  // (get) https://eraofband.shop/pofol/comment
-    //@ApiOperation(value = " 댓글 목록 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = " 댓글 목록 조회")
     public BaseResponse<List<GetCommentRes>> getComment(@RequestParam int postIdx){
         try{
             //jwt 없애기
