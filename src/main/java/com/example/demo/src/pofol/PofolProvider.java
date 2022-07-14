@@ -4,6 +4,7 @@ package com.example.demo.src.pofol;
 import com.example.demo.config.BaseException;
 
 import com.example.demo.src.pofol.model.GetCommentRes;
+
 import com.example.demo.src.pofol.model.GetPofolRes;
 import com.example.demo.src.pofol.*;
 import com.example.demo.utils.JwtService;
@@ -102,6 +103,22 @@ public class PofolProvider {
         }
     }
 
+
+    public List<GetPofolRes> retrieveMyPofol(int userIdx) throws BaseException {
+
+        if(checkUserExist(userIdx) ==0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+
+        try{
+            List<GetPofolRes> getMyPofol = pofolDao.selectMyPofol(userIdx);
+            return getMyPofol;
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
 
     // 포트폴리오 댓글 리스트 조회
     public List<GetCommentRes> retrieveComment(int pofolIdx) throws BaseException {
