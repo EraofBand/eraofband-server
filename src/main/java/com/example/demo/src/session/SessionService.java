@@ -1,9 +1,7 @@
 package com.example.demo.src.session;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.session.model.PatchBandReq;
-import com.example.demo.src.session.model.PostBandReq;
-import com.example.demo.src.session.model.PostBandRes;
+import com.example.demo.src.session.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,5 +68,17 @@ public class SessionService {
         }
     }
 
+    // 밴드 지원
+    public PostApplyRes applySession(int userIdx, int bandIdx, PostApplyReq postApplyReq) throws BaseException {
+
+
+        try{
+            int bandUserIdx = sessionDao.insertApply(userIdx, bandIdx, postApplyReq);
+            return new PostApplyRes(bandUserIdx);
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
 }
