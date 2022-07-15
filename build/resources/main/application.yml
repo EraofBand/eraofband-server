@@ -18,6 +18,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8버전
     # driver-class-name: com.mysql.jdbc.Driver # mysql 5버전
 
+
 logging:
   level:
     com:
@@ -29,12 +30,10 @@ cloud:
   aws:
     s3:
       bucket: eraofband
-    credentials:
-      access-key: AKIARNTNV6CZV2JABKKT
-      secret-key: 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
     region:
       static: ap-northeast-2
       auto: false
     stack:
       auto: false
-
+    credentials:
+      instance-profile: true
