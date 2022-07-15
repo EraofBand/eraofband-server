@@ -2,10 +2,7 @@ package com.example.demo.src.session;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.session.model.GetBandRes;
-import com.example.demo.src.session.model.PatchBandReq;
-import com.example.demo.src.session.model.PostBandReq;
-import com.example.demo.src.session.model.PostBandRes;
+import com.example.demo.src.session.model.*;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +28,12 @@ public class SessionController {
 
     // 밴드 조회
     @ResponseBody
-    @GetMapping("/{bandIdx}") // (get) https://eraofband.shop/2
+    @GetMapping("/{bandIdx}") // (get) https://eraofband.shop/sessions/2
     @ApiOperation(value = "밴드 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<GetBandRes> retrieveBand(@PathVariable("bandIdx") int bandIdx){
+    public BaseResponse<GetBandRes> getBand(@PathVariable("bandIdx") int bandIdx){
         try{
             int userIdxByJwt = jwtService.getUserIdx();
-            GetBandRes getBandRes = sessionProvider.retrieveBand(userIdxByJwt, bandIdx);
+            GetBandRes getBandRes = sessionProvider.getBand(userIdxByJwt, bandIdx);
 
             return new BaseResponse<>(getBandRes);
         } catch (BaseException exception){
@@ -124,6 +121,22 @@ public class SessionController {
             String result = "밴드가 삭제되었습니다.";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    // 밴드 세션 지원 생성
+    @ResponseBody
+    @PostMapping("apply/{bandIdx}") // (post) https://eraofband.shop/sessions/apply/2
+    @ApiOperation(value = "밴드 세션 지원 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<PostApplyRes> applySession(@PathVariable("bandIdx") int bandIdx, @RequestBody PostApplyReq postApplyReq) {
+        try{
+
+            int userIdxByJwt = jwtService.getUserIdx();
+            PostApplyRes postApplyRes = sessionService.applySession(userIdxByJwt, bandIdx, postApplyReq);
+
+            return new BaseResponse<>(postApplyRes);
+        } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
     }
