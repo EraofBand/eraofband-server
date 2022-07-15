@@ -14,6 +14,8 @@ com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/src/session/model/PatchBandReq.java
  com.example.demo.src.session.model.PatchBandReq
+com/example/demo/src/session/model/PostApplyRes.java
+ com.example.demo.src.session.model.PostApplyRes
 com/example/demo/src/session/SessionService.java
  com.example.demo.src.session.SessionService
 com/example/demo/src/pofol/model/GetPofolRes.java
@@ -36,6 +38,8 @@ com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
+com/example/demo/src/S33/UploadService.java
+ com.example.demo.src.S33.UploadService
 com/example/demo/src/user/model/GetMyFeedRes.java
  com.example.demo.src.user.model.GetMyFeedRes
 com/example/demo/config/BaseException.java
@@ -46,6 +50,8 @@ com/example/demo/config/SwaggerConfig.java
  com.example.demo.config.SwaggerConfig
 com/example/demo/src/session/SessionProvider.java
  com.example.demo.src.session.SessionProvider
+com/example/demo/src/session/model/GetApplyRes.java
+ com.example.demo.src.session.model.GetApplyRes
 com/example/demo/src/user/model/PatchSessionReq.java
  com.example.demo.src.user.model.PatchSessionReq
 com/example/demo/src/session/SessionController.java
@@ -56,10 +62,14 @@ com/example/demo/src/user/model/GetUserFeedRes.java
  com.example.demo.src.user.model.GetUserFeedRes
 com/example/demo/src/session/model/PostBandRes.java
  com.example.demo.src.session.model.PostBandRes
+com/example/demo/src/S33/FileUploadController.java
+ com.example.demo.src.S33.FileUploadController
 com/example/demo/utils/SHA256.java
  com.example.demo.utils.SHA256
 com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
+com/example/demo/src/session/model/PostApplyReq.java
+ com.example.demo.src.session.model.PostApplyReq
 com/example/demo/src/user/model/GetMyInfoRes.java
  com.example.demo.src.user.model.GetMyInfoRes
 com/example/demo/src/user/model/PostLoginRes.java
@@ -80,8 +90,12 @@ com/example/demo/src/pofol/model/PostPofolRes.java
  com.example.demo.src.pofol.model.PostPofolRes
 com/example/demo/src/pofol/PofolProvider.java
  com.example.demo.src.pofol.PofolProvider
+com/example/demo/src/S33/S3Component.java
+ com.example.demo.src.S33.S3Component
 com/example/demo/src/user/model/GetUserPofolRes.java
  com.example.demo.src.user.model.GetUserPofolRes
+com/example/demo/src/S33/AwsS3UploadService.java
+ com.example.demo.src.S33.AwsS3UploadService
 com/example/demo/src/session/model/PostBandReq.java
  com.example.demo.src.session.model.PostBandReq
 com/example/demo/src/user/UserController.java
@@ -102,3 +116,5 @@ com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
 com/example/demo/src/user/UserProvider.java
  com.example.demo.src.user.UserProvider
+com/example/demo/src/S33/FileUploadService.java
+ com.example.demo.src.S33.FileUploadService

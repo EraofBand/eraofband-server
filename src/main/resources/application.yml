@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: demo
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+
 
   datasource:
     platform: mysql
@@ -12,3 +17,23 @@ spring:
     password:  eob1234!
     driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8버전
     # driver-class-name: com.mysql.jdbc.Driver # mysql 5버전
+
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
+
+cloud:
+  aws:
+    s3:
+      bucket: eraofband
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      instance-profile: true
