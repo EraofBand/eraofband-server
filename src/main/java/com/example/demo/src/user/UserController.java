@@ -53,17 +53,19 @@ public class UserController {
 //        }
 //    }
     /**
-     * 회원 페이지 조회 API
+     * 다른 회원 페이지 조회 API
      * [GET] /users/{userIdx}
      * 유저 인덱스 검색 조회 API
-     * @return BaseResponse<GetUserRes>
+     * @return BaseResponse<GetUserFeedRes>
      */
     @ResponseBody
     @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/users/userIdx
-    public BaseResponse<GetUserRes> getUserByIdx(@PathVariable("userIdx")int userIdx) {
+    @ApiOperation(value = "다른 회원 정보 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<GetUserFeedRes> getUserByIdx(@PathVariable("userIdx")int userIdx) {
             try{
-                GetUserRes getUsersRes = userProvider.getUsersByIdx(userIdx);
-                return new BaseResponse<>(getUsersRes);
+                int myId = jwtService.getUserIdx();
+                GetUserFeedRes getUserFeed = userProvider.getUserByIdx(myId,userIdx);
+                return new BaseResponse<>(getUserFeed);
             } catch(BaseException exception){
                 return new BaseResponse<>((exception.getStatus()));
             }
@@ -71,15 +73,22 @@ public class UserController {
 
     /**
      * 마이 페이지 조회 API
-     * [GET] /users/myPage
-     * @return BaseResponse<GetUserRes>
+     * [GET] /users/myPage/{userIdx}
+     * @return BaseResponse<GetMyFeedRes>
      */
     @ResponseBody
-    @GetMapping("/myPage") // (GET) 127.0.0.1:9000/users/mypage
-    public BaseResponse<GetUserRes> getMypage(@PathVariable("userIdx")int userIdx) {
+    @GetMapping("/myPage/{userIdx}") // (GET) 127.0.0.1:9000/users/mypage
+    @ApiOperation(value = "마이페이지 정보 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<GetMyFeedRes> getMypage(@PathVariable("userIdx")int userIdx) {
         try{
-            GetUserRes getUsersRes = userProvider.getUsersByIdx(userIdx);
-            return new BaseResponse<>(getUsersRes);
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            GetMyFeedRes getMyFeedRes = userProvider.getMyFeed(userIdx);
+            return new BaseResponse<>(getMyFeedRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

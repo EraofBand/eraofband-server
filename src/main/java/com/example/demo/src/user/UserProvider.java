@@ -2,12 +2,14 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.user.model.GetUserRes;
+import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
@@ -28,12 +30,32 @@ public class UserProvider {
     }
 
 
-    public GetUserRes getUsersByIdx(int userIdx) throws BaseException{
+    public GetUserFeedRes getUserByIdx(int myId, int userIdx) throws BaseException{
         try{
-            GetUserRes getUsersRes = userDao.getUsersByIdx(userIdx);
-            return getUsersRes;
+            GetUserInfoRes getUserInfo=userDao.getUserByIdx(myId, userIdx);
+            List<GetUserPofolRes> getUserPofol=userDao.getUserPofol(userIdx);
+            List<GetUserBandRes> getUserBand=userDao.getUserBand(userIdx);
+            List<GetUserLessonRes> getUserLesson=userDao.getUserLesson(userIdx);
+            GetUserFeedRes getUserFeed = new GetUserFeedRes(getUserInfo,getUserPofol,getUserBand,getUserLesson);
+            return getUserFeed;
         }
         catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public GetMyFeedRes getMyFeed(int userIdx) throws BaseException{
+        try{
+            GetMyInfoRes getMyInfo=userDao.getMyFeed(userIdx);
+            List<GetUserPofolRes> getUserPofol=userDao.getUserPofol(userIdx);
+            List<GetUserBandRes> getUserBand=userDao.getUserBand(userIdx);
+            List<GetUserLessonRes> getUserLesson=userDao.getUserLesson(userIdx);
+            GetMyFeedRes getMyFeed = new GetMyFeedRes(getMyInfo,getUserPofol,getUserBand,getUserLesson);
+            return getMyFeed;
+        }
+        catch (Exception exception) {
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
