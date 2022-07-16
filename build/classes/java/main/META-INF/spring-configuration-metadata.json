@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "cloud.aws.s3",
+      "type": "com.example.demo.src.S33.S3Component",
+      "sourceType": "com.example.demo.src.S33.S3Component"
+    }
+  ],
+  "properties": [
+    {
+      "name": "cloud.aws.s3.bucket",
+      "type": "java.lang.String",
+      "sourceType": "com.example.demo.src.S33.S3Component"
+    }
+  ],
+  "hints": []
+}
