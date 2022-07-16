@@ -16,7 +16,7 @@ public class DemoApplication {
 
     public static final String APPLICATION_LOCATIONS = "spring.config.location="
             + "classpath:application.yml,"
-            + "optional:classpath:aws.yml";
+            + "classpath:aws.yml";
 
 
     public static void main(String[] args) {
