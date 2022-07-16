@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -24,11 +23,13 @@ public class GetBandRes {
     private int keyboard;
     private int drum;
 
+    private List<GetSessionRes> sessionMembers;
+
     private String chatRoomLink;
     private String performDate;
 
     private String bandImgUrl;
 
-    private List<GetApplyRes> applicants;
+    private List<GetSessionRes> applicants;
 
 }
