@@ -255,7 +255,6 @@ public class UserController {
     @DeleteMapping ("/unfollow/{userIdx}") // (post) https://eraofband.shop/users/unfollow/2
     @ApiOperation(value = "팔로우 취소 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> unFollowUser(@PathVariable("userIdx") int userIdx){
-
         try {
             //jwt에서 idx 추출
             int userIdxByJwt = jwtService.getUserIdx();
@@ -266,7 +265,6 @@ public class UserController {
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
-
     }
 
     /**
