@@ -1,7 +1,7 @@
 package com.example.demo.src.session;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.session.model.GetApplyRes;
+import com.example.demo.src.session.model.GetSessionRes;
 import com.example.demo.src.session.model.GetBandRes;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,8 @@ import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 public class SessionProvider {
     private final SessionDao sessionDao;
     private final JwtService jwtService;
-    private List<GetApplyRes> getApplicants;
+    private List<GetSessionRes> getSessionMembers;
+    private List<GetSessionRes> getApplicants;
 
     @Autowired
     public SessionProvider(SessionDao sessionDao, JwtService jwtService) {
@@ -32,6 +33,15 @@ public class SessionProvider {
         }
     }
 
+    // 밴드 세션 멤버 확인
+    public int checkBandSession(int userIdx, int bandIdx) throws BaseException {
+        try {
+            return sessionDao.checkBandSession(userIdx, bandIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     // 밴드 확인
     public int checkBandExist(int bandIdx) throws BaseException {
         try{
@@ -44,20 +54,20 @@ public class SessionProvider {
     // 밴드 조회
     public GetBandRes getBand(int userIdx, int bandIdx) throws BaseException {
         try{
+            getSessionMembers = getSessionMembers(bandIdx);
             if (checkBandMaker(bandIdx) == userIdx) {
+                getApplicants = getApplicants(bandIdx);
+                GetBandRes getBandRes = sessionDao.getMyBandByIdx(bandIdx, getSessionMembers, getApplicants);
 
-                try {
-                    getApplicants = getApplicants(bandIdx);
-                } catch(Exception exception){
-//                    System.out.println(exception);
-
-                    throw new BaseException(DATABASE_ERROR);
-                }
-                GetBandRes getBandRes = sessionDao.getMyBandByIdx(bandIdx, getApplicants);
                 return getBandRes;
-            }
-            else {
-                GetBandRes getBandRes = sessionDao.getBandByIdx(bandIdx);
+
+            } else if (checkBandSession(userIdx, bandIdx) == 1) {
+                GetBandRes getBandRes = sessionDao.getSessionBandByIdx(bandIdx, getSessionMembers);
+
+                return getBandRes;
+            } else {
+                GetBandRes getBandRes = sessionDao.getBandByIdx(bandIdx, getSessionMembers);
+
                 return getBandRes;
             }
         } catch(Exception exception){
@@ -66,9 +76,18 @@ public class SessionProvider {
         }
     }
 
-    public List<GetApplyRes> getApplicants(int bandIdx) throws BaseException {
+    public List<GetSessionRes> getSessionMembers(int bandIdx) throws BaseException {
         try{
-            List<GetApplyRes> getApplicants = sessionDao.getApplicants(bandIdx);
+            List<GetSessionRes> getSessionMembers = sessionDao.getSessionMembers(bandIdx);
+            return getSessionMembers;
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetSessionRes> getApplicants(int bandIdx) throws BaseException {
+        try{
+            List<GetSessionRes> getApplicants = sessionDao.getApplicants(bandIdx);
             return getApplicants;
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);

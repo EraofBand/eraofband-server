@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetApplyRes {
-    private int userIdx;
+public class GetSessionRes {
     private int session;
+    private int userIdx;
 }
