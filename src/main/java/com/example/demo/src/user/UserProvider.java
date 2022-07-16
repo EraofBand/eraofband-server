@@ -60,6 +60,19 @@ public class UserProvider {
         }
     }
 
+    public GetFollowRes getFollow(int userIdx) throws BaseException{
+        try{
+            List<Users> getfollowing=userDao.getFollowing(userIdx);
+            List<Users> getfollower=userDao.getFollower(userIdx);
+            GetFollowRes getFollow = new GetFollowRes(getfollowing,getfollower);
+            return getFollow;
+        }
+        catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 
     public int checkEmail(String email) throws BaseException{
         try{

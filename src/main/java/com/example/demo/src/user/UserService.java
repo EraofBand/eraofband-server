@@ -2,6 +2,7 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.pofol.model.PostLikeRes;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
@@ -156,6 +157,34 @@ public class UserService {
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    public PostFollowRes followUser(int myIdx, int userIdx) throws BaseException {
+
+        try{
+            int result = userDao.updateFollow(myIdx, userIdx);
+            if(result == 0){
+                throw new BaseException(FOLLOW_FAIL_USER);
+            }
+            return new PostFollowRes(result);
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
+
+    public void unfollowUser(int myIdx, int userIdx) throws BaseException {
+        try{
+            int result = userDao.updateUnFollow(myIdx, userIdx);
+            if(result == 0){
+                throw new BaseException(UNFOLLOW_FAIL_USER);
+            }
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+
     }
 
 }
