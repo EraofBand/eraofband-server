@@ -1,3 +1,7 @@
+.gradle
+build/
 
+.ideas
+.iml
 
 aws.yml
