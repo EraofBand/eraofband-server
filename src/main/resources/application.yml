@@ -36,4 +36,4 @@ cloud:
     stack:
       auto: false
     credentials:
-      instanceProfile: true
+      instance-profile: true
