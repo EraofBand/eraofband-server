@@ -181,10 +181,10 @@ public class SessionDao {
     public int updateBand(int bandIdx, PatchBandReq patchBandReq){
         String updateBandQuery = "UPDATE Band SET bandTitle=?, bandIntroduction=?, bandRegion=?, bandContent=?," +
                 "vocal=?, guitar=?, base=?, keyboard=?, drum=?, chatRoomLink=?, performDate=?, bandImgUrl=? WHERE bandIdx = ?" ;
-        Object[] updateBandParams = new Object[]{patchBandReq.getBandTitle(), patchBandReq.getBandIntroduction(),
+        Object[] updateBandParams = new Object[]{ patchBandReq.getBandTitle(), patchBandReq.getBandIntroduction(),
                 patchBandReq.getBandRegion(), patchBandReq.getBandContent(),
                 patchBandReq.getVocal(), patchBandReq.getGuitar(), patchBandReq.getBase(), patchBandReq.getKeyboard(), patchBandReq.getDrum(),
-                patchBandReq.getChatRoomLink(), patchBandReq.getPerformDate(), patchBandReq.getBandImgUrl(), bandIdx};
+                patchBandReq.getChatRoomLink(), patchBandReq.getPerformDate(), patchBandReq.getBandImgUrl(), bandIdx };
 
         return this.jdbcTemplate.update(updateBandQuery,updateBandParams);
     }
@@ -192,10 +192,11 @@ public class SessionDao {
     // 밴드 삭제
     public int updateBandStatus(int bandIdx){
         String deleteBandQuery = "UPDATE Band SET status = 'INACTIVE' WHERE bandIdx = ? ";
-        Object[] deleteBandParams = new Object[]{bandIdx};
+        Object[] deleteBandParams = new Object[]{ bandIdx };
 
         return this.jdbcTemplate.update(deleteBandQuery,deleteBandParams);
     }
+
 
     // 밴드 세션 지원
     public int insertApply(int userIdx, int bandIdx, PostApplyReq postApplyReq){
@@ -205,5 +206,21 @@ public class SessionDao {
 
         String lastInsertIdQuery = "SELECT last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    // 세션 지원 수락
+    public int acceptSession(int bandIdx, int userIdx){
+        String updateStatusQuery = "UPDATE BandUser SET status = 'ACTIVE' WHERE bandIdx = ? and userIdx = ?";
+        Object[] updateStatusParams = new Object[]{ bandIdx, userIdx };
+
+        return this.jdbcTemplate.update(updateStatusQuery, updateStatusParams);
+    }
+
+    // 세션 지원 거절
+    public int rejectSession(int bandIdx, int userIdx){
+        String updateStatusQuery = "UPDATE BandUser SET status = 'REJECT' WHERE bandIdx = ? and userIdx = ?";
+        Object[] updateStatusParams = new Object[]{ bandIdx, userIdx };
+
+        return this.jdbcTemplate.update(updateStatusQuery, updateStatusParams);
     }
 }
