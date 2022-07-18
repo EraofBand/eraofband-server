@@ -144,7 +144,7 @@ public class SessionController {
     // 세션 지원 수락
     @ResponseBody
     @PatchMapping("/{bandIdx}/accept/{userIdx}") // (patch) https://eraofband.shop/sessions/2/accept/9
-    @ApiOperation(value = "세션 지원 수락 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "세션 지원 수락 처리", notes = "path: 해당 페이지의 bandIdx, 지원 수락하려는 userIdx")
     public BaseResponse<String> acceptSession(@PathVariable("bandIdx") int bandIdx, @PathVariable("userIdx") int userIdx){
         try {
 
@@ -160,7 +160,7 @@ public class SessionController {
     // 세션 지원 거절
     @ResponseBody
     @PatchMapping("/{bandIdx}/reject/{userIdx}") // (patch) https://eraofband.shop/sessions/2/reject/9
-    @ApiOperation(value = "세션 지원 거절 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "세션 지원 거절 처리", notes = "path: 해당 페이지의 bandIdx, 지원 거절하려는 userIdx")
     public BaseResponse<String> rejectSession(@PathVariable("bandIdx") int bandIdx, @PathVariable("userIdx") int userIdx){
         try {
             sessionService.rejectSession(bandIdx, userIdx);

@@ -79,6 +79,7 @@ public class SessionService {
         }
     }
 
+    // 밴드 지원 수락
     public void acceptSession(int bandIdx, int userIdx) throws BaseException {
 
         if(sessionProvider.checkBandExist(bandIdx) ==0){
@@ -93,6 +94,7 @@ public class SessionService {
         }
     }
 
+    // 밴드 지원 거절
     public void rejectSession(int bandIdx, int userIdx) throws BaseException {
 
         if(sessionProvider.checkBandExist(bandIdx) ==0){
