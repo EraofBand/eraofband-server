@@ -44,48 +44,46 @@ public class SessionDao {
     }
 
     public List<GetSessionRes> getSessionMembers(int bandIdx){
-        String getSessionMemberQuery = "SELECT session, userIdx, bandIdx\n" +
-                "        FROM BandUser\n" +
-                "        WHERE bandIdx=? and status = 'ACTIVE'";
+        String getSessionMemberQuery = "SELECT session, BU.userIdx as userIdx, u.nickName as nickName, bandIdx\n" +
+                "FROM BandUser as BU JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = BU.userIdx\n" +
+                "WHERE bandIdx = ? and status = 'ACTIVE'";
         int getSessionMemberParams = bandIdx;
         return this.jdbcTemplate.query(getSessionMemberQuery,
                                        (rs, rowNum) -> new GetSessionRes(
                                                rs.getInt("session"),
-                                               rs.getInt("userIdx")),
+                                               rs.getInt("userIdx"),
+                                               rs.getString("nickName")),
                                        getSessionMemberParams);
     }
 
     public List<GetSessionRes> getApplicants(int bandIdx){
-        String getApplicantsQuery = "SELECT session, userIdx, bandIdx\n" +
-                "        FROM BandUser\n" +
-                "        WHERE bandIdx=? and status = 'INACTIVE'";
+        String getApplicantsQuery = "SELECT session, BU.userIdx as userIdx, u.nickName as nickName, bandIdx\n" +
+                "FROM BandUser as BU JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = BU.userIdx\n" +
+                "WHERE bandIdx = ? and status = 'INACTIVE'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.query(getApplicantsQuery,
                                        (rs, rowNum) -> new GetSessionRes(
                                                rs.getInt("session"),
-                                               rs.getInt("userIdx")),
+                                               rs.getInt("userIdx"),
+                                               rs.getString("nickName")),
                                        getBandByIdxParams);
     }
 
     // 밴드 조회
     public GetBandRes getMyBandByIdx(int bandIdx,  List<GetSessionRes> sessionMembers, List<GetSessionRes> applicants){
-        String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, b.bandTitle as bandTitle,\n" +
-                "    b.bandIntroduction as bandIntroduction, b.bandRegion as bandRegion,\n" +
-                "    b.bandContent as bandContent,\n" +
-                "    IF(vocal is null, 0, vocal) as vocal,\n" +
-                "    IF(guitar is null, 0, guitar) as guitar,\n" +
-                "    IF(base is null, 0, base) as base,\n" +
-                "    IF(keyboard is null, 0, keyboard) as keyboard,\n" +
-                "    IF(drum is null, 0, drum) as drum,\n" +
-                "    b.chatRoomLink as chatRoomLink, b.performDate as performDate,\n" +
-                "    b.bandImgUrl as bandImgUrl\n" +
-                "FROM Band as b\n" +
+        String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
+                "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
+                "       b.bandRegion as bandRegion, b.bandContent as bandContent,\n" +
+                "       vocal, guitar, base, keyboard, drum,\n" +
+                "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.bandImgUrl as bandImgUrl\n" +
+                "FROM Band as b JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = b.userIdx\n" +
                 "WHERE b.bandIdx=? and b.status='ACTIVE'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.queryForObject(getBandByIdxQuery,
                                                 (rs, rowNum) -> new GetBandRes(
                                                         rs.getInt("bandIdx"),
                                                         rs.getInt("userIdx"),
+                                                        rs.getString("nickName"),
                                                         rs.getString("bandTitle"),
                                                         rs.getString("bandIntroduction"),
                                                         rs.getString("bandRegion"),
@@ -104,18 +102,19 @@ public class SessionDao {
     }
 
     public GetBandRes getSessionBandByIdx(int bandIdx,  List<GetSessionRes> sessionMembers){
-        String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, b.bandTitle as bandTitle, " +
-                "b.bandIntroduction as bandIntroduction, b.bandRegion as bandRegion, b.bandContent as bandContent, " +
-                "IF(vocal is null, 0, vocal) as vocal, IF(guitar is null, 0, guitar) as guitar, " +
-                "IF(base is null, 0, base) as base, IF(keyboard is null, 0, keyboard) as keyboard, IF(drum is null, 0, drum) as drum, " +
-                "b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.bandImgUrl as bandImgUrl\n" +
-                "FROM Band as b\n"+
+        String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
+                "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
+                "       b.bandRegion as bandRegion, b.bandContent as bandContent,\n" +
+                "       vocal, guitar, base, keyboard, drum,\n" +
+                "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.bandImgUrl as bandImgUrl\n" +
+                "FROM Band as b JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = b.userIdx\n" +
                 "WHERE b.bandIdx=? and b.status='ACTIVE'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.queryForObject(getBandByIdxQuery,
                                                 (rs, rowNum) -> new GetBandRes(
                                                         rs.getInt("bandIdx"),
                                                         rs.getInt("userIdx"),
+                                                        rs.getString("nickName"),
                                                         rs.getString("bandTitle"),
                                                         rs.getString("bandIntroduction"),
                                                         rs.getString("bandRegion"),
@@ -134,18 +133,19 @@ public class SessionDao {
     }
 
     public GetBandRes getBandByIdx(int bandIdx,  List<GetSessionRes> sessionMembers){
-        String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, b.bandTitle as bandTitle, " +
-                "b.bandIntroduction as bandIntroduction, b.bandRegion as bandRegion, b.bandContent as bandContent, " +
-                "IF(vocal is null, 0, vocal) as vocal, IF(guitar is null, 0, guitar) as guitar, " +
-                "IF(base is null, 0, base) as base, IF(keyboard is null, 0, keyboard) as keyboard, IF(drum is null, 0, drum) as drum, " +
-                "b.performDate as performDate, b.bandImgUrl as bandImgUrl\n" +
-                "FROM Band as b\n"+
+        String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
+                "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
+                "       b.bandRegion as bandRegion, b.bandContent as bandContent,\n" +
+                "       vocal, guitar, base, keyboard, drum,\n" +
+                "       b.performDate as performDate, b.bandImgUrl as bandImgUrl\n" +
+                "FROM Band as b JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = b.userIdx\n" +
                 "WHERE b.bandIdx=? and b.status='ACTIVE'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.queryForObject(getBandByIdxQuery,
                                                 (rs, rowNum) -> new GetBandRes(
                                                         rs.getInt("bandIdx"),
                                                         rs.getInt("userIdx"),
+                                                        rs.getString("nickName"),
                                                         rs.getString("bandTitle"),
                                                         rs.getString("bandIntroduction"),
                                                         rs.getString("bandRegion"),
@@ -181,10 +181,10 @@ public class SessionDao {
     public int updateBand(int bandIdx, PatchBandReq patchBandReq){
         String updateBandQuery = "UPDATE Band SET bandTitle=?, bandIntroduction=?, bandRegion=?, bandContent=?," +
                 "vocal=?, guitar=?, base=?, keyboard=?, drum=?, chatRoomLink=?, performDate=?, bandImgUrl=? WHERE bandIdx = ?" ;
-        Object[] updateBandParams = new Object[]{patchBandReq.getBandTitle(), patchBandReq.getBandIntroduction(),
+        Object[] updateBandParams = new Object[]{ patchBandReq.getBandTitle(), patchBandReq.getBandIntroduction(),
                 patchBandReq.getBandRegion(), patchBandReq.getBandContent(),
                 patchBandReq.getVocal(), patchBandReq.getGuitar(), patchBandReq.getBase(), patchBandReq.getKeyboard(), patchBandReq.getDrum(),
-                patchBandReq.getChatRoomLink(), patchBandReq.getPerformDate(), patchBandReq.getBandImgUrl(), bandIdx};
+                patchBandReq.getChatRoomLink(), patchBandReq.getPerformDate(), patchBandReq.getBandImgUrl(), bandIdx };
 
         return this.jdbcTemplate.update(updateBandQuery,updateBandParams);
     }
@@ -192,10 +192,11 @@ public class SessionDao {
     // 밴드 삭제
     public int updateBandStatus(int bandIdx){
         String deleteBandQuery = "UPDATE Band SET status = 'INACTIVE' WHERE bandIdx = ? ";
-        Object[] deleteBandParams = new Object[]{bandIdx};
+        Object[] deleteBandParams = new Object[]{ bandIdx };
 
         return this.jdbcTemplate.update(deleteBandQuery,deleteBandParams);
     }
+
 
     // 밴드 세션 지원
     public int insertApply(int userIdx, int bandIdx, PostApplyReq postApplyReq){
@@ -205,5 +206,21 @@ public class SessionDao {
 
         String lastInsertIdQuery = "SELECT last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    // 세션 지원 수락
+    public int acceptSession(int bandIdx, int userIdx){
+        String updateStatusQuery = "UPDATE BandUser SET status = 'ACTIVE' WHERE bandIdx = ? and userIdx = ?";
+        Object[] updateStatusParams = new Object[]{ bandIdx, userIdx };
+
+        return this.jdbcTemplate.update(updateStatusQuery, updateStatusParams);
+    }
+
+    // 세션 지원 거절
+    public int rejectSession(int bandIdx, int userIdx){
+        String updateStatusQuery = "UPDATE BandUser SET status = 'REJECT' WHERE bandIdx = ? and userIdx = ?";
+        Object[] updateStatusParams = new Object[]{ bandIdx, userIdx };
+
+        return this.jdbcTemplate.update(updateStatusQuery, updateStatusParams);
     }
 }

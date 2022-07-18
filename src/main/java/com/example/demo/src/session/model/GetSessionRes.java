@@ -10,4 +10,5 @@ import lombok.Setter;
 public class GetSessionRes {
     private int session;
     private int userIdx;
+    private String nickName;
 }
