@@ -27,32 +27,7 @@ public class UserController {
         this.userService = userService;
         this.jwtService = jwtService;
     }
-    /**
-     * 회원 조회 API
-     * [GET] /users
-     * 이메일 검색 조회 API
-     * [GET] /users? Email=
-     * @return BaseResponse<GetUserRes>
-     */
-    //Query String
-//    @ResponseBody
-//    @GetMapping("") // (GET) 127.0.0.1:9000/users
-//    public BaseResponse<GetUserRes> getUsers(@RequestParam(required = true) String Email) {
-//        try{
-//            // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
-//            if(Email.length()==0){
-//                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-//            }
-//            // 이메일 정규표현
-//            if(!isRegexEmail(Email)){
-//                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
-//            }
-//            GetUserRes getUsersRes = userProvider.getUsersByEmail(Email);
-//            return new BaseResponse<>(getUsersRes);
-//        } catch(BaseException exception){
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+
     /**
      * 다른 회원 페이지 조회 API
      * [GET] /users/{userIdx}

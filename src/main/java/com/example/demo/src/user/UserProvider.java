@@ -35,8 +35,7 @@ public class UserProvider {
             GetUserInfoRes getUserInfo=userDao.getUserByIdx(myId, userIdx);
             List<GetUserPofolRes> getUserPofol=userDao.getUserPofol(userIdx);
             List<GetUserBandRes> getUserBand=userDao.getUserBand(userIdx);
-            List<GetUserLessonRes> getUserLesson=userDao.getUserLesson(userIdx);
-            GetUserFeedRes getUserFeed = new GetUserFeedRes(getUserInfo,getUserPofol,getUserBand,getUserLesson);
+            GetUserFeedRes getUserFeed = new GetUserFeedRes(getUserInfo,getUserPofol,getUserBand);
             return getUserFeed;
         }
         catch (Exception exception) {
