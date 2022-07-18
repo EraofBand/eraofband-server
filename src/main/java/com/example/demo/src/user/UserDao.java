@@ -195,4 +195,53 @@ public class UserDao {
         return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
     }
 
+    public int updateFollow(int myIdx, int userIdx) {
+        String updateFollowQuery = "INSERT INTO Follow(followerIdx, followeeIdx) VALUES (?,?)";
+        Object[] updateFollowParams = new Object[]{myIdx, userIdx};
+
+        this.jdbcTemplate.update(updateFollowQuery, updateFollowParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    public int updateUnFollow(int myIdx, int userIdx) {
+        String updateUnFollowQuery = "DELETE FROM Follow WHERE followerIdx = ? and followeeIdx = ?";
+        Object[] updateUnFollowParams = new Object[]{myIdx,userIdx};
+
+        return this.jdbcTemplate.update(updateUnFollowQuery, updateUnFollowParams);
+    }
+
+    public List<Users> getFollowing(int userIdx){
+        String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl\n" +
+                "from Follow as f\n" +
+                "    left join User as u on u.userIdx=f.followeeIdx\n" +
+                "where u.status='ACTIVE' and f.status='ACTIVE' and f.followerIdx=?\n" +
+                "group by u.userIdx\n" +
+                "order by u.userIdx;";
+        int getFollowParams = userIdx;
+        return this.jdbcTemplate.query(getFollowQuery,
+                (rs, rowNum) -> new Users(
+                        rs.getInt("userIdx"),
+                        rs.getString("nickName"),
+                        rs.getString("profileImgUrl")),
+                getFollowParams);
+    }
+
+    public List<Users> getFollower(int userIdx){
+        String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl\n" +
+                "from Follow as f\n" +
+                "    left join User as u on u.userIdx=f.followerIdx\n" +
+                "where u.status='ACTIVE' and f.status='ACTIVE' and f.followeeIdx=?\n" +
+                "group by u.userIdx\n" +
+                "order by u.userIdx;";
+        int getFollowParams = userIdx;
+        return this.jdbcTemplate.query(getFollowQuery,
+                (rs, rowNum) -> new Users(
+                        rs.getInt("userIdx"),
+                        rs.getString("nickName"),
+                        rs.getString("profileImgUrl")),
+                getFollowParams);
+    }
+
     }

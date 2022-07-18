@@ -32,8 +32,7 @@ cloud:
       bucket: eraofband
     region:
       static: ap-northeast-2
-      auto: false
     stack:
       auto: false
     credentials:
-      instance-profile: true
+      instanceProfile: true

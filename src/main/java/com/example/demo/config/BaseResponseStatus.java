@@ -30,6 +30,9 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
 
+    FOLLOW_FAIL_USER(false,2070,"유저 팔로우에 실패했습니다."),
+    UNFOLLOW_FAIL_USER(false,2071,"유저 팔로우 취소에 실패했습니다."),
+
     // band
     POSTS_EMPTY_BAND_ID(false,2018,"밴드 아이디 값을 확인해주세요."),
     POST_BANDS_EMPTY_CONTENTS(false,2019,"내용 입력값을 확인해주세요."),
