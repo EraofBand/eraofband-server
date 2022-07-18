@@ -102,9 +102,10 @@ public class UserDao {
     /**회원 소속 밴드 조회*/
     public List<GetUserBandRes> getUserBand(int userIdx){
         String getBandsByIdxQuery = "select b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction," +
-                "b.bandRegion as bandRegion\n" +
+                "b.bandRegion as bandRegion, IF(memberCount is null, 0, memberCount) as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity\n" +
                 "from BandUser as bu\n" +
-                "   join Band as b on b.bandIdx=bu.bandIdx\n" +
+                "   left join Band as b on b.bandIdx=bu.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n"+
                 "where b.status='ACTIVE' and bu.status='ACTIVE' and (bu.userIdx=? or b.userIdx=?)\n" +
                 "group by b.bandIdx\n" +
                 "order by b.bandIdx";
@@ -115,16 +116,19 @@ public class UserDao {
                         rs.getString("bandImgUrl"),
                         rs.getString("bandTitle"),
                         rs.getString("bandIntroduction"),
-                        rs.getString("bandRegion")),
+                        rs.getString("bandRegion"),
+                        rs.getInt("capacity"),
+                        rs.getInt("memberCount")),
                 getBandsByIdxParams);
     }
 
     /**회원 소속 레슨 조회*/
     public List<GetUserLessonRes> getUserLesson(int userIdx){
         String getLessonsByIdxQuery = "select l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction," +
-                "l.lessonRegion as lessonRegion\n" +
+                "l.lessonRegion as lessonRegion, IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity\n" +
                 "from LessonUser as lu\n" +
                 "   join Lesson as l on l.lessonIdx=lu.lessonIdx\n" +
+                "   left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n"+
                 "where l.status='ACTIVE' and lu.status='ACTIVE' and (lu.userIdx=? or l.userIdx=?)\n" +
                 "group by l.lessonIdx\n" +
                 "order by l.lessonIdx";
@@ -135,7 +139,9 @@ public class UserDao {
                         rs.getString("lessonImgUrl"),
                         rs.getString("lessonTitle"),
                         rs.getString("lessonIntroduction"),
-                        rs.getString("lessonRegion")),
+                        rs.getString("lessonRegion"),
+                        rs.getInt("capacity"),
+                        rs.getInt("memberCount")),
                 getLessonsByIdxParams);
     }
 
