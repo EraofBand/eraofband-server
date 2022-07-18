@@ -280,10 +280,11 @@ public class PofolDao {
     }
 
 
-    // 댓글 작성
+     // 댓글 작성
     public int insertComment(int pofolIdx, int userIdx, PostCommentReq postCommentReq) {
 
         String insertCommentQuery = "INSERT INTO PofolComment(pofolIdx, userIdx, content) VALUES (?, ?, ?)";
+
         Object[] insertCommentParams = new Object[]{pofolIdx, userIdx, postCommentReq.getContent()};
 
         this.jdbcTemplate.update(insertCommentQuery, insertCommentParams);
@@ -293,6 +294,50 @@ public class PofolDao {
 
     }
 
+    // 댓글 조회
+    public List<GetCommentRes> certainComment(int pofolCommentIdx) {
+
+        String selectCommentQuery = "SELECT p.pofolCommentIdx as pofolCommentIdx,\n" +
+                "p.pofolIdx as pofolIdx, \n" +
+                "p.userIdx as userIdx,\n" +
+                "u.nickName as nickName,\n" +
+                "u.profileImgUrl as profileImgUrl,\n" +
+                "p.content as content,\n" +
+                "case\n" +
+                "when timestampdiff(second, p.updatedAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(second, p.updatedAt, current_timestamp), '초 전')\n" +
+                "when timestampdiff(minute , p.updatedAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(minute, p.updatedAt, current_timestamp), '분 전')\n" +
+                "when timestampdiff(hour , p.updatedAt, current_timestamp) < 24\n" +
+                "then concat(timestampdiff(hour, p.updatedAt, current_timestamp), '시간 전')\n" +
+                "when timestampdiff(day , p.updatedAt, current_timestamp) < 365\n" +
+                "then concat(timestampdiff(day, p.updatedAt, current_timestamp), '일 전')\n" +
+                "else timestampdiff(year , p.updatedAt, current_timestamp)\n" +
+                "end as updatedAt\n" +
+                "FROM PofolComment as p\n" +
+                "join User as u on u.userIdx = p.userIdx\n" +
+                "WHERE p.pofolCommentIdx = ? and p.status = 'ACTIVE'\n " +
+                "group by p.pofolCommentIdx order by p.pofolCommentIdx DESC; \n";
+
+        int selectCommentParam = pofolCommentIdx;
+        return this.jdbcTemplate.query(selectCommentQuery,
+                (rs, rowNum) -> new GetCommentRes(
+                        rs.getInt("pofolCommentIdx"),
+                        rs.getInt("pofolIdx"),
+                        rs.getInt("userIdx"),
+                        rs.getString("nickName"),
+                        rs.getString("profileImgUrl"),
+                        rs.getString("content"),
+                        rs.getString("updatedAt")
+                ), selectCommentParam);
+
+    }
+
+
+
+
+
+
 
     // 댓글 삭제
     public int deleteComment(int pofolCommentIdx) {
@@ -300,6 +345,7 @@ public class PofolDao {
         Object[] deleteCommentParams = new Object[]{pofolCommentIdx};
 
         return this.jdbcTemplate.update(deleteCommentQuery, deleteCommentParams);
+
 
 
     }

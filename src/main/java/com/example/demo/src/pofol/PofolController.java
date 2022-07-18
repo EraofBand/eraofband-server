@@ -58,7 +58,7 @@ public class PofolController {
 
 
 
-    // 내 포트폴리오 조회
+    // 특정 포트폴리오 조회
     @ResponseBody
     @GetMapping("/my/")   // (get) https://eraofband.shop/pofol/my?userIdx=12
     @ApiOperation(value = " 내 포트폴리오 리스트 조회")
@@ -204,11 +204,37 @@ public class PofolController {
 
     }
 
+//    // 댓글 등록
+//    @ResponseBody
+//    @PostMapping("/{pofolIdx}/comment") // (post) https://eraofband.shop/pofol/2/comment
+//    @ApiOperation(value = "포트폴리오 댓글 등록 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+//    public BaseResponse<PostCommentRes> createComment(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PostCommentReq postCommentReq) {
+//
+//        if(postCommentReq.getContent().length()>100){
+//            return new BaseResponse<>(POST_POSTS_INVALID_CONTENTS);
+//        }
+//
+//        try{
+//            int userIdxByJwt = jwtService.getUserIdx();
+//            //if(postCommentReq.getUserIdx()!= userIdxByJwt){
+//            //    return new BaseResponse<>(INVALID_JWT);
+//            //}
+//
+//            PostCommentRes postCommentRes = pofolService.createComment(pofolIdx, userIdxByJwt,postCommentReq);
+//            return new BaseResponse<>(postCommentRes);
+//
+//
+//        } catch(BaseException exception){
+//            return new BaseResponse<>((exception.getStatus()));
+//        }
+//
+//    }
+
     // 댓글 등록
     @ResponseBody
     @PostMapping("/{pofolIdx}/comment") // (post) https://eraofband.shop/pofol/2/comment
     @ApiOperation(value = "포트폴리오 댓글 등록 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<PostCommentRes> createComment(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PostCommentReq postCommentReq) {
+    public BaseResponse<List<GetCommentRes>> createComment(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PostCommentReq postCommentReq) {
 
         if(postCommentReq.getContent().length()>100){
             return new BaseResponse<>(POST_POSTS_INVALID_CONTENTS);
@@ -216,18 +242,38 @@ public class PofolController {
 
         try{
             int userIdxByJwt = jwtService.getUserIdx();
-            //if(postCommentReq.getUserIdx()!= userIdxByJwt){
-            //    return new BaseResponse<>(INVALID_JWT);
-            //}
+            if(postCommentReq.getUserIdx()!= userIdxByJwt){
+                return new BaseResponse<>(INVALID_JWT);
+            }
 
-            PostCommentRes postCommentRes = pofolService.createComment(pofolIdx, userIdxByJwt,postCommentReq);
-            return new BaseResponse<>(postCommentRes);
+            int pofolCommentIdx = pofolService.createComment(pofolIdx, userIdxByJwt,postCommentReq);
+
+            List<GetCommentRes> getComment = pofolProvider.certainComment(pofolCommentIdx);
+            return new BaseResponse<>(getComment);
+
+
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
 
-
     }
+
+//    // 특정 댓글 조회
+//    @ResponseBody
+//    @GetMapping("/{pofolCommentIdx}/comment")  // (get) https://eraofband.shop/pofol/2/comment
+//    @ApiOperation(value = "특정 댓글 조회")
+//    public BaseResponse<List<GetCommentRes>> getComment(@PathVariable("pofolCommentIdx") int pofolCommentIdx){
+//
+//        try{
+//
+//            List<GetCommentRes> getComment = pofolProvider.certainComment(pofolCommentIdx);
+//            return new BaseResponse<>(getComment);
+//        } catch (BaseException exception){
+//            return new BaseResponse<>(exception.getStatus());
+//        }
+//
+//    }
+
 
     // 댓글 삭제
     @ResponseBody
@@ -258,16 +304,16 @@ public class PofolController {
     // 댓글 목록 조회
 
     @ResponseBody
-    @GetMapping("/comment/")  // (get) https://eraofband.shop/pofol/comment
+    @GetMapping("/comment")  // (get) https://eraofband.shop/pofol/comment
     @ApiOperation(value = " 댓글 목록 조회")
-    public BaseResponse<List<GetCommentRes>> getComment(@RequestParam int postIdx){
+    public BaseResponse<List<GetCommentRes>> getListComment(@RequestParam int pofolIdx){
         try{
             //jwt 없애기
             //int userIdxByJwt = jwtService.getUserIdx();
-            //List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdxByJwt);
+            //List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdxByJwt);q
 
-            List<GetCommentRes> getComment=pofolProvider.retrieveComment(postIdx);
-            return new BaseResponse<>(getComment);
+            List<GetCommentRes> getListComment=pofolProvider.retrieveComment(pofolIdx);
+            return new BaseResponse<>(getListComment);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
