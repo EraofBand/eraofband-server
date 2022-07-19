@@ -9,4 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DeleteBandReq {
     private int userIdx;
+    public DeleteBandReq(){
+
+    }
 }

@@ -42,6 +42,8 @@ com/example/demo/src/S33/UploadService.java
  com.example.demo.src.S33.UploadService
 com/example/demo/src/user/model/GetMyFeedRes.java
  com.example.demo.src.user.model.GetMyFeedRes
+com/example/demo/src/session/model/GetSessionRes.java
+ com.example.demo.src.session.model.GetSessionRes
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
 com/example/demo/src/user/model/GetUserInfoRes.java
@@ -50,8 +52,8 @@ com/example/demo/config/SwaggerConfig.java
  com.example.demo.config.SwaggerConfig
 com/example/demo/src/session/SessionProvider.java
  com.example.demo.src.session.SessionProvider
-com/example/demo/src/session/model/GetApplyRes.java
- com.example.demo.src.session.model.GetApplyRes
+com/example/demo/src/pofol/model/PatchPofComReq.java
+ com.example.demo.src.pofol.model.PatchPofComReq
 com/example/demo/src/user/model/PatchSessionReq.java
  com.example.demo.src.user.model.PatchSessionReq
 com/example/demo/src/session/SessionController.java
@@ -80,6 +82,8 @@ com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
 com/example/demo/src/user/model/PatchUserReq.java
  com.example.demo.src.user.model.PatchUserReq
+com/example/demo/src/session/model/DeleteBandReq.java
+ com.example.demo.src.session.model.DeleteBandReq
 com/example/demo/src/WebSecurityConfig.java
  com.example.demo.src.WebSecurityConfig
 com/example/demo/src/user/model/PostFollowRes.java
