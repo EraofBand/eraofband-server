@@ -9,4 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PatchPofComReq {
     private int userIdx;
+
+    public PatchPofComReq(){
+
+    }
 }
