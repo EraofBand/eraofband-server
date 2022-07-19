@@ -73,9 +73,10 @@ public class SessionDao {
     public GetBandRes getMyBandByIdx(int bandIdx,  List<GetSessionRes> sessionMembers, List<GetSessionRes> applicants){
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
-                "       b.bandRegion as bandRegion, b.bandContent as bandContent,\n" +
-                "       vocal, guitar, base, keyboard, drum,\n" +
-                "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.bandImgUrl as bandImgUrl\n" +
+                "       b.bandRegion as bandRegion, b.bandContent as bandContent, b.mySession as mySession,\n" +
+                "       vocal, vocalComment, guitar, guitarComment, base, baseComment, keyboard, keyboardComment, drum, drumComment,\n" +
+                "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.performTime as performTime," +
+                "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = b.userIdx\n" +
                 "WHERE b.bandIdx=? and b.status='ACTIVE'";
         int getBandByIdxParams = bandIdx;
@@ -88,14 +89,23 @@ public class SessionDao {
                                                         rs.getString("bandIntroduction"),
                                                         rs.getString("bandRegion"),
                                                         rs.getString("bandContent"),
+                                                        rs.getInt("mySession"),
                                                         rs.getInt("vocal"),
+                                                        rs.getString("vocalComment"),
                                                         rs.getInt("guitar"),
+                                                        rs.getString("guitarComment"),
                                                         rs.getInt("base"),
+                                                        rs.getString("baseComment"),
                                                         rs.getInt("keyboard"),
+                                                        rs.getString("keyboardComment"),
                                                         rs.getInt("drum"),
+                                                        rs.getString("drumComment"),
                                                         sessionMembers,
                                                         rs.getString("chatRoomLink"),
                                                         rs.getString("performDate"),
+                                                        rs.getString("performTime"),
+                                                        rs.getString("performLocation"),
+                                                        rs.getInt("performFee"),
                                                         rs.getString("bandImgUrl"),
                                                         applicants),
                                                 getBandByIdxParams);
@@ -104,9 +114,10 @@ public class SessionDao {
     public GetBandRes getSessionBandByIdx(int bandIdx,  List<GetSessionRes> sessionMembers){
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
-                "       b.bandRegion as bandRegion, b.bandContent as bandContent,\n" +
-                "       vocal, guitar, base, keyboard, drum,\n" +
-                "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.bandImgUrl as bandImgUrl\n" +
+                "       b.bandRegion as bandRegion, b.bandContent as bandContent,b.mySession as mySession,\n" +
+                "       vocal, vocalComment, guitar, guitarComment, base, baseComment, keyboard, keyboardComment, drum, drumComment,\n" +
+                "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.performTime as performTime," +
+                "       b.performLocation as performLocation, b.performFee as performFee,b.bandImgUrl as bandImgUrl\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = b.userIdx\n" +
                 "WHERE b.bandIdx=? and b.status='ACTIVE'";
         int getBandByIdxParams = bandIdx;
@@ -119,14 +130,23 @@ public class SessionDao {
                                                         rs.getString("bandIntroduction"),
                                                         rs.getString("bandRegion"),
                                                         rs.getString("bandContent"),
+                                                        rs.getInt("mySession"),
                                                         rs.getInt("vocal"),
+                                                        rs.getString("vocalComment"),
                                                         rs.getInt("guitar"),
+                                                        rs.getString("guitarComment"),
                                                         rs.getInt("base"),
+                                                        rs.getString("baseComment"),
                                                         rs.getInt("keyboard"),
+                                                        rs.getString("keyboardComment"),
                                                         rs.getInt("drum"),
+                                                        rs.getString("drumComment"),
                                                         sessionMembers,
                                                         rs.getString("chatRoomLink"),
                                                         rs.getString("performDate"),
+                                                        rs.getString("performTime"),
+                                                        rs.getString("performLocation"),
+                                                        rs.getInt("performFee"),
                                                         rs.getString("bandImgUrl"),
                                                         null),
                                                 getBandByIdxParams);
@@ -135,9 +155,10 @@ public class SessionDao {
     public GetBandRes getBandByIdx(int bandIdx,  List<GetSessionRes> sessionMembers){
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
-                "       b.bandRegion as bandRegion, b.bandContent as bandContent,\n" +
-                "       vocal, guitar, base, keyboard, drum,\n" +
-                "       b.performDate as performDate, b.bandImgUrl as bandImgUrl\n" +
+                "       b.bandRegion as bandRegion, b.bandContent as bandContent, b.mySession as mySession,\n" +
+                "       vocal, vocalComment, guitar, guitarComment, base, baseComment, keyboard, keyboardComment, drum, drumComment,\n" +
+                "       b.performDate as performDate,  b.performTime as performTime," +
+                "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = b.userIdx\n" +
                 "WHERE b.bandIdx=? and b.status='ACTIVE'";
         int getBandByIdxParams = bandIdx;
@@ -150,14 +171,23 @@ public class SessionDao {
                                                         rs.getString("bandIntroduction"),
                                                         rs.getString("bandRegion"),
                                                         rs.getString("bandContent"),
+                                                        rs.getInt("mySession"),
                                                         rs.getInt("vocal"),
+                                                        rs.getString("vocalComment"),
                                                         rs.getInt("guitar"),
+                                                        rs.getString("guitarComment"),
                                                         rs.getInt("base"),
+                                                        rs.getString("baseComment"),
                                                         rs.getInt("keyboard"),
+                                                        rs.getString("keyboardComment"),
                                                         rs.getInt("drum"),
+                                                        rs.getString("drumComment"),
                                                         sessionMembers,
                                                         null,
                                                         rs.getString("performDate"),
+                                                        rs.getString("performTime"),
+                                                        rs.getString("performLocation"),
+                                                        rs.getInt("performFee"),
                                                         rs.getString("bandImgUrl"),
                                                         null),
                                                 getBandByIdxParams);
@@ -165,11 +195,13 @@ public class SessionDao {
 
     // 밴드 생성
     public int insertBand(int userIdx, PostBandReq postBandReq){
-        String insertBandQuery = "INSERT INTO Band(userIdx, bandTitle, bandIntroduction, bandRegion, bandContent, vocal, guitar, base, keyboard, drum, chatRoomLink, performDate, bandImgUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertBandQuery = "INSERT INTO Band(userIdx, bandTitle, bandIntroduction, bandRegion, bandContent, mySession, vocal, vocalComment, " +
+                "guitar, guitarComment, base, baseComment, keyboard, keyboardComment, drum, drumComment, chatRoomLink, bandImgUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Object[] insertBandParams = new Object[]{ userIdx, postBandReq.getBandTitle(), postBandReq.getBandIntroduction(),
-                postBandReq.getBandRegion(), postBandReq.getBandContent(),
-                postBandReq.getVocal(), postBandReq.getGuitar(), postBandReq.getBase(), postBandReq.getKeyboard(), postBandReq.getDrum(),
-                postBandReq.getChatRoomLink(), postBandReq.getPerformDate(), postBandReq.getBandImgUrl()
+                postBandReq.getBandRegion(), postBandReq.getBandContent(), postBandReq.getMySession(),
+                postBandReq.getVocal(), postBandReq.getVocalComment(), postBandReq.getGuitar(), postBandReq.getGuitarComment(),
+                postBandReq.getBase(), postBandReq.getBaseComment(),postBandReq.getKeyboard(), postBandReq.getKeyboardComment(),postBandReq.getDrum(),postBandReq.getDrumComment(),
+                postBandReq.getChatRoomLink(), postBandReq.getBandImgUrl()
         };
         this.jdbcTemplate.update(insertBandQuery, insertBandParams);
 
@@ -177,14 +209,24 @@ public class SessionDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
+    public int insertMy(int userIdx, int bandIdx, int mySession){
+        String insertApplyQuery = "INSERT INTO BandUser(userIdx, bandIdx, session) VALUES (?, ?, ?)";
+        Object[] insertApplyParams = new Object[]{ userIdx, bandIdx, mySession };
+        this.jdbcTemplate.update(insertApplyQuery, insertApplyParams);
+
+        String lastInsertIdQuery = "SELECT last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
     // 밴드 수정
     public int updateBand(int bandIdx, PatchBandReq patchBandReq){
-        String updateBandQuery = "UPDATE Band SET bandTitle=?, bandIntroduction=?, bandRegion=?, bandContent=?," +
-                "vocal=?, guitar=?, base=?, keyboard=?, drum=?, chatRoomLink=?, performDate=?, bandImgUrl=? WHERE bandIdx = ?" ;
+        String updateBandQuery = "UPDATE Band SET bandTitle=?, bandIntroduction=?, bandRegion=?, bandContent=?, mySession=?," +
+                "vocal=?, vocalComment=?, guitar=?, guitarComment=?, base=?, baseComment=?, keyboard=?, keyboardComment=?, drum=?, drumComment=?, chatRoomLink=?, performDate=?, performTime=?, performLocation=?, performFee=?, bandImgUrl=? WHERE bandIdx = ?" ;
         Object[] updateBandParams = new Object[]{ patchBandReq.getBandTitle(), patchBandReq.getBandIntroduction(),
-                patchBandReq.getBandRegion(), patchBandReq.getBandContent(),
-                patchBandReq.getVocal(), patchBandReq.getGuitar(), patchBandReq.getBase(), patchBandReq.getKeyboard(), patchBandReq.getDrum(),
-                patchBandReq.getChatRoomLink(), patchBandReq.getPerformDate(), patchBandReq.getBandImgUrl(), bandIdx };
+                patchBandReq.getBandRegion(), patchBandReq.getBandContent(), patchBandReq.getMySession(),
+                patchBandReq.getVocal(), patchBandReq.getVocalComment(), patchBandReq.getGuitar(), patchBandReq.getGuitarComment(),
+                patchBandReq.getBase(), patchBandReq.getBaseComment(),patchBandReq.getKeyboard(), patchBandReq.getKeyboardComment(),patchBandReq.getDrum(),patchBandReq.getDrumComment(),
+                patchBandReq.getChatRoomLink(), patchBandReq.getPerformDate(), patchBandReq.getPerformTime(), patchBandReq.getPerformLocation(), patchBandReq.getPerformFee(),patchBandReq.getBandImgUrl(), bandIdx };
 
         return this.jdbcTemplate.update(updateBandQuery,updateBandParams);
     }

@@ -26,6 +26,8 @@ public class SessionService {
 
         try{
             int bandIdx = sessionDao.insertBand(userIdx, postBandReq);
+            sessionDao.insertMy(userIdx, bandIdx, postBandReq.getMySession());
+            sessionDao.acceptSession(bandIdx, userIdx);
             return new PostBandRes(bandIdx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
@@ -33,7 +35,7 @@ public class SessionService {
     }
 
     // 밴드 수정
-    public void modifyBand(int userIdx, int bandIdx, PatchBandReq patchBandReq) throws BaseException {
+    public void modifyBand(int bandIdx, PatchBandReq patchBandReq) throws BaseException {
 
         if(sessionProvider.checkBandExist(bandIdx) == 0){
             throw new BaseException(POSTS_EMPTY_BAND_ID);
@@ -51,7 +53,7 @@ public class SessionService {
     }
 
     // 밴드 삭제
-    public void deleteBand(int userIdx,int bandIdx) throws BaseException {
+    public void deleteBand(int bandIdx) throws BaseException {
 
         if(sessionProvider.checkBandExist(bandIdx) ==0){
             throw new BaseException(POSTS_EMPTY_BAND_ID);
