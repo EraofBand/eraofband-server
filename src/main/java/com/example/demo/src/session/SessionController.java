@@ -98,8 +98,13 @@ public class SessionController {
                 return new BaseResponse<>(POST_BANDS_INVALID_CONTENTS);
             }
 
+            //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
-            sessionService.modifyBand(userIdxByJwt, bandIdx, patchBandReq);
+            //userIdx와 접근한 유저가 같은지 확인
+            if(patchBandReq.getUserIdx() != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            sessionService.modifyBand(bandIdx, patchBandReq);
 
             String result = "밴드 내용 수정을 완료하였습니다.";
             return new BaseResponse<>(result);
@@ -112,11 +117,16 @@ public class SessionController {
     @ResponseBody
     @PatchMapping("patch/{bandIdx}/status") // (patch) https://eraofband.shop/sessions/patch/2/status
     @ApiOperation(value = "밴드 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<String> deleteBand(@PathVariable("bandIdx") int bandIdx){
+    public BaseResponse<String> deleteBand(@PathVariable("bandIdx") int bandIdx, @RequestBody DeleteBandReq deleteBandReq){
         try {
 
+            //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
-            sessionService.deleteBand(userIdxByJwt, bandIdx);
+            //userIdx와 접근한 유저가 같은지 확인
+            if(deleteBandReq.getUserIdx() != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            sessionService.deleteBand(bandIdx);
 
             String result = "밴드가 삭제되었습니다.";
             return new BaseResponse<>(result);

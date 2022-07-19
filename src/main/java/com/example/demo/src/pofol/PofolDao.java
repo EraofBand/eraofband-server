@@ -295,7 +295,7 @@ public class PofolDao {
     }
 
     // 댓글 조회
-    public List<GetCommentRes> certainComment(int pofolCommentIdx) {
+    public GetCommentRes certainComment(int pofolCommentIdx) {
 
         String selectCommentQuery = "SELECT p.pofolCommentIdx as pofolCommentIdx,\n" +
                 "p.pofolIdx as pofolIdx, \n" +
@@ -320,7 +320,7 @@ public class PofolDao {
                 "group by p.pofolCommentIdx order by p.pofolCommentIdx DESC; \n";
 
         int selectCommentParam = pofolCommentIdx;
-        return this.jdbcTemplate.query(selectCommentQuery,
+        return this.jdbcTemplate.queryForObject(selectCommentQuery,
                 (rs, rowNum) -> new GetCommentRes(
                         rs.getInt("pofolCommentIdx"),
                         rs.getInt("pofolIdx"),
