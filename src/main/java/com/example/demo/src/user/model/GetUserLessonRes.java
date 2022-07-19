@@ -14,4 +14,6 @@ public class GetUserLessonRes {
     private String lessonTitle;
     private String lessonIntroduction;
     private String lessonRegion;
+    private int capacity;
+    private int memberCount;
 }

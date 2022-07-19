@@ -98,8 +98,13 @@ public class SessionController {
                 return new BaseResponse<>(POST_BANDS_INVALID_CONTENTS);
             }
 
+            //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
-            sessionService.modifyBand(userIdxByJwt, bandIdx, patchBandReq);
+            //userIdx와 접근한 유저가 같은지 확인
+            if(patchBandReq.getUserIdx() != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            sessionService.modifyBand(bandIdx, patchBandReq);
 
             String result = "밴드 내용 수정을 완료하였습니다.";
             return new BaseResponse<>(result);
@@ -112,11 +117,16 @@ public class SessionController {
     @ResponseBody
     @PatchMapping("patch/{bandIdx}/status") // (patch) https://eraofband.shop/sessions/patch/2/status
     @ApiOperation(value = "밴드 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<String> deleteBand(@PathVariable("bandIdx") int bandIdx){
+    public BaseResponse<String> deleteBand(@PathVariable("bandIdx") int bandIdx, @RequestBody DeleteBandReq deleteBandReq){
         try {
 
+            //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
-            sessionService.deleteBand(userIdxByJwt,bandIdx);
+            //userIdx와 접근한 유저가 같은지 확인
+            if(deleteBandReq.getUserIdx() != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            sessionService.deleteBand(bandIdx);
 
             String result = "밴드가 삭제되었습니다.";
             return new BaseResponse<>(result);
@@ -140,4 +150,36 @@ public class SessionController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    // 세션 지원 수락
+    @ResponseBody
+    @PatchMapping("/{bandIdx}/accept/{userIdx}") // (patch) https://eraofband.shop/sessions/2/accept/9
+    @ApiOperation(value = "세션 지원 수락 처리", notes = "path: 해당 페이지의 bandIdx, 지원 수락하려는 userIdx")
+    public BaseResponse<String> acceptSession(@PathVariable("bandIdx") int bandIdx, @PathVariable("userIdx") int userIdx){
+        try {
+
+            sessionService.acceptSession(bandIdx, userIdx);
+
+            String result = "세션 지원이 수락되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    // 세션 지원 거절
+    @ResponseBody
+    @PatchMapping("/{bandIdx}/reject/{userIdx}") // (patch) https://eraofband.shop/sessions/2/reject/9
+    @ApiOperation(value = "세션 지원 거절 처리", notes = "path: 해당 페이지의 bandIdx, 지원 거절하려는 userIdx")
+    public BaseResponse<String> rejectSession(@PathVariable("bandIdx") int bandIdx, @PathVariable("userIdx") int userIdx){
+        try {
+            sessionService.rejectSession(bandIdx, userIdx);
+
+            String result = "세션 지원이 거절되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 }

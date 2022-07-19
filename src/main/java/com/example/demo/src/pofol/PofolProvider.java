@@ -122,10 +122,10 @@ public class PofolProvider {
     }
 
     // 특정 댓글 조회
-    public List<GetCommentRes> certainComment (int pofolCommentIdx) throws BaseException {
+    public GetCommentRes certainComment (int pofolCommentIdx) throws BaseException {
 
         try{
-            List<GetCommentRes> getCommentRes = pofolDao.certainComment(pofolCommentIdx);
+            GetCommentRes getCommentRes = pofolDao.certainComment(pofolCommentIdx);
             return getCommentRes;
         } catch(Exception exception){
             System.out.println(exception);

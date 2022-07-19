@@ -14,4 +14,6 @@ public class GetUserBandRes {
     private String bandTitle;
     private String bandIntroduction;
     private String bandRegion;
+    private int capacity;
+    private int memberCount;
 }

@@ -142,13 +142,13 @@ public class PofolController {
     @ResponseBody
     @PatchMapping("/{pofolIdx}/status") // (patch) https://eraofband.shop/pofol/2/status
     @ApiOperation(value = "포트폴리오 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<String> deletePofol(@PathVariable("pofolIdx") int pofolIdx, int userIdx){
+    public BaseResponse<String> deletePofol(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PatchPofComReq patchPofComReq){
         try {
 
             //jwt에서 idx 추출
             int userIdxByJwt = jwtService.getUserIdx();
 
-            if(userIdx!= userIdxByJwt){
+            if(patchPofComReq.getUserIdx()!= userIdxByJwt){
                 return new BaseResponse<>(INVALID_JWT);
             }
             pofolService.deletePofol(userIdxByJwt,pofolIdx);
@@ -234,7 +234,7 @@ public class PofolController {
     @ResponseBody
     @PostMapping("/{pofolIdx}/comment") // (post) https://eraofband.shop/pofol/2/comment
     @ApiOperation(value = "포트폴리오 댓글 등록 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<List<GetCommentRes>> createComment(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PostCommentReq postCommentReq) {
+    public BaseResponse<GetCommentRes> createComment(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PostCommentReq postCommentReq) {
 
         if(postCommentReq.getContent().length()>100){
             return new BaseResponse<>(POST_POSTS_INVALID_CONTENTS);
@@ -248,7 +248,7 @@ public class PofolController {
 
             int pofolCommentIdx = pofolService.createComment(pofolIdx, userIdxByJwt,postCommentReq);
 
-            List<GetCommentRes> getComment = pofolProvider.certainComment(pofolCommentIdx);
+            GetCommentRes getComment = pofolProvider.certainComment(pofolCommentIdx);
             return new BaseResponse<>(getComment);
 
 
@@ -279,14 +279,14 @@ public class PofolController {
     @ResponseBody
     @PatchMapping("/{pofolCommentIdx}/comment/status") // (patch) https://eraofband.shop/2/comment/status
     @ApiOperation(value = "포트폴리오 댓글 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<String> deleteComment(@PathVariable("pofolCommentIdx") int pofolCommentIdx, int userIdx) {
+    public BaseResponse<String> deleteComment(@PathVariable("pofolCommentIdx") int pofolCommentIdx, @RequestBody PatchPofComReq patchPofComReq) {
 
         try {
 
             //jwt에서 idx 추출
             int userIdxByJwt = jwtService.getUserIdx();
 
-            if(userIdx!= userIdxByJwt){
+            if(patchPofComReq.getUserIdx()!= userIdxByJwt){
                 return new BaseResponse<>(INVALID_JWT);
             }
             pofolService.deleteComment(userIdxByJwt,pofolCommentIdx);

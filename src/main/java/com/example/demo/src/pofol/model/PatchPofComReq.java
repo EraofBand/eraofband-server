@@ -1,4 +1,4 @@
-package com.example.demo.src.session.model;
+package com.example.demo.src.pofol.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,8 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetSessionRes {
-    private int session;
+public class PatchPofComReq {
     private int userIdx;
-    private String nickName;
+
+    public PatchPofComReq(){
+
+    }
 }

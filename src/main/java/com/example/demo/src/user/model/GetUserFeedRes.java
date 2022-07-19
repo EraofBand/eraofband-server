@@ -14,6 +14,4 @@ public class GetUserFeedRes {
     private GetUserInfoRes getUser;
     private List<GetUserPofolRes> getUserPofol;
     private List<GetUserBandRes> getUserBand;
-    private List<GetUserLessonRes> getUserLesson;
-
 }

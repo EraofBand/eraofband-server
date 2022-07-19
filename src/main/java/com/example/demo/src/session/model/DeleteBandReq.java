@@ -7,8 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetSessionRes {
-    private int session;
+public class DeleteBandReq {
     private int userIdx;
-    private String nickName;
+    public DeleteBandReq(){
+
+    }
 }
