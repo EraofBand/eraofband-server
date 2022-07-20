@@ -128,14 +128,14 @@ com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/src/lesson/model/PostLessonRes.java
  com.example.demo.src.lesson.model.PostLessonRes
+com/example/demo/src/lesson/model/GetMemberRes.java
+ com.example.demo.src.lesson.model.GetMemberRes
 com/example/demo/src/lesson/model/PatchLessonReq.java
  com.example.demo.src.lesson.model.PatchLessonReq
 com/example/demo/src/lesson/model/GetLessonRes.java
  com.example.demo.src.lesson.model.GetLessonRes
 com/example/demo/src/lesson/model/PostLessonReq.java
  com.example.demo.src.lesson.model.PostLessonReq
-com/example/demo/src/lesson/model/GetMemberRes.java
- com.example.demo.src.lesson.model.GetMemberRes
 com/example/demo/src/lesson/LessonDao.java
  com.example.demo.src.lesson.LessonDao
 com/example/demo/src/lesson/LessonProvider.java

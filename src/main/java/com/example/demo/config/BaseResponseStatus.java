@@ -44,6 +44,7 @@ public enum BaseResponseStatus {
     // lesson
     DELETE_FAIL_LESSON(false,2019,"레슨 삭제에 실패했습니다."),
 
+
     POSTS_EMPTY_LESSON_ID(false,2018,"레슨 아이디 값을 확인해주세요."),
 
     MODIFY_FAIL_LESSON(false,2019,"레슨 변경에 실패했습니다."),
