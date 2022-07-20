@@ -115,13 +115,11 @@ public class LessonDao {
     }
 
     public GetLessonRes getLessonMemberByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
-
-
-
         String getLessonMemberByIdxQuery = "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
                 "                l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.lessonSession as lessonSession, l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl\n" +
                 "                              FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
                 "                              WHERE l.lessonIdx=? and l.status='ACTIVE'";
+
         int getLessonMemberByIdxParams = lessonIdx;
         return this.jdbcTemplate.queryForObject(getLessonMemberByIdxQuery,
                 (rs, rowNum) -> new GetLessonRes(
@@ -146,6 +144,7 @@ public class LessonDao {
                 "       l.lessonImgUrl as lessonImgUrl\n" +
                 " FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
                 "WHERE l.lessonIdx=? and l.status='ACTIVE'";
+
         int getLessonByIdxParams = lessonIdx;
         return this.jdbcTemplate.queryForObject(getLessonByIdxQuery,
                 (rs, rowNum) -> new GetLessonRes(
