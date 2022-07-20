@@ -41,9 +41,9 @@ public class LessonDao {
 
     // 레슨 생성
     public int insertLesson(int userIdx, PostLessonReq postLessonReq){
-        String insertLessonQuery = "INSERT INTO Lesson(userIdx, lessonTitle, lessonIntroduction, lessonRegion, lessonContent, session, capacity, chatRoomLink, lessonImgUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertLessonQuery = "INSERT INTO Lesson(userIdx, lessonTitle, lessonIntroduction, lessonRegion, lessonContent, mySession, capacity, chatRoomLink, lessonImgUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Object[] insertLessonParams = new Object[]{ userIdx, postLessonReq.getLessonTitle(), postLessonReq.getLessonIntroduction(),
-                postLessonReq.getLessonRegion(), postLessonReq.getLessonContent(), postLessonReq.getSession(),
+                postLessonReq.getLessonRegion(), postLessonReq.getLessonContent(), postLessonReq.getMySession(),
                 postLessonReq.getCapacity(), postLessonReq.getChatRoomLink(), postLessonReq.getLessonImgUrl() };
         this.jdbcTemplate.update(insertLessonQuery, insertLessonParams);
 
@@ -53,10 +53,10 @@ public class LessonDao {
 
     // 레슨 수정
     public int updateLesson(int lessonIdx, PatchLessonReq patchLessonReq){
-        String updateLessonQuery = "UPDATE Lesson SET lessonTitle=?, lessonIntroduction=?, lessonRegion=?, lessonContent=?, session=?," +
+        String updateLessonQuery = "UPDATE Lesson SET lessonTitle=?, lessonIntroduction=?, lessonRegion=?, lessonContent=?, mySession=?," +
                 "capacity=?, chatRoomLink=?, lessonImgUrl=? WHERE lessonIdx = ?" ;
         Object[] updateLessonParams = new Object[]{ patchLessonReq.getLessonTitle(), patchLessonReq.getLessonIntroduction(),
-                patchLessonReq.getLessonRegion(), patchLessonReq.getLessonContent(), patchLessonReq.getSession(),
+                patchLessonReq.getLessonRegion(), patchLessonReq.getLessonContent(), patchLessonReq.getMySession(),
                 patchLessonReq.getCapacity(), patchLessonReq.getChatRoomLink(), patchLessonReq.getLessonImgUrl(), lessonIdx };
 
         return this.jdbcTemplate.update(updateLessonQuery,updateLessonParams);
@@ -82,13 +82,13 @@ public class LessonDao {
 
     // 레슨 멤버 목록
     public List<GetMemberRes> getLessonMembers(int lessonIdx){
-        String getLessonMemberQuery = "SELECT session, LU.userIdx as userIdx, u.nickName as nickName, lessonIdx\n" +
-                "FROM LessonUser as LU JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = LU.userIdx\n" +
-                "WHERE lessonIdx = ? and status = 'ACTIVE'";
+        String getLessonMemberQuery = "SELECT u.session as mySession, LU.userIdx as userIdx, u.nickName as nickName\n" +
+                "FROM LessonUser as LU JOIN User as u on u.userIdx = LU.userIdx\n" +
+                "WHERE lessonIdx = ? and u.status = 'ACTIVE'";
         int getLessonMemberParams = lessonIdx;
         return this.jdbcTemplate.query(getLessonMemberQuery,
                 (rs, rowNum) -> new GetMemberRes(
-                        rs.getInt("session"),
+                        rs.getInt("mySession"),
                         rs.getInt("userIdx"),
                         rs.getString("nickName")),
                 getLessonMemberParams);
@@ -117,10 +117,9 @@ public class LessonDao {
 
 
         String getLessonMemberByIdxQuery = "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
-                "l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.session as session,l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl\n" +
-                "                FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
-                "                WHERE l.lessonIdx=? and l.status='ACTIVE'";
-
+                "                l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.mySession as mySession,l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl\n" +
+                "                              FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
+                "                              WHERE l.lessonIdx=? and l.status='ACTIVE'";
         int getLessonMemberByIdxParams = lessonIdx;
         return this.jdbcTemplate.queryForObject(getLessonMemberByIdxQuery,
                 (rs, rowNum) -> new GetLessonRes(
@@ -131,7 +130,7 @@ public class LessonDao {
                         rs.getString("lessonIntroduction"),
                         rs.getString("lessonRegion"),
                         rs.getString("lessonContent"),
-                        rs.getInt("session"),
+                        rs.getInt("mySession"),
                         lessonMembers,
                         rs.getString("chatRoomLink"),
                         rs.getString("lessonImgUrl")),
@@ -141,10 +140,10 @@ public class LessonDao {
     public GetLessonRes getLessonByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
         String getLessonByIdxQuery = "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
-                "       l.lessonRegion as lessonRegion, l.lessonContent as lessonContent,l.session as session,\n" +
+                "       l.lessonRegion as lessonRegion, l.lessonContent as lessonContent,l.mySession as mySession,\n" +
                 "       l.lessonImgUrl as lessonImgUrl\n" +
                 "FROM Lesson as l JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = l.userIdx\n" +
-                "WHERE b.bandIdx=? and b.status='ACTIVE'";
+                "WHERE l.lessonIdx=? and l.status='ACTIVE'";
         int getLessonByIdxParams = lessonIdx;
         return this.jdbcTemplate.queryForObject(getLessonByIdxQuery,
                 (rs, rowNum) -> new GetLessonRes(
@@ -155,7 +154,7 @@ public class LessonDao {
                         rs.getString("lessonIntroduction"),
                         rs.getString("lessonRegion"),
                         rs.getString("lessonContent"),
-                        rs.getInt("session"),
+                        rs.getInt("mySession"),
                         lessonMembers,
                         null,
                         rs.getString("lessonImgUrl")),

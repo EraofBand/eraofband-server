@@ -19,7 +19,7 @@ public class PostLessonReq {
 
     private String lessonContent;
 
-    private int session;
+    private int mySession;
 
     //private int mySession;
 

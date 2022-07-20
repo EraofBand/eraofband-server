@@ -98,8 +98,8 @@ com/example/demo/src/session/SessionController.java
  com.example.demo.src.session.SessionController
 com/example/demo/src/pofol/PofolProvider.java
  com.example.demo.src.pofol.PofolProvider
-com/example/demo/src/lesson/LessonDao.java
- com.example.demo.src.lesson.LessonDao
+com/example/demo/utils/JwtService.java
+ com.example.demo.utils.JwtService
 com/example/demo/src/S33/FileUploadController.java
  com.example.demo.src.S33.FileUploadController
 com/example/demo/src/session/SessionService.java
@@ -108,18 +108,18 @@ com/example/demo/src/pofol/PofolController.java
  com.example.demo.src.pofol.PofolController
 com/example/demo/src/user/UserProvider.java
  com.example.demo.src.user.UserProvider
-com/example/demo/src/lesson/LessonService.java
- com.example.demo.src.lesson.LessonService
+com/example/demo/src/session/SessionProvider.java
+ com.example.demo.src.session.SessionProvider
 com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
 com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
-com/example/demo/src/lesson/model/PostLessonReq.java
- com.example.demo.src.lesson.model.PostLessonReq
-com/example/demo/src/lesson/model/PatchLessonReq.java
- com.example.demo.src.lesson.model.PatchLessonReq
-com/example/demo/src/lesson/LessonProvider.java
- com.example.demo.src.lesson.LessonProvider
+com/example/demo/config/BaseException.java
+ com.example.demo.config.BaseException
+com/example/demo/src/lesson/model/PostSignUpRes.java
+ com.example.demo.src.lesson.model.PostSignUpRes
+com/example/demo/src/lesson/model/PatchLesComReq.java
+ com.example.demo.src.lesson.model.PatchLesComReq
 com/example/demo/src/pofol/PofolService.java
  com.example.demo.src.pofol.PofolService
 com/example/demo/src/user/UserService.java
@@ -128,13 +128,19 @@ com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/src/lesson/model/PostLessonRes.java
  com.example.demo.src.lesson.model.PostLessonRes
-com/example/demo/config/BaseException.java
- com.example.demo.config.BaseException
-com/example/demo/utils/JwtService.java
- com.example.demo.utils.JwtService
-com/example/demo/src/session/SessionProvider.java
- com.example.demo.src.session.SessionProvider
-com/example/demo/src/lesson/model/PatchLesComReq.java
- com.example.demo.src.lesson.model.PatchLesComReq
+com/example/demo/src/lesson/model/PatchLessonReq.java
+ com.example.demo.src.lesson.model.PatchLessonReq
+com/example/demo/src/lesson/model/GetLessonRes.java
+ com.example.demo.src.lesson.model.GetLessonRes
+com/example/demo/src/lesson/model/PostLessonReq.java
+ com.example.demo.src.lesson.model.PostLessonReq
+com/example/demo/src/lesson/model/GetMemberRes.java
+ com.example.demo.src.lesson.model.GetMemberRes
+com/example/demo/src/lesson/LessonDao.java
+ com.example.demo.src.lesson.LessonDao
+com/example/demo/src/lesson/LessonProvider.java
+ com.example.demo.src.lesson.LessonProvider
+com/example/demo/src/lesson/LessonService.java
+ com.example.demo.src.lesson.LessonService
 com/example/demo/src/lesson/LessonController.java
  com.example.demo.src.lesson.LessonController
