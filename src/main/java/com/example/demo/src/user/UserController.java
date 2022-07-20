@@ -4,11 +4,15 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.src.pofol.model.PostLikeRes;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexEmail;
 
@@ -78,6 +82,9 @@ public class UserController {
     // Body
     @ResponseBody
     @PostMapping("/signin/{access-token}") // (POST) 127.0.0.1:9000/users/signin/dsfdsbfuewhiuwf...
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="access-token", value="접근 토큰", required = true)
+    })
     public BaseResponse<PostUserRes> createKakaoUser(@PathVariable("access-token") String token, @RequestBody PostUserReq postUserReq){
         try{
             String email=userService.getKakaoInfo(token);
