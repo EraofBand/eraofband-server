@@ -2,10 +2,7 @@ package com.example.demo.src.lesson;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.lesson.model.PatchLesComReq;
-import com.example.demo.src.lesson.model.PatchLessonReq;
-import com.example.demo.src.lesson.model.PostLessonReq;
-import com.example.demo.src.lesson.model.PostLessonRes;
+import com.example.demo.src.lesson.model.*;
 import com.example.demo.src.session.model.*;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +27,23 @@ public class LessonController {
         this.jwtService = jwtService;
     }
 
-    // 레슨 생성 처리
+    // 레슨 조회
+    @ResponseBody
+    @GetMapping("/{lessonIdx}") // (get) https://eraofband.shop/lesson/2
+    @ApiOperation(value = "레슨 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<GetLessonRes> getLesson(@PathVariable("lessonIdx") int lessonIdx){
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            GetLessonRes getLessonRes = lessonProvider.getLesson(userIdxByJwt, lessonIdx);
+
+            return new BaseResponse<>(getLessonRes);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
+    // 레슨 생성
     @ResponseBody
     @PostMapping("") // (post) https://eraofband.shop/lesson
     @ApiOperation(value = "레슨 생성 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
@@ -123,6 +136,25 @@ public class LessonController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+
+
+    // 레슨 신청
+    @ResponseBody
+    @PostMapping("apply/{lessonIdx}") // (post) https://eraofband.shop/lessonIdx/apply/2
+    @ApiOperation(value = "레슨 신청 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<PostSignUpRes> applyLesson(@PathVariable("lessonIdx") int lessonIdx) {
+        try{
+
+            int userIdxByJwt = jwtService.getUserIdx();
+            PostSignUpRes postSignUpRes = lessonService.applyLesson(userIdxByJwt, lessonIdx);
+
+            return new BaseResponse<>(postSignUpRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 
 
 

@@ -1,12 +1,12 @@
 package com.example.demo.src.lesson;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.lesson.model.PatchLessonReq;
-import com.example.demo.src.lesson.model.PostLessonReq;
-import com.example.demo.src.lesson.model.PostLessonRes;
+import com.example.demo.src.lesson.model.*;
 import com.example.demo.src.session.SessionDao;
 import com.example.demo.src.session.SessionProvider;
 import com.example.demo.src.session.model.PatchBandReq;
+import com.example.demo.src.session.model.PostApplyReq;
+import com.example.demo.src.session.model.PostApplyRes;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,6 +72,18 @@ public class LessonService {
             }
         } catch(Exception exception){
             System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 레슨 신청
+    public PostSignUpRes applyLesson(int userIdx, int lessonIdx) throws BaseException {
+
+        try{
+            int lessonUserIdx = lessonDao.insertSignUp(userIdx, lessonIdx);
+            return new PostSignUpRes(lessonUserIdx);
+        } catch (Exception exception) {
+            //System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
