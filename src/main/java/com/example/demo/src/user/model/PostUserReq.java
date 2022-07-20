@@ -17,6 +17,6 @@ public class PostUserReq {
 
     private String gender;
     private String profileImgUrl;
-    private int session;
+    private int userSession;
     private String region;
 }

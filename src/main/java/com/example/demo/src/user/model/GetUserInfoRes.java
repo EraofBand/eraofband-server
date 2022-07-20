@@ -15,7 +15,7 @@ public class GetUserInfoRes {
     private String birth;
     private String introduction;
     private String profileImgUrl;
-    private int session;
+    private int userSession;
     private String region;
     private int followerCount;
     private int followeeCount;

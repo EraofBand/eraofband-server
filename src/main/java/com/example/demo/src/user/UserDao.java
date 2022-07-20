@@ -19,20 +19,9 @@ public class UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-//    public List<GetUserRes> getUsers(){
-//        String getUsersQuery = "select userIdx,name,nickName from User";
-//        return this.jdbcTemplate.query(getUsersQuery,
-//                (rs,rowNum) -> new GetUserRes(
-//                        rs.getInt("userIdx"),
-//                        rs.getString("name"),
-//                        rs.getString("nickName")
-//                ));
-//    }
-
-
     /**회원 페이지 조회*/
     public GetUserInfoRes getUserByIdx(int myId,int userIdx){
-        String getUsersByIdxQuery = "select u.userIdx as userIdx, u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.session as session,u.region as region," +
+        String getUsersByIdxQuery = "select u.userIdx as userIdx, u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.session as userSession,u.region as region," +
                         "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount, follow as follow\n"+
         "from User as u\n"+
             "left join (select userIdx, count(pofolIdx) as pofolCount from Pofol where status='ACTIVE' group by userIdx) p on p.userIdx=u.userIdx\n"+
@@ -49,7 +38,7 @@ public class UserDao {
                         rs.getString("birth"),
                         rs.getString("introduction"),
                         rs.getString("profileImgUrl"),
-                        rs.getInt("session"),
+                        rs.getInt("userSession"),
                         rs.getString("region"),
                         rs.getInt("followerCount"),
                         rs.getInt("followeeCount"),
@@ -60,7 +49,7 @@ public class UserDao {
 
     /**마이 페이지 조회*/
     public GetMyInfoRes getMyFeed(int userIdx){
-        String getUsersByIdxQuery = "select u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.session as session,u.region as region," +
+        String getUsersByIdxQuery = "select u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.session as userSession,u.region as region," +
                 "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount\n"+
                 "from User as u\n"+
                 "left join (select userIdx, count(pofolIdx) as pofolCount from Pofol where status='ACTIVE' group by userIdx) p on p.userIdx=u.userIdx\n"+
@@ -75,7 +64,7 @@ public class UserDao {
                         rs.getString("birth"),
                         rs.getString("introduction"),
                         rs.getString("profileImgUrl"),
-                        rs.getInt("session"),
+                        rs.getInt("userSession"),
                         rs.getString("region"),
                         rs.getInt("followerCount"),
                         rs.getInt("followeeCount"),
@@ -150,9 +139,9 @@ public class UserDao {
      * 회원가입
      * */
     public int createUser(PostUserReq postUserReq, String email){
-        String createUserQuery = "insert into User (nickName,email,birth,gender,profileImgUrl,session,region) VALUES (?,?,?,?,?,?,?)";
+        String createUserQuery = "insert into User (nickName,email,birth,gender,profileImgUrl,userSession,region) VALUES (?,?,?,?,?,?,?)";
         Object[] createUserParams = new Object[]{postUserReq.getNickName(),email,postUserReq.getBirth(), postUserReq.getGender(),
-                postUserReq.getProfileImgUrl(),postUserReq.getSession(),postUserReq.getRegion()};
+                postUserReq.getProfileImgUrl(),postUserReq.getUserSession(),postUserReq.getRegion()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
         String lastInsertIdQuery = "select last_insert_id()";
@@ -188,8 +177,8 @@ public class UserDao {
     }
 
     public int modifyUserSession(PatchSessionReq patchSessionReq){
-        String modifyUserSessionQuery = "update User set session =? where userIdx = ?";
-        Object[] modifyUserSessionParams = new Object[]{patchSessionReq.getSession(),patchSessionReq.getUserIdx()};
+        String modifyUserSessionQuery = "update User set userSession =? where userIdx = ?";
+        Object[] modifyUserSessionParams = new Object[]{patchSessionReq.getUserSession(),patchSessionReq.getUserIdx()};
 
         return this.jdbcTemplate.update(modifyUserSessionQuery,modifyUserSessionParams);
     }

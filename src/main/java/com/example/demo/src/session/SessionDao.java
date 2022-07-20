@@ -44,26 +44,26 @@ public class SessionDao {
     }
 
     public List<GetSessionRes> getSessionMembers(int bandIdx){
-        String getSessionMemberQuery = "SELECT session, BU.userIdx as userIdx, u.nickName as nickName, bandIdx\n" +
+        String getSessionMemberQuery = "SELECT BU.session as buSession, BU.userIdx as userIdx, u.nickName as nickName, bandIdx\n" +
                 "FROM BandUser as BU JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = BU.userIdx\n" +
                 "WHERE bandIdx = ? and status = 'ACTIVE'";
         int getSessionMemberParams = bandIdx;
         return this.jdbcTemplate.query(getSessionMemberQuery,
                                        (rs, rowNum) -> new GetSessionRes(
-                                               rs.getInt("session"),
+                                               rs.getInt("buSession"),
                                                rs.getInt("userIdx"),
                                                rs.getString("nickName")),
                                        getSessionMemberParams);
     }
 
     public List<GetSessionRes> getApplicants(int bandIdx){
-        String getApplicantsQuery = "SELECT session, BU.userIdx as userIdx, u.nickName as nickName, bandIdx\n" +
+        String getApplicantsQuery = "SELECT BU.session as buSession, BU.userIdx as userIdx, u.nickName as nickName, bandIdx\n" +
                 "FROM BandUser as BU JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = BU.userIdx\n" +
                 "WHERE bandIdx = ? and status = 'INACTIVE'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.query(getApplicantsQuery,
                                        (rs, rowNum) -> new GetSessionRes(
-                                               rs.getInt("session"),
+                                               rs.getInt("buSession"),
                                                rs.getInt("userIdx"),
                                                rs.getString("nickName")),
                                        getBandByIdxParams);
@@ -209,9 +209,9 @@ public class SessionDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
-    public int insertMy(int userIdx, int bandIdx, int mySession){
-        String insertApplyQuery = "INSERT INTO BandUser(userIdx, bandIdx, session) VALUES (?, ?, ?)";
-        Object[] insertApplyParams = new Object[]{ userIdx, bandIdx, mySession };
+    public int insertMy(int userIdx, int bandIdx, int buSession){
+        String insertApplyQuery = "INSERT INTO BandUser(userIdx, bandIdx, buSession) VALUES (?, ?, ?)";
+        Object[] insertApplyParams = new Object[]{ userIdx, bandIdx, buSession };
         this.jdbcTemplate.update(insertApplyQuery, insertApplyParams);
 
         String lastInsertIdQuery = "SELECT last_insert_id()";
@@ -242,8 +242,8 @@ public class SessionDao {
 
     // 밴드 세션 지원
     public int insertApply(int userIdx, int bandIdx, PostApplyReq postApplyReq){
-        String insertApplyQuery = "INSERT INTO BandUser(userIdx, bandIdx, session) VALUES (?, ?, ?)";
-        Object[] insertApplyParams = new Object[]{ userIdx, bandIdx, postApplyReq.getSession() };
+        String insertApplyQuery = "INSERT INTO BandUser(userIdx, bandIdx, buSession) VALUES (?, ?, ?)";
+        Object[] insertApplyParams = new Object[]{ userIdx, bandIdx, postApplyReq.getBuSession() };
         this.jdbcTemplate.update(insertApplyQuery, insertApplyParams);
 
         String lastInsertIdQuery = "SELECT last_insert_id()";
