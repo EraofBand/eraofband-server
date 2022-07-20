@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PostApplyReq {
-    private int session;
+    private int buSession;
 
     public PostApplyReq() {
 
