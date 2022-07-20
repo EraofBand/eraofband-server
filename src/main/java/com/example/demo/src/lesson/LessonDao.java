@@ -113,6 +113,14 @@ public class LessonDao {
     }
 
     public GetLessonRes getLessonMemberByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
+<<<<<<< HEAD
+        String getLessonMemberByIdxQuery =
+                "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName, l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction, " +
+                "l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.session as session, l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl\n"+
+                "FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n"+
+                "WHERE l.lessonIdx=? and l.status='ACTIVE'";
+
+=======
 
 
 
@@ -120,6 +128,7 @@ public class LessonDao {
                 "                l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.mySession as mySession,l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl\n" +
                 "                              FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
                 "                              WHERE l.lessonIdx=? and l.status='ACTIVE'";
+>>>>>>> 26590c0de36fff65110a9c8fcae8f41d1e95bc86
         int getLessonMemberByIdxParams = lessonIdx;
         return this.jdbcTemplate.queryForObject(getLessonMemberByIdxQuery,
                 (rs, rowNum) -> new GetLessonRes(
@@ -143,7 +152,11 @@ public class LessonDao {
                 "       l.lessonRegion as lessonRegion, l.lessonContent as lessonContent,l.mySession as mySession,\n" +
                 "       l.lessonImgUrl as lessonImgUrl\n" +
                 "FROM Lesson as l JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = l.userIdx\n" +
+<<<<<<< HEAD
+                "WHERE l.bandIdx=? and l.status='ACTIVE'";
+=======
                 "WHERE l.lessonIdx=? and l.status='ACTIVE'";
+>>>>>>> 26590c0de36fff65110a9c8fcae8f41d1e95bc86
         int getLessonByIdxParams = lessonIdx;
         return this.jdbcTemplate.queryForObject(getLessonByIdxQuery,
                 (rs, rowNum) -> new GetLessonRes(
