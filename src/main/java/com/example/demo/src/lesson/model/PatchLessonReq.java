@@ -19,7 +19,7 @@ public class PatchLessonReq {
 
     private String lessonContent;
 
-    private int session;
+    private int mySession;
 
     //private int mySession;
 

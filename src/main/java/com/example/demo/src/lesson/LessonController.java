@@ -141,7 +141,7 @@ public class LessonController {
 
     // 레슨 신청
     @ResponseBody
-    @PostMapping("apply/{lessonIdx}") // (post) https://eraofband.shop/lessonIdx/apply/2
+    @PostMapping("apply/{lessonIdx}") // (post) https://eraofband.shop/lesson/apply/2
     @ApiOperation(value = "레슨 신청 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<PostSignUpRes> applyLesson(@PathVariable("lessonIdx") int lessonIdx) {
         try{
