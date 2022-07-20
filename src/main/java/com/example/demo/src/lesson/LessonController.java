@@ -34,7 +34,7 @@ public class LessonController {
     @ResponseBody
     @PostMapping("") // (post) https://eraofband.shop/lesson
     @ApiOperation(value = "레슨 생성 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<PostLessonRes> createBands(@RequestBody PostLessonReq postLessonReq) {
+    public BaseResponse<PostLessonRes> createLesson(@RequestBody PostLessonReq postLessonReq) {
         if(postLessonReq.getLessonTitle() == null){
             return new BaseResponse<>(POST_BANDS_EMPTY_CONTENTS);
         }
@@ -79,7 +79,7 @@ public class LessonController {
     @ResponseBody
     @PatchMapping("patch/{lessonIdx}") // (patch) https://eraofband.shop/lesson/patch/2
     @ApiOperation(value = "레슨 수정 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<String> modifyBand(@PathVariable("lessonIdx") int lessonIdx, @RequestBody PatchLessonReq patchLessonReq){
+    public BaseResponse<String> modifyLesson(@PathVariable("lessonIdx") int lessonIdx, @RequestBody PatchLessonReq patchLessonReq){
         try{
 
             if(patchLessonReq.getLessonContent().length()>450)
@@ -106,7 +106,7 @@ public class LessonController {
     @ResponseBody
     @PatchMapping("patch/{lessonIdx}/status") // (patch) https://eraofband.shop/lesson/patch/2/status
     @ApiOperation(value = "레슨 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<String> deleteBand(@PathVariable("lessonIdx") int lessonIdx, @RequestBody PatchLesComReq patchLesComReq){
+    public BaseResponse<String> deleteLesson(@PathVariable("lessonIdx") int lessonIdx, @RequestBody PatchLesComReq patchLesComReq){
         try {
 
             //jwt에서 idx 추출.
@@ -123,6 +123,7 @@ public class LessonController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
 
 
 
