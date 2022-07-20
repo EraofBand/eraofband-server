@@ -8,7 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetMemberRes {
 
-    private int session;
+    private int mySession;
     private int userIdx;
     private String nickName;
 
