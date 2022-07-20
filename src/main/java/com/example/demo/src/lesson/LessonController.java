@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.example.demo.config.BaseResponseStatus.*;
 
 @RestController
-@RequestMapping("/lesson")
+@RequestMapping("/lessons")
 public class LessonController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class LessonController {
 
     // 레슨 조회
     @ResponseBody
-    @GetMapping("/{lessonIdx}") // (get) https://eraofband.shop/lesson/2
+    @GetMapping("/info/{lessonIdx}") // (get) https://eraofband.shop/lesson/2
     @ApiOperation(value = "레슨 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<GetLessonRes> getLesson(@PathVariable("lessonIdx") int lessonIdx){
         try{
@@ -90,7 +90,7 @@ public class LessonController {
 
     // 레슨 수정
     @ResponseBody
-    @PatchMapping("patch/{lessonIdx}") // (patch) https://eraofband.shop/lesson/patch/2
+    @PatchMapping("/lesson-info/{lessonIdx}") // (patch) https://eraofband.shop/lesson/patch/2
     @ApiOperation(value = "레슨 수정 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> modifyLesson(@PathVariable("lessonIdx") int lessonIdx, @RequestBody PatchLessonReq patchLessonReq){
         try{
@@ -117,7 +117,7 @@ public class LessonController {
 
     // 레슨 삭제
     @ResponseBody
-    @PatchMapping("patch/{lessonIdx}/status") // (patch) https://eraofband.shop/lesson/patch/2/status
+    @PatchMapping("/status/{lessonIdx}") // (patch) https://eraofband.shop/lesson/patch/2/status
     @ApiOperation(value = "레슨 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> deleteLesson(@PathVariable("lessonIdx") int lessonIdx, @RequestBody PatchLesComReq patchLesComReq){
         try {
@@ -141,7 +141,7 @@ public class LessonController {
 
     // 레슨 신청
     @ResponseBody
-    @PostMapping("apply/{lessonIdx}") // (post) https://eraofband.shop/lesson/apply/2
+    @PostMapping("/{lessonIdx}") // (post) https://eraofband.shop/lesson/apply/2
     @ApiOperation(value = "레슨 신청 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<PostSignUpRes> applyLesson(@PathVariable("lessonIdx") int lessonIdx) {
         try{
