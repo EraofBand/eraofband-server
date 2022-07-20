@@ -17,7 +17,7 @@ public class GetLessonRes {
     private String lessonIntroduction;
     private String lessonRegion;
     private String lessonContent;
-    private int mySession;
+    private int lessonSession;
 
     private List<GetMemberRes> lessonMembers;
 

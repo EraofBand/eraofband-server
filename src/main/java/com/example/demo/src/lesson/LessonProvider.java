@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.POSTS_EMPTY_LESSON_ID;
 
 @Service
 public class LessonProvider {
@@ -35,10 +36,11 @@ public class LessonProvider {
         try{
             return lessonDao.checkLessonExist(lessonIdx);
         } catch (Exception exception){
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(POSTS_EMPTY_LESSON_ID);
         }
     }
 
+    // 레슨 생성 유저 확인
     public int checkLessonMaker(int lessonIdx) throws BaseException {
         try{
             return lessonDao.checkLessonMaker(lessonIdx);
@@ -58,6 +60,7 @@ public class LessonProvider {
         }
     }
 
+    // 레슨 정보 (멤버/멤버 아닌 유저)에 따라 다름
     public GetLessonRes getLesson(int userIdx, int lessonIdx) throws BaseException {
         try{
             getLessonMembers = getLessonMembers(lessonIdx);
