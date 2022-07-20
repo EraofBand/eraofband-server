@@ -20,7 +20,7 @@ import static org.hibernate.sql.InFragment.NULL;
 
 
 @RestController
-@RequestMapping("/pofol")
+@RequestMapping("/pofols")
 public class PofolController {
 
     @Autowired
@@ -41,9 +41,9 @@ public class PofolController {
 
     // 팔로우 한 유저 포트폴리오 리스트 조회
     @ResponseBody
-    @GetMapping("")  // (get) https://eraofband.shop/pofol?userIdx=12
+    @GetMapping("/info/follow/{userIdx}")  // (get) https://eraofband.shop/pofols/info/follow/12
     @ApiOperation(value = " 팔로우 한 유저 포트폴리오 리스트 조회")
-    public BaseResponse<List<GetPofolRes>> getPofol(@RequestParam int userIdx){
+    public BaseResponse<List<GetPofolRes>> getPofol(@PathVariable("userIdx") int userIdx){
         try{
             //jwt 없애기
             //int userIdxByJwt = jwtService.getUserIdx();
@@ -58,11 +58,11 @@ public class PofolController {
 
 
 
-    // 특정 포트폴리오 조회
+    // 포트폴리오 리스트 조회
     @ResponseBody
-    @GetMapping("/my/")   // (get) https://eraofband.shop/pofol/my?userIdx=12
-    @ApiOperation(value = " 내 포트폴리오 리스트 조회")
-    public BaseResponse<List<GetPofolRes>> getMyPofol(@RequestParam int userIdx){
+    @GetMapping("/info/{userIdx}")   // (get) https://eraofband.shop/pofols/info/12
+    @ApiOperation(value = "포트폴리오 리스트 조회")
+    public BaseResponse<List<GetPofolRes>> getMyPofol(@PathVariable("userIdx") int userIdx){
 
         try{
             //jwt 없애기
@@ -114,7 +114,7 @@ public class PofolController {
 
     // 포트폴리오 수정
     @ResponseBody
-    @PatchMapping("/{pofolIdx}") // (patch) https://eraofband.shop/pofol/2
+    @PatchMapping("/pofol-info/{pofolIdx}/") // (patch) https://eraofband.shop/pofol/2
     @ApiOperation(value = "포트폴리오 수정 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> modifyPofol(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PatchPofolReq patchPofolReq){
         try{
@@ -140,7 +140,7 @@ public class PofolController {
 
     // 포트폴리오 삭제
     @ResponseBody
-    @PatchMapping("/{pofolIdx}/status") // (patch) https://eraofband.shop/pofol/2/status
+    @PatchMapping("/status/{pofolIdx}") // (patch) https://eraofband.shop/pofol/2/status
     @ApiOperation(value = "포트폴리오 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> deletePofol(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PatchPofComReq patchPofComReq){
         try {
@@ -163,7 +163,7 @@ public class PofolController {
 
     // 포트폴리오 좋아요
     @ResponseBody
-    @PostMapping("/{pofolIdx}/likes") // (post) https://eraofband.shop/pofol/2/likes
+    @PostMapping("/likes/{pofolIdx}") // (post) https://eraofband.shop/pofol/2/likes
     @ApiOperation(value = "포트폴리오 좋아요 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<PostLikeRes> likesPofol(@PathVariable("pofolIdx") int pofolIdx){
 //
@@ -186,7 +186,7 @@ public class PofolController {
 
     // 포트폴리오 좋아요 취소
     @ResponseBody
-    @DeleteMapping ("/{pofolIdx}/unlikes") // (post) https://eraofband.shop/pofol/2/unlikes
+    @DeleteMapping ("/unlikes/{pofolIdx}") // (post) https://eraofband.shop/pofol/2/unlikes
     @ApiOperation(value = "포트폴리오 좋아요 취소 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> unlikesPofol(@PathVariable("pofolIdx") int pofolIdx){
 
@@ -204,35 +204,10 @@ public class PofolController {
 
     }
 
-//    // 댓글 등록
-//    @ResponseBody
-//    @PostMapping("/{pofolIdx}/comment") // (post) https://eraofband.shop/pofol/2/comment
-//    @ApiOperation(value = "포트폴리오 댓글 등록 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-//    public BaseResponse<PostCommentRes> createComment(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PostCommentReq postCommentReq) {
-//
-//        if(postCommentReq.getContent().length()>100){
-//            return new BaseResponse<>(POST_POSTS_INVALID_CONTENTS);
-//        }
-//
-//        try{
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //if(postCommentReq.getUserIdx()!= userIdxByJwt){
-//            //    return new BaseResponse<>(INVALID_JWT);
-//            //}
-//
-//            PostCommentRes postCommentRes = pofolService.createComment(pofolIdx, userIdxByJwt,postCommentReq);
-//            return new BaseResponse<>(postCommentRes);
-//
-//
-//        } catch(BaseException exception){
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//
-//    }
 
     // 댓글 등록
     @ResponseBody
-    @PostMapping("/{pofolIdx}/comment") // (post) https://eraofband.shop/pofol/2/comment
+    @PostMapping("/comment/{pofolIdx}") // (post) https://eraofband.shop/pofol/2/comment
     @ApiOperation(value = "포트폴리오 댓글 등록 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<GetCommentRes> createComment(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PostCommentReq postCommentReq) {
 
@@ -258,26 +233,10 @@ public class PofolController {
 
     }
 
-//    // 특정 댓글 조회
-//    @ResponseBody
-//    @GetMapping("/{pofolCommentIdx}/comment")  // (get) https://eraofband.shop/pofol/2/comment
-//    @ApiOperation(value = "특정 댓글 조회")
-//    public BaseResponse<List<GetCommentRes>> getComment(@PathVariable("pofolCommentIdx") int pofolCommentIdx){
-//
-//        try{
-//
-//            List<GetCommentRes> getComment = pofolProvider.certainComment(pofolCommentIdx);
-//            return new BaseResponse<>(getComment);
-//        } catch (BaseException exception){
-//            return new BaseResponse<>(exception.getStatus());
-//        }
-//
-//    }
-
 
     // 댓글 삭제
     @ResponseBody
-    @PatchMapping("/{pofolCommentIdx}/comment/status") // (patch) https://eraofband.shop/2/comment/status
+    @PatchMapping("/comment/status/{pofolCommentIdx}") // (patch) https://eraofband.shop/2/comment/status
     @ApiOperation(value = "포트폴리오 댓글 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> deleteComment(@PathVariable("pofolCommentIdx") int pofolCommentIdx, @RequestBody PatchPofComReq patchPofComReq) {
 
@@ -304,7 +263,7 @@ public class PofolController {
     // 댓글 목록 조회
 
     @ResponseBody
-    @GetMapping("/comment")  // (get) https://eraofband.shop/pofol/comment
+    @GetMapping("/info/comment")  // (get) https://eraofband.shop/pofol/comment
     @ApiOperation(value = " 댓글 목록 조회")
     public BaseResponse<List<GetCommentRes>> getListComment(@RequestParam int pofolIdx){
         try{

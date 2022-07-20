@@ -28,7 +28,7 @@ public class SessionController {
 
     // 밴드 조회
     @ResponseBody
-    @GetMapping("/{bandIdx}") // (get) https://eraofband.shop/sessions/2
+    @GetMapping("/info/{bandIdx}") // (get) https://eraofband.shop/sessions/2
     @ApiOperation(value = "밴드 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<GetBandRes> getBand(@PathVariable("bandIdx") int bandIdx){
         try{
@@ -88,7 +88,7 @@ public class SessionController {
 
     // 밴드 수정
     @ResponseBody
-    @PatchMapping("patch/{bandIdx}") // (patch) https://eraofband.shop/sessions/patch/2
+    @PatchMapping("/band-info/{bandIdx}") // (patch) https://eraofband.shop/sessions/patch/2
     @ApiOperation(value = "밴드 수정 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> modifyBand(@PathVariable("bandIdx") int bandIdx, @RequestBody PatchBandReq patchBandReq){
         try{
@@ -115,7 +115,7 @@ public class SessionController {
 
     // 밴드 삭제
     @ResponseBody
-    @PatchMapping("patch/{bandIdx}/status") // (patch) https://eraofband.shop/sessions/patch/2/status
+    @PatchMapping("/status/{bandIdx}") // (patch) https://eraofband.shop/sessions/patch/2/status
     @ApiOperation(value = "밴드 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> deleteBand(@PathVariable("bandIdx") int bandIdx, @RequestBody DeleteBandReq deleteBandReq){
         try {
@@ -137,7 +137,7 @@ public class SessionController {
 
     // 밴드 세션 지원 생성
     @ResponseBody
-    @PostMapping("apply/{bandIdx}") // (post) https://eraofband.shop/sessions/apply/2
+    @PostMapping("/{bandIdx}") // (post) https://eraofband.shop/sessions/apply/2
     @ApiOperation(value = "밴드 세션 지원 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<PostApplyRes> applySession(@PathVariable("bandIdx") int bandIdx, @RequestBody PostApplyReq postApplyReq) {
         try{
@@ -153,7 +153,7 @@ public class SessionController {
 
     // 세션 지원 수락
     @ResponseBody
-    @PatchMapping("/{bandIdx}/accept/{userIdx}") // (patch) https://eraofband.shop/sessions/2/accept/9
+    @PatchMapping("/in/{bandIdx}/{userIdx}") // (patch) https://eraofband.shop/sessions/2/accept/9
     @ApiOperation(value = "세션 지원 수락 처리", notes = "path: 해당 페이지의 bandIdx, 지원 수락하려는 userIdx")
     public BaseResponse<String> acceptSession(@PathVariable("bandIdx") int bandIdx, @PathVariable("userIdx") int userIdx){
         try {
@@ -169,7 +169,7 @@ public class SessionController {
 
     // 세션 지원 거절
     @ResponseBody
-    @PatchMapping("/{bandIdx}/reject/{userIdx}") // (patch) https://eraofband.shop/sessions/2/reject/9
+    @PatchMapping("/out/{bandIdx}/{userIdx}") // (patch) https://eraofband.shop/sessions/2/reject/9
     @ApiOperation(value = "세션 지원 거절 처리", notes = "path: 해당 페이지의 bandIdx, 지원 거절하려는 userIdx")
     public BaseResponse<String> rejectSession(@PathVariable("bandIdx") int bandIdx, @PathVariable("userIdx") int userIdx){
         try {

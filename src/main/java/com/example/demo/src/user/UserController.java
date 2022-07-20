@@ -39,7 +39,7 @@ public class UserController {
      * @return BaseResponse<GetUserFeedRes>
      */
     @ResponseBody
-    @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/users/2
+    @GetMapping("/info/{userIdx}") // (GET) 127.0.0.1:9000/users/info/2
     @ApiOperation(value = "다른 회원 정보 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<GetUserFeedRes> getUserByIdx(@PathVariable("userIdx")int userIdx) {
             try{
@@ -57,7 +57,7 @@ public class UserController {
      * @return BaseResponse<GetMyFeedRes>
      */
     @ResponseBody
-    @GetMapping("/my-page/{userIdx}") // (GET) 127.0.0.1:9000/users/mypage/12
+    @GetMapping("/info/my-page/{userIdx}") // (GET) 127.0.0.1:9000/users/info/mypage/12
     @ApiOperation(value = "마이페이지 정보 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<GetMyFeedRes> getMypage(@PathVariable("userIdx")int userIdx) {
         try{
@@ -82,9 +82,7 @@ public class UserController {
     // Body
     @ResponseBody
     @PostMapping("/signin/{access-token}") // (POST) 127.0.0.1:9000/users/signin/dsfdsbfuewhiuwf...
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="access-token", value="접근 토큰", required = true)
-    })
+    @ApiImplicitParam(name="access-token", value="접근 가능 토큰", required = true)
     public BaseResponse<PostUserRes> createKakaoUser(@PathVariable("access-token") String token, @RequestBody PostUserReq postUserReq){
         try{
             String email=userService.getKakaoInfo(token);
@@ -105,12 +103,11 @@ public class UserController {
 
     /**
      * 로그인(가입 여부 확인) API
-     * status 확인 필요
      * [POST] /users/login/{kakao-email}
      * @return BaseResponse<PostLoginRes>
      */
     @ResponseBody
-    @PatchMapping("/login/{kakao-email}") // (PATCH) 127.0.0.1:9000/users/login/jdshkf@gmail.com
+    @PostMapping("/login/{kakao-email}") // (POST) 127.0.0.1:9000/users/login/jdshkf@gmail.com
     public BaseResponse<PostLoginRes> UserLogin(@PathVariable("kakao-email") String email){
         try {
             //email validation 처리
@@ -135,7 +132,7 @@ public class UserController {
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/user-info") // (PATCH) 127.0.0.1:9000/users/modiUserInfo
+    @PatchMapping("/user-info") // (PATCH) 127.0.0.1:9000/users/user-info
     @ApiOperation(value = "회원 정보 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> modifyUserInfo(@RequestBody PatchUserReq patchUserReq){
         try {
@@ -185,7 +182,7 @@ public class UserController {
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/delete/{userIdx}") // (PATCH) 127.0.0.1:9000/users/2/delete
+    @PatchMapping("/status/{userIdx}") // (PATCH) 127.0.0.1:9000/users/2/delete
     @ApiOperation(value = "회원 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> deleteUser(@PathVariable("userIdx") int userIdx){
         try {
@@ -255,7 +252,7 @@ public class UserController {
      * @return BaseResponse<GetFollowRes>
      */
     @ResponseBody
-    @GetMapping("/follow-info/{userIdx}") // (GET) 127.0.0.1:9000/users/mypage/12
+    @GetMapping("/info/follow/{userIdx}") // (GET) 127.0.0.1:9000/users/info/follow/12
     @ApiOperation(value = "팔로잉, 팔로워 리스트 조회")
     public BaseResponse<GetFollowRes> getFollow(@PathVariable("userIdx")int userIdx) {
         try{

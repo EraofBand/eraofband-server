@@ -41,6 +41,13 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_BAND(false,2019,"밴드 변경에 실패했습니다."),
     DELETE_FAIL_BAND(false,2019,"밴드 삭제에 실패했습니다."),
 
+    // lesson
+    DELETE_FAIL_LESSON(false,2019,"레슨 삭제에 실패했습니다."),
+
+    POSTS_EMPTY_LESSON_ID(false,2018,"레슨 아이디 값을 확인해주세요."),
+
+    MODIFY_FAIL_LESSON(false,2019,"레슨 변경에 실패했습니다."),
+
     // pofol
     POSTS_EMPTY_POFOL_ID(false,2020,"포트폴리오 아이디 값을 확인해주세요."),
     POSTS_EMPTY_POFOL_COMMENT_ID(false,2020,"포트폴리오 댓글 아이디 값을 확인해주세요."),
