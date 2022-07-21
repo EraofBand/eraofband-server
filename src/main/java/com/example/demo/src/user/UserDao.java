@@ -21,7 +21,7 @@ public class UserDao {
 
     /**회원 페이지 조회*/
     public GetUserInfoRes getUserByIdx(int myId,int userIdx){
-        String getUsersByIdxQuery = "select u.userIdx as userIdx, u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.session as userSession,u.region as region," +
+        String getUsersByIdxQuery = "select u.userIdx as userIdx, u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.userSession as userSession,u.region as region," +
                         "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount, follow as follow\n"+
         "from User as u\n"+
             "left join (select userIdx, count(pofolIdx) as pofolCount from Pofol where status='ACTIVE' group by userIdx) p on p.userIdx=u.userIdx\n"+
@@ -49,7 +49,7 @@ public class UserDao {
 
     /**마이 페이지 조회*/
     public GetMyInfoRes getMyFeed(int userIdx){
-        String getUsersByIdxQuery = "select u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.session as userSession,u.region as region," +
+        String getUsersByIdxQuery = "select u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.userSession as userSession,u.region as region," +
                 "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount\n"+
                 "from User as u\n"+
                 "left join (select userIdx, count(pofolIdx) as pofolCount from Pofol where status='ACTIVE' group by userIdx) p on p.userIdx=u.userIdx\n"+
