@@ -71,7 +71,7 @@ public class SessionProvider {
                 return getBandRes;
             }
         } catch(Exception exception){
-//            System.out.println(exception);
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -81,6 +81,7 @@ public class SessionProvider {
             List<GetSessionRes> getSessionMembers = sessionDao.getSessionMembers(bandIdx);
             return getSessionMembers;
         } catch(Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -90,6 +91,7 @@ public class SessionProvider {
             List<GetSessionRes> getApplicants = sessionDao.getApplicants(bandIdx);
             return getApplicants;
         } catch(Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }

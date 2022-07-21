@@ -44,28 +44,56 @@ public class SessionDao {
     }
 
     public List<GetSessionRes> getSessionMembers(int bandIdx){
-        String getSessionMemberQuery = "SELECT BU.session as buSession, BU.userIdx as userIdx, u.nickName as nickName, bandIdx\n" +
-                "FROM BandUser as BU JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = BU.userIdx\n" +
+        String getSessionMemberQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl,\n" +
+                "case\n" +
+                "when timestampdiff(second, BU.updatedAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(second, BU.updatedAt, current_timestamp), '초 전')\n" +
+                "when timestampdiff(minute , BU.updatedAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(minute, BU.updatedAt, current_timestamp), '분 전')\n" +
+                "when timestampdiff(hour , BU.updatedAt, current_timestamp) < 24\n" +
+                "then concat(timestampdiff(hour, BU.updatedAt, current_timestamp), '시간 전')\n" +
+                "when timestampdiff(day , BU.updatedAt, current_timestamp) < 365\n" +
+                "then concat(timestampdiff(day, BU.updatedAt, current_timestamp), '일 전')\n" +
+                "else timestampdiff(year , BU.updatedAt, current_timestamp)\n" +
+                "end as updatedAt\n" +
+                "FROM BandUser as BU\n" +
+                "JOIN (SELECT userIdx, nickName, profileImgUrl FROM User) u on u.userIdx = BU.userIdx\n" +
                 "WHERE bandIdx = ? and status = 'ACTIVE'";
         int getSessionMemberParams = bandIdx;
         return this.jdbcTemplate.query(getSessionMemberQuery,
                                        (rs, rowNum) -> new GetSessionRes(
                                                rs.getInt("buSession"),
                                                rs.getInt("userIdx"),
-                                               rs.getString("nickName")),
+                                               rs.getString("profileImgUrl"),
+                                               rs.getString("nickName"),
+                                               rs.getString("updatedAt")),
                                        getSessionMemberParams);
     }
 
     public List<GetSessionRes> getApplicants(int bandIdx){
-        String getApplicantsQuery = "SELECT BU.session as buSession, BU.userIdx as userIdx, u.nickName as nickName, bandIdx\n" +
-                "FROM BandUser as BU JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = BU.userIdx\n" +
+        String getApplicantsQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl,\n" +
+                "case\n" +
+                "when timestampdiff(second, BU.updatedAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(second, BU.updatedAt, current_timestamp), '초 전')\n" +
+                "when timestampdiff(minute , BU.updatedAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(minute, BU.updatedAt, current_timestamp), '분 전')\n" +
+                "when timestampdiff(hour , BU.updatedAt, current_timestamp) < 24\n" +
+                "then concat(timestampdiff(hour, BU.updatedAt, current_timestamp), '시간 전')\n" +
+                "when timestampdiff(day , BU.updatedAt, current_timestamp) < 365\n" +
+                "then concat(timestampdiff(day, BU.updatedAt, current_timestamp), '일 전')\n" +
+                "else timestampdiff(year , BU.updatedAt, current_timestamp)\n" +
+                "end as updatedAt\n" +
+                "FROM BandUser as BU\n" +
+                "JOIN(SELECT userIdx, nickName, profileImgUrl FROM User) u on u.userIdx = BU.userIdx\n" +
                 "WHERE bandIdx = ? and status = 'INACTIVE'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.query(getApplicantsQuery,
                                        (rs, rowNum) -> new GetSessionRes(
                                                rs.getInt("buSession"),
                                                rs.getInt("userIdx"),
-                                               rs.getString("nickName")),
+                                               rs.getString("profileImgUrl"),
+                                               rs.getString("nickName"),
+                                               rs.getString("updatedAt")),
                                        getBandByIdxParams);
     }
 
@@ -74,10 +102,16 @@ public class SessionDao {
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
                 "       b.bandRegion as bandRegion, b.bandContent as bandContent, b.mySession as mySession,\n" +
-                "       vocal, vocalComment, guitar, guitarComment, base, baseComment, keyboard, keyboardComment, drum, drumComment,\n" +
+                "       b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal, vocalComment, b.guitar-IF(b1.guitarCount is null, 0, b1.guitarCount) as guitar, guitarComment, b.base-IF(b2.baseCount is null, 0, b2.baseCount) as base,\n" +
+                "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
                 "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = b.userIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as guitarCount from BandUser where status='ACTIVE' and buSession=1 group by bandIdx) b1 on b1.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as baseCount from BandUser where status='ACTIVE' and buSession=2 group by bandIdx) b2 on b2.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as keyboardCount from BandUser where status='ACTIVE' and buSession=3 group by bandIdx) b3 on b3.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as drumCount from BandUser where status='ACTIVE' and buSession=4 group by bandIdx) b4 on b4.bandIdx=b.bandIdx\n" +
                 "WHERE b.bandIdx=? and b.status='ACTIVE'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.queryForObject(getBandByIdxQuery,
@@ -115,10 +149,16 @@ public class SessionDao {
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
                 "       b.bandRegion as bandRegion, b.bandContent as bandContent,b.mySession as mySession,\n" +
-                "       vocal, vocalComment, guitar, guitarComment, base, baseComment, keyboard, keyboardComment, drum, drumComment,\n" +
+                "       b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal, vocalComment, b.guitar-IF(b1.guitarCount is null, 0, b1.guitarCount) as guitar, guitarComment, b.base-IF(b2.baseCount is null, 0, b2.baseCount) as base,\n" +
+                "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
                 "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee,b.bandImgUrl as bandImgUrl\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = b.userIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as guitarCount from BandUser where status='ACTIVE' and buSession=1 group by bandIdx) b1 on b1.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as baseCount from BandUser where status='ACTIVE' and buSession=2 group by bandIdx) b2 on b2.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as keyboardCount from BandUser where status='ACTIVE' and buSession=3 group by bandIdx) b3 on b3.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as drumCount from BandUser where status='ACTIVE' and buSession=4 group by bandIdx) b4 on b4.bandIdx=b.bandIdx\n" +
                 "WHERE b.bandIdx=? and b.status='ACTIVE'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.queryForObject(getBandByIdxQuery,
@@ -156,10 +196,16 @@ public class SessionDao {
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
                 "       b.bandRegion as bandRegion, b.bandContent as bandContent, b.mySession as mySession,\n" +
-                "       vocal, vocalComment, guitar, guitarComment, base, baseComment, keyboard, keyboardComment, drum, drumComment,\n" +
+                "       b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal, vocalComment, b.guitar-IF(b1.guitarCount is null, 0, b1.guitarCount) as guitar, guitarComment, b.base-IF(b2.baseCount is null, 0, b2.baseCount) as base,\n" +
+                "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
                 "       b.performDate as performDate,  b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = b.userIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as guitarCount from BandUser where status='ACTIVE' and buSession=1 group by bandIdx) b1 on b1.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as baseCount from BandUser where status='ACTIVE' and buSession=2 group by bandIdx) b2 on b2.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as keyboardCount from BandUser where status='ACTIVE' and buSession=3 group by bandIdx) b3 on b3.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, count(bandUserIdx) as drumCount from BandUser where status='ACTIVE' and buSession=4 group by bandIdx) b4 on b4.bandIdx=b.bandIdx\n" +
                 "WHERE b.bandIdx=? and b.status='ACTIVE'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.queryForObject(getBandByIdxQuery,
