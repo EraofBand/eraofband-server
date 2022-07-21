@@ -3,7 +3,6 @@ package com.example.demo.src.lesson;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.lesson.model.*;
-import com.example.demo.src.session.model.*;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class LessonController {
 
     // 레슨 조회
     @ResponseBody
-    @GetMapping("/info/{lessonIdx}") // (get) https://eraofband.shop/lesson/2
+    @GetMapping("/info/{lessonIdx}") // (get) https://eraofband.shop/lesson/info/2
     @ApiOperation(value = "레슨 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<GetLessonRes> getLesson(@PathVariable("lessonIdx") int lessonIdx){
         try{
@@ -153,6 +152,45 @@ public class LessonController {
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
+    }
+
+
+    // 레슨 좋아요
+    @ResponseBody
+    @PostMapping("/likes/{lessonIdx}") // (post) https://eraofband.shop/lesson/likes/2
+    @ApiOperation(value = "레슨 좋아요 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<PostLesLikeRes> likesLesson(@PathVariable("lessonIdx") int lessonIdx){
+//
+        try {
+
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+            PostLesLikeRes postLesLikeRes = lessonService.likesLesson(userIdxByJwt,lessonIdx);
+
+            return new BaseResponse<>(postLesLikeRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    // 레슨 좋아요 취소
+    @ResponseBody
+    @DeleteMapping ("/unlikes/{lessonIdx}") // (delete) https://eraofband.shop/pofol/unlikes/2
+    @ApiOperation(value = "레슨 좋아요 취소 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<String> unlikesLesson(@PathVariable("lessonIdx") int lessonIdx){
+
+        try {
+
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+            lessonService.unlikesLesson(userIdxByJwt,lessonIdx);
+
+            String result = "레슨 좋아요 취소를 완료하였습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
     }
 
 

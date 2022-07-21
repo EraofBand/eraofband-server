@@ -5,8 +5,6 @@ package com.example.demo.src.lesson;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.lesson.model.GetLessonRes;
 import com.example.demo.src.lesson.model.GetMemberRes;
-import com.example.demo.src.session.model.GetBandRes;
-import com.example.demo.src.session.model.GetSessionRes;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,6 +83,7 @@ public class LessonProvider {
             List<GetMemberRes> getMembers = lessonDao.getLessonMembers(lessonIdx);
             return getMembers;
         } catch(Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
