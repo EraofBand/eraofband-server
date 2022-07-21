@@ -26,4 +26,8 @@ public class GetLessonRes {
     private String likeOrNot;
     private int lessonLikeCount;
 
+    private int memberCount;
+    private int capacity;
+
+
 }
