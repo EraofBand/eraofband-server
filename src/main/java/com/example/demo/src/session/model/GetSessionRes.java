@@ -10,5 +10,7 @@ import lombok.Setter;
 public class GetSessionRes {
     private int buSession;
     private int userIdx;
+    private String profileImgUrl;
     private String nickName;
+    private String updatedAt;
 }
