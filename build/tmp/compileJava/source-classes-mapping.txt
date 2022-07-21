@@ -8,6 +8,8 @@ com/example/demo/src/user/model/Users.java
  com.example.demo.src.user.model.Users
 com/example/demo/utils/ValidationRegex.java
  com.example.demo.utils.ValidationRegex
+com/example/demo/src/lesson/model/PostLesLikeRes.java
+ com.example.demo.src.lesson.model.PostLesLikeRes
 com/example/demo/src/pofol/model/GetCommentRes.java
  com.example.demo.src.pofol.model.GetCommentRes
 com/example/demo/src/pofol/PofolService.java
@@ -114,8 +116,6 @@ com/example/demo/src/S33/S3Component.java
  com.example.demo.src.S33.S3Component
 com/example/demo/src/user/model/GetUserPofolRes.java
  com.example.demo.src.user.model.GetUserPofolRes
-com/example/demo/src/user/model/Usersf.java
- com.example.demo.src.user.model.Usersf
 com/example/demo/src/S33/AwsS3UploadService.java
  com.example.demo.src.S33.AwsS3UploadService
 com/example/demo/src/session/model/PostBandReq.java
