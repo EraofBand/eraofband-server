@@ -2,11 +2,6 @@ package com.example.demo.src.lesson;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.lesson.model.*;
-import com.example.demo.src.session.SessionDao;
-import com.example.demo.src.session.SessionProvider;
-import com.example.demo.src.session.model.PatchBandReq;
-import com.example.demo.src.session.model.PostApplyReq;
-import com.example.demo.src.session.model.PostApplyRes;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,6 +81,52 @@ public class LessonService {
             //System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+
+
+    // 레슨 좋아요
+    public PostLesLikeRes likesLesson(int userIdx, int lessonIdx) throws BaseException {
+
+        if(lessonProvider.checkLessonExist(lessonIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_LESSON_ID);
+        }
+
+
+        try{
+            int result = lessonDao.updateLikes(userIdx, lessonIdx);
+            if(result == 0){
+                throw new BaseException(LIKES_FAIL_LESSON);
+            }
+            return new PostLesLikeRes(result);
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
+
+
+
+    // 레슨 좋아요 취소
+    public void unlikesLesson(int userIdx, int lessonIdx) throws BaseException {
+
+        if(lessonProvider.checkLessonExist(lessonIdx) == 0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+
+
+        try{
+            int result = lessonDao.updateUnlikes(userIdx, lessonIdx);
+            if(result == 0){
+                throw new BaseException(UNLIKES_FAIL_POFOL);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+
+
     }
 
 

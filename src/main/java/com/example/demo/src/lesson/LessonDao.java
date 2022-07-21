@@ -84,7 +84,7 @@ public class LessonDao {
 
     // 레슨 멤버 목록
     public List<GetMemberRes> getLessonMembers(int lessonIdx){
-        String getLessonMemberQuery = "SELECT u.session as mySession, LU.userIdx as userIdx, u.nickName as nickName\n" +
+        String getLessonMemberQuery = "SELECT u.usersession as mySession, LU.userIdx as userIdx, u.nickName as nickName\n" +
                 "FROM LessonUser as LU JOIN User as u on u.userIdx = LU.userIdx\n" +
                 "WHERE lessonIdx = ? and u.status = 'ACTIVE'";
         int getLessonMemberParams = lessonIdx;
@@ -114,11 +114,22 @@ public class LessonDao {
                 checkUserExistParams);
     }
 
+
+    // 레슨 소속 유저가 레슨 조회
     public GetLessonRes getLessonMemberByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
-        String getLessonMemberByIdxQuery = "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
-                "                l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.lessonSession as lessonSession, l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl\n" +
-                "                              FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
-                "                              WHERE l.lessonIdx=? and l.status='ACTIVE'";
+        String getLessonMemberByIdxQuery = "\n" +
+                "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
+                "   l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
+                "   l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.lessonSession as lessonSession, \n" +
+                "   l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl,\n" +
+                "   IF(lessonLikeCount is null, 0, lessonLikeCount) as lessonLikeCount,"+
+                "   IF(ll.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n"+
+                "FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
+                "left join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n"+
+                "left join LessonLike as ll on  ll.lessonIdx = l.lessonIdx\n" +
+                "WHERE l.lessonIdx=? and l.status='ACTIVE' and u.userIdx = l.userIdx";
+
+
 
         int getLessonMemberByIdxParams = lessonIdx;
         return this.jdbcTemplate.queryForObject(getLessonMemberByIdxQuery,
@@ -133,17 +144,27 @@ public class LessonDao {
                         rs.getInt("lessonSession"),
                         lessonMembers,
                         rs.getString("chatRoomLink"),
-                        rs.getString("lessonImgUrl")),
+                        rs.getString("lessonImgUrl"),
+                        rs.getString("likeOrNot"),
+                        rs.getInt("lessonLikeCount")),
                 getLessonMemberByIdxParams);
     }
 
+
+
+    // 레슨 미소속 유저가 레슨 조회
     public GetLessonRes getLessonByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
         String getLessonByIdxQuery = "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
                 "       l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.lessonSession as lessonSession,\n" +
-                "       l.lessonImgUrl as lessonImgUrl\n" +
-                " FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
-                "WHERE l.lessonIdx=? and l.status='ACTIVE'";
+                "       l.lessonImgUrl as lessonImgUrl,\n" +
+                "       IF(lessonLikeCount is null, 0, lessonLikeCount) as lessonLikeCount,"+
+                "       IF(ll.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n"+
+                "       FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
+                "       left join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n"+
+                "       left join LessonLike as ll on  ll.lessonIdx = l.lessonIdx\n" +
+                "WHERE l.lessonIdx=? and l.status='ACTIVE' and u.userIdx = l.userIdx";
+
 
         int getLessonByIdxParams = lessonIdx;
         return this.jdbcTemplate.queryForObject(getLessonByIdxQuery,
@@ -158,8 +179,29 @@ public class LessonDao {
                         rs.getInt("lessonSession"),
                         lessonMembers,
                         null,
-                        rs.getString("lessonImgUrl")),
+                        rs.getString("lessonImgUrl"),
+                        rs.getString("likeOrNot"),
+                        rs.getInt("lessonLikeCount")),
                 getLessonByIdxParams);
+    }
+
+    // 레슨 좋아요
+    public int updateLikes(int userIdx, int lessonIdx) {
+        String updateLikesQuery = "INSERT INTO LessonLike(userIdx, lessonIdx) VALUES (?,?)";
+        Object[] updateLikesParams = new Object[]{userIdx, lessonIdx};
+
+        this.jdbcTemplate.update(updateLikesQuery, updateLikesParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    // 레슨 좋아요 취소
+    public int updateUnlikes(int userIdx, int lessonIdx) {
+        String updateUnlikesQuery = "DELETE FROM LessonLike WHERE userIdx = ? and lessonIdx = ?";
+        Object[] updateUnlikesParams = new Object[]{userIdx, lessonIdx};
+
+        return this.jdbcTemplate.update(updateUnlikesQuery, updateUnlikesParams);
     }
 
 

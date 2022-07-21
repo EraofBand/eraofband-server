@@ -1,5 +1,4 @@
 package com.example.demo.src.lesson.model;
-import com.example.demo.src.session.model.GetSessionRes;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,5 +22,8 @@ public class GetLessonRes {
 
     private String chatRoomLink;
     private String lessonImgUrl;
+
+    private String likeOrNot;
+    private int lessonLikeCount;
 
 }
