@@ -9,6 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PatchSessionReq {
     private int userIdx;
-    private int session;
+    private int userSession;
 }
 
