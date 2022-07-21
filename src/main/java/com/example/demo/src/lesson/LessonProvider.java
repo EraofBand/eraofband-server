@@ -4,6 +4,7 @@ package com.example.demo.src.lesson;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.lesson.model.GetLessonRes;
+import com.example.demo.src.lesson.model.GetLikesLessonRes;
 import com.example.demo.src.lesson.model.GetMemberRes;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,18 @@ public class LessonProvider {
         try{
             List<GetMemberRes> getMembers = lessonDao.getLessonMembers(lessonIdx);
             return getMembers;
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 찜한 레슨 조회
+    public List<GetLikesLessonRes> getLikesLesson(int userIdx) throws BaseException {
+
+        try{
+            List<GetLikesLessonRes> getLikesLesson = lessonDao.getLikesLesson(userIdx);
+            return getLikesLesson;
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);

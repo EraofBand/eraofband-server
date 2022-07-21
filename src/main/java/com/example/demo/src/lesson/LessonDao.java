@@ -2,12 +2,10 @@ package com.example.demo.src.lesson;
 
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.lesson.model.GetLessonRes;
-import com.example.demo.src.lesson.model.GetMemberRes;
-import com.example.demo.src.lesson.model.PatchLessonReq;
-import com.example.demo.src.lesson.model.PostLessonReq;
+import com.example.demo.src.lesson.model.*;
 
 
+import com.example.demo.src.user.model.GetUserLessonRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -121,11 +119,13 @@ public class LessonDao {
                 "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
                 "   l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
                 "   l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.lessonSession as lessonSession, \n" +
-                "   l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl,\n" +
+                "   l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl," +
+                "   IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity,"+
                 "   IF(lessonLikeCount is null, 0, lessonLikeCount) as lessonLikeCount,"+
                 "   IF(ll.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n"+
                 "FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
-                "left join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n"+
+                "        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx"+
+                "        left join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n"+
                 "left join LessonLike as ll on  ll.lessonIdx = l.lessonIdx\n" +
                 "WHERE l.lessonIdx=? and l.status='ACTIVE' and u.userIdx = l.userIdx";
 
@@ -146,7 +146,10 @@ public class LessonDao {
                         rs.getString("chatRoomLink"),
                         rs.getString("lessonImgUrl"),
                         rs.getString("likeOrNot"),
-                        rs.getInt("lessonLikeCount")),
+                        rs.getInt("lessonLikeCount"),
+                        rs.getInt("memberCount"),
+                        rs.getInt("capacity")
+                ),
                 getLessonMemberByIdxParams);
     }
 
@@ -157,10 +160,12 @@ public class LessonDao {
         String getLessonByIdxQuery = "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
                 "       l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.lessonSession as lessonSession,\n" +
-                "       l.lessonImgUrl as lessonImgUrl,\n" +
+                "       l.lessonImgUrl as lessonImgUrl, "+
+                "       IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity,"+
                 "       IF(lessonLikeCount is null, 0, lessonLikeCount) as lessonLikeCount,"+
                 "       IF(ll.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n"+
                 "       FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
+                "        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx"+
                 "       left join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n"+
                 "       left join LessonLike as ll on  ll.lessonIdx = l.lessonIdx\n" +
                 "WHERE l.lessonIdx=? and l.status='ACTIVE' and u.userIdx = l.userIdx";
@@ -181,7 +186,10 @@ public class LessonDao {
                         null,
                         rs.getString("lessonImgUrl"),
                         rs.getString("likeOrNot"),
-                        rs.getInt("lessonLikeCount")),
+                        rs.getInt("lessonLikeCount"),
+                        rs.getInt("memberCount"),
+                        rs.getInt("capacity")
+                ),
                 getLessonByIdxParams);
     }
 
@@ -202,6 +210,32 @@ public class LessonDao {
         Object[] updateUnlikesParams = new Object[]{userIdx, lessonIdx};
 
         return this.jdbcTemplate.update(updateUnlikesQuery, updateUnlikesParams);
+    }
+
+    // 찜한 레슨 조회
+    public List<GetLikesLessonRes> getLikesLesson(int userIdx){
+        String getLikesLessonQuery = "\n"+
+                "SELECT l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle,"+
+        "        l.lessonIntroduction as lessonIntroduction, l.lessonRegion as lessonRegion,"+
+        "        IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity"+
+        "        FROM LessonUser as lu"+
+        "        JOIN Lesson as l"+
+        "        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx"+
+        "        left join LessonLike as ll on l.lessonIdx = ll.lessonIdx"+
+        "        WHERE l.status='ACTIVE' and lu.status='ACTIVE' and ll.userIdx=?"+
+        "        group by l.lessonIdx"+
+        "        order by l.lessonIdx";
+        Object[] getLikesLessonParams = new Object[]{userIdx};
+        return this.jdbcTemplate.query(getLikesLessonQuery,
+                (rs, rowNum) -> new GetLikesLessonRes(
+                        rs.getInt("lessonIdx"),
+                        rs.getString("lessonImgUrl"),
+                        rs.getString("lessonTitle"),
+                        rs.getString("lessonIntroduction"),
+                        rs.getString("lessonRegion"),
+                        rs.getInt("capacity"),
+                        rs.getInt("memberCount")),
+                getLikesLessonParams);
     }
 
 

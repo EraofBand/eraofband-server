@@ -7,6 +7,9 @@ import com.example.demo.utils.JwtService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 import static com.example.demo.config.BaseResponseStatus.*;
 
 @RestController
@@ -160,7 +163,7 @@ public class LessonController {
     @PostMapping("/likes/{lessonIdx}") // (post) https://eraofband.shop/lesson/likes/2
     @ApiOperation(value = "레슨 좋아요 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<PostLesLikeRes> likesLesson(@PathVariable("lessonIdx") int lessonIdx){
-//
+
         try {
 
             //jwt에서 idx 추출
@@ -192,6 +195,28 @@ public class LessonController {
         }
 
     }
+
+    // 찜한 레슨 조회
+    @ResponseBody
+    @GetMapping("/info/likes") // (get) https://eraofband.shop/lesson/info/likes
+    @ApiOperation(value = "찜한 레슨 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<List<GetLikesLessonRes>> getLikesLesson(@RequestParam int userIdx){
+        try{
+
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            List<GetLikesLessonRes> getLikesLessonRes = lessonProvider.getLikesLesson(userIdxByJwt);
+            return new BaseResponse<>(getLikesLessonRes);
+
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
+
 
 
 
