@@ -8,6 +8,8 @@ com/example/demo/src/user/model/Users.java
  com.example.demo.src.user.model.Users
 com/example/demo/utils/ValidationRegex.java
  com.example.demo.utils.ValidationRegex
+com/example/demo/src/lesson/model/PostLesLikeRes.java
+ com.example.demo.src.lesson.model.PostLesLikeRes
 com/example/demo/src/pofol/model/GetCommentRes.java
  com.example.demo.src.pofol.model.GetCommentRes
 com/example/demo/src/pofol/PofolService.java
