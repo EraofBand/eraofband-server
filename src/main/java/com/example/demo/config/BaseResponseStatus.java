@@ -49,6 +49,8 @@ public enum BaseResponseStatus {
 
     MODIFY_FAIL_LESSON(false,2019,"레슨 변경에 실패했습니다."),
 
+    LIKES_FAIL_LESSON(false,2022,"레슨 좋아요에 실패했습니다."),
+
     // pofol
     POSTS_EMPTY_POFOL_ID(false,2020,"포트폴리오 아이디 값을 확인해주세요."),
     POSTS_EMPTY_POFOL_COMMENT_ID(false,2020,"포트폴리오 댓글 아이디 값을 확인해주세요."),
