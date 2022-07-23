@@ -20,7 +20,7 @@ public class SessionDao {
 
     // 유저 확인
     public int checkBandMaker(int bandIdx){
-        String selectUserIdxQuery = "SELECT userIdx FROM Band WHERE bandIdx = ?";
+        String selectUserIdxQuery = "SELECT userIdx FROM Band WHERE bandIdx = ? and status='ACTIVE'";
         int selectUserIdxParams = bandIdx;
         return this.jdbcTemplate.queryForObject(selectUserIdxQuery,
                                                 int.class,
@@ -28,7 +28,7 @@ public class SessionDao {
     }
 
     public int checkBandSession(int userIdx, int bandIdx){
-        String checkUserExistQuery = "SELECT exists(SELECT bandUserIdx FROM BandUser WHERE userIdx=? and bandIdx=?)";
+        String checkUserExistQuery = "SELECT exists(SELECT bandUserIdx FROM BandUser WHERE userIdx=? and bandIdx=? and status='ACTIVE')";
         Object[] checkUserExistParams = new Object[]{ userIdx, bandIdx };
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
                                                        int.class,
@@ -37,7 +37,7 @@ public class SessionDao {
 
     // 밴드 확인
     public int checkBandExist(int bandIdx){
-        String checkBandExistQuery = "SELECT exists(SELECT bandIdx FROM Band WHERE bandIdx = ?)";
+        String checkBandExistQuery = "SELECT exists(SELECT bandIdx FROM Band WHERE bandIdx = ? and status='ACTIVE')";
         int checkBandExistParams = bandIdx;
         return this.jdbcTemplate.queryForObject(checkBandExistQuery,
                                                 int.class,
@@ -69,7 +69,7 @@ public class SessionDao {
     public List<GetFameBandRes> getFameBand(){
         String getFameBandQuery = "SELECT b.bandIdx as bandIdx, b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction, b.bandImgUrl as bandImgUrl\n" +
                 "FROM Band as b\n" +
-                "    left join (select bandIdx, userIdx, count(bandLikeIdx) as BandLikeCount\n" +
+                "    left join (select bandIdx, userIdx, count(bandLikeIdx) as bandLikeCount\n" +
                 "    from BandLike WHERE status = 'ACTIVE' group by bandIdx) plc on plc.bandIdx = b.bandIdx\n" +
                 "WHERE b.status='ACTIVE' order by bandLikeCount DESC\n" +
                 "LIMIT 3;";
@@ -126,7 +126,7 @@ public class SessionDao {
                 "end as updatedAt\n" +
                 "FROM BandUser as BU\n" +
                 "JOIN(SELECT userIdx, nickName, profileImgUrl FROM User) u on u.userIdx = BU.userIdx\n" +
-                "WHERE bandIdx = ? and status = 'INACTIVE'";
+                "WHERE bandIdx = ? and status = 'WAIT'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.query(getApplicantsQuery,
                                        (rs, rowNum) -> new GetSessionRes(
@@ -300,7 +300,7 @@ public class SessionDao {
     // 밴드 수정
     public int updateBand(int bandIdx, PatchBandReq patchBandReq){
         String updateBandQuery = "UPDATE Band SET bandTitle=?, bandIntroduction=?, bandRegion=?, bandContent=?, mySession=?," +
-                "vocal=?, vocalComment=?, guitar=?, guitarComment=?, base=?, baseComment=?, keyboard=?, keyboardComment=?, drum=?, drumComment=?, chatRoomLink=?, performDate=?, performTime=?, performLocation=?, performFee=?, bandImgUrl=? WHERE bandIdx = ?" ;
+                "vocal=?, vocalComment=?, guitar=?, guitarComment=?, base=?, baseComment=?, keyboard=?, keyboardComment=?, drum=?, drumComment=?, chatRoomLink=?, performDate=?, performTime=?, performLocation=?, performFee=?, bandImgUrl=? WHERE bandIdx = ? and status='ACTIVE'" ;
         Object[] updateBandParams = new Object[]{ patchBandReq.getBandTitle(), patchBandReq.getBandIntroduction(),
                 patchBandReq.getBandRegion(), patchBandReq.getBandContent(), patchBandReq.getMySession(),
                 patchBandReq.getVocal(), patchBandReq.getVocalComment(), patchBandReq.getGuitar(), patchBandReq.getGuitarComment(),
@@ -312,7 +312,13 @@ public class SessionDao {
 
     // 밴드 삭제
     public int updateBandStatus(int bandIdx){
-        String deleteBandQuery = "UPDATE Band SET status = 'INACTIVE' WHERE bandIdx = ? ";
+        String deleteBandQuery = "update Band b" +
+                "    left join BandUser as bu on (bu.bandIdx=b.bandIdx)\n" +
+                "    left join BandLike as bl on (bl.bandIdx=b.bandIdx)\n" +
+                "        set b.status='INACTIVE',\n" +
+                "            bu.status='INACTIVE',\n" +
+                "            bl.status='INACTIVE'\n" +
+                "   where b.bandIdx = ? ";
         Object[] deleteBandParams = new Object[]{ bandIdx };
 
         return this.jdbcTemplate.update(deleteBandQuery,deleteBandParams);
@@ -346,7 +352,7 @@ public class SessionDao {
 
     // 밴드 좋아요
     public int updateLikes(int userIdx, int bandIdx) {
-        String updateLikesQuery = "INSERT INTO BandLike(userIdx, lessonIdx) VALUES (?,?)";
+        String updateLikesQuery = "INSERT INTO BandLike(userIdx, bandIdx) VALUES (?,?)";
         Object[] updateLikesParams = new Object[]{userIdx, bandIdx};
 
         this.jdbcTemplate.update(updateLikesQuery, updateLikesParams);
@@ -357,7 +363,7 @@ public class SessionDao {
 
     // 밴드 좋아요 취소
     public int updateUnlikes(int userIdx, int bandIdx) {
-        String updateUnlikesQuery = "DELETE FROM BandLike WHERE userIdx = ? and lessonIdx = ?";
+        String updateUnlikesQuery = "DELETE FROM BandLike WHERE userIdx = ? and bandIdx = ?";
         Object[] updateUnlikesParams = new Object[]{userIdx, bandIdx};
 
         return this.jdbcTemplate.update(updateUnlikesQuery, updateUnlikesParams);

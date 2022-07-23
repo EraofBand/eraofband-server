@@ -33,7 +33,7 @@ public class SessionController {
 
     // 최신 밴드
     @ResponseBody
-    @GetMapping("/home") // (get) https://eraofband.shop/sessions/home
+    @GetMapping("/home/new") // (get) https://eraofband.shop/sessions/home
     @ApiOperation(value = "새로 생성된 밴드 6개 조회")
     public BaseResponse<List<GetNewBandRes>> getNewBand(){
         try{
@@ -264,13 +264,11 @@ public class SessionController {
     @ResponseBody
     @GetMapping("/info/likes") // (get) https://eraofband.shop/lesson/info/likes
     @ApiOperation(value = "찜한 밴드 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<List<GetLikesBandRes>> getLikesBand(@PathVariable int userIdx) {
+    public BaseResponse<List<GetLikesBandRes>> getLikesBand() {
         try {
 
             int userIdxByJwt = jwtService.getUserIdx();
-            if (userIdx != userIdxByJwt) {
-                return new BaseResponse<>(INVALID_USER_JWT);
-            }
+
             List<GetLikesBandRes> getLikesBandRes = sessionProvider.getLikesBand(userIdxByJwt);
             return new BaseResponse<>(getLikesBandRes);
 

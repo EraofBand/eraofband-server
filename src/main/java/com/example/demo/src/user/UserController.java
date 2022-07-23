@@ -158,7 +158,7 @@ public class UserController {
      */
     @ResponseBody
     @PatchMapping("/user-session") // (PATCH) 127.0.0.1:9000/users/modiUserSession
-    @ApiOperation(value = "회원 정보 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "회원 세션 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> modifyUserSession(@RequestBody PatchSessionReq patchSessionReq){
         try {
             //jwt에서 idx 추출.
