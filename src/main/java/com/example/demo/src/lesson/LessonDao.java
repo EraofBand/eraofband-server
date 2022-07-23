@@ -36,6 +36,16 @@ public class LessonDao {
                 checkLessonExistParams);
     }
 
+//    // 레슨 개설 유저 레슨유저에 추가
+//    public int insertMy(int userIdx, int lessonIdx){
+//        String insertApplyQuery = "INSERT INTO LessonUser(userIdx, bandIdx) VALUES (?, ?)";
+//        Object[] insertApplyParams = new Object[]{ userIdx, lessonIdx };
+//        this.jdbcTemplate.update(insertApplyQuery, insertApplyParams);
+//
+//        String lastInsertIdQuery = "SELECT last_insert_id()";
+//        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+//    }
+//
 
 
 
@@ -82,9 +92,10 @@ public class LessonDao {
 
     // 레슨 멤버 목록
     public List<GetMemberRes> getLessonMembers(int lessonIdx){
-        String getLessonMemberQuery = "SELECT u.usersession as mySession, LU.userIdx as userIdx, u.nickName as nickName\n" +
-                "FROM LessonUser as LU JOIN User as u on u.userIdx = LU.userIdx\n" +
-                "WHERE lessonIdx = ? and u.status = 'ACTIVE'";
+        String getLessonMemberQuery = "SELECT u.userSession as mySession, LU.userIdx as userIdx, u.nickName as nickName\n" +
+                "                FROM LessonUser as LU JOIN User as u on u.userIdx = LU.userIdx\n" +
+                "                LEFT join Lesson as l on l.lessonIdx = LU.lessonIdx\n" +
+                "                WHERE LU.lessonIdx = ? and u.status = 'ACTIVE'";
         int getLessonMemberParams = lessonIdx;
         return this.jdbcTemplate.query(getLessonMemberQuery,
                 (rs, rowNum) -> new GetMemberRes(
@@ -117,19 +128,18 @@ public class LessonDao {
     public GetLessonRes getLessonMemberByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
         String getLessonMemberByIdxQuery = "\n" +
                 "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
-                "   l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
-                "   l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.lessonSession as lessonSession, \n" +
-                "   l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl," +
-                "   IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity,"+
-                "   IF(lessonLikeCount is null, 0, lessonLikeCount) as lessonLikeCount,"+
-                "   IF(ll.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n"+
-                "FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
-                "        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx"+
-                "        left join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n"+
-                "left join LessonLike as ll on  ll.lessonIdx = l.lessonIdx\n" +
-                "WHERE l.lessonIdx=? and l.status='ACTIVE' and u.userIdx = l.userIdx";
-
-
+                "                   l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
+                "                   l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.lessonSession as lessonSession,\n" +
+                "                   l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl,\n" +
+                "                   IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity,\n" +
+                "                   IF(lessonLikeCount is null, 0, lessonLikeCount) as lessonLikeCount,\n" +
+                "                   IF(ll.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
+                "                FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
+                "                   left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
+                "                   left join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n" +
+                "                   left join LessonLike as ll on  ll.lessonIdx = l.lessonIdx\n" +
+                "            WHERE l.lessonIdx=? and l.status='ACTIVE' and u.userIdx = l.userIdx\n" +
+                "            GROUP BY l.lessonIdx";
 
         int getLessonMemberByIdxParams = lessonIdx;
         return this.jdbcTemplate.queryForObject(getLessonMemberByIdxQuery,
@@ -158,17 +168,18 @@ public class LessonDao {
     // 레슨 미소속 유저가 레슨 조회
     public GetLessonRes getLessonByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
         String getLessonByIdxQuery = "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
-                "       l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
-                "       l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.lessonSession as lessonSession,\n" +
-                "       l.lessonImgUrl as lessonImgUrl, "+
-                "       IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity,"+
-                "       IF(lessonLikeCount is null, 0, lessonLikeCount) as lessonLikeCount,"+
-                "       IF(ll.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n"+
-                "       FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
-                "        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx"+
-                "       left join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n"+
-                "       left join LessonLike as ll on  ll.lessonIdx = l.lessonIdx\n" +
-                "WHERE l.lessonIdx=? and l.status='ACTIVE' and u.userIdx = l.userIdx";
+                "                       l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
+                "                       l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.lessonSession as lessonSession,\n" +
+                "                       l.lessonImgUrl as lessonImgUrl,\n" +
+                "                       IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity,\n" +
+                "                       IF(lessonLikeCount is null, 0, lessonLikeCount) as lessonLikeCount,\n" +
+                "                       IF(ll.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
+                "                       FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
+                "                       LEFT join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
+                "                       LEFT join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n" +
+                "                       LEFT join LessonLike as ll on ll.lessonIdx = l.lessonIdx\n" +
+                "                       WHERE l.lessonIdx=? and l.status='ACTIVE' and u.userIdx = l.userIdx"+
+                "                       GROUP BY l.lessonIdx";
 
 
         int getLessonByIdxParams = lessonIdx;
@@ -238,101 +249,72 @@ public class LessonDao {
                 getLikesLessonParams);
     }
 
-    // 레슨 조회 (모든 지역 : 모든 세션)
-    public List<GetInfoLessonRes> getInfoAllLessonRes(){
-
-        String getInfoAllLessonQuery = "\n"+
-                "SELECT l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle,\n" +
-                "                        l.lessonIntroduction as lessonIntroduction, l.lessonRegion as lessonRegion,\n" +
-                "                        IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity\n" +
-                "                        FROM LessonUser as lu\n" +
-                "                        JOIN Lesson as l\n" +
-                "                        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
-                "                        WHERE l.status='ACTIVE' and lu.status='ACTIVE'\n" +
-                "                        group by l.lessonIdx\n" +
-                "                        order by l.lessonIdx DESC ";
-        Object[] getInfoAllLessonParams = new Object[]{};
-        return this.jdbcTemplate.query(getInfoAllLessonQuery,
-                (rs, rowNum) -> new GetInfoLessonRes(
-                        rs.getInt("lessonIdx"),
-                        rs.getString("lessonImgUrl"),
-                        rs.getString("lessonTitle"),
-                        rs.getString("lessonIntroduction"),
-                        rs.getString("lessonRegion"),
-                        rs.getInt("capacity"),
-                        rs.getInt("memberCount")),
-                getInfoAllLessonParams);
-    }
 
 
-    // 레슨 조회 (모든 지역 : 선택 세션)
-    public List<GetInfoLessonRes> getInfoSessionLessonRes(int session){
-
-        String getInfoSessionLessonQuery = "\n"+
-                "SELECT l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle,\n" +
-                "                        l.lessonIntroduction as lessonIntroduction, l.lessonRegion as lessonRegion,\n" +
-                "                        IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity\n" +
-                "                        FROM LessonUser as lu\n" +
-                "                        JOIN Lesson as l\n" +
-                "                        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
-                "                        WHERE l.status='ACTIVE' and lu.status='ACTIVE' and l.lessonSession = ?\n" +
-                "                        group by l.lessonIdx\n" +
-                "                        order by l.lessonIdx DESC ";
-        Object[] getInfoSessionLessonParams = new Object[]{session};
-        return this.jdbcTemplate.query(getInfoSessionLessonQuery,
-                (rs, rowNum) -> new GetInfoLessonRes(
-                        rs.getInt("lessonIdx"),
-                        rs.getString("lessonImgUrl"),
-                        rs.getString("lessonTitle"),
-                        rs.getString("lessonIntroduction"),
-                        rs.getString("lessonRegion"),
-                        rs.getInt("capacity"),
-                        rs.getInt("memberCount")),
-                getInfoSessionLessonParams);
-    }
 
 
-    // 레슨 조회 (선택 지역 : 모든 세션)
-    public List<GetInfoLessonRes> getInfoRegionLessonRes(String region){
-
-
-        String getInfoRegionLessonQuery = "\n"+
-                "SELECT l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle,\n" +
-                "                        l.lessonIntroduction as lessonIntroduction, l.lessonRegion as lessonRegion,\n" +
-                "                        IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity\n" +
-                "                        FROM LessonUser as lu\n" +
-                "                        JOIN Lesson as l\n" +
-                "                        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
-                "                        WHERE l.status='ACTIVE' and lu.status='ACTIVE' and (SUBSTRING(l.lessonRegion, 1, 2)) = ?\n" +
-                "                        group by l.lessonIdx\n" +
-                "                        order by l.lessonIdx DESC";
-        Object[] getInfoRegionLessonParams = new Object[]{region};
-        return this.jdbcTemplate.query(getInfoRegionLessonQuery,
-                (rs, rowNum) -> new GetInfoLessonRes(
-                        rs.getInt("lessonIdx"),
-                        rs.getString("lessonImgUrl"),
-                        rs.getString("lessonTitle"),
-                        rs.getString("lessonIntroduction"),
-                        rs.getString("lessonRegion"),
-                        rs.getInt("capacity"),
-                        rs.getInt("memberCount")),
-                getInfoRegionLessonParams);
-
-    }
-
-    // 레슨 조회 (선택 지역 : 선택 세션)
+    // 지역-세션 분류 레슨 정보 반환
     public List<GetInfoLessonRes> getInfoLessonRes(String region, int session){
-        String getInfoLessonQuery = "\n"+
-                "SELECT l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle,\n" +
-                "                        l.lessonIntroduction as lessonIntroduction, l.lessonRegion as lessonRegion,\n" +
-                "                        IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity\n" +
-                "                        FROM LessonUser as lu\n" +
-                "                        JOIN Lesson as l\n" +
-                "                        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
-                "                        WHERE l.status='ACTIVE' and lu.status='ACTIVE' and (SUBSTRING(l.lessonRegion, 1, 2)) = ? and l.lessonSession = ?\n" +
-                "                        group by l.lessonIdx\n" +
-                "                        order by l.lessonIdx DESC";
-        Object[] getInfoLessonParams = new Object[]{region, session};
+        region = region.substring(0, 2);
+
+        String getInfoLessonQuery = "";
+        Object[] getInfoLessonParams = new Object[]{};
+        if (region.compareTo("전체") == 0 && session == 5) {
+            getInfoLessonQuery = "\n"+
+                    "SELECT l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle,\n" +
+                    "                        l.lessonIntroduction as lessonIntroduction, l.lessonRegion as lessonRegion,\n" +
+                    "                        IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity\n" +
+                    "                        FROM LessonUser as lu\n" +
+                    "                        JOIN Lesson as l\n" +
+                    "                        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
+                    "                        WHERE l.status='ACTIVE' and lu.status='ACTIVE'\n" +
+                    "                        group by l.lessonIdx\n" +
+                    "                        order by l.lessonIdx DESC ";
+            getInfoLessonParams = new Object[]{};
+
+
+        } else if (region.compareTo("전체") == 0 && session != 5) {
+            getInfoLessonQuery = "\n"+
+                    "SELECT l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle,\n" +
+                    "                        l.lessonIntroduction as lessonIntroduction, l.lessonRegion as lessonRegion,\n" +
+                    "                        IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity\n" +
+                    "                        FROM LessonUser as lu\n" +
+                    "                        JOIN Lesson as l\n" +
+                    "                        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
+                    "                        WHERE l.status='ACTIVE' and lu.status='ACTIVE' and l.lessonSession = ?\n" +
+                    "                        group by l.lessonIdx\n" +
+                    "                        order by l.lessonIdx DESC ";
+            getInfoLessonParams = new Object[]{session};
+
+        } else if (region.compareTo("전체") != 0 && session == 5) {
+            getInfoLessonQuery = "\n"+
+                    "SELECT l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle,\n" +
+                    "                        l.lessonIntroduction as lessonIntroduction, l.lessonRegion as lessonRegion,\n" +
+                    "                        IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity\n" +
+                    "                        FROM LessonUser as lu\n" +
+                    "                        JOIN Lesson as l\n" +
+                    "                        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
+                    "                        WHERE l.status='ACTIVE' and lu.status='ACTIVE' and (SUBSTRING(l.lessonRegion, 1, 2)) = ?\n" +
+                    "                        group by l.lessonIdx\n" +
+                    "                        order by l.lessonIdx DESC";
+            getInfoLessonParams = new Object[]{region};
+
+        } else if (region.compareTo("전체") != 0 && session != 5) {
+
+            getInfoLessonQuery = "\n"+
+                    "SELECT l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle,\n" +
+                    "                        l.lessonIntroduction as lessonIntroduction, l.lessonRegion as lessonRegion,\n" +
+                    "                        IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity\n" +
+                    "                        FROM LessonUser as lu\n" +
+                    "                        JOIN Lesson as l\n" +
+                    "                        left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
+                    "                        WHERE l.status='ACTIVE' and lu.status='ACTIVE' and (SUBSTRING(l.lessonRegion, 1, 2)) = ? and l.lessonSession = ?\n" +
+                    "                        group by l.lessonIdx\n" +
+                    "                        order by l.lessonIdx DESC";
+            getInfoLessonParams = new Object[]{region, session};
+
+        }
+
         return this.jdbcTemplate.query(getInfoLessonQuery,
                 (rs, rowNum) -> new GetInfoLessonRes(
                         rs.getInt("lessonIdx"),
@@ -344,8 +326,6 @@ public class LessonDao {
                         rs.getInt("memberCount")),
                 getInfoLessonParams);
     }
-
-
 
 
 

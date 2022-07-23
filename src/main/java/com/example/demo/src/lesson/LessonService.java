@@ -26,9 +26,9 @@ public class LessonService {
     public PostLessonRes createLesson(int userIdx, PostLessonReq postLessonReq) throws BaseException {
 
         try{
+
             int lessonIdx = lessonDao.insertLesson(userIdx, postLessonReq);
-            //LessonDao.insertMy(userIdx, lessonIdx, postLessonReq.getMySession());
-            //LessonDao.acceptLesson(lessonIdx, userIdx);
+            //lessonDao.insertMy(userIdx, lessonIdx);
             return new PostLessonRes(lessonIdx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
