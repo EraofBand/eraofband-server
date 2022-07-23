@@ -44,6 +44,46 @@ public class SessionDao {
                                                 checkBandExistParams);
     }
 
+    // 최신 밴드
+    public List<GetNewBandRes> getNewBand(){
+        String getNewBandQuery = "SELECT b.bandIdx, bandRegion, bandTitle, bandImgUrl, sessionNum, vocal+guitar+base+keyboard+drum as totalNum\n" +
+                "FROM Band as b\n" +
+                "    left join (SELECT bandIdx, count(bandIdx) as sessionNum \n" +
+                "    from BandUser WHERE status = 'ACTIVE') BU on BU.bandIdx = b.bandIdx\n" +
+                "WHERE status = 'ACTIVE' order by createdAt DESC\n" +
+                "LIMIT 6;";
+        Object[] getNewBandParams = new Object[]{};
+        return this.jdbcTemplate.query(getNewBandQuery,
+                                       (rs, rowNum) -> new GetNewBandRes(
+                                               rs.getInt("bandIdx"),
+                                               rs.getString("bandRegion"),
+                                               rs.getString("bandTitle"),
+                                               rs.getInt("sessionNum"),
+                                               rs.getInt("totalNum"),
+                                               rs.getString("bandImgUrl")
+                                       ),
+                                       getNewBandParams);
+    }
+
+    // 인기 TOP3 밴드
+    public List<GetFameBandRes> getFameBand(){
+        String getFameBandQuery = "SELECT b.bandIdx as bandIdx, b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction, b.bandImgUrl as bandImgUrl\n" +
+                "FROM Band as b\n" +
+                "    left join (select bandIdx, userIdx, count(bandLikeIdx) as BandLikeCount\n" +
+                "    from BandLike WHERE status = 'ACTIVE' group by bandIdx) plc on plc.bandIdx = b.bandIdx\n" +
+                "WHERE b.status='ACTIVE' order by bandLikeCount DESC\n" +
+                "LIMIT 3;";
+        Object[] getFameBandParams = new Object[]{};
+        return this.jdbcTemplate.query(getFameBandQuery,
+                                       (rs, rowNum) -> new GetFameBandRes(
+                                               rs.getInt("bandIdx"),
+                                               rs.getString("bandTitle"),
+                                               rs.getString("bandIntroduction"),
+                                               rs.getString("bandImgUrl")
+                                       ),
+                                       getFameBandParams);
+    }
+
     public List<GetSessionRes> getSessionMembers(int bandIdx){
         String getSessionMemberQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl,\n" +
                 "case\n" +
@@ -277,7 +317,6 @@ public class SessionDao {
 
         return this.jdbcTemplate.update(deleteBandQuery,deleteBandParams);
     }
-
 
     // 밴드 세션 지원
     public int insertApply(int userIdx, int bandIdx, PostApplyReq postApplyReq){

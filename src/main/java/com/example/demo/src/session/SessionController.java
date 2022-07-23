@@ -31,6 +31,36 @@ public class SessionController {
         this.jwtService = jwtService;
     }
 
+    // 최신 밴드
+    @ResponseBody
+    @GetMapping("/home") // (get) https://eraofband.shop/sessions/home
+    @ApiOperation(value = "새로 생성된 밴드 6개 조회")
+    public BaseResponse<List<GetNewBandRes>> getNewBand(){
+        try{
+
+            List<GetNewBandRes> getNewBandRes = sessionProvider.getNewBand();
+            return new BaseResponse<>(getNewBandRes);
+
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    // 인기 TOP3 밴드
+    @ResponseBody
+    @GetMapping("/home/fame") // (get) https://eraofband.shop/sessions/home/fame
+    @ApiOperation(value = "인기 TOP3 밴드 정보 반환")
+    public BaseResponse<List<GetFameBandRes>> getFameBand(){
+        try{
+
+            List<GetFameBandRes> getFameBandRes = sessionProvider.getFameBand();
+            return new BaseResponse<>(getFameBandRes);
+
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
     // 밴드 조회
     @ResponseBody
     @GetMapping("/info/{bandIdx}") // (get) https://eraofband.shop/sessions/2

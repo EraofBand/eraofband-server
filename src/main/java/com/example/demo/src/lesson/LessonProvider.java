@@ -3,6 +3,7 @@ package com.example.demo.src.lesson;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.lesson.model.GetInfoLessonRes;
 import com.example.demo.src.lesson.model.GetLessonRes;
 import com.example.demo.src.lesson.model.GetLikesLessonRes;
 import com.example.demo.src.lesson.model.GetMemberRes;
@@ -32,18 +33,18 @@ public class LessonProvider {
 
     // 레슨 확인
     public int checkLessonExist(int lessonIdx) throws BaseException {
-        try{
+        try {
             return lessonDao.checkLessonExist(lessonIdx);
-        } catch (Exception exception){
+        } catch (Exception exception) {
             throw new BaseException(POSTS_EMPTY_LESSON_ID);
         }
     }
 
     // 레슨 생성 유저 확인
     public int checkLessonMaker(int lessonIdx) throws BaseException {
-        try{
+        try {
             return lessonDao.checkLessonMaker(lessonIdx);
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
@@ -61,7 +62,7 @@ public class LessonProvider {
 
     // 레슨 정보 (멤버/멤버 아닌 유저)에 따라 다름
     public GetLessonRes getLesson(int userIdx, int lessonIdx) throws BaseException {
-        try{
+        try {
             getLessonMembers = getLessonMembers(lessonIdx);
             if (checkLessonSession(userIdx, lessonIdx) == 1 || checkLessonMaker(lessonIdx) == userIdx) {
                 GetLessonRes getLessonRes = lessonDao.getLessonMemberByIdx(lessonIdx, getLessonMembers);
@@ -72,7 +73,7 @@ public class LessonProvider {
 
                 return getLessonRes;
             }
-        } catch(Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
@@ -80,10 +81,10 @@ public class LessonProvider {
 
     // 레슨 멤버 목록
     public List<GetMemberRes> getLessonMembers(int lessonIdx) throws BaseException {
-        try{
+        try {
             List<GetMemberRes> getMembers = lessonDao.getLessonMembers(lessonIdx);
             return getMembers;
-        } catch(Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
@@ -92,13 +93,29 @@ public class LessonProvider {
     // 찜한 레슨 조회
     public List<GetLikesLessonRes> getLikesLesson(int userIdx) throws BaseException {
 
-        try{
+        try {
             List<GetLikesLessonRes> getLikesLesson = lessonDao.getLikesLesson(userIdx);
             return getLikesLesson;
-        } catch(Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
+
+    // 지역-세션 분류 레슨 정보 반환
+    public List<GetInfoLessonRes> getInfoLesson(String region, int session) throws BaseException {
+
+        try {
+            List<GetInfoLessonRes> getInfoLessonRes = lessonDao.getInfoLessonRes(region, session);
+            return getInfoLessonRes;
+
+
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
 }
+
