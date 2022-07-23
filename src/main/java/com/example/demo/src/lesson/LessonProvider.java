@@ -102,31 +102,13 @@ public class LessonProvider {
         }
     }
 
+
     // 지역-세션 분류 레슨 정보 반환
     public List<GetInfoLessonRes> getInfoLesson(String region, int session) throws BaseException {
 
         try {
-
-            if (region.compareTo("전체") == 0 && session == 5) {
-                List<GetInfoLessonRes> getInfoLessonRes = lessonDao.getInfoAllLessonRes();
-                return getInfoLessonRes;
-
-            } else if (region.compareTo("전체") == 0 && session != 5) {
-                List<GetInfoLessonRes> getInfoLessonRes = lessonDao.getInfoSessionLessonRes(session);
-                return getInfoLessonRes;
-
-            } else if (region.compareTo("전체") != 0 && session == 5) {
-                region = region.substring(0, 2);
-                List<GetInfoLessonRes> getInfoLessonRes = lessonDao.getInfoRegionLessonRes(region);
-                return getInfoLessonRes;
-
-            } else if (region.compareTo("전체") != 0 && session != 5) {
-                region = region.substring(0, 2);
-                List<GetInfoLessonRes> getInfoLessonRes = lessonDao.getInfoLessonRes(region, session);
-                return getInfoLessonRes;
-
-            }
-            return null;
+            List<GetInfoLessonRes> getInfoLessonRes = lessonDao.getInfoLessonRes(region, session);
+            return getInfoLessonRes;
 
 
         } catch (Exception exception) {

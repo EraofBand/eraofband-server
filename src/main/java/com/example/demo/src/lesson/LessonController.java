@@ -218,7 +218,7 @@ public class LessonController {
 
     // 지역-세션 분류 레슨 정보 반환
     @ResponseBody
-    @GetMapping("/info/list/{lesson-region}/{lesson-session}") // (get) https://eraofband.shop/lesson/info/list/경기/1
+    @GetMapping("/info/list/{lesson-region}/{lesson-session}") // (get) https://eraofband.shop/lesson/info/list/경기도 성남시/1
     @ApiOperation(value = "지역-세션 분류 레슨 정보 반환")
     public BaseResponse<List<GetInfoLessonRes>> getInfoLesson(@PathVariable("lesson-region") String region, @PathVariable("lesson-session") int session){
         try{
