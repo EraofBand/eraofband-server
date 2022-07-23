@@ -1,6 +1,9 @@
 package com.example.demo.src.session;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.lesson.model.GetLikesLessonRes;
+import com.example.demo.src.session.model.GetInfoBandRes;
+import com.example.demo.src.session.model.GetLikesBandRes;
 import com.example.demo.src.session.model.GetSessionRes;
 import com.example.demo.src.session.model.GetBandRes;
 import com.example.demo.utils.JwtService;
@@ -94,5 +97,29 @@ public class SessionProvider {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    // 찜한 밴드 조회
+    public List<GetLikesBandRes> getLikesBand(int userIdx) throws BaseException {
+
+        try{
+            List<GetLikesBandRes> getLikesBand = sessionDao.getLikesBand(userIdx);
+            return getLikesBand;
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetInfoBandRes> getInfoBand(String region, String session) throws BaseException {
+
+        try {
+                List<GetInfoBandRes> getInfoBandRes = sessionDao.getInfoBandRes(region, session);
+                return getInfoBandRes;
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+
     }
 }
