@@ -64,7 +64,7 @@ public class LessonDao {
     // 레슨 수정
     public int updateLesson(int lessonIdx, PatchLessonReq patchLessonReq){
         String updateLessonQuery = "UPDATE Lesson SET lessonTitle=?, lessonIntroduction=?, lessonRegion=?, lessonContent=?, lessonSession=?," +
-                "capacity=?, chatRoomLink=?, lessonImgUrl=? WHERE lessonIdx = ?" ;
+                "capacity=?, chatRoomLink=?, lessonImgUrl=? WHERE lessonIdx = ? and status='ACTIVE'" ;
         Object[] updateLessonParams = new Object[]{ patchLessonReq.getLessonTitle(), patchLessonReq.getLessonIntroduction(),
                 patchLessonReq.getLessonRegion(), patchLessonReq.getLessonContent(), patchLessonReq.getLessonSession(),
                 patchLessonReq.getCapacity(), patchLessonReq.getChatRoomLink(), patchLessonReq.getLessonImgUrl(), lessonIdx };
@@ -74,7 +74,13 @@ public class LessonDao {
 
     // 레슨 삭제
     public int updateLessonStatus(int lessonIdx){
-        String deleteLessonQuery = "UPDATE Lesson SET status = 'INACTIVE' WHERE lessonIdx = ? ";
+        String deleteLessonQuery = "update Lesson l" +
+                "    left join LessonUser as lu on (lu.lessonIdx=l.lessonIdx)\n" +
+                "    left join LessonLike as ll on (ll.lessonIdx=l.lessonIdx)\n" +
+                "        set l.status='INACTIVE',\n" +
+                "            lu.status='INACTIVE',\n" +
+                "            ll.status='INACTIVE'\n" +
+                "   where l.lessonIdx = ? ";
         Object[] deleteLessonParams = new Object[]{ lessonIdx };
 
         return this.jdbcTemplate.update(deleteLessonQuery,deleteLessonParams);
@@ -107,7 +113,7 @@ public class LessonDao {
 
     // 레슨 생성 유저 확인
     public int checkLessonMaker(int lessonIdx){
-        String selectUserIdxQuery = "SELECT userIdx FROM Lesson WHERE lessonIdx = ?";
+        String selectUserIdxQuery = "SELECT userIdx FROM Lesson WHERE lessonIdx = ? and status='ACTIVE'";
         int selectUserIdxParams = lessonIdx;
         return this.jdbcTemplate.queryForObject(selectUserIdxQuery,
                 int.class,
@@ -116,7 +122,7 @@ public class LessonDao {
 
     // 레슨 멤버 확인
     public int checkLessonSession(int userIdx, int lessonIdx){
-        String checkUserExistQuery = "SELECT exists(SELECT lessonUserIdx FROM LessonUser WHERE userIdx=? and lessonIdx=?)";
+        String checkUserExistQuery = "SELECT exists(SELECT lessonUserIdx FROM LessonUser WHERE userIdx=? and lessonIdx=? and status='ACTIVE')";
         Object[] checkUserExistParams = new Object[]{ userIdx, lessonIdx };
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
                 int.class,

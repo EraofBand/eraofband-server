@@ -54,7 +54,7 @@ public class PofolDao {
 
     // 이메일 확인
     public int checkEmailExist(String email) {
-        String checkEmailQuery = "select exists(select email from User where email = ?)";
+        String checkEmailQuery = "select exists(select email from User where email = ? and status='ACTIVE')";
         String checkEmailParams = email;
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,
@@ -244,7 +244,7 @@ public class PofolDao {
 
     // 포트폴리오 수정
     public int updatePofol(int pofolIdx, PatchPofolReq patchPofolReq) {
-        String updatePofolQuery = "UPDATE Pofol SET title = ?, content = ? WHERE pofolIdx = ?\n";
+        String updatePofolQuery = "UPDATE Pofol SET title = ?, content = ? WHERE pofolIdx = ? and status='ACTIVE'\n";
         Object[] updatePofolParams = new Object[]{patchPofolReq.getTitle(), patchPofolReq.getContent(), pofolIdx};
 
         return this.jdbcTemplate.update(updatePofolQuery, updatePofolParams);
@@ -252,7 +252,13 @@ public class PofolDao {
 
     // 포트폴리오 삭제
     public int updatePofolStatus(int pofolIdx) {
-        String deleteUserQuery = "UPDATE Pofol SET status = 'INACTIVE' WHERE pofolIdx = ? ";
+        String deleteUserQuery = "update Pofol p" +
+                "    left join PofolComment as pc on (pc.pofolIdx=p.pofolIdx)\n" +
+                "    left join PofolLike as pl on (pl.pofolIdx=p.pofolIdx)\n" +
+                "        set p.status='INACTIVE',\n" +
+                "            pc.status='INACTIVE',\n" +
+                "            pl.status='INACTIVE'\n" +
+                "   where p.pofolIdx = ? ";
         Object[] deleteUserParams = new Object[]{pofolIdx};
 
         return this.jdbcTemplate.update(deleteUserQuery, deleteUserParams);
