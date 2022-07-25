@@ -1,4 +1,5 @@
-package com.example.demo.src.lesson.model;
+package com.example.demo.src.session.model;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -6,11 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetMemberRes {
-
-    private int mySession;
+public class GetSessionMemRes {
+    private int buSession;
     private int userIdx;
-    private String nickName;
     private String profileImgUrl;
+    private String nickName;
     private String introduction;
 }

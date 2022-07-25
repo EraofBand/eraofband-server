@@ -7,10 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetSessionRes {
+public class GetSessionAppRes {
     private int buSession;
     private int userIdx;
     private String profileImgUrl;
     private String nickName;
+    private String introduction;
     private String updatedAt;
 }
