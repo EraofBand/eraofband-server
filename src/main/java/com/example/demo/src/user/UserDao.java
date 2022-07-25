@@ -169,7 +169,7 @@ public class UserDao {
 
 
     public int modifyUserInfo(PatchUserReq patchUserReq){
-        String modifyUserInfoQuery = "update User set nickName=?, birth=?, gender=?, introduction=?, profileImgUrl=?, region=? where userIdx =  and status='ACTIVE'";
+        String modifyUserInfoQuery = "update User set nickName=?, birth=?, gender=?, introduction=?, profileImgUrl=?, region=? where userIdx = ? and status='ACTIVE'";
         Object[] modifyUserInfoParams = new Object[]{patchUserReq.getNickName(), patchUserReq.getBirth(),
                 patchUserReq.getGender(), patchUserReq.getIntroduction(), patchUserReq.getProfileImgUrl(), patchUserReq.getRegion(),patchUserReq.getUserIdx()};
 
