@@ -40,6 +40,8 @@ public enum BaseResponseStatus {
     POST_BANDS_EMPTY_IMG(false,2019,"이미지를 입력해주세요."),
     MODIFY_FAIL_BAND(false,2019,"밴드 변경에 실패했습니다."),
     DELETE_FAIL_BAND(false,2019,"밴드 삭제에 실패했습니다."),
+    LIKES_FAIL_BAND(false,2029,"밴드 좋아요에 실패했습니다."),
+    UNLIKES_FAIL_BAND(false,2023,"밴드 좋아요 취소에 실패했습니다."),
 
     // lesson
     DELETE_FAIL_LESSON(false,2019,"레슨 삭제에 실패했습니다."),

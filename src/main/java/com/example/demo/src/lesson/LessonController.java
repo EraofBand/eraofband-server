@@ -200,13 +200,11 @@ public class LessonController {
     @ResponseBody
     @GetMapping("/info/likes") // (get) https://eraofband.shop/lesson/info/likes
     @ApiOperation(value = "찜한 레슨 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    public BaseResponse<List<GetLikesLessonRes>> getLikesLesson(@RequestParam int userIdx){
+    public BaseResponse<List<GetLikesLessonRes>> getLikesLesson(){
         try{
 
             int userIdxByJwt = jwtService.getUserIdx();
-            if(userIdx != userIdxByJwt){
-                return new BaseResponse<>(INVALID_USER_JWT);
-            }
+
             List<GetLikesLessonRes> getLikesLessonRes = lessonProvider.getLikesLesson(userIdxByJwt);
             return new BaseResponse<>(getLikesLessonRes);
 

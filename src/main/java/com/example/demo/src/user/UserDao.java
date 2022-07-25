@@ -91,7 +91,7 @@ public class UserDao {
     /**회원 소속 밴드 조회*/
     public List<GetUserBandRes> getUserBand(int userIdx){
         String getBandsByIdxQuery = "select b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction," +
-                "b.bandRegion as bandRegion, IF(memberCount is null, 0, memberCount) as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum+1 as capacity\n" +
+                "b.bandRegion as bandRegion, IF(memberCount is null, 0, memberCount) as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity\n" +
                 "from BandUser as bu\n" +
                 "   left join Band as b on b.bandIdx=bu.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n"+
@@ -169,7 +169,7 @@ public class UserDao {
 
 
     public int modifyUserInfo(PatchUserReq patchUserReq){
-        String modifyUserInfoQuery = "update User set nickName=?, birth=?, gender=?, introduction=?, profileImgUrl=?, region=? where userIdx = ?";
+        String modifyUserInfoQuery = "update User set nickName=?, birth=?, gender=?, introduction=?, profileImgUrl=?, region=? where userIdx = ? and status='ACTIVE'";
         Object[] modifyUserInfoParams = new Object[]{patchUserReq.getNickName(), patchUserReq.getBirth(),
                 patchUserReq.getGender(), patchUserReq.getIntroduction(), patchUserReq.getProfileImgUrl(), patchUserReq.getRegion(),patchUserReq.getUserIdx()};
 
@@ -177,14 +177,36 @@ public class UserDao {
     }
 
     public int modifyUserSession(PatchSessionReq patchSessionReq){
-        String modifyUserSessionQuery = "update User set userSession =? where userIdx = ?";
+        String modifyUserSessionQuery = "update User set userSession =? where userIdx = ? and status='ACTIVE'";
         Object[] modifyUserSessionParams = new Object[]{patchSessionReq.getUserSession(),patchSessionReq.getUserIdx()};
 
         return this.jdbcTemplate.update(modifyUserSessionQuery,modifyUserSessionParams);
     }
 
     public int deleteUser(int userIdx){
-        String deleteUserQuery = "update User set status='INACTIVE' where userIdx = ?";
+        String deleteUserQuery = "update User u\n" +
+                "    left join Band as b on (b.userIdx=u.userIdx)\n" +
+                "    left join BandLike as bl on (bl.userIdx=u.userIdx)\n" +
+                "    left join BandUser as bu on (bu.userIdx=u.userIdx)\n" +
+                "    left join Follow as f on (f.followerIdx=u.userIdx or f.followeeIdx=u.userIdx)\n" +
+                "    left join Lesson as l on (l.userIdx=u.userIdx)\n" +
+                "    left join LessonLike as ll on (ll.userIdx=u.userIdx)\n" +
+                "    left join LessonUser as lu on (lu.userIdx=u.userIdx)\n" +
+                "    left join Pofol as p on (p.userIdx=u.userIdx)\n" +
+                "    left join PofolComment as pc on (pc.userIdx=u.userIdx)\n" +
+                "    left join PofolLike as pl on (pl.userIdx=u.userIdx)\n" +
+                "        set u.status='INACTIVE',\n" +
+                "            b.status='INACTIVE',\n" +
+                "            bl.status='INACTIVE',\n" +
+                "            bu.status='INACTIVE',\n" +
+                "            f.status='INACTIVE',\n" +
+                "            l.status='INACTIVE',\n" +
+                "            ll.status='INACTIVE',\n" +
+                "            lu.status='INACTIVE',\n" +
+                "            p.status='INACTIVE',\n" +
+                "            pc.status='INACTIVE',\n" +
+                "            pl.status='INACTIVE'\n" +
+                "    where u.userIdx = ?";
         Object[] deleteUserParams = new Object[]{userIdx};
 
         return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
@@ -213,7 +235,7 @@ public class UserDao {
                 "    left join User as u on u.userIdx=f.followeeIdx\n" +
                 "where u.status='ACTIVE' and f.status='ACTIVE' and f.followerIdx=?\n" +
                 "group by u.userIdx\n" +
-                "order by u.userIdx;";
+                "order by u.userIdx";
         int getFollowParams = userIdx;
         return this.jdbcTemplate.query(getFollowQuery,
                 (rs, rowNum) -> new Users(
@@ -229,7 +251,7 @@ public class UserDao {
                 "    left join User as u on u.userIdx=f.followerIdx\n" +
                 "where u.status='ACTIVE' and f.status='ACTIVE' and f.followeeIdx=?\n" +
                 "group by u.userIdx\n" +
-                "order by u.userIdx;";
+                "order by u.userIdx";
         int getFollowParams = userIdx;
         return this.jdbcTemplate.query(getFollowQuery,
                 (rs, rowNum) -> new Users(

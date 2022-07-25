@@ -1,6 +1,7 @@
 package com.example.demo.src.session;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.lesson.model.PostLesLikeRes;
 import com.example.demo.src.session.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,6 @@ public class SessionService {
 
         try{
             int bandIdx = sessionDao.insertBand(userIdx, postBandReq);
-            sessionDao.insertMy(userIdx, bandIdx, postBandReq.getMySession());
-            sessionDao.acceptSession(bandIdx, userIdx);
             return new PostBandRes(bandIdx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
@@ -109,5 +108,49 @@ public class SessionService {
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    // 밴드 좋아요
+    public PostBandLikeRes likesBand(int userIdx, int bandIdx) throws BaseException {
+
+        if(sessionProvider.checkBandExist(bandIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BAND_ID);
+        }
+
+
+        try{
+            int result = sessionDao.updateLikes(userIdx, bandIdx);
+            if(result == 0){
+                throw new BaseException(LIKES_FAIL_BAND);
+            }
+            return new PostBandLikeRes(result);
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
+
+
+
+    // 밴드 좋아요 취소
+    public void unlikesBand(int userIdx, int bandIdx) throws BaseException {
+
+        if(sessionProvider.checkBandExist(bandIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BAND_ID);
+        }
+
+
+        try{
+            int result = sessionDao.updateUnlikes(userIdx, bandIdx);
+            if(result == 0){
+                throw new BaseException(UNLIKES_FAIL_BAND);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+
+
     }
 }
