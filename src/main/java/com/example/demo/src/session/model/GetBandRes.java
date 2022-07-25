@@ -30,7 +30,7 @@ public class GetBandRes {
     private int drum;
     private String drumComment;
 
-    private List<GetSessionRes> sessionMembers;
+    private List<GetSessionMemRes> sessionMembers;
 
     private String chatRoomLink;
     private String performDate;
@@ -39,6 +39,6 @@ public class GetBandRes {
     private int performFee;
     private String bandImgUrl;
 
-    private List<GetSessionRes> applicants;
+    private List<GetSessionAppRes> applicants;
 
 }

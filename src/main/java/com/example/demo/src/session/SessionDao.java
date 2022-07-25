@@ -1,6 +1,5 @@
 package com.example.demo.src.session;
 
-import com.example.demo.src.lesson.model.GetLikesLessonRes;
 import com.example.demo.src.session.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -84,35 +83,24 @@ public class SessionDao {
                                        getFameBandParams);
     }
 
-    public List<GetSessionRes> getSessionMembers(int bandIdx){
-        String getSessionMemberQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl,\n" +
-                "case\n" +
-                "when timestampdiff(second, BU.updatedAt, current_timestamp) < 60\n" +
-                "then concat(timestampdiff(second, BU.updatedAt, current_timestamp), '초 전')\n" +
-                "when timestampdiff(minute , BU.updatedAt, current_timestamp) < 60\n" +
-                "then concat(timestampdiff(minute, BU.updatedAt, current_timestamp), '분 전')\n" +
-                "when timestampdiff(hour , BU.updatedAt, current_timestamp) < 24\n" +
-                "then concat(timestampdiff(hour, BU.updatedAt, current_timestamp), '시간 전')\n" +
-                "when timestampdiff(day , BU.updatedAt, current_timestamp) < 365\n" +
-                "then concat(timestampdiff(day, BU.updatedAt, current_timestamp), '일 전')\n" +
-                "else timestampdiff(year , BU.updatedAt, current_timestamp)\n" +
-                "end as updatedAt\n" +
+    public List<GetSessionMemRes> getSessionMembers(int bandIdx){
+        String getSessionMemberQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.introduction as introduction\n" +
                 "FROM BandUser as BU\n" +
-                "JOIN (SELECT userIdx, nickName, profileImgUrl FROM User) u on u.userIdx = BU.userIdx\n" +
+                "JOIN (SELECT userIdx, nickName, profileImgUrl, introduction FROM User) u on u.userIdx = BU.userIdx\n" +
                 "WHERE bandIdx = ? and status = 'ACTIVE'";
         int getSessionMemberParams = bandIdx;
         return this.jdbcTemplate.query(getSessionMemberQuery,
-                                       (rs, rowNum) -> new GetSessionRes(
+                                       (rs, rowNum) -> new GetSessionMemRes(
                                                rs.getInt("buSession"),
                                                rs.getInt("userIdx"),
                                                rs.getString("profileImgUrl"),
                                                rs.getString("nickName"),
-                                               rs.getString("updatedAt")),
+                                               rs.getString("introduction")),
                                        getSessionMemberParams);
     }
 
-    public List<GetSessionRes> getApplicants(int bandIdx){
-        String getApplicantsQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl,\n" +
+    public List<GetSessionAppRes> getApplicants(int bandIdx){
+        String getApplicantsQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.introduction as introduction,\n" +
                 "case\n" +
                 "when timestampdiff(second, BU.updatedAt, current_timestamp) < 60\n" +
                 "then concat(timestampdiff(second, BU.updatedAt, current_timestamp), '초 전')\n" +
@@ -125,21 +113,22 @@ public class SessionDao {
                 "else timestampdiff(year , BU.updatedAt, current_timestamp)\n" +
                 "end as updatedAt\n" +
                 "FROM BandUser as BU\n" +
-                "JOIN(SELECT userIdx, nickName, profileImgUrl FROM User) u on u.userIdx = BU.userIdx\n" +
+                "JOIN(SELECT userIdx, nickName, profileImgUrl, introduction FROM User) u on u.userIdx = BU.userIdx\n" +
                 "WHERE bandIdx = ? and status = 'WAIT'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.query(getApplicantsQuery,
-                                       (rs, rowNum) -> new GetSessionRes(
+                                       (rs, rowNum) -> new GetSessionAppRes(
                                                rs.getInt("buSession"),
                                                rs.getInt("userIdx"),
                                                rs.getString("profileImgUrl"),
                                                rs.getString("nickName"),
+                                               rs.getString("introduction"),
                                                rs.getString("updatedAt")),
                                        getBandByIdxParams);
     }
 
     // 밴드 조회
-    public GetBandRes getMyBandByIdx(int bandIdx,  List<GetSessionRes> sessionMembers, List<GetSessionRes> applicants){
+    public GetBandRes getMyBandByIdx(int bandIdx, List<GetSessionMemRes> sessionMembers, List<GetSessionAppRes> applicants){
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
                 "       b.bandRegion as bandRegion, b.bandContent as bandContent, b.mySession as mySession,\n" +
@@ -186,7 +175,7 @@ public class SessionDao {
                                                 getBandByIdxParams);
     }
 
-    public GetBandRes getSessionBandByIdx(int bandIdx,  List<GetSessionRes> sessionMembers){
+    public GetBandRes getSessionBandByIdx(int bandIdx,  List<GetSessionMemRes> sessionMembers){
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
                 "       b.bandRegion as bandRegion, b.bandContent as bandContent,b.mySession as mySession,\n" +
@@ -233,7 +222,7 @@ public class SessionDao {
                                                 getBandByIdxParams);
     }
 
-    public GetBandRes getBandByIdx(int bandIdx,  List<GetSessionRes> sessionMembers){
+    public GetBandRes getBandByIdx(int bandIdx,  List<GetSessionMemRes> sessionMembers){
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
                 "       b.bandRegion as bandRegion, b.bandContent as bandContent, b.mySession as mySession,\n" +

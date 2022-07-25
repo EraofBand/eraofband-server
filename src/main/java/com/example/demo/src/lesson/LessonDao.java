@@ -36,19 +36,6 @@ public class LessonDao {
                 checkLessonExistParams);
     }
 
-//    // 레슨 개설 유저 레슨유저에 추가
-//    public int insertMy(int userIdx, int lessonIdx){
-//        String insertApplyQuery = "INSERT INTO LessonUser(userIdx, bandIdx) VALUES (?, ?)";
-//        Object[] insertApplyParams = new Object[]{ userIdx, lessonIdx };
-//        this.jdbcTemplate.update(insertApplyQuery, insertApplyParams);
-//
-//        String lastInsertIdQuery = "SELECT last_insert_id()";
-//        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
-//    }
-//
-
-
-
     // 레슨 생성
     public int insertLesson(int userIdx, PostLessonReq postLessonReq){
         String insertLessonQuery = "INSERT INTO Lesson(userIdx, lessonTitle, lessonIntroduction, lessonRegion, lessonContent, lessonSession, capacity, chatRoomLink, lessonImgUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -98,7 +85,7 @@ public class LessonDao {
 
     // 레슨 멤버 목록
     public List<GetMemberRes> getLessonMembers(int lessonIdx){
-        String getLessonMemberQuery = "SELECT u.userSession as mySession, LU.userIdx as userIdx, u.nickName as nickName\n" +
+        String getLessonMemberQuery = "SELECT u.userSession as mySession, LU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.introduction as introduction\n" +
                 "                FROM LessonUser as LU JOIN User as u on u.userIdx = LU.userIdx\n" +
                 "                LEFT join Lesson as l on l.lessonIdx = LU.lessonIdx\n" +
                 "                WHERE LU.lessonIdx = ? and u.status = 'ACTIVE'";
@@ -107,7 +94,9 @@ public class LessonDao {
                 (rs, rowNum) -> new GetMemberRes(
                         rs.getInt("mySession"),
                         rs.getInt("userIdx"),
-                        rs.getString("nickName")),
+                        rs.getString("nickName"),
+                        rs.getString("profileImgUrl"),
+                        rs.getString("introduction")),
                 getLessonMemberParams);
     }
 

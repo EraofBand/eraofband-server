@@ -1,12 +1,7 @@
 package com.example.demo.src.session;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.session.model.GetInfoBandRes;
-import com.example.demo.src.session.model.GetLikesBandRes;
-import com.example.demo.src.session.model.GetFameBandRes;
-import com.example.demo.src.session.model.GetNewBandRes;
-import com.example.demo.src.session.model.GetSessionRes;
-import com.example.demo.src.session.model.GetBandRes;
+import com.example.demo.src.session.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +14,8 @@ import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 public class SessionProvider {
     private final SessionDao sessionDao;
     private final JwtService jwtService;
-    private List<GetSessionRes> getSessionMembers;
-    private List<GetSessionRes> getApplicants;
+    private List<GetSessionMemRes> getSessionMembers;
+    private List<GetSessionAppRes> getApplicants;
 
     @Autowired
     public SessionProvider(SessionDao sessionDao, JwtService jwtService) {
@@ -104,9 +99,9 @@ public class SessionProvider {
         }
     }
 
-    public List<GetSessionRes> getSessionMembers(int bandIdx) throws BaseException {
+    public List<GetSessionMemRes> getSessionMembers(int bandIdx) throws BaseException {
         try{
-            List<GetSessionRes> getSessionMembers = sessionDao.getSessionMembers(bandIdx);
+            List<GetSessionMemRes> getSessionMembers = sessionDao.getSessionMembers(bandIdx);
             return getSessionMembers;
         } catch(Exception exception){
             System.out.println(exception);
@@ -114,9 +109,9 @@ public class SessionProvider {
         }
     }
 
-    public List<GetSessionRes> getApplicants(int bandIdx) throws BaseException {
+    public List<GetSessionAppRes> getApplicants(int bandIdx) throws BaseException {
         try{
-            List<GetSessionRes> getApplicants = sessionDao.getApplicants(bandIdx);
+            List<GetSessionAppRes> getApplicants = sessionDao.getApplicants(bandIdx);
             return getApplicants;
         } catch(Exception exception){
             System.out.println(exception);
