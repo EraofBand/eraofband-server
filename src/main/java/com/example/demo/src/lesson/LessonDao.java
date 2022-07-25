@@ -254,7 +254,7 @@ public class LessonDao {
 
 
     // 지역-세션 분류 레슨 정보 반환
-    public List<GetInfoLessonRes> getInfoLessonRes(String region, int session){
+    public List<GetInfoLessonRes> getInfoLesson(String region, int session){
         region = region.substring(0, 2);
 
         String getInfoLessonQuery = "";
@@ -325,6 +325,37 @@ public class LessonDao {
                         rs.getInt("capacity"),
                         rs.getInt("memberCount")),
                 getInfoLessonParams);
+    }
+
+
+    // 상단바 레슨 제목 검색
+    public List<GetInfoLessonRes> getSearchLesson(String search){
+
+        String getSearchLessonQuery = "\n"+
+                "SELECT l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle,\n" +
+                "                l.lessonIntroduction as lessonIntroduction, l.lessonRegion as lessonRegion,\n" +
+                "                IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity\n" +
+                "                FROM LessonUser as lu\n" +
+                "                JOIN Lesson as l\n" +
+                "                left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
+                "                left join LessonLike as ll on l.lessonIdx = ll.lessonIdx\n" +
+                "                WHERE l.status='ACTIVE' and lu.status='ACTIVE' and l.lessonTitle LIKE CONCAT('%', ?, '%')\n" +
+                "                group by l.lessonIdx\n" +
+                "                order by l.lessonIdx";
+        Object[] getSearchLessonParams = new Object[]{search};
+
+        return this.jdbcTemplate.query(getSearchLessonQuery,
+                (rs, rowNum) -> new GetInfoLessonRes(
+                        rs.getInt("lessonIdx"),
+                        rs.getString("lessonImgUrl"),
+                        rs.getString("lessonTitle"),
+                        rs.getString("lessonIntroduction"),
+                        rs.getString("lessonRegion"),
+                        rs.getInt("capacity"),
+                        rs.getInt("memberCount")),
+                getSearchLessonParams);
+
+
     }
 
 

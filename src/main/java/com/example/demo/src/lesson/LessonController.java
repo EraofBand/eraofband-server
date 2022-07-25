@@ -231,6 +231,22 @@ public class LessonController {
         }
     }
 
+    // 상단바 레슨 제목 검색
+    @ResponseBody
+    @GetMapping("/search/{lesson-search}") // (get) https://eraofband.shop/lesson/search
+    @ApiOperation(value = "상단바 레슨 제목 검색")
+    public BaseResponse<List<GetInfoLessonRes>> getSearchLesson(@PathVariable("lesson-search") String search){
+        try{
+
+            List<GetInfoLessonRes> getInfoLessonRes = lessonProvider.getSearchLesson(search);
+            return new BaseResponse<>(getInfoLessonRes);
+
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
 
 
 

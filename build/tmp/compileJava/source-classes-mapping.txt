@@ -22,8 +22,8 @@ com/example/demo/src/lesson/model/PostLessonRes.java
  com.example.demo.src.lesson.model.PostLessonRes
 com/example/demo/src/session/model/PostApplyRes.java
  com.example.demo.src.session.model.PostApplyRes
-com/example/demo/src/session/SessionService.java
- com.example.demo.src.session.SessionService
+com/example/demo/DemoApplication.java
+ com.example.demo.DemoApplication
 com/example/demo/src/pofol/model/GetPofolRes.java
  com.example.demo.src.pofol.model.GetPofolRes
 com/example/demo/src/pofol/PofolController.java
@@ -64,8 +64,8 @@ com/example/demo/src/user/model/GetUserInfoRes.java
  com.example.demo.src.user.model.GetUserInfoRes
 com/example/demo/config/SwaggerConfig.java
  com.example.demo.config.SwaggerConfig
-com/example/demo/src/session/SessionProvider.java
- com.example.demo.src.session.SessionProvider
+com/example/demo/src/user/model/User.java
+ com.example.demo.src.user.model.User
 com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
 com/example/demo/src/pofol/model/PatchPofComReq.java
@@ -74,10 +74,10 @@ com/example/demo/src/user/model/PatchSessionReq.java
  com.example.demo.src.user.model.PatchSessionReq
 com/example/demo/src/lesson/model/GetLikesLessonRes.java
  com.example.demo.src.lesson.model.GetLikesLessonRes
-com/example/demo/src/session/SessionController.java
- com.example.demo.src.session.SessionController
-com/example/demo/src/session/SessionDao.java
- com.example.demo.src.session.SessionDao
+com/example/demo/src/user/model/GetFollowRes.java
+ com.example.demo.src.user.model.GetFollowRes
+com/example/demo/src/pofol/model/PostPofolReq.java
+ com.example.demo.src.pofol.model.PostPofolReq
 com/example/demo/src/user/model/GetUserFeedRes.java
  com.example.demo.src.user.model.GetUserFeedRes
 com/example/demo/src/session/model/PostBandRes.java
@@ -144,14 +144,20 @@ com/example/demo/src/lesson/model/PostLessonReq.java
  com.example.demo.src.lesson.model.PostLessonReq
 com/example/demo/src/pofol/model/PostLikeRes.java
  com.example.demo.src.pofol.model.PostLikeRes
-com/example/demo/src/user/model/GetFollowRes.java
- com.example.demo.src.user.model.GetFollowRes
-com/example/demo/src/user/model/User.java
- com.example.demo.src.user.model.User
-com/example/demo/src/pofol/model/PostPofolReq.java
- com.example.demo.src.pofol.model.PostPofolReq
-com/example/demo/DemoApplication.java
- com.example.demo.DemoApplication
+com/example/demo/src/session/model/GetFameBandRes.java
+ com.example.demo.src.session.model.GetFameBandRes
+com/example/demo/src/session/model/GetNewBandRes.java
+ com.example.demo.src.session.model.GetNewBandRes
+com/example/demo/src/session/SessionController.java
+ com.example.demo.src.session.SessionController
+com/example/demo/src/session/SessionDao.java
+ com.example.demo.src.session.SessionDao
+com/example/demo/src/lesson/model/GetSearchLesReq.java
+ com.example.demo.src.lesson.model.GetSearchLesReq
+com/example/demo/src/session/SessionService.java
+ com.example.demo.src.session.SessionService
+com/example/demo/src/session/SessionProvider.java
+ com.example.demo.src.session.SessionProvider
 com/example/demo/src/lesson/LessonDao.java
  com.example.demo.src.lesson.LessonDao
 com/example/demo/src/lesson/LessonProvider.java
