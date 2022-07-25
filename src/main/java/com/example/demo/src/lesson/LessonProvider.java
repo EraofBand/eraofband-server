@@ -116,18 +116,8 @@ public class LessonProvider {
     }
 
 
-    // 상단바 레슨 제목 검색
-    public List<GetInfoLessonRes> getSearchLesson(String search) throws BaseException {
 
-        try {
-            List<GetInfoLessonRes> getSearchLesson = lessonDao.getSearchLesson(search);
-            return getSearchLesson;
 
-        } catch (Exception exception) {
-            System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
-        }
 
-    }
 }
 
