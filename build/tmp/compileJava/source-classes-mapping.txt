@@ -8,6 +8,8 @@ com/example/demo/src/user/model/Users.java
  com.example.demo.src.user.model.Users
 com/example/demo/utils/ValidationRegex.java
  com.example.demo.utils.ValidationRegex
+com/example/demo/src/search/model/GetSearchBandRes.java
+ com.example.demo.src.search.model.GetSearchBandRes
 com/example/demo/src/lesson/model/PostLesLikeRes.java
  com.example.demo.src.lesson.model.PostLesLikeRes
 com/example/demo/src/pofol/model/GetCommentRes.java
@@ -50,6 +52,8 @@ com/example/demo/src/lesson/model/GetInfoLessonRes.java
  com.example.demo.src.lesson.model.GetInfoLessonRes
 com/example/demo/src/lesson/model/PatchLessonReq.java
  com.example.demo.src.lesson.model.PatchLessonReq
+com/example/demo/src/search/model/GetSearchUserRes.java
+ com.example.demo.src.search.model.GetSearchUserRes
 com/example/demo/src/lesson/LessonProvider.java
  com.example.demo.src.lesson.LessonProvider
 com/example/demo/src/user/UserService.java
@@ -68,6 +72,8 @@ com/example/demo/src/user/model/GetUserInfoRes.java
  com.example.demo.src.user.model.GetUserInfoRes
 com/example/demo/config/SwaggerConfig.java
  com.example.demo.config.SwaggerConfig
+com/example/demo/src/lesson/model/GetSearchLesReq.java
+ com.example.demo.src.lesson.model.GetSearchLesReq
 com/example/demo/src/session/SessionProvider.java
  com.example.demo.src.session.SessionProvider
 com/example/demo/src/lesson/LessonController.java
@@ -94,10 +100,18 @@ com/example/demo/src/S33/FileUploadController.java
  com.example.demo.src.S33.FileUploadController
 com/example/demo/utils/SHA256.java
  com.example.demo.utils.SHA256
+com/example/demo/src/search/SearchService.java
+ com.example.demo.src.search.SearchService
 com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
 com/example/demo/src/session/model/PostApplyReq.java
  com.example.demo.src.session.model.PostApplyReq
+com/example/demo/src/search/model/GetSearchLesRes.java
+ com.example.demo.src.search.model.GetSearchLesRes
+com/example/demo/src/search/model/GetInfoSearchRes.java
+ com.example.demo.src.search.model.GetInfoSearchRes
+com/example/demo/src/search/SearchProvider.java
+ com.example.demo.src.search.SearchProvider
 com/example/demo/src/user/model/GetMyInfoRes.java
  com.example.demo.src.user.model.GetMyInfoRes
 com/example/demo/src/user/model/PostLoginRes.java
@@ -128,6 +142,8 @@ com/example/demo/src/S33/S3Component.java
  com.example.demo.src.S33.S3Component
 com/example/demo/src/user/model/GetUserPofolRes.java
  com.example.demo.src.user.model.GetUserPofolRes
+com/example/demo/src/search/SearchDao.java
+ com.example.demo.src.search.SearchDao
 com/example/demo/src/S33/AwsS3UploadService.java
  com.example.demo.src.S33.AwsS3UploadService
 com/example/demo/src/session/model/GetLikesBandRes.java
@@ -146,6 +162,8 @@ com/example/demo/src/pofol/model/PostLikeRes.java
  com.example.demo.src.pofol.model.PostLikeRes
 com/example/demo/src/user/model/GetFollowRes.java
  com.example.demo.src.user.model.GetFollowRes
+com/example/demo/src/search/SearchController.java
+ com.example.demo.src.search.SearchController
 com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
 com/example/demo/src/pofol/model/PostPofolReq.java

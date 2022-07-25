@@ -3,10 +3,7 @@ package com.example.demo.src.lesson;
 
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.lesson.model.GetInfoLessonRes;
-import com.example.demo.src.lesson.model.GetLessonRes;
-import com.example.demo.src.lesson.model.GetLikesLessonRes;
-import com.example.demo.src.lesson.model.GetMemberRes;
+import com.example.demo.src.lesson.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -107,8 +104,8 @@ public class LessonProvider {
     public List<GetInfoLessonRes> getInfoLesson(String region, int session) throws BaseException {
 
         try {
-            List<GetInfoLessonRes> getInfoLessonRes = lessonDao.getInfoLessonRes(region, session);
-            return getInfoLessonRes;
+            List<GetInfoLessonRes> getInfoLesson = lessonDao.getInfoLesson(region, session);
+            return getInfoLesson;
 
 
         } catch (Exception exception) {
@@ -117,5 +114,10 @@ public class LessonProvider {
         }
 
     }
+
+
+
+
+
 }
 

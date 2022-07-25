@@ -249,7 +249,7 @@ public class LessonDao {
 
 
     // 지역-세션 분류 레슨 정보 반환
-    public List<GetInfoLessonRes> getInfoLessonRes(String region, int session){
+    public List<GetInfoLessonRes> getInfoLesson(String region, int session){
         region = region.substring(0, 2);
 
         String getInfoLessonQuery = "";
@@ -321,6 +321,7 @@ public class LessonDao {
                         rs.getInt("memberCount")),
                 getInfoLessonParams);
     }
+
 
 
 
