@@ -17,7 +17,9 @@ public class SessionDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    // 유저 확인
+    /**
+     * 밴드 생성 유저 확인
+     * */
     public int checkBandMaker(int bandIdx){
         String selectUserIdxQuery = "SELECT userIdx FROM Band WHERE bandIdx = ? and status='ACTIVE'";
         int selectUserIdxParams = bandIdx;
@@ -26,6 +28,9 @@ public class SessionDao {
                                                 selectUserIdxParams);
     }
 
+    /**
+     * 밴드 멤버 확인
+     * */
     public int checkBandSession(int userIdx, int bandIdx){
         String checkUserExistQuery = "SELECT exists(SELECT bandUserIdx FROM BandUser WHERE userIdx=? and bandIdx=? and status='ACTIVE')";
         Object[] checkUserExistParams = new Object[]{ userIdx, bandIdx };
@@ -34,7 +39,9 @@ public class SessionDao {
                                                        checkUserExistParams);
     }
 
-    // 밴드 확인
+    /**
+     * 밴드 존재 유무 확인
+     * */
     public int checkBandExist(int bandIdx){
         String checkBandExistQuery = "SELECT exists(SELECT bandIdx FROM Band WHERE bandIdx = ? and status='ACTIVE')";
         int checkBandExistParams = bandIdx;
@@ -43,7 +50,9 @@ public class SessionDao {
                                                 checkBandExistParams);
     }
 
-    // 최신 밴드
+    /**
+     * 최신 밴드 조회
+     * */
     public List<GetNewBandRes> getNewBand(){
         String getNewBandQuery = "SELECT b.bandIdx, bandRegion, bandTitle, bandImgUrl, sessionNum, vocal+guitar+base+keyboard+drum as totalNum\n" +
                 "FROM Band as b\n" +
@@ -64,7 +73,9 @@ public class SessionDao {
                                        getNewBandParams);
     }
 
-    // 인기 TOP3 밴드
+    /**
+     * 인기 밴드 top3 조회
+     * */
     public List<GetFameBandRes> getFameBand(){
         String getFameBandQuery = "SELECT b.bandIdx as bandIdx, b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction, b.bandImgUrl as bandImgUrl\n" +
                 "FROM Band as b\n" +
@@ -83,6 +94,9 @@ public class SessionDao {
                                        getFameBandParams);
     }
 
+    /**
+     * 밴드 멤버 조회
+     * */
     public List<GetSessionMemRes> getSessionMembers(int bandIdx){
         String getSessionMemberQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.introduction as introduction\n" +
                 "FROM BandUser as BU\n" +
@@ -99,6 +113,9 @@ public class SessionDao {
                                        getSessionMemberParams);
     }
 
+    /**
+     * 밴드 지원자 조회
+     * */
     public List<GetSessionAppRes> getApplicants(int bandIdx){
         String getApplicantsQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.introduction as introduction,\n" +
                 "case\n" +
@@ -127,7 +144,9 @@ public class SessionDao {
                                        getBandByIdxParams);
     }
 
-    // 밴드 조회
+    /**
+     * 밴드 생성자가 보는 정보 조회
+     * */
     public GetBandRes getMyBandByIdx(int bandIdx, List<GetSessionMemRes> sessionMembers, List<GetSessionAppRes> applicants){
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
@@ -175,6 +194,9 @@ public class SessionDao {
                                                 getBandByIdxParams);
     }
 
+    /**
+     * 밴드 멤버가 보는 정보 조회
+     * */
     public GetBandRes getSessionBandByIdx(int bandIdx,  List<GetSessionMemRes> sessionMembers){
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
@@ -222,6 +244,9 @@ public class SessionDao {
                                                 getBandByIdxParams);
     }
 
+    /**
+     * 밴드 외부 유저가 보는 정보 조회
+     * */
     public GetBandRes getBandByIdx(int bandIdx,  List<GetSessionMemRes> sessionMembers){
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
@@ -269,7 +294,9 @@ public class SessionDao {
                                                 getBandByIdxParams);
     }
 
-    // 밴드 생성
+    /**
+     * 밴드 생성
+     * */
     public int insertBand(int userIdx, PostBandReq postBandReq){
         String insertBandQuery = "INSERT INTO Band(userIdx, bandTitle, bandIntroduction, bandRegion, bandContent, mySession, vocal, vocalComment, " +
                 "guitar, guitarComment, base, baseComment, keyboard, keyboardComment, drum, drumComment, chatRoomLink, bandImgUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -286,7 +313,9 @@ public class SessionDao {
     }
 
 
-    // 밴드 수정
+    /**
+     * 밴드 수정
+     * */
     public int updateBand(int bandIdx, PatchBandReq patchBandReq){
         String updateBandQuery = "UPDATE Band SET bandTitle=?, bandIntroduction=?, bandRegion=?, bandContent=?, mySession=?," +
                 "vocal=?, vocalComment=?, guitar=?, guitarComment=?, base=?, baseComment=?, keyboard=?, keyboardComment=?, drum=?, drumComment=?, chatRoomLink=?, performDate=?, performTime=?, performLocation=?, performFee=?, bandImgUrl=? WHERE bandIdx = ? and status='ACTIVE'" ;
@@ -299,7 +328,9 @@ public class SessionDao {
         return this.jdbcTemplate.update(updateBandQuery,updateBandParams);
     }
 
-    // 밴드 삭제
+    /**
+     * 밴드 삭제
+     * */
     public int updateBandStatus(int bandIdx){
         String deleteBandQuery = "update Band b" +
                 "    left join BandUser as bu on (bu.bandIdx=b.bandIdx)\n" +
@@ -313,7 +344,9 @@ public class SessionDao {
         return this.jdbcTemplate.update(deleteBandQuery,deleteBandParams);
     }
 
-    // 밴드 세션 지원
+    /**
+     * 밴드 지원
+     * */
     public int insertApply(int userIdx, int bandIdx, PostApplyReq postApplyReq){
         String insertApplyQuery = "INSERT INTO BandUser(userIdx, bandIdx, buSession) VALUES (?, ?, ?)";
         Object[] insertApplyParams = new Object[]{ userIdx, bandIdx, postApplyReq.getBuSession() };
@@ -323,7 +356,9 @@ public class SessionDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
-    // 세션 지원 수락
+    /**
+     * 밴드 지원 수락
+     * */
     public int acceptSession(int bandIdx, int userIdx){
         String updateStatusQuery = "UPDATE BandUser SET status = 'ACTIVE' WHERE bandIdx = ? and userIdx = ?";
         Object[] updateStatusParams = new Object[]{ bandIdx, userIdx };
@@ -331,7 +366,9 @@ public class SessionDao {
         return this.jdbcTemplate.update(updateStatusQuery, updateStatusParams);
     }
 
-    // 세션 지원 거절
+    /**
+     * 밴드 지원 거절
+     * */
     public int rejectSession(int bandIdx, int userIdx){
         String updateStatusQuery = "UPDATE BandUser SET status = 'REJECT' WHERE bandIdx = ? and userIdx = ?";
         Object[] updateStatusParams = new Object[]{ bandIdx, userIdx };
@@ -339,7 +376,9 @@ public class SessionDao {
         return this.jdbcTemplate.update(updateStatusQuery, updateStatusParams);
     }
 
-    // 밴드 좋아요
+    /**
+     * 밴드 좋아요
+     * */
     public int updateLikes(int userIdx, int bandIdx) {
         String updateLikesQuery = "INSERT INTO BandLike(userIdx, bandIdx) VALUES (?,?)";
         Object[] updateLikesParams = new Object[]{userIdx, bandIdx};
@@ -350,7 +389,9 @@ public class SessionDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
-    // 밴드 좋아요 취소
+    /**
+     * 밴드 좋아요 취소
+     * */
     public int updateUnlikes(int userIdx, int bandIdx) {
         String updateUnlikesQuery = "DELETE FROM BandLike WHERE userIdx = ? and bandIdx = ?";
         Object[] updateUnlikesParams = new Object[]{userIdx, bandIdx};
@@ -358,7 +399,9 @@ public class SessionDao {
         return this.jdbcTemplate.update(updateUnlikesQuery, updateUnlikesParams);
     }
 
-    // 찜한 밴드 조회
+    /**
+     * 찜한 밴드 조회
+     * */
     public List<GetLikesBandRes> getLikesBand(int userIdx){
         String getLikesBandQuery = "\n"+
                 "SELECT b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle,"+
@@ -384,6 +427,9 @@ public class SessionDao {
                 getLikesBandParams);
     }
 
+    /**
+     * 지역-세션 분류 밴드 검색 조회
+     * */
     public List<GetInfoBandRes> getInfoBandRes(String region, String session){
 
         String getInfoBandQuery="";

@@ -19,7 +19,9 @@ public class UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    /**회원 페이지 조회*/
+    /**
+     * 다른 유저 페이지 조회
+     * */
     public GetUserInfoRes getUserByIdx(int myId,int userIdx){
         String getUsersByIdxQuery = "select u.userIdx as userIdx, u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.userSession as userSession,u.region as region," +
                         "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount, follow as follow\n"+
@@ -47,7 +49,9 @@ public class UserDao {
                 getUsersByIdxParams);
     }
 
-    /**마이 페이지 조회*/
+    /**
+     * 마이 페이지 조회
+     * */
     public GetMyInfoRes getMyFeed(int userIdx){
         String getUsersByIdxQuery = "select u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.userSession as userSession,u.region as region," +
                 "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount\n"+
@@ -72,7 +76,9 @@ public class UserDao {
                 getUsersByIdxParams);
     }
 
-    /**회원 포트폴리오 조회*/
+    /**
+     * 유저 포트폴리오 조회
+     * */
     public List<GetUserPofolRes> getUserPofol(int userIdx){
         String getPofolsByIdxQuery = "select p.pofolIdx as pofolIdx, p.imgUrl as imgUrl\n" +
                 "from Pofol as p\n" +
@@ -88,7 +94,9 @@ public class UserDao {
                 getPofolsByIdxParams);
     }
 
-    /**회원 소속 밴드 조회*/
+    /**
+     * 유저 소속 밴드 조회
+     * */
     public List<GetUserBandRes> getUserBand(int userIdx){
         String getBandsByIdxQuery = "select b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction," +
                 "b.bandRegion as bandRegion, IF(memberCount is null, 0, memberCount) as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity\n" +
@@ -111,7 +119,9 @@ public class UserDao {
                 getBandsByIdxParams);
     }
 
-    /**회원 소속 레슨 조회*/
+    /**
+     * 유저 소속 레슨 조회
+     * */
     public List<GetUserLessonRes> getUserLesson(int userIdx){
         String getLessonsByIdxQuery = "select l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction," +
                 "l.lessonRegion as lessonRegion, IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity\n" +
@@ -148,6 +158,9 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
 
+    /**
+     * 기존 유저 정보 반환
+     */
     public User getUserIdx(String email){
         String getIdQuery = "select userIdx, email from User where email=? and status='ACTIVE'";
         String getIdParams = email;
@@ -158,6 +171,9 @@ public class UserDao {
                 getIdParams);
     }
 
+    /**
+     * 이메일 존재 유무 확인
+     */
     public int checkEmail(String email){
         String checkEmailQuery = "select exists(select email from User where email = ? and status='ACTIVE')";
         String checkEmailParams = email;
@@ -167,7 +183,9 @@ public class UserDao {
 
     }
 
-
+    /**
+     * 회원 정보 변경
+     */
     public int modifyUserInfo(PatchUserReq patchUserReq){
         String modifyUserInfoQuery = "update User set nickName=?, birth=?, gender=?, introduction=?, profileImgUrl=?, region=? where userIdx = ? and status='ACTIVE'";
         Object[] modifyUserInfoParams = new Object[]{patchUserReq.getNickName(), patchUserReq.getBirth(),
@@ -176,6 +194,9 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyUserInfoQuery,modifyUserInfoParams);
     }
 
+    /**
+     * 회원 세션 변경
+     */
     public int modifyUserSession(PatchSessionReq patchSessionReq){
         String modifyUserSessionQuery = "update User set userSession =? where userIdx = ? and status='ACTIVE'";
         Object[] modifyUserSessionParams = new Object[]{patchSessionReq.getUserSession(),patchSessionReq.getUserIdx()};
@@ -183,6 +204,9 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyUserSessionQuery,modifyUserSessionParams);
     }
 
+    /**
+     * 회원 삭제
+     */
     public int deleteUser(int userIdx){
         String deleteUserQuery = "update User u\n" +
                 "    left join Band as b on (b.userIdx=u.userIdx)\n" +
@@ -212,6 +236,9 @@ public class UserDao {
         return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
     }
 
+    /**
+     * 팔로우 하기
+     */
     public int updateFollow(int myIdx, int userIdx) {
         String updateFollowQuery = "INSERT INTO Follow(followerIdx, followeeIdx) VALUES (?,?)";
         Object[] updateFollowParams = new Object[]{myIdx, userIdx};
@@ -222,6 +249,9 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
+    /**
+     * 팔로우 취소하기
+     */
     public int updateUnFollow(int myIdx, int userIdx) {
         String updateUnFollowQuery = "DELETE FROM Follow WHERE followerIdx = ? and followeeIdx = ?";
         Object[] updateUnFollowParams = new Object[]{myIdx,userIdx};
@@ -229,6 +259,9 @@ public class UserDao {
         return this.jdbcTemplate.update(updateUnFollowQuery, updateUnFollowParams);
     }
 
+    /**
+     * 팔로잉 리스트 조회
+     */
     public List<Users> getFollowing(int userIdx){
         String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl\n" +
                 "from Follow as f\n" +
@@ -245,6 +278,9 @@ public class UserDao {
                 getFollowParams);
     }
 
+    /**
+     * 팔로워 리스트 조회
+     */
     public List<Users> getFollower(int userIdx){
         String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl\n" +
                 "from Follow as f\n" +
@@ -260,5 +296,4 @@ public class UserDao {
                         rs.getString("profileImgUrl")),
                 getFollowParams);
     }
-
-    }
+}

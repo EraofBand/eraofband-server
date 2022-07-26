@@ -23,7 +23,9 @@ public class SessionProvider {
         this.jwtService = jwtService;
     }
 
-    // 유저 확인
+    /**
+     * 밴드 생성 유저 확인
+     * */
     public int checkBandMaker(int bandIdx) throws BaseException {
         try{
             return sessionDao.checkBandMaker(bandIdx);
@@ -32,7 +34,9 @@ public class SessionProvider {
         }
     }
 
-    // 밴드 세션 멤버 확인
+    /**
+     * 밴드 멤버 확인
+     * */
     public int checkBandSession(int userIdx, int bandIdx) throws BaseException {
         try {
             return sessionDao.checkBandSession(userIdx, bandIdx);
@@ -41,7 +45,9 @@ public class SessionProvider {
         }
     }
 
-    // 밴드 확인
+    /**
+     * 밴드 존재 유무 확인
+     * */
     public int checkBandExist(int bandIdx) throws BaseException {
         try{
             return sessionDao.checkBandExist(bandIdx);
@@ -50,7 +56,9 @@ public class SessionProvider {
         }
     }
 
-    // 최신 밴드
+    /**
+     * 최신 밴드 조회
+     * */
     public List<GetNewBandRes> getNewBand() throws BaseException {
 
         try{
@@ -62,7 +70,9 @@ public class SessionProvider {
         }
     }
 
-    // 인기 TOP3 밴드
+    /**
+     * 인기 밴드 top3 조회
+     * */
     public List<GetFameBandRes> getFameBand() throws BaseException {
 
         try{
@@ -74,21 +84,27 @@ public class SessionProvider {
         }
     }
 
-    // 밴드 조회
+    /**
+     * 밴드 정보 조회
+     * */
     public GetBandRes getBand(int userIdx, int bandIdx) throws BaseException {
         try{
             getSessionMembers = getSessionMembers(bandIdx);
+            //밴드 생성자일 경우
             if (checkBandMaker(bandIdx) == userIdx) {
                 getApplicants = getApplicants(bandIdx);
                 GetBandRes getBandRes = sessionDao.getMyBandByIdx(bandIdx, getSessionMembers, getApplicants);
 
                 return getBandRes;
-
-            } else if (checkBandSession(userIdx, bandIdx) == 1) {
+            }
+            //밴드 멤버일 경우
+            else if (checkBandSession(userIdx, bandIdx) == 1) {
                 GetBandRes getBandRes = sessionDao.getSessionBandByIdx(bandIdx, getSessionMembers);
 
                 return getBandRes;
-            } else {
+            }
+            //밴드 외부 유저일 경우
+            else {
                 GetBandRes getBandRes = sessionDao.getBandByIdx(bandIdx, getSessionMembers);
 
                 return getBandRes;
@@ -99,6 +115,9 @@ public class SessionProvider {
         }
     }
 
+    /**
+     * 밴드 멤버 조회
+     * */
     public List<GetSessionMemRes> getSessionMembers(int bandIdx) throws BaseException {
         try{
             List<GetSessionMemRes> getSessionMembers = sessionDao.getSessionMembers(bandIdx);
@@ -109,6 +128,9 @@ public class SessionProvider {
         }
     }
 
+    /**
+     * 밴드 지원자 조회
+     * */
     public List<GetSessionAppRes> getApplicants(int bandIdx) throws BaseException {
         try{
             List<GetSessionAppRes> getApplicants = sessionDao.getApplicants(bandIdx);
@@ -119,7 +141,9 @@ public class SessionProvider {
         }
     }
 
-    // 찜한 밴드 조회
+    /**
+     * 찜한 밴드 조회
+     * */
     public List<GetLikesBandRes> getLikesBand(int userIdx) throws BaseException {
 
         try{
@@ -131,6 +155,9 @@ public class SessionProvider {
         }
     }
 
+    /**
+     * 지역-세션 분류 밴드 검색 조회
+     * */
     public List<GetInfoBandRes> getInfoBand(String region, String session) throws BaseException {
 
         try {

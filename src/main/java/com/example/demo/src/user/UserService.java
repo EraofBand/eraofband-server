@@ -112,13 +112,17 @@ public class UserService {
      */
     public PostLoginRes logIn(String email) throws BaseException {
         try {
+            //이미 회원가입이 되어 있을 경우
             if (userProvider.checkEmail(email) == 1) {
                 User user = userDao.getUserIdx(email);
                 int userIdx = user.getUserIdx();
+
+                //새 jwt 발급
                 String jwt = jwtService.createJwt(userIdx);
                 return new PostLoginRes(userIdx, jwt);
             }
 
+            //회원가입이 되어 있지 않은 경우
             return new PostLoginRes(0, "NULL");
 
         }catch(Exception exception){
@@ -127,7 +131,9 @@ public class UserService {
             }
     }
 
-
+    /**
+     * 회원 정보 변경
+     */
     public void modifyUserInfo(PatchUserReq patchUserReq) throws BaseException {
         try {
             int result = userDao.modifyUserInfo(patchUserReq);
@@ -138,6 +144,9 @@ public class UserService {
         }
     }
 
+    /**
+     * 회원 세션 변경
+     */
     public void modifyUserSession(PatchSessionReq patchSessionReq) throws BaseException {
         try {
             int result = userDao.modifyUserSession(patchSessionReq);
@@ -148,6 +157,9 @@ public class UserService {
         }
     }
 
+    /**
+     * 회원 삭제
+     */
     public void deleteUser ( int userIdx) throws BaseException {
         try {
             int result = userDao.deleteUser(userIdx);
@@ -159,6 +171,9 @@ public class UserService {
         }
     }
 
+    /**
+     * 팔로우 하기
+     */
     public PostFollowRes followUser(int myIdx, int userIdx) throws BaseException {
 
         try{
@@ -174,6 +189,9 @@ public class UserService {
 
     }
 
+    /**
+     * 팔로우 취소 하기
+     */
     public void unfollowUser(int myIdx, int userIdx) throws BaseException {
         try{
             int result = userDao.updateUnFollow(myIdx, userIdx);
@@ -186,5 +204,4 @@ public class UserService {
         }
 
     }
-
 }

@@ -33,16 +33,18 @@ public class UserController {
     }
 
     /**
-     * 다른 회원 페이지 조회 API
-     * [GET] /users/{userIdx}
+     * 다른 유저 페이지 조회 API
+     * [GET] /users/info/{userIdx}
      * 유저 인덱스 검색 조회 API
      * @return BaseResponse<GetUserFeedRes>
      */
     @ResponseBody
-    @GetMapping("/info/{userIdx}") // (GET) 127.0.0.1:9000/users/info/2
+    @GetMapping("/info/{userIdx}") // (GET) eraofband.shop/users/info/2
     @ApiOperation(value = "다른 회원 정보 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="userIdx", value="조회할 유저 인덱스", required = true)
     public BaseResponse<GetUserFeedRes> getUserByIdx(@PathVariable("userIdx")int userIdx) {
             try{
+                //jwt에서 idx 추출
                 int myId = jwtService.getUserIdx();
                 GetUserFeedRes getUserFeed = userProvider.getUserByIdx(myId,userIdx);
                 return new BaseResponse<>(getUserFeed);
@@ -53,15 +55,16 @@ public class UserController {
 
     /**
      * 마이 페이지 조회 API
-     * [GET] /users/my-page/{userIdx}
+     * [GET] /users/info/my-page/{userIdx}
      * @return BaseResponse<GetMyFeedRes>
      */
     @ResponseBody
-    @GetMapping("/info/my-page/{userIdx}") // (GET) 127.0.0.1:9000/users/info/mypage/12
+    @GetMapping("/info/my-page/{userIdx}") // (GET) eraofband.shop/users/info/my-page/12
     @ApiOperation(value = "마이페이지 정보 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="userIdx", value="조회할 유저 인덱스", required = true)
     public BaseResponse<GetMyFeedRes> getMypage(@PathVariable("userIdx")int userIdx) {
         try{
-            //jwt에서 idx 추출.
+            //jwt에서 idx 추출
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
             if(userIdx != userIdxByJwt){
@@ -81,12 +84,12 @@ public class UserController {
      */
     // Body
     @ResponseBody
-    @PostMapping("/signin/{access-token}") // (POST) 127.0.0.1:9000/users/signin/dsfdsbfuewhiuwf...
+    @PostMapping("/signin/{access-token}") // (POST) eraofband.shop/users/signin/dsfdsbfuewhiuwf...
     @ApiImplicitParam(name="access-token", value="접근 가능 토큰", required = true)
     public BaseResponse<PostUserRes> createKakaoUser(@PathVariable("access-token") String token, @RequestBody PostUserReq postUserReq){
         try{
             String email=userService.getKakaoInfo(token);
-            //email validation 처리
+            //이메일 필수 처리
             if(email.length()==0){
                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
             }
@@ -107,10 +110,11 @@ public class UserController {
      * @return BaseResponse<PostLoginRes>
      */
     @ResponseBody
-    @PostMapping("/login/{kakao-email}") // (POST) 127.0.0.1:9000/users/login/jdshkf@gmail.com
+    @PostMapping("/login/{kakao-email}") // (POST) eraofband.sop/users/login/jdshkf@gmail.com
+    @ApiImplicitParam(name="kakao-email", value="회원가입용 이메일", required = true)
     public BaseResponse<PostLoginRes> UserLogin(@PathVariable("kakao-email") String email){
         try {
-            //email validation 처리
+            //이메일 필수 처리
             if(email.length()==0){
                 return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
             }
@@ -132,7 +136,7 @@ public class UserController {
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/user-info") // (PATCH) 127.0.0.1:9000/users/user-info
+    @PatchMapping("/user-info") // (PATCH) eraofband.shop/users/user-info
     @ApiOperation(value = "회원 정보 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> modifyUserInfo(@RequestBody PatchUserReq patchUserReq){
         try {
@@ -157,7 +161,7 @@ public class UserController {
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/user-session") // (PATCH) 127.0.0.1:9000/users/modiUserSession
+    @PatchMapping("/user-session") // (PATCH) eraofband.shop/users/user-session
     @ApiOperation(value = "회원 세션 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> modifyUserSession(@RequestBody PatchSessionReq patchSessionReq){
         try {
@@ -178,12 +182,13 @@ public class UserController {
 
     /**
      * 회원 삭제 API
-     * [PATCH] /users/delete/{userIdx}
+     * [PATCH] /users/status/{userIdx}
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/status/{userIdx}") // (PATCH) 127.0.0.1:9000/users/2/delete
+    @PatchMapping("/status/{userIdx}") // (PATCH) eraofband.shop/users/status/2
     @ApiOperation(value = "회원 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="userIdx", value="삭제할 유저 인덱스", required = true)
     public BaseResponse<String> deleteUser(@PathVariable("userIdx") int userIdx){
         try {
             //jwt에서 idx 추출.
@@ -207,8 +212,9 @@ public class UserController {
      * @return BaseResponse<PostFollowRes>
      */
     @ResponseBody
-    @PostMapping("/follow/{userIdx}") // (post) https://eraofband.shop/users/follow/10
+    @PostMapping("/follow/{userIdx}") // (post) eraofband.shop/users/follow/10
     @ApiOperation(value = "팔로우 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="userIdx", value="팔로우할 유저 인덱스", required = true)
     public BaseResponse<PostFollowRes> followUser(@PathVariable("userIdx") int userIdx){
 //
         try {
@@ -229,16 +235,16 @@ public class UserController {
      * [DELETE] /users/unfollow/10
      * @return BaseResponse<String>
      */
-    // 포트폴리오 좋아요 취소
     @ResponseBody
-    @DeleteMapping ("/unfollow/{userIdx}") // (post) https://eraofband.shop/users/unfollow/2
+    @DeleteMapping ("/unfollow/{userIdx}") // (delete) eraofband.shop/users/unfollow/2
     @ApiOperation(value = "팔로우 취소 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="userIdx", value="언팔로우할 유저 인덱스", required = true)
     public BaseResponse<String> unFollowUser(@PathVariable("userIdx") int userIdx){
         try {
             //jwt에서 idx 추출
             int userIdxByJwt = jwtService.getUserIdx();
-            userService.unfollowUser(userIdxByJwt,userIdx);
 
+            userService.unfollowUser(userIdxByJwt,userIdx);
             String result = "팔로우 취소를 완료하였습니다.";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
@@ -248,12 +254,13 @@ public class UserController {
 
     /**
      * 팔로잉, 팔로워 리스트 조회 API
-     * [GET] /users/follow-info/10
+     * [GET] /users/info/follow/10
      * @return BaseResponse<GetFollowRes>
      */
     @ResponseBody
-    @GetMapping("/info/follow/{userIdx}") // (GET) 127.0.0.1:9000/users/info/follow/12
+    @GetMapping("/info/follow/{userIdx}") // (GET) eraofband.shop/users/info/follow/12
     @ApiOperation(value = "팔로잉, 팔로워 리스트 조회")
+    @ApiImplicitParam(name="userIdx", value="조회할 유저 인덱스", required = true)
     public BaseResponse<GetFollowRes> getFollow(@PathVariable("userIdx")int userIdx) {
         try{
             GetFollowRes getFollowRes = userProvider.getFollow(userIdx);
@@ -262,5 +269,4 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
 }
