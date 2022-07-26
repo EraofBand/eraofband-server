@@ -22,7 +22,10 @@ public class LessonService {
         this.jwtService = jwtService;
     }
 
-    // 레슨 생성
+
+    /**
+     *  레슨 생성
+     * */
     public PostLessonRes createLesson(int userIdx, PostLessonReq postLessonReq) throws BaseException {
 
         try{
@@ -35,7 +38,10 @@ public class LessonService {
         }
     }
 
-    // 레슨 수정
+
+    /**
+     *  레슨 수정
+     * */
     public void modifyLesson(int lessonIdx, PatchLessonReq patchLessonReq) throws BaseException {
 
         if(lessonProvider.checkLessonExist(lessonIdx) == 0){
@@ -53,7 +59,10 @@ public class LessonService {
         }
     }
 
-    // 레슨 삭제
+
+    /**
+     *  레슨 삭제
+     * */
     public void deleteLesson(int lessonIdx) throws BaseException {
 
         if(lessonProvider.checkLessonExist(lessonIdx) ==0){
@@ -71,7 +80,10 @@ public class LessonService {
         }
     }
 
-    // 레슨 신청
+
+    /**
+     *  레슨 신청
+     * */
     public PostSignUpRes applyLesson(int userIdx, int lessonIdx) throws BaseException {
 
         try{
@@ -85,7 +97,10 @@ public class LessonService {
 
 
 
-    // 레슨 좋아요
+
+    /**
+     *  레슨 좋아요
+     * */
     public PostLesLikeRes likesLesson(int userIdx, int lessonIdx) throws BaseException {
 
         if(lessonProvider.checkLessonExist(lessonIdx) == 0){
@@ -108,7 +123,10 @@ public class LessonService {
 
 
 
-    // 레슨 좋아요 취소
+
+    /**
+     *  레슨 좋아요 취소
+     * */
     public void unlikesLesson(int userIdx, int lessonIdx) throws BaseException {
 
         if(lessonProvider.checkLessonExist(lessonIdx) == 0){

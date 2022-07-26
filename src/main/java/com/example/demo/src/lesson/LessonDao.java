@@ -27,7 +27,10 @@ public class LessonDao {
 
 
 
-    // 레슨 확인
+
+    /**
+     * 레슨 확인
+     * */
     public int checkLessonExist(int lessonIdx){
         String checkLessonExistQuery = "SELECT exists(SELECT lessonIdx FROM Lesson WHERE lessonIdx = ? and status = 'ACTIVE')";
         int checkLessonExistParams = lessonIdx;
@@ -36,7 +39,9 @@ public class LessonDao {
                 checkLessonExistParams);
     }
 
-    // 레슨 생성
+    /**
+     * 레슨 생성
+     * */
     public int insertLesson(int userIdx, PostLessonReq postLessonReq){
         String insertLessonQuery = "INSERT INTO Lesson(userIdx, lessonTitle, lessonIntroduction, lessonRegion, lessonContent, lessonSession, capacity, chatRoomLink, lessonImgUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Object[] insertLessonParams = new Object[]{ userIdx, postLessonReq.getLessonTitle(), postLessonReq.getLessonIntroduction(),
@@ -48,7 +53,9 @@ public class LessonDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
-    // 레슨 수정
+    /**
+     * 레슨 수정
+     * */
     public int updateLesson(int lessonIdx, PatchLessonReq patchLessonReq){
         String updateLessonQuery = "UPDATE Lesson SET lessonTitle=?, lessonIntroduction=?, lessonRegion=?, lessonContent=?, lessonSession=?," +
                 "capacity=?, chatRoomLink=?, lessonImgUrl=? WHERE lessonIdx = ? and status='ACTIVE'" ;
@@ -59,7 +66,9 @@ public class LessonDao {
         return this.jdbcTemplate.update(updateLessonQuery,updateLessonParams);
     }
 
-    // 레슨 삭제
+    /**
+     * 레슨 삭제
+     * */
     public int updateLessonStatus(int lessonIdx){
         String deleteLessonQuery = "update Lesson l" +
                 "    left join LessonUser as lu on (lu.lessonIdx=l.lessonIdx)\n" +
@@ -73,7 +82,9 @@ public class LessonDao {
         return this.jdbcTemplate.update(deleteLessonQuery,deleteLessonParams);
     }
 
-    // 레슨 신청
+    /**
+     * 레슨 신청
+     * */
     public int insertSignUp(int userIdx, int lessonIdx){
         String insertApplyQuery = "INSERT INTO LessonUser(userIdx, lessonIdx) VALUES (?, ?)";
         Object[] insertApplyParams = new Object[]{ userIdx, lessonIdx };
@@ -83,7 +94,9 @@ public class LessonDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
-    // 레슨 멤버 목록
+    /**
+     * 레슨 멤버 목록
+     * */
     public List<GetMemberRes> getLessonMembers(int lessonIdx){
         String getLessonMemberQuery = "SELECT u.userSession as mySession, LU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.introduction as introduction\n" +
                 "                FROM LessonUser as LU JOIN User as u on u.userIdx = LU.userIdx\n" +
@@ -100,7 +113,9 @@ public class LessonDao {
                 getLessonMemberParams);
     }
 
-    // 레슨 생성 유저 확인
+    /**
+     * 레슨 생성 유저 확인
+     * */
     public int checkLessonMaker(int lessonIdx){
         String selectUserIdxQuery = "SELECT userIdx FROM Lesson WHERE lessonIdx = ? and status='ACTIVE'";
         int selectUserIdxParams = lessonIdx;
@@ -109,7 +124,10 @@ public class LessonDao {
                 selectUserIdxParams);
     }
 
-    // 레슨 멤버 확인
+
+    /**
+     * 레슨 멤버 확인
+     * */
     public int checkLessonSession(int userIdx, int lessonIdx){
         String checkUserExistQuery = "SELECT exists(SELECT lessonUserIdx FROM LessonUser WHERE userIdx=? and lessonIdx=? and status='ACTIVE')";
         Object[] checkUserExistParams = new Object[]{ userIdx, lessonIdx };
@@ -119,7 +137,10 @@ public class LessonDao {
     }
 
 
-    // 레슨 소속 유저가 레슨 조회
+
+    /**
+     *  레슨 소속 유저가 레슨 조회
+     * */
     public GetLessonRes getLessonMemberByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
         String getLessonMemberByIdxQuery = "\n" +
                 "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
@@ -160,7 +181,9 @@ public class LessonDao {
 
 
 
-    // 레슨 미소속 유저가 레슨 조회
+    /**
+     *  레슨 미소속 유저가 레슨 조회
+     * */
     public GetLessonRes getLessonByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
         String getLessonByIdxQuery = "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
                 "                       l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
@@ -199,7 +222,11 @@ public class LessonDao {
                 getLessonByIdxParams);
     }
 
-    // 레슨 좋아요
+
+
+    /**
+     *  레슨 좋아요
+     * */
     public int updateLikes(int userIdx, int lessonIdx) {
         String updateLikesQuery = "INSERT INTO LessonLike(userIdx, lessonIdx) VALUES (?,?)";
         Object[] updateLikesParams = new Object[]{userIdx, lessonIdx};
@@ -210,7 +237,9 @@ public class LessonDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
-    // 레슨 좋아요 취소
+    /**
+     *  레슨 좋아요 취소
+     * */
     public int updateUnlikes(int userIdx, int lessonIdx) {
         String updateUnlikesQuery = "DELETE FROM LessonLike WHERE userIdx = ? and lessonIdx = ?";
         Object[] updateUnlikesParams = new Object[]{userIdx, lessonIdx};
@@ -218,7 +247,11 @@ public class LessonDao {
         return this.jdbcTemplate.update(updateUnlikesQuery, updateUnlikesParams);
     }
 
-    // 찜한 레슨 조회
+
+
+    /**
+     *  찜한 레슨 조회
+     * */
     public List<GetLikesLessonRes> getLikesLesson(int userIdx){
         String getLikesLessonQuery = "\n"+
                 "SELECT l.lessonIdx as lessonIdx, l.lessonImgUrl as lessonImgUrl, l.lessonTitle as lessonTitle,"+
@@ -248,7 +281,10 @@ public class LessonDao {
 
 
 
-    // 지역-세션 분류 레슨 정보 반환
+
+    /**
+     *  지역-세션 분류 레슨 정보 반환
+     * */
     public List<GetInfoLessonRes> getInfoLesson(String region, int session){
         region = region.substring(0, 2);
 

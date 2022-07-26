@@ -4,6 +4,8 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.lesson.model.*;
 import com.example.demo.utils.JwtService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,10 +31,17 @@ public class LessonController {
         this.jwtService = jwtService;
     }
 
-    // 레슨 조회
+
+    /**
+     * 레슨 조회 API
+     * [GET] /lessons/info/{lessonIdx}
+     * @return BaseResponse<GetLessonRes>
+     */
+
     @ResponseBody
-    @GetMapping("/info/{lessonIdx}") // (get) https://eraofband.shop/lesson/info/2
+    @GetMapping("/info/{lessonIdx}") // (get) https://eraofband.shop/lessons/info/2
     @ApiOperation(value = "레슨 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="lessonIdx", value="조회할 레슨 인덱스", required = true)
     public BaseResponse<GetLessonRes> getLesson(@PathVariable("lessonIdx") int lessonIdx){
         try{
             int userIdxByJwt = jwtService.getUserIdx();
@@ -45,9 +54,14 @@ public class LessonController {
     }
 
 
-    // 레슨 생성
+
+    /**
+     * 레슨 생성 API
+     * [POST] /lessons/info
+     * @return BaseResponse<PostLessonRes>
+     */
     @ResponseBody
-    @PostMapping("") // (post) https://eraofband.shop/lesson
+    @PostMapping("") // (post) https://eraofband.shop/lessons
     @ApiOperation(value = "레슨 생성 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<PostLessonRes> createLesson(@RequestBody PostLessonReq postLessonReq) {
         if(postLessonReq.getLessonTitle() == null){
@@ -90,10 +104,16 @@ public class LessonController {
         }
     }
 
-    // 레슨 수정
+
+    /**
+     * 레슨 수정 API
+     * [PATCH] /lessons/lesson-info/{lessonIdx}
+     * @return BaseResponse<String>
+     */
     @ResponseBody
-    @PatchMapping("/lesson-info/{lessonIdx}") // (patch) https://eraofband.shop/lesson/patch/2
+    @PatchMapping("/lesson-info/{lessonIdx}") // (patch) https://eraofband.shop/lessons/lesson-info/2
     @ApiOperation(value = "레슨 수정 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="lessonIdx", value="수정할 레슨 인덱스", required = true)
     public BaseResponse<String> modifyLesson(@PathVariable("lessonIdx") int lessonIdx, @RequestBody PatchLessonReq patchLessonReq){
         try{
 
@@ -117,10 +137,16 @@ public class LessonController {
         }
     }
 
-    // 레슨 삭제
+
+    /**
+     * 레슨 삭제 API
+     * [PATCH] /lessons/status/{lessonIdx}
+     * @return BaseResponse<String>
+     */
     @ResponseBody
-    @PatchMapping("/status/{lessonIdx}") // (patch) https://eraofband.shop/lesson/patch/2/status
+    @PatchMapping("/status/{lessonIdx}") // (patch) https://eraofband.shop/lessons/status/2
     @ApiOperation(value = "레슨 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="lessonIdx", value="삭제할 레슨 인덱스", required = true)
     public BaseResponse<String> deleteLesson(@PathVariable("lessonIdx") int lessonIdx, @RequestBody PatchLesComReq patchLesComReq){
         try {
 
@@ -141,10 +167,16 @@ public class LessonController {
 
 
 
-    // 레슨 신청
+
+    /**
+     * 레슨 신청 API
+     * [POST] /lessons/{lessonIdx}
+     * @return BaseResponse<PostSignUpRes>
+     */
     @ResponseBody
-    @PostMapping("/{lessonIdx}") // (post) https://eraofband.shop/lesson/apply/2
+    @PostMapping("/{lessonIdx}") // (post) https://eraofband.shop/lessons/2
     @ApiOperation(value = "레슨 신청 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="lessonIdx", value="신청할 레슨 인덱스", required = true)
     public BaseResponse<PostSignUpRes> applyLesson(@PathVariable("lessonIdx") int lessonIdx) {
         try{
 
@@ -158,10 +190,16 @@ public class LessonController {
     }
 
 
-    // 레슨 좋아요
+
+    /**
+     * 레슨 좋아요 API
+     * [POST] /lessons/likes/{lessonIdx}
+     * @return BaseResponse<PostLesLikeRes>
+     */
     @ResponseBody
-    @PostMapping("/likes/{lessonIdx}") // (post) https://eraofband.shop/lesson/likes/2
+    @PostMapping("/likes/{lessonIdx}") // (post) https://eraofband.shop/lessons/likes/2
     @ApiOperation(value = "레슨 좋아요 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="lessonIdx", value="좋아요 누를 레슨 인덱스", required = true)
     public BaseResponse<PostLesLikeRes> likesLesson(@PathVariable("lessonIdx") int lessonIdx){
 
         try {
@@ -176,10 +214,16 @@ public class LessonController {
         }
     }
 
-    // 레슨 좋아요 취소
+
+    /**
+     * 레슨 좋아요 취소 API
+     * [DELETE] /lessons/unlikes/{lessonIdx}
+     * @return BaseResponse<String>
+     */
     @ResponseBody
-    @DeleteMapping ("/unlikes/{lessonIdx}") // (delete) https://eraofband.shop/pofol/unlikes/2
+    @DeleteMapping ("/unlikes/{lessonIdx}") // (delete) https://eraofband.shop/lessons/unlikes/2
     @ApiOperation(value = "레슨 좋아요 취소 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="lessonIdx", value="좋아요 취소 누를 레슨 인덱스", required = true)
     public BaseResponse<String> unlikesLesson(@PathVariable("lessonIdx") int lessonIdx){
 
         try {
@@ -196,9 +240,14 @@ public class LessonController {
 
     }
 
-    // 찜한 레슨 조회
+
+    /**
+     * 찜한 레슨 조회 API
+     * [GET] /info/likes
+     * @return BaseResponse<List<GetLikesLessonRes>>
+     */
     @ResponseBody
-    @GetMapping("/info/likes") // (get) https://eraofband.shop/lesson/info/likes
+    @GetMapping("/info/likes") // (get) https://eraofband.shop/lessons/info/likes
     @ApiOperation(value = "찜한 레슨 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<List<GetLikesLessonRes>> getLikesLesson(){
         try{
@@ -214,10 +263,18 @@ public class LessonController {
     }
 
 
-    // 지역-세션 분류 레슨 정보 반환
+
+    /**
+     * 지역-세션 분류 레슨 정보 반환 API
+     * [GET] /info/list/{lesson-region}/{lesson-session}
+     * @return BaseResponse<List<GetInfoLessonRes>>
+     */
     @ResponseBody
     @GetMapping("/info/list/{lesson-region}/{lesson-session}") // (get) https://eraofband.shop/lesson/info/list/경기도 성남시/1
     @ApiOperation(value = "지역-세션 분류 레슨 정보 반환")
+    @ApiImplicitParams({@ApiImplicitParam(name="lesson-region", value="지역(서울,경기도,전체)", required = true),
+            @ApiImplicitParam(name="lesson-session", value="세션(0,1,2,3,4,5)", required = true)})
+
     public BaseResponse<List<GetInfoLessonRes>> getInfoLesson(@PathVariable("lesson-region") String region, @PathVariable("lesson-session") int session){
         try{
 
