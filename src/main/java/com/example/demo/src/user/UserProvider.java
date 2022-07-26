@@ -29,7 +29,9 @@ public class UserProvider {
         this.jwtService = jwtService;
     }
 
-
+    /**
+     * 다른 유저 페이지 조회
+     */
     public GetUserFeedRes getUserByIdx(int myId, int userIdx) throws BaseException{
         try{
             GetUserInfoRes getUserInfo=userDao.getUserByIdx(myId, userIdx);
@@ -44,6 +46,9 @@ public class UserProvider {
         }
     }
 
+    /**
+     * 마이 페이지 조회
+     */
     public GetMyFeedRes getMyFeed(int userIdx) throws BaseException{
         try{
             GetMyInfoRes getMyInfo=userDao.getMyFeed(userIdx);
@@ -59,6 +64,9 @@ public class UserProvider {
         }
     }
 
+    /**
+     * 팔로잉, 팔로워 리스트 조회
+     */
     public GetFollowRes getFollow(int userIdx) throws BaseException{
         try{
             List<Users> getfollowing=userDao.getFollowing(userIdx);
@@ -72,7 +80,9 @@ public class UserProvider {
         }
     }
 
-
+    /**
+     * 이메일 존재 유무 확인
+     */
     public int checkEmail(String email) throws BaseException{
         try{
             return userDao.checkEmail(email);
@@ -80,7 +90,4 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
-
-
 }

@@ -10,18 +10,10 @@ import lombok.Setter;
 public class GetLikesLessonRes {
 
     private int lessonIdx;
-
-    @ApiModelProperty(example="레슨 모집 이미지 URL")
     private String lessonImgUrl;
-
     private String lessonTitle;
-
-    @ApiModelProperty(example="레슨 한 줄 소개")
     private String lessonIntroduction;
-
     private String lessonRegion;
-
     private int capacity;
-
     private int memberCount;
 }

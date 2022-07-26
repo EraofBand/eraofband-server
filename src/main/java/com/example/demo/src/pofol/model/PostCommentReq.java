@@ -11,8 +11,6 @@ import lombok.Setter;
 public class PostCommentReq {
 
     private int userIdx;
-
-    @ApiModelProperty(example="포트폴리오 댓글 내용")
     private String content;
 
 }

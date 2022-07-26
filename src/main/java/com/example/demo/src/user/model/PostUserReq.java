@@ -9,12 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PostUserReq {
-    @ApiModelProperty(example="harry (유저 닉네임)")
     private String nickName;
-
-    @ApiModelProperty(example="1998-11-13 (유저 생일)")
     private String birth;
-
     private String gender;
     private String profileImgUrl;
     private int userSession;

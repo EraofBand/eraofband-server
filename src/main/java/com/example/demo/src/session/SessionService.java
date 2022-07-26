@@ -22,7 +22,9 @@ public class SessionService {
         this.jwtService = jwtService;
     }
 
-    // 밴드 생성
+    /**
+     * 밴드 생성
+     * */
     public PostBandRes createBand(int userIdx, PostBandReq postBandReq) throws BaseException {
 
         try{
@@ -33,7 +35,9 @@ public class SessionService {
         }
     }
 
-    // 밴드 수정
+    /**
+     * 밴드 수정
+     * */
     public void modifyBand(int bandIdx, PatchBandReq patchBandReq) throws BaseException {
 
         if(sessionProvider.checkBandExist(bandIdx) == 0){
@@ -51,7 +55,9 @@ public class SessionService {
         }
     }
 
-    // 밴드 삭제
+    /**
+     * 밴드 삭제
+     * */
     public void deleteBand(int bandIdx) throws BaseException {
 
         if(sessionProvider.checkBandExist(bandIdx) ==0){
@@ -68,7 +74,10 @@ public class SessionService {
         }
     }
 
-    // 밴드 지원
+
+    /**
+     * 밴드 지원
+     * */
     public PostApplyRes applySession(int userIdx, int bandIdx, PostApplyReq postApplyReq) throws BaseException {
 
         try{
@@ -80,7 +89,9 @@ public class SessionService {
         }
     }
 
-    // 밴드 지원 수락
+    /**
+     * 밴드 지원 수락
+     * */
     public void acceptSession(int bandIdx, int userIdx) throws BaseException {
 
         if(sessionProvider.checkBandExist(bandIdx) ==0){
@@ -95,7 +106,9 @@ public class SessionService {
         }
     }
 
-    // 밴드 지원 거절
+    /**
+     * 밴드 지원 거절
+     * */
     public void rejectSession(int bandIdx, int userIdx) throws BaseException {
 
         if(sessionProvider.checkBandExist(bandIdx) ==0){
@@ -110,13 +123,14 @@ public class SessionService {
         }
     }
 
-    // 밴드 좋아요
+    /**
+     * 밴드 좋아요
+     * */
     public PostBandLikeRes likesBand(int userIdx, int bandIdx) throws BaseException {
 
         if(sessionProvider.checkBandExist(bandIdx) == 0){
             throw new BaseException(POSTS_EMPTY_BAND_ID);
         }
-
 
         try{
             int result = sessionDao.updateLikes(userIdx, bandIdx);
@@ -132,14 +146,14 @@ public class SessionService {
     }
 
 
-
-    // 밴드 좋아요 취소
+    /**
+     * 밴드 좋아요 취소
+     * */
     public void unlikesBand(int userIdx, int bandIdx) throws BaseException {
 
         if(sessionProvider.checkBandExist(bandIdx) == 0){
             throw new BaseException(POSTS_EMPTY_BAND_ID);
         }
-
 
         try{
             int result = sessionDao.updateUnlikes(userIdx, bandIdx);
@@ -149,8 +163,5 @@ public class SessionService {
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
-
-
-
     }
 }
