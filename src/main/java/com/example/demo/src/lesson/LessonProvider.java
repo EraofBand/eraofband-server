@@ -28,7 +28,10 @@ public class LessonProvider {
 
     }
 
-    // 레슨 확인
+
+    /**
+     *  레슨 확인
+     * */
     public int checkLessonExist(int lessonIdx) throws BaseException {
         try {
             return lessonDao.checkLessonExist(lessonIdx);
@@ -37,7 +40,10 @@ public class LessonProvider {
         }
     }
 
-    // 레슨 생성 유저 확인
+
+    /**
+     *  레슨 생성 유저 확인
+     * */
     public int checkLessonMaker(int lessonIdx) throws BaseException {
         try {
             return lessonDao.checkLessonMaker(lessonIdx);
@@ -47,7 +53,10 @@ public class LessonProvider {
         }
     }
 
-    // 레슨 멤버 확인
+
+    /**
+     *  레슨 멤버 확인
+     * */
     public int checkLessonSession(int userIdx, int lessonIdx) throws BaseException {
         try {
             return lessonDao.checkLessonSession(userIdx, lessonIdx);
@@ -57,7 +66,10 @@ public class LessonProvider {
         }
     }
 
-    // 레슨 정보 (멤버/멤버 아닌 유저)에 따라 다름
+
+    /**
+     *  레슨 정보 (멤버/멤버 아닌 유저)에 따라 다름
+     * */
     public GetLessonRes getLesson(int userIdx, int lessonIdx) throws BaseException {
         try {
             getLessonMembers = getLessonMembers(lessonIdx);
@@ -76,7 +88,10 @@ public class LessonProvider {
         }
     }
 
-    // 레슨 멤버 목록
+
+    /**
+     *  레슨 멤버 목록
+     * */
     public List<GetMemberRes> getLessonMembers(int lessonIdx) throws BaseException {
         try {
             List<GetMemberRes> getMembers = lessonDao.getLessonMembers(lessonIdx);
@@ -87,7 +102,10 @@ public class LessonProvider {
         }
     }
 
-    // 찜한 레슨 조회
+
+    /**
+     *  찜한 레슨 조회
+     * */
     public List<GetLikesLessonRes> getLikesLesson(int userIdx) throws BaseException {
 
         try {
@@ -100,7 +118,10 @@ public class LessonProvider {
     }
 
 
-    // 지역-세션 분류 레슨 정보 반환
+
+    /**
+     *  지역-세션 분류 레슨 정보 반환
+     * */
     public List<GetInfoLessonRes> getInfoLesson(String region, int session) throws BaseException {
 
         try {
