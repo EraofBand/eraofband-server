@@ -141,7 +141,7 @@ public class LessonDao {
     /**
      *  레슨 소속 유저가 레슨 조회
      * */
-    public GetLessonRes getLessonMemberByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
+    public GetLessonRes getLessonMemberByIdx(int userId, int lessonIdx, List<GetMemberRes> lessonMembers){
         String getLessonMemberByIdxQuery = "\n" +
                 "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
                 "                   u.profileImgUrl as profileImgUrl, u.introduction as userIntroduction,\n "+
@@ -154,11 +154,11 @@ public class LessonDao {
                 "                FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
                 "                   left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
                 "                   left join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n" +
-                "                   left join LessonLike as ll on  ll.lessonIdx = l.lessonIdx\n" +
+                "                   left join LessonLike as ll on  ll.lessonIdx = l.lessonIdx and ll.userIdx=?\n" +
                 "            WHERE l.lessonIdx=? and l.status='ACTIVE' and u.userIdx = l.userIdx\n" +
                 "            GROUP BY l.lessonIdx";
 
-        int getLessonMemberByIdxParams = lessonIdx;
+        Object[] getLessonMemberByIdxParams = new Object[]{userId,lessonIdx};
         return this.jdbcTemplate.queryForObject(getLessonMemberByIdxQuery,
                 (rs, rowNum) -> new GetLessonRes(
                         rs.getInt("lessonIdx"),
@@ -187,7 +187,7 @@ public class LessonDao {
     /**
      *  레슨 미소속 유저가 레슨 조회
      * */
-    public GetLessonRes getLessonByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
+    public GetLessonRes getLessonByIdx(int userId, int lessonIdx, List<GetMemberRes> lessonMembers){
         String getLessonByIdxQuery = "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
                 "                       u.profileImgUrl as profileImgUrl, u.introduction as userIntroduction,\n "+
                 "                       l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
@@ -199,12 +199,12 @@ public class LessonDao {
                 "                       FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
                 "                       LEFT join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
                 "                       LEFT join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n" +
-                "                       LEFT join LessonLike as ll on ll.lessonIdx = l.lessonIdx\n" +
+                "                       LEFT join LessonLike as ll on ll.lessonIdx = l.lessonIdx and ll.userIdx=?\n" +
                 "                       WHERE l.lessonIdx=? and l.status='ACTIVE' and u.userIdx = l.userIdx"+
                 "                       GROUP BY l.lessonIdx";
 
 
-        int getLessonByIdxParams = lessonIdx;
+        Object[] getLessonByIdxParams = new Object[]{userId,lessonIdx};
         return this.jdbcTemplate.queryForObject(getLessonByIdxQuery,
                 (rs, rowNum) -> new GetLessonRes(
                         rs.getInt("lessonIdx"),

@@ -14,7 +14,6 @@ public class PatchBandReq {
     private String bandIntroduction;
     private String bandRegion;
     private String bandContent;
-    private int mySession;
 
     private int vocal;
     private String vocalComment;
