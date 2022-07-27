@@ -64,25 +64,25 @@ public class LessonController {
     @PostMapping("") // (post) https://eraofband.shop/lessons
     @ApiOperation(value = "레슨 생성 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<PostLessonRes> createLesson(@RequestBody PostLessonReq postLessonReq) {
-        if(postLessonReq.getLessonTitle() == null){
+        if(postLessonReq.getLessonTitle() == null || postLessonReq.getLessonTitle() == ""){
             return new BaseResponse<>(POST_BANDS_EMPTY_CONTENTS);
         }
         if(postLessonReq.getLessonTitle().length()>40){
             return new BaseResponse<>(POST_BANDS_INVALID_CONTENTS);
         }
 
-        if(postLessonReq.getLessonIntroduction() == null){
+        if(postLessonReq.getLessonIntroduction() == null || postLessonReq.getLessonIntroduction() == ""){
             return new BaseResponse<>(POST_BANDS_EMPTY_CONTENTS);
         }
         if(postLessonReq.getLessonIntroduction().length()>60){
             return new BaseResponse<>(POST_BANDS_INVALID_CONTENTS);
         }
 
-        if(postLessonReq.getLessonRegion() == null){
+        if(postLessonReq.getLessonRegion() == null || postLessonReq.getLessonRegion() == ""){
             return new BaseResponse<>(POST_BANDS_EMPTY_CONTENTS);
         }
 
-        if(postLessonReq.getLessonContent() == null){
+        if(postLessonReq.getLessonContent() == null || postLessonReq.getLessonContent() == ""){
             return new BaseResponse<>(POST_BANDS_EMPTY_CONTENTS);
         }
         if(postLessonReq.getLessonContent().length()>3000){
