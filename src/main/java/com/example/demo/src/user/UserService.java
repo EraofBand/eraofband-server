@@ -181,6 +181,11 @@ public class UserService {
             if(result == 0){
                 throw new BaseException(FOLLOW_FAIL_USER);
             }
+            //팔로우 요청자의 정보 얻기
+            GetUserNotiInfoRes getUserNotiInfoRes=userDao.Noti(myIdx);
+            //알림 테이블에 추가
+            userDao.followNoti(getUserNotiInfoRes, userIdx);
+
             return new PostFollowRes(result);
         } catch(Exception exception){
             System.out.println(exception);
