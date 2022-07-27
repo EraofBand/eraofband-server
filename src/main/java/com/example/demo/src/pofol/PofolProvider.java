@@ -33,7 +33,9 @@ public class PofolProvider {
     }
 
 
-    // 유저 확인
+    /**
+     * 유저 확인
+     */
     public int checkUserExist(int userIdx) throws BaseException{
         try{
             return pofolDao.checkUserExist(userIdx);
@@ -42,7 +44,9 @@ public class PofolProvider {
         }
     }
 
-    // 포트폴리오 확인
+    /**
+     * 포트폴리오 확인
+     */
     public int checkPofolExist(int pofolIdx) throws BaseException{
         try{
             return pofolDao.checkPofolExist(pofolIdx);
@@ -51,6 +55,9 @@ public class PofolProvider {
         }
     }
 
+    /**
+     * 포트폴리오 댓글 확인
+     */
     public int checkCommentExist(int pofolCommentIdx) throws BaseException{
         try{
             return pofolDao.checkCommentExist(pofolCommentIdx);
@@ -59,7 +66,9 @@ public class PofolProvider {
         }
     }
 
-    // 유저의 포트폴리오인지 확인
+    /**
+     * 유저의 포트폴리오인지 확인
+     */
     public int checkUserPofolExist(int userIdx,int pofolIdx) throws BaseException{
         try{
             return pofolDao.checkUserPofolExist(userIdx,pofolIdx);
@@ -68,7 +77,9 @@ public class PofolProvider {
         }
     }
 
-    // 이메일 확인
+    /**
+     * 이메일 확인
+     */
     public int checkEmailExist(String email) throws BaseException{
         try{
             return pofolDao.checkEmailExist(email);
@@ -77,7 +88,9 @@ public class PofolProvider {
         }
     }
 
-    // 이메일 확인
+    /**
+     * 회원 확인
+     */
     public String checkUserStatus(String email) throws BaseException{
         try{
             return pofolDao.checkUserStatus(email);
@@ -86,8 +99,9 @@ public class PofolProvider {
         }
     }
 
-
-    // 포트폴리오 리스트 조회
+    /**
+     * 포트폴리오 리스트 조회
+     */
     public List<GetPofolRes> retrievePofol(int userIdx) throws BaseException {
 
         if(checkUserExist(userIdx) ==0){
@@ -103,8 +117,9 @@ public class PofolProvider {
         }
     }
 
-
-    // 내 포트폴리오 조회
+    /**
+     * 내 포트폴리오 조회
+     */
     public List<GetPofolRes> retrieveMyPofol(int userIdx) throws BaseException {
 
         if(checkUserExist(userIdx) ==0){
@@ -118,10 +133,11 @@ public class PofolProvider {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
-
     }
 
-    // 특정 댓글 조회
+    /**
+     * 특정 댓글 조회
+     */
     public GetCommentRes certainComment (int pofolCommentIdx) throws BaseException {
 
         try{
@@ -135,7 +151,9 @@ public class PofolProvider {
 
     }
 
-    // 포트폴리오 댓글 리스트 조회
+    /**
+     * 포트폴리오 댓글 리스트 조회
+     */
     public List<GetCommentRes> retrieveComment(int pofolIdx) throws BaseException {
 
         if(checkPofolExist(pofolIdx) ==0){
@@ -149,11 +167,6 @@ public class PofolProvider {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
-
-
     }
-
-
-
 
 }

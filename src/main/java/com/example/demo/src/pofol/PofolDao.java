@@ -21,8 +21,9 @@ public class PofolDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-
-    // 유저 확인
+    /**
+     * 유저 확인
+     * */
     public int checkUserExist(int userIdx) {
         String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ? and status = 'ACTIVE')";
         int checkUserExistParams = userIdx;
@@ -32,7 +33,9 @@ public class PofolDao {
 
     }
 
-    // 포트폴리오 확인
+    /**
+     * 포트폴리오 확인
+     * */
     public int checkPofolExist(int pofolIdx) {
         String checkPostExistQuery = "select exists(select pofolIdx from Pofol where pofolIdx = ? and status = 'ACTIVE')";
         int checkPostExistParams = pofolIdx;
@@ -42,7 +45,9 @@ public class PofolDao {
 
     }
 
-    // 포트폴리오 댓글 확인
+    /**
+     * 포트폴리오 댓글 확인
+     * */
     public int checkCommentExist(int pofolCommentIdx) {
         String checkCommentExistQuery = "select exists(select pofolCommentIdx from PofolComment where pofolCommentIdx = ? and status = 'ACTIVE')";
         int checkCommentExistParams = pofolCommentIdx;
@@ -52,7 +57,9 @@ public class PofolDao {
 
     }
 
-    // 이메일 확인
+    /**
+     * 이메일 확인
+     * */
     public int checkEmailExist(String email) {
         String checkEmailQuery = "select exists(select email from User where email = ? and status='ACTIVE')";
         String checkEmailParams = email;
@@ -62,8 +69,9 @@ public class PofolDao {
 
     }
 
-
-    // 포트폴리오 댓글 리스트 조회
+    /**
+     * 포트폴리오 댓글 리스트 조회
+     * */
     public List<GetCommentRes> selectComment(int pofolIdx) {
         String selectCommentPofolQuery = "SELECT p.pofolCommentIdx as pofolCommentIdx,\n" +
                                          "p.pofolIdx as pofolIdx, \n" +
@@ -102,8 +110,9 @@ public class PofolDao {
 
     }
 
-    // 팔로우 한 유저 포트폴리오 리스트 조회
-
+    /**
+     * 팔로우 한 유저 포트폴리오 리스트 조회
+     * */
     public List<GetPofolRes> selectPofol(int userIdx) {
         String selectUserPofolQuery = "\n" +
                 "        SELECT p.pofolIdx as pofolIdx,\n" +
@@ -151,11 +160,11 @@ public class PofolDao {
                         rs.getString("videoUrl")
                 ), selectUserPofolParam);
 
-
     }
 
-
-    // 내 포트폴리오 리스트 조회
+    /**
+     * 내 포트폴리오 리스트 조회
+     * */
     public List<GetPofolRes> selectMyPofol(int userIdx) {
 
         String selectMyPofolQuery = "\n" +
@@ -205,12 +214,9 @@ public class PofolDao {
 
     }
 
-
-
-
-
-
-    // 회원 확인
+    /**
+     * 회원 확인
+     * */
     public String checkUserStatus(String email) {
         String checkUserStatusQuery = "select status from User where email = ? ";
         String checkUserStatusParams = email;
@@ -220,7 +226,9 @@ public class PofolDao {
 
     }
 
-    // 포트폴리오, 유저 확인
+    /**
+     * 포트폴리오, 유저 확인
+     * */
     public int checkUserPofolExist(int userIdx, int pofolIdx) {
         String checkUserPofolQuery = "select exists(select pofolIdx from Pofol where pofolIdx = ? and userIdx=?) ";
         Object[] checkUserPofolParams = new Object[]{pofolIdx, userIdx};
@@ -230,7 +238,9 @@ public class PofolDao {
 
     }
 
-    // 포트폴리오 생성
+    /**
+     * 포트폴리오 생성
+     * */
     public int insertPofol(int userIdx, PostPofolReq postPofolReq) {
         String insertPofolQuery = "INSERT INTO Pofol(userIdx, content, videoUrl, title, imgUrl) VALUES (?, ?, ?, ?, ?)";
         Object[] insertPofolParams = new Object[]{userIdx, postPofolReq.getContent(), postPofolReq.getVideoUrl(), postPofolReq.getTitle(), postPofolReq.getImgUrl()};
@@ -241,8 +251,9 @@ public class PofolDao {
 
     }
 
-
-    // 포트폴리오 수정
+    /**
+     * 포트폴리오 수정
+     * */
     public int updatePofol(int pofolIdx, PatchPofolReq patchPofolReq) {
         String updatePofolQuery = "UPDATE Pofol SET title = ?, content = ? WHERE pofolIdx = ? and status='ACTIVE'\n";
         Object[] updatePofolParams = new Object[]{patchPofolReq.getTitle(), patchPofolReq.getContent(), pofolIdx};
@@ -250,7 +261,9 @@ public class PofolDao {
         return this.jdbcTemplate.update(updatePofolQuery, updatePofolParams);
     }
 
-    // 포트폴리오 삭제
+    /**
+     * 포트폴리오 삭제
+     * */
     public int updatePofolStatus(int pofolIdx) {
         String deleteUserQuery = "update Pofol p" +
                 "    left join PofolComment as pc on (pc.pofolIdx=p.pofolIdx)\n" +
@@ -264,9 +277,9 @@ public class PofolDao {
         return this.jdbcTemplate.update(deleteUserQuery, deleteUserParams);
     }
 
-
-
-    // 포트폴리오 좋아요
+    /**
+     * 포트폴리오 좋아요
+     * */
     public int updateLikes(int userIdx, int pofolIdx) {
         String updateLikesQuery = "INSERT INTO PofolLike(userIdx, pofolIdx) VALUES (?,?)";
         Object[] updateLikesParams = new Object[]{userIdx, pofolIdx};
@@ -277,7 +290,9 @@ public class PofolDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
-    // 포트폴리오 좋아요 취소
+    /**
+     * 포트폴리오 좋아요 취소
+     * */
     public int updateUnlikes(int userIdx, int pofolIdx) {
         String updateUnlikesQuery = "DELETE FROM PofolLike WHERE userIdx = ? and pofolIdx = ?";
         Object[] updateUnlikesParams = new Object[]{userIdx, pofolIdx};
@@ -285,8 +300,9 @@ public class PofolDao {
         return this.jdbcTemplate.update(updateUnlikesQuery, updateUnlikesParams);
     }
 
-
-     // 댓글 작성
+    /**
+     * 댓글 작성
+     * */
     public int insertComment(int pofolIdx, int userIdx, PostCommentReq postCommentReq) {
 
         String insertCommentQuery = "INSERT INTO PofolComment(pofolIdx, userIdx, content) VALUES (?, ?, ?)";
@@ -300,7 +316,9 @@ public class PofolDao {
 
     }
 
-    // 댓글 조회
+    /**
+     * 댓글 조회
+     * */
     public GetCommentRes certainComment(int pofolCommentIdx) {
 
         String selectCommentQuery = "SELECT p.pofolCommentIdx as pofolCommentIdx,\n" +
@@ -339,22 +357,15 @@ public class PofolDao {
 
     }
 
-
-
-
-
-
-
-    // 댓글 삭제
+    /**
+     * 댓글 삭제
+     * */
     public int deleteComment(int pofolCommentIdx) {
         String deleteCommentQuery = "UPDATE PofolComment SET status = 'INACTIVE' WHERE pofolCommentIdx = ? ";
         Object[] deleteCommentParams = new Object[]{pofolCommentIdx};
 
         return this.jdbcTemplate.update(deleteCommentQuery, deleteCommentParams);
 
-
-
     }
-
 
 }
