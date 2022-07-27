@@ -151,12 +151,14 @@ public class SessionDao {
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       u.profileImgUrl as profileImgUrl, u.introduction as userIntroduction,\n"+
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
-                "       b.bandRegion as bandRegion, b.bandContent as bandContent, b.mySession as mySession,\n" +
+                "       b.bandRegion as bandRegion, b.bandContent as bandContent,\n" +
                 "       b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal, vocalComment, b.guitar-IF(b1.guitarCount is null, 0, b1.guitarCount) as guitar, guitarComment, b.base-IF(b2.baseCount is null, 0, b2.baseCount) as base,\n" +
                 "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
                 "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl,\n" +
-                "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount\n" +
+                "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount," +
+                "       IF(bandLikeCount is null, 0, bandLikeCount) as bandLikeCount,\n" +
+                "       IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName, profileImgUrl, introduction FROM User) u on u.userIdx = b.userIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n"+
                 "   left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
@@ -164,6 +166,8 @@ public class SessionDao {
                 "   left join (select bandIdx, count(bandUserIdx) as baseCount from BandUser where status='ACTIVE' and buSession=2 group by bandIdx) b2 on b2.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as keyboardCount from BandUser where status='ACTIVE' and buSession=3 group by bandIdx) b3 on b3.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as drumCount from BandUser where status='ACTIVE' and buSession=4 group by bandIdx) b4 on b4.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, userIdx, count(bandLikeIdx) as bandLikeCount from BandLike WHERE status = 'ACTIVE' group by bandIdx) pbc on pbc.bandIdx = b.bandIdx\n" +
+                "   left join BandLike as bl on  bl.bandIdx = b.bandIdx\n" +
                 "WHERE b.bandIdx=? and b.status='ACTIVE'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.queryForObject(getBandByIdxQuery,
@@ -177,7 +181,6 @@ public class SessionDao {
                                                         rs.getString("bandIntroduction"),
                                                         rs.getString("bandRegion"),
                                                         rs.getString("bandContent"),
-                                                        rs.getInt("mySession"),
                                                         rs.getInt("vocal"),
                                                         rs.getString("vocalComment"),
                                                         rs.getInt("guitar"),
@@ -195,6 +198,8 @@ public class SessionDao {
                                                         rs.getString("performLocation"),
                                                         rs.getInt("performFee"),
                                                         rs.getString("bandImgUrl"),
+                                                        rs.getString("likeOrNot"),
+                                                        rs.getInt("bandLikeCount"),
                                                         rs.getInt("capacity"),
                                                         rs.getInt("memberCount"),
                                                         applicants),
@@ -208,12 +213,14 @@ public class SessionDao {
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       u.profileImgUrl as profileImgUrl, u.introduction as userIntroduction,\n"+
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
-                "       b.bandRegion as bandRegion, b.bandContent as bandContent,b.mySession as mySession,\n" +
+                "       b.bandRegion as bandRegion, b.bandContent as bandContent,\n" +
                 "       b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal, vocalComment, b.guitar-IF(b1.guitarCount is null, 0, b1.guitarCount) as guitar, guitarComment, b.base-IF(b2.baseCount is null, 0, b2.baseCount) as base,\n" +
                 "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
                 "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee,b.bandImgUrl as bandImgUrl,\n" +
                 "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount\n" +
+                "       IF(bandLikeCount is null, 0, bandLikeCount) as bandLikeCount,\n" +
+                "       IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName, profileImgUrl, introduction FROM User) u on u.userIdx = b.userIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n"+
                 "   left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
@@ -221,6 +228,8 @@ public class SessionDao {
                 "   left join (select bandIdx, count(bandUserIdx) as baseCount from BandUser where status='ACTIVE' and buSession=2 group by bandIdx) b2 on b2.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as keyboardCount from BandUser where status='ACTIVE' and buSession=3 group by bandIdx) b3 on b3.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as drumCount from BandUser where status='ACTIVE' and buSession=4 group by bandIdx) b4 on b4.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, userIdx, count(bandLikeIdx) as bandLikeCount from BandLike WHERE status = 'ACTIVE' group by bandIdx) pbc on pbc.bandIdx = b.bandIdx\n" +
+                "   left join BandLike as bl on  bl.bandIdx = b.bandIdx\n" +
                 "WHERE b.bandIdx=? and b.status='ACTIVE'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.queryForObject(getBandByIdxQuery,
@@ -234,7 +243,6 @@ public class SessionDao {
                                                         rs.getString("bandIntroduction"),
                                                         rs.getString("bandRegion"),
                                                         rs.getString("bandContent"),
-                                                        rs.getInt("mySession"),
                                                         rs.getInt("vocal"),
                                                         rs.getString("vocalComment"),
                                                         rs.getInt("guitar"),
@@ -252,6 +260,8 @@ public class SessionDao {
                                                         rs.getString("performLocation"),
                                                         rs.getInt("performFee"),
                                                         rs.getString("bandImgUrl"),
+                                                        rs.getString("likeOrNot"),
+                                                        rs.getInt("bandLikeCount"),
                                                         rs.getInt("capacity"),
                                                         rs.getInt("memberCount"),
                                                         null),
@@ -265,12 +275,14 @@ public class SessionDao {
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
                 "       u.profileImgUrl as profileImgUrl, u.introduction as userIntroduction,\n"+
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
-                "       b.bandRegion as bandRegion, b.bandContent as bandContent, b.mySession as mySession,\n" +
+                "       b.bandRegion as bandRegion, b.bandContent as bandContent,\n" +
                 "       b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal, vocalComment, b.guitar-IF(b1.guitarCount is null, 0, b1.guitarCount) as guitar, guitarComment, b.base-IF(b2.baseCount is null, 0, b2.baseCount) as base,\n" +
                 "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
                 "       b.performDate as performDate,  b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl," +
                 "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount\n" +
+                "       IF(bandLikeCount is null, 0, bandLikeCount) as bandLikeCount,\n" +
+                "       IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName, profileImgUrl, introduction FROM User) u on u.userIdx = b.userIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n"+
                 "   left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
@@ -278,6 +290,8 @@ public class SessionDao {
                 "   left join (select bandIdx, count(bandUserIdx) as baseCount from BandUser where status='ACTIVE' and buSession=2 group by bandIdx) b2 on b2.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as keyboardCount from BandUser where status='ACTIVE' and buSession=3 group by bandIdx) b3 on b3.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as drumCount from BandUser where status='ACTIVE' and buSession=4 group by bandIdx) b4 on b4.bandIdx=b.bandIdx\n" +
+                "   left join (select bandIdx, userIdx, count(bandLikeIdx) as bandLikeCount from BandLike WHERE status = 'ACTIVE' group by bandIdx) pbc on pbc.bandIdx = b.bandIdx\n" +
+                "   left join BandLike as bl on  bl.bandIdx = b.bandIdx\n" +
                 "WHERE b.bandIdx=? and b.status='ACTIVE'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.queryForObject(getBandByIdxQuery,
@@ -291,7 +305,6 @@ public class SessionDao {
                                                         rs.getString("bandIntroduction"),
                                                         rs.getString("bandRegion"),
                                                         rs.getString("bandContent"),
-                                                        rs.getInt("mySession"),
                                                         rs.getInt("vocal"),
                                                         rs.getString("vocalComment"),
                                                         rs.getInt("guitar"),
@@ -309,6 +322,8 @@ public class SessionDao {
                                                         rs.getString("performLocation"),
                                                         rs.getInt("performFee"),
                                                         rs.getString("bandImgUrl"),
+                                                        rs.getString("likeOrNot"),
+                                                        rs.getInt("bandLikeCount"),
                                                         rs.getInt("capacity"),
                                                         rs.getInt("memberCount"),
                                                         null),
@@ -319,10 +334,10 @@ public class SessionDao {
      * 밴드 생성
      * */
     public int insertBand(int userIdx, PostBandReq postBandReq){
-        String insertBandQuery = "INSERT INTO Band(userIdx, bandTitle, bandIntroduction, bandRegion, bandContent, mySession, vocal, vocalComment, " +
+        String insertBandQuery = "INSERT INTO Band(userIdx, bandTitle, bandIntroduction, bandRegion, bandContent, vocal, vocalComment," +
                 "guitar, guitarComment, base, baseComment, keyboard, keyboardComment, drum, drumComment, chatRoomLink, bandImgUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Object[] insertBandParams = new Object[]{ userIdx, postBandReq.getBandTitle(), postBandReq.getBandIntroduction(),
-                postBandReq.getBandRegion(), postBandReq.getBandContent(), postBandReq.getMySession(),
+                postBandReq.getBandRegion(), postBandReq.getBandContent(),
                 postBandReq.getVocal(), postBandReq.getVocalComment(), postBandReq.getGuitar(), postBandReq.getGuitarComment(),
                 postBandReq.getBase(), postBandReq.getBaseComment(),postBandReq.getKeyboard(), postBandReq.getKeyboardComment(),postBandReq.getDrum(),postBandReq.getDrumComment(),
                 postBandReq.getChatRoomLink(), postBandReq.getBandImgUrl()
@@ -338,10 +353,10 @@ public class SessionDao {
      * 밴드 수정
      * */
     public int updateBand(int bandIdx, PatchBandReq patchBandReq){
-        String updateBandQuery = "UPDATE Band SET bandTitle=?, bandIntroduction=?, bandRegion=?, bandContent=?, mySession=?," +
+        String updateBandQuery = "UPDATE Band SET bandTitle=?, bandIntroduction=?, bandRegion=?, bandContent=?," +
                 "vocal=?, vocalComment=?, guitar=?, guitarComment=?, base=?, baseComment=?, keyboard=?, keyboardComment=?, drum=?, drumComment=?, chatRoomLink=?, performDate=?, performTime=?, performLocation=?, performFee=?, bandImgUrl=? WHERE bandIdx = ? and status='ACTIVE'" ;
         Object[] updateBandParams = new Object[]{ patchBandReq.getBandTitle(), patchBandReq.getBandIntroduction(),
-                patchBandReq.getBandRegion(), patchBandReq.getBandContent(), patchBandReq.getMySession(),
+                patchBandReq.getBandRegion(), patchBandReq.getBandContent(),
                 patchBandReq.getVocal(), patchBandReq.getVocalComment(), patchBandReq.getGuitar(), patchBandReq.getGuitarComment(),
                 patchBandReq.getBase(), patchBandReq.getBaseComment(),patchBandReq.getKeyboard(), patchBandReq.getKeyboardComment(),patchBandReq.getDrum(),patchBandReq.getDrumComment(),
                 patchBandReq.getChatRoomLink(), patchBandReq.getPerformDate(), patchBandReq.getPerformTime(), patchBandReq.getPerformLocation(), patchBandReq.getPerformFee(),patchBandReq.getBandImgUrl(), bandIdx };
