@@ -2,6 +2,7 @@ package com.example.demo.src.pofol;
 
 
 import com.example.demo.src.pofol.model.*;
+import com.example.demo.src.user.model.GetUserNotiInfoRes;
 import com.example.demo.src.user.model.PatchUserReq;
 import com.example.demo.src.user.model.PostUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -366,6 +367,45 @@ public class PofolDao {
 
         return this.jdbcTemplate.update(deleteCommentQuery, deleteCommentParams);
 
+    }
+
+    /**
+     * 댓글 작성자의 정보 얻기
+     */
+    public GetComNotiInfoRes Noti(int pofolCommentIdx){
+        String getInfoQuery = "SELECT pc.pofolCommentIdx as pofolCommentIdx,\n" +
+                "                pc.pofolIdx as pofolIdx,\n" +
+                "                pc.userIdx as userIdx,\n" +
+                "                u.nickName as nickName,\n" +
+                "                u.profileImgUrl as profileImgUrl,\n" +
+                "                p.title as pofolTitle\n" +
+                "FROM PofolComment as pc\n" +
+                "                join User as u on u.userIdx = pc.userIdx\n" +
+                "left join Pofol as p on p.pofolIdx = pc.pofolIdx\n" +
+                "                WHERE pc.pofolCommentIdx = ? and pc.status = 'ACTIVE'\n" +
+                "                group by pc.pofolCommentIdx order by pc.pofolCommentIdx";
+        int getInfoParams = pofolCommentIdx;
+        return this.jdbcTemplate.queryForObject(getInfoQuery,
+                (rs, rowNum) -> new GetComNotiInfoRes(
+                        rs.getInt("pofolCommentIdx"),
+                        rs.getInt("pofolIdx"),
+                        rs.getInt("userIdx"),
+                        rs.getString("nickName"),
+                        rs.getString("profileImgUrl"),
+                        rs.getString("pofolTitle")
+                ),
+                getInfoParams);
+    }
+
+    /**
+     * 알림 테이블에 추가
+     */
+    public void CommentNoti(GetComNotiInfoRes getComNotiInfoRes, int userIdx){
+        String updateComNotiQuery = "INSERT INTO Notice(receiverIdx, image, head, body) VALUES (?,?,?,?)";
+        Object[] updateComNotiParams = new Object[]{userIdx, getComNotiInfoRes.getProfileImgUrl(),"포트폴리오 댓글",
+                getComNotiInfoRes.getNickName()+"님이 "+ getComNotiInfoRes.getPofolTitle()+"에 댓글을 남기셨습니다."};
+
+        this.jdbcTemplate.update(updateComNotiQuery, updateComNotiParams);
     }
 
 }

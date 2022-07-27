@@ -3,6 +3,7 @@ package com.example.demo.src.pofol;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.pofol.model.*;
 //import com.example.demo.utils.AES128;
+import com.example.demo.src.user.model.GetUserNotiInfoRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -157,9 +158,12 @@ public class PofolService {
 
         try{
             int pofolCommentIdx = pofolDao.insertComment(pofolIdx, userIdx, postCommentReq);
+            //포트폴리오 댓글의 정보 얻기
+            GetComNotiInfoRes getComNotiInfoRes=pofolDao.Noti(pofolCommentIdx);
+            //알림 테이블에 추가
+            pofolDao.CommentNoti(getComNotiInfoRes, userIdx);
             return pofolCommentIdx;
         } catch (Exception exception) {
-
             throw new BaseException(DATABASE_ERROR);
         }
     }
