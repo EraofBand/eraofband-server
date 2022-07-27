@@ -108,20 +108,20 @@ com/example/demo/src/session/model/PostApplyReq.java
  com.example.demo.src.session.model.PostApplyReq
 com/example/demo/src/lesson/model/GetLikesLessonRes.java
  com.example.demo.src.lesson.model.GetLikesLessonRes
-com/example/demo/src/session/SessionController.java
- com.example.demo.src.session.SessionController
-com/example/demo/src/session/SessionDao.java
- com.example.demo.src.session.SessionDao
+com/example/demo/src/lesson/model/GetLessonRes.java
+ com.example.demo.src.lesson.model.GetLessonRes
+com/example/demo/src/lesson/LessonController.java
+ com.example.demo.src.lesson.LessonController
 com/example/demo/src/pofol/model/PatchPofolReq.java
  com.example.demo.src.pofol.model.PatchPofolReq
-com/example/demo/src/lesson/LessonDao.java
- com.example.demo.src.lesson.LessonDao
+com/example/demo/src/pofol/PofolDao.java
+ com.example.demo.src.pofol.PofolDao
 com/example/demo/src/search/SearchService.java
  com.example.demo.src.search.SearchService
 com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
-com/example/demo/src/lesson/LessonService.java
- com.example.demo.src.lesson.LessonService
+com/example/demo/src/pofol/PofolService.java
+ com.example.demo.src.pofol.PofolService
 com/example/demo/src/search/SearchProvider.java
  com.example.demo.src.search.SearchProvider
 com/example/demo/src/pofol/model/PostCommentReq.java
@@ -130,24 +130,24 @@ com/example/demo/src/pofol/model/GetCommentRes.java
  com.example.demo.src.pofol.model.GetCommentRes
 com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
-com/example/demo/src/session/SessionProvider.java
- com.example.demo.src.session.SessionProvider
+com/example/demo/src/lesson/LessonDao.java
+ com.example.demo.src.lesson.LessonDao
 com/example/demo/src/session/model/GetSessionMemRes.java
  com.example.demo.src.session.model.GetSessionMemRes
-com/example/demo/src/lesson/model/GetLessonRes.java
- com.example.demo.src.lesson.model.GetLessonRes
+com/example/demo/src/pofol/PofolProvider.java
+ com.example.demo.src.pofol.PofolProvider
 com/example/demo/src/session/model/GetSessionAppRes.java
  com.example.demo.src.session.model.GetSessionAppRes
 com/example/demo/src/user/UserProvider.java
  com.example.demo.src.user.UserProvider
-com/example/demo/src/session/SessionService.java
- com.example.demo.src.session.SessionService
+com/example/demo/src/lesson/LessonService.java
+ com.example.demo.src.lesson.LessonService
 com/example/demo/src/pofol/model/GetPofolRes.java
  com.example.demo.src.pofol.model.GetPofolRes
 com/example/demo/src/pofol/model/PostPofolReq.java
  com.example.demo.src.pofol.model.PostPofolReq
-com/example/demo/src/session/model/GetBandRes.java
- com.example.demo.src.session.model.GetBandRes
+com/example/demo/src/lesson/LessonProvider.java
+ com.example.demo.src.lesson.LessonProvider
 com/example/demo/src/search/SearchDao.java
  com.example.demo.src.search.SearchDao
 com/example/demo/src/user/model/PostUserRes.java
@@ -164,17 +164,17 @@ com/example/demo/src/lesson/model/PatchLessonReq.java
  com.example.demo.src.lesson.model.PatchLessonReq
 com/example/demo/src/search/SearchController.java
  com.example.demo.src.search.SearchController
-com/example/demo/src/lesson/LessonProvider.java
- com.example.demo.src.lesson.LessonProvider
-com/example/demo/src/user/UserService.java
- com.example.demo.src.user.UserService
-com/example/demo/src/pofol/PofolProvider.java
- com.example.demo.src.pofol.PofolProvider
 com/example/demo/src/pofol/PofolController.java
  com.example.demo.src.pofol.PofolController
-com/example/demo/src/pofol/PofolService.java
- com.example.demo.src.pofol.PofolService
-com/example/demo/src/lesson/LessonController.java
- com.example.demo.src.lesson.LessonController
-com/example/demo/src/pofol/PofolDao.java
- com.example.demo.src.pofol.PofolDao
+com/example/demo/src/user/UserService.java
+ com.example.demo.src.user.UserService
+com/example/demo/src/session/SessionController.java
+ com.example.demo.src.session.SessionController
+com/example/demo/src/session/SessionDao.java
+ com.example.demo.src.session.SessionDao
+com/example/demo/src/session/SessionService.java
+ com.example.demo.src.session.SessionService
+com/example/demo/src/session/model/GetBandRes.java
+ com.example.demo.src.session.model.GetBandRes
+com/example/demo/src/session/SessionProvider.java
+ com.example.demo.src.session.SessionProvider

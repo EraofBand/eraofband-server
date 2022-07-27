@@ -149,13 +149,14 @@ public class SessionDao {
      * */
     public GetBandRes getMyBandByIdx(int bandIdx, List<GetSessionMemRes> sessionMembers, List<GetSessionAppRes> applicants){
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
+                "       u.profileImgUrl as profileImgUrl, u.introduction as userIntroduction,\n"+
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
                 "       b.bandRegion as bandRegion, b.bandContent as bandContent, b.mySession as mySession,\n" +
                 "       b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal, vocalComment, b.guitar-IF(b1.guitarCount is null, 0, b1.guitarCount) as guitar, guitarComment, b.base-IF(b2.baseCount is null, 0, b2.baseCount) as base,\n" +
                 "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
                 "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl\n" +
-                "FROM Band as b JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = b.userIdx\n" +
+                "FROM Band as b JOIN (SELECT userIdx, nickName, profileImgUrl, introduction FROM User) u on u.userIdx = b.userIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as guitarCount from BandUser where status='ACTIVE' and buSession=1 group by bandIdx) b1 on b1.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as baseCount from BandUser where status='ACTIVE' and buSession=2 group by bandIdx) b2 on b2.bandIdx=b.bandIdx\n" +
@@ -168,6 +169,8 @@ public class SessionDao {
                                                         rs.getInt("bandIdx"),
                                                         rs.getInt("userIdx"),
                                                         rs.getString("nickName"),
+                                                        rs.getString("profileImgUrl"),
+                                                        rs.getString("userIntroduction"),
                                                         rs.getString("bandTitle"),
                                                         rs.getString("bandIntroduction"),
                                                         rs.getString("bandRegion"),
@@ -199,13 +202,14 @@ public class SessionDao {
      * */
     public GetBandRes getSessionBandByIdx(int bandIdx,  List<GetSessionMemRes> sessionMembers){
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
+                "       u.profileImgUrl as profileImgUrl, u.introduction as userIntroduction,\n"+
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
                 "       b.bandRegion as bandRegion, b.bandContent as bandContent,b.mySession as mySession,\n" +
                 "       b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal, vocalComment, b.guitar-IF(b1.guitarCount is null, 0, b1.guitarCount) as guitar, guitarComment, b.base-IF(b2.baseCount is null, 0, b2.baseCount) as base,\n" +
                 "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
                 "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee,b.bandImgUrl as bandImgUrl\n" +
-                "FROM Band as b JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = b.userIdx\n" +
+                "FROM Band as b JOIN (SELECT userIdx, nickName, profileImgUrl, introduction FROM User) u on u.userIdx = b.userIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as guitarCount from BandUser where status='ACTIVE' and buSession=1 group by bandIdx) b1 on b1.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as baseCount from BandUser where status='ACTIVE' and buSession=2 group by bandIdx) b2 on b2.bandIdx=b.bandIdx\n" +
@@ -218,6 +222,8 @@ public class SessionDao {
                                                         rs.getInt("bandIdx"),
                                                         rs.getInt("userIdx"),
                                                         rs.getString("nickName"),
+                                                        rs.getString("profileImgUrl"),
+                                                        rs.getString("userIntroduction"),
                                                         rs.getString("bandTitle"),
                                                         rs.getString("bandIntroduction"),
                                                         rs.getString("bandRegion"),
@@ -249,13 +255,14 @@ public class SessionDao {
      * */
     public GetBandRes getBandByIdx(int bandIdx,  List<GetSessionMemRes> sessionMembers){
         String getBandByIdxQuery = "SELECT b.bandIdx as bandIdx, b.userIdx as userIdx, u.nickName as nickName,\n" +
+                "       u.profileImgUrl as profileImgUrl, u.introduction as userIntroduction,\n"+
                 "       b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
                 "       b.bandRegion as bandRegion, b.bandContent as bandContent, b.mySession as mySession,\n" +
                 "       b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal, vocalComment, b.guitar-IF(b1.guitarCount is null, 0, b1.guitarCount) as guitar, guitarComment, b.base-IF(b2.baseCount is null, 0, b2.baseCount) as base,\n" +
                 "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
                 "       b.performDate as performDate,  b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl\n" +
-                "FROM Band as b JOIN (SELECT userIdx, nickName FROM User) u on u.userIdx = b.userIdx\n" +
+                "FROM Band as b JOIN (SELECT userIdx, nickName, profileImgUrl, introduction FROM User) u on u.userIdx = b.userIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as guitarCount from BandUser where status='ACTIVE' and buSession=1 group by bandIdx) b1 on b1.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as baseCount from BandUser where status='ACTIVE' and buSession=2 group by bandIdx) b2 on b2.bandIdx=b.bandIdx\n" +
@@ -268,6 +275,8 @@ public class SessionDao {
                                                         rs.getInt("bandIdx"),
                                                         rs.getInt("userIdx"),
                                                         rs.getString("nickName"),
+                                                        rs.getString("profileImgUrl"),
+                                                        rs.getString("userIntroduction"),
                                                         rs.getString("bandTitle"),
                                                         rs.getString("bandIntroduction"),
                                                         rs.getString("bandRegion"),
