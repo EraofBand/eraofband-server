@@ -8,9 +8,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetComNotiInfoRes {
     private int pofolCommentIdx;
+    private int reciverIdx;
     private int pofolIdx;
     private int userIdx;
     private String nickName;
     private String profileImgUrl;
     private String pofolTitle;
+
 }
