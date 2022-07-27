@@ -64,7 +64,7 @@ public class LessonController {
     @PostMapping("") // (post) https://eraofband.shop/lessons
     @ApiOperation(value = "레슨 생성 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<PostLessonRes> createLesson(@RequestBody PostLessonReq postLessonReq) {
-        if(postLessonReq.getLessonTitle() == null){
+        if(postLessonReq.getLessonTitle() == ""){
             return new BaseResponse<>(POST_BANDS_EMPTY_CONTENTS);
         }
         if(postLessonReq.getLessonTitle().length()>40){
