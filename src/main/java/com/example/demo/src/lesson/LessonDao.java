@@ -144,6 +144,7 @@ public class LessonDao {
     public GetLessonRes getLessonMemberByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
         String getLessonMemberByIdxQuery = "\n" +
                 "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
+                "                   u.profileImgUrl as profileImgUrl, u.introduction as userIntroduction,\n "+
                 "                   l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
                 "                   l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.lessonSession as lessonSession,\n" +
                 "                   l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl,\n" +
@@ -163,6 +164,8 @@ public class LessonDao {
                         rs.getInt("lessonIdx"),
                         rs.getInt("userIdx"),
                         rs.getString("nickName"),
+                        rs.getString("profileImgUrl"),
+                        rs.getString("userIntroduction"),
                         rs.getString("lessonTitle"),
                         rs.getString("lessonIntroduction"),
                         rs.getString("lessonRegion"),
@@ -186,6 +189,7 @@ public class LessonDao {
      * */
     public GetLessonRes getLessonByIdx(int lessonIdx, List<GetMemberRes> lessonMembers){
         String getLessonByIdxQuery = "SELECT l.lessonIdx as lessonIdx, l.userIdx as userIdx, u.nickName as nickName,\n" +
+                "                       u.profileImgUrl as profileImgUrl, u.introduction as userIntroduction,\n "+
                 "                       l.lessonTitle as lessonTitle, l.lessonIntroduction as lessonIntroduction,\n" +
                 "                       l.lessonRegion as lessonRegion, l.lessonContent as lessonContent, l.lessonSession as lessonSession,\n" +
                 "                       l.lessonImgUrl as lessonImgUrl,\n" +
@@ -206,6 +210,8 @@ public class LessonDao {
                         rs.getInt("lessonIdx"),
                         rs.getInt("userIdx"),
                         rs.getString("nickName"),
+                        rs.getString("profileImgUrl"),
+                        rs.getString("userIntroduction"),
                         rs.getString("lessonTitle"),
                         rs.getString("lessonIntroduction"),
                         rs.getString("lessonRegion"),
