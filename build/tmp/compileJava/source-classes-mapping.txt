@@ -26,6 +26,8 @@ com/example/demo/src/lesson/model/PostLessonRes.java
  com.example.demo.src.lesson.model.PostLessonRes
 com/example/demo/src/session/model/PostApplyRes.java
  com.example.demo.src.session.model.PostApplyRes
+com/example/demo/src/user/model/GetUserNotiInfoRes.java
+ com.example.demo.src.user.model.GetUserNotiInfoRes
 com/example/demo/src/session/model/GetNewBandRes.java
  com.example.demo.src.session.model.GetNewBandRes
 com/example/demo/src/session/SessionService.java
