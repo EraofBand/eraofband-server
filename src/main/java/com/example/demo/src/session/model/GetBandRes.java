@@ -13,6 +13,8 @@ public class GetBandRes {
     private int bandIdx;
     private int userIdx;
     private String nickName;
+    private String profileImgUrl;
+    private String userIntroduction;
     private String bandTitle;
     private String bandIntroduction;
     private String bandRegion;
