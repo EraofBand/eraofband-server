@@ -116,6 +116,8 @@ com/example/demo/src/user/model/PostLoginRes.java
  com.example.demo.src.user.model.PostLoginRes
 com/example/demo/src/pofol/model/PostCommentReq.java
  com.example.demo.src.pofol.model.PostCommentReq
+com/example/demo/src/pofol/model/GetComNotiInfoRes.java
+ com.example.demo.src.pofol.model.GetComNotiInfoRes
 com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
 com/example/demo/src/session/model/PostBandLikeRes.java
