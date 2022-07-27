@@ -40,6 +40,8 @@ public class GetBandRes {
     private String performLocation;
     private int performFee;
     private String bandImgUrl;
+    private int capacity;
+    private int memberCount;
 
     private List<GetSessionAppRes> applicants;
 
