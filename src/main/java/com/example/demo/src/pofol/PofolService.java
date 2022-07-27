@@ -30,8 +30,9 @@ public class PofolService {
 
     }
 
-
-    // 포트폴리오 생성
+    /**
+     * 포트폴리오 생성
+     */
     public PostPofolRes createPofol(int userIdx, PostPofolReq postPofolReq) throws BaseException {
 
         try{
@@ -43,9 +44,9 @@ public class PofolService {
         }
     }
 
-
-
-    // 포트폴리오 수정
+    /**
+     * 포트폴리오 수정
+     */
     public void modifyPofol(int userIdx, int pofolIdx, PatchPofolReq patchPofolReq) throws BaseException {
 
         if(pofolProvider.checkUserExist(userIdx) == 0){
@@ -66,9 +67,9 @@ public class PofolService {
         }
     }
 
-
-
-    // 포트폴리오 삭제
+    /**
+     * 포트폴리오 삭제
+     */
     public void deletePofol(int userIdx,int pofolIdx) throws BaseException {
 
         if(pofolProvider.checkPofolExist(pofolIdx) ==0){
@@ -89,8 +90,9 @@ public class PofolService {
         }
     }
 
-
-    // 포트폴리오 좋아요
+    /**
+     * 포트폴리오 좋아요
+     */
     public PostLikeRes likesPofol(int userIdx, int pofolIdx) throws BaseException {
 
         if(pofolProvider.checkUserExist(userIdx) == 0){
@@ -113,9 +115,9 @@ public class PofolService {
 
     }
 
-
-
-    // 포트폴리오 좋아요 취소
+    /**
+     * 포트폴리오 좋아요 취소
+     */
     public void unlikesPofol(int userIdx, int pofolIdx) throws BaseException {
 
         if(pofolProvider.checkUserExist(userIdx) == 0){
@@ -134,8 +136,6 @@ public class PofolService {
             throw new BaseException(DATABASE_ERROR);
         }
 
-
-
     }
 
 //    // 댓글 등록
@@ -150,8 +150,9 @@ public class PofolService {
 //        }
 //    }
 
-
-    // 댓글 등록
+    /**
+     * 댓글 등록
+     */
     public int createComment(int pofolIdx, int userIdx, PostCommentReq postCommentReq) throws BaseException {
 
         try{
@@ -163,9 +164,9 @@ public class PofolService {
         }
     }
 
-
-
-    // 댓글 삭제
+    /**
+     * 댓글 삭제
+     */
     public void deleteComment(int userIdx, int pofolCommentIdx) throws BaseException {
 
         if(pofolProvider.checkCommentExist(pofolCommentIdx) == 0){
@@ -186,8 +187,5 @@ public class PofolService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
-
-
 
 }
