@@ -26,6 +26,8 @@ com/example/demo/src/lesson/model/PostLessonRes.java
  com.example.demo.src.lesson.model.PostLessonRes
 com/example/demo/src/session/model/PostApplyRes.java
  com.example.demo.src.session.model.PostApplyRes
+com/example/demo/src/user/model/GetUserNotiInfoRes.java
+ com.example.demo.src.user.model.GetUserNotiInfoRes
 com/example/demo/src/session/model/GetNewBandRes.java
  com.example.demo.src.session.model.GetNewBandRes
 com/example/demo/src/session/SessionService.java
@@ -64,8 +66,6 @@ com/example/demo/src/S33/UploadService.java
  com.example.demo.src.S33.UploadService
 com/example/demo/src/user/model/GetMyFeedRes.java
  com.example.demo.src.user.model.GetMyFeedRes
-com/example/demo/src/session/model/GetSessionRes.java
- com.example.demo.src.session.model.GetSessionRes
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
 com/example/demo/src/user/model/GetUserInfoRes.java
@@ -108,8 +108,6 @@ com/example/demo/src/session/model/PostApplyReq.java
  com.example.demo.src.session.model.PostApplyReq
 com/example/demo/src/search/model/GetSearchLesRes.java
  com.example.demo.src.search.model.GetSearchLesRes
-com/example/demo/src/search/model/GetInfoSearchRes.java
- com.example.demo.src.search.model.GetInfoSearchRes
 com/example/demo/src/search/SearchProvider.java
  com.example.demo.src.search.SearchProvider
 com/example/demo/src/user/model/GetMyInfoRes.java
@@ -118,12 +116,16 @@ com/example/demo/src/user/model/PostLoginRes.java
  com.example.demo.src.user.model.PostLoginRes
 com/example/demo/src/pofol/model/PostCommentReq.java
  com.example.demo.src.pofol.model.PostCommentReq
+com/example/demo/src/pofol/model/GetComNotiInfoRes.java
+ com.example.demo.src.pofol.model.GetComNotiInfoRes
 com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
 com/example/demo/src/session/model/PostBandLikeRes.java
  com.example.demo.src.session.model.PostBandLikeRes
 com/example/demo/src/user/model/PatchUserReq.java
  com.example.demo.src.user.model.PatchUserReq
+com/example/demo/src/session/model/GetSessionMemRes.java
+ com.example.demo.src.session.model.GetSessionMemRes
 com/example/demo/src/session/model/DeleteBandReq.java
  com.example.demo.src.session.model.DeleteBandReq
 com/example/demo/src/WebSecurityConfig.java
@@ -136,6 +138,8 @@ com/example/demo/src/lesson/model/GetLessonRes.java
  com.example.demo.src.lesson.model.GetLessonRes
 com/example/demo/src/pofol/model/PostPofolRes.java
  com.example.demo.src.pofol.model.PostPofolRes
+com/example/demo/src/session/model/GetSessionAppRes.java
+ com.example.demo.src.session.model.GetSessionAppRes
 com/example/demo/src/pofol/PofolProvider.java
  com.example.demo.src.pofol.PofolProvider
 com/example/demo/src/S33/S3Component.java

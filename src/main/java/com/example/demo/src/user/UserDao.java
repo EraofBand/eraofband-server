@@ -250,6 +250,31 @@ public class UserDao {
     }
 
     /**
+     * 팔로우 요청자의 정보 얻기
+     */
+    public GetUserNotiInfoRes Noti(int myIdx){
+        String getInfoQuery = "select userIdx, nickName, profileImgUrl from User where userIdx=? and status='ACTIVE'";
+        int getInfoParams = myIdx;
+        return this.jdbcTemplate.queryForObject(getInfoQuery,
+                (rs, rowNum) -> new GetUserNotiInfoRes(
+                        rs.getInt("userIdx"),
+                        rs.getString("nickName"),
+                        rs.getString("profileImgUrl")),
+                getInfoParams);
+    }
+
+    /**
+     * 알림 테이블에 추가
+     */
+    public void followNoti(GetUserNotiInfoRes getUserNotiInfoRes, int userIdx){
+        String updateFollowNotiQuery = "INSERT INTO Notice(receiverIdx, image, head, body) VALUES (?,?,?,?)";
+        Object[] updateFollowNotiParams = new Object[]{userIdx, getUserNotiInfoRes.getProfileImgUrl(),"팔로우",
+        getUserNotiInfoRes.getNickName()+"님이 회원님을 팔로우 했습니다."};
+
+        this.jdbcTemplate.update(updateFollowNotiQuery, updateFollowNotiParams);
+    }
+
+    /**
      * 팔로우 취소하기
      */
     public int updateUnFollow(int myIdx, int userIdx) {

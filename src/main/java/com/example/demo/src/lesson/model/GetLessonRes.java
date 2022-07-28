@@ -13,6 +13,8 @@ public class GetLessonRes {
     private int lessonIdx;
     private int userIdx;
     private String nickName;
+    private String profileImgUrl;
+    private String userIntroduction;
     private String lessonTitle;
     private String lessonIntroduction;
     private String lessonRegion;

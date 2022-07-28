@@ -25,10 +25,9 @@ public class SearchDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-
     /**
      * 상단바 유저 검색
-     * */
+     */
     public List<GetSearchUserRes> getSearchUser(String search){
         String getSearchUserQuery = "\n"+
                 "select u.userIdx as userIdx, u.nickName as nickName,u.profileImgUrl as profileImgUrl,u.userSession as userSession\n" +
@@ -51,7 +50,7 @@ public class SearchDao {
 
     /**
      * 상단바 밴드 검색
-     * */
+     */
     public List<GetSearchBandRes> getSearchBand(String search){
 
         String getSearchBandQuery = "\n"+
@@ -81,7 +80,7 @@ public class SearchDao {
 
     /**
      * 상단바 레슨 검색
-     * */
+     */
     public List<GetSearchLesRes> getSearchLes(String search){
 
         String getSearchLessonQuery = "\n"+

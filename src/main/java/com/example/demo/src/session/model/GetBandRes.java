@@ -13,11 +13,12 @@ public class GetBandRes {
     private int bandIdx;
     private int userIdx;
     private String nickName;
+    private String profileImgUrl;
+    private String userIntroduction;
     private String bandTitle;
     private String bandIntroduction;
     private String bandRegion;
     private String bandContent;
-    private int mySession;
 
     private int vocal;
     private String vocalComment;
@@ -38,6 +39,10 @@ public class GetBandRes {
     private String performLocation;
     private int performFee;
     private String bandImgUrl;
+    private String likeOrNot;
+    private int bandLikeCount;
+    private int capacity;
+    private int memberCount;
 
     private List<GetSessionAppRes> applicants;
 
