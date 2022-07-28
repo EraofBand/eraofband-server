@@ -93,19 +93,19 @@ public class SessionProvider {
             //밴드 생성자일 경우
             if (checkBandMaker(bandIdx) == userIdx) {
                 getApplicants = getApplicants(bandIdx);
-                GetBandRes getBandRes = sessionDao.getMyBandByIdx(bandIdx, getSessionMembers, getApplicants);
+                GetBandRes getBandRes = sessionDao.getMyBandByIdx(userIdx,bandIdx, getSessionMembers, getApplicants);
 
                 return getBandRes;
             }
             //밴드 멤버일 경우
             else if (checkBandSession(userIdx, bandIdx) == 1) {
-                GetBandRes getBandRes = sessionDao.getSessionBandByIdx(bandIdx, getSessionMembers);
+                GetBandRes getBandRes = sessionDao.getSessionBandByIdx(userIdx,bandIdx, getSessionMembers);
 
                 return getBandRes;
             }
             //밴드 외부 유저일 경우
             else {
-                GetBandRes getBandRes = sessionDao.getBandByIdx(bandIdx, getSessionMembers);
+                GetBandRes getBandRes = sessionDao.getBandByIdx(userIdx, bandIdx, getSessionMembers);
 
                 return getBandRes;
             }

@@ -42,7 +42,6 @@ public class SearchProvider {
 
     }
 
-
     /**
      * 상단바 밴드 검색
      */
@@ -58,7 +57,6 @@ public class SearchProvider {
         }
 
     }
-
 
     /**
      * 상단바 레슨 검색

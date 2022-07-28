@@ -74,11 +74,11 @@ public class LessonProvider {
         try {
             getLessonMembers = getLessonMembers(lessonIdx);
             if (checkLessonSession(userIdx, lessonIdx) == 1 || checkLessonMaker(lessonIdx) == userIdx) {
-                GetLessonRes getLessonRes = lessonDao.getLessonMemberByIdx(lessonIdx, getLessonMembers);
+                GetLessonRes getLessonRes = lessonDao.getLessonMemberByIdx(userIdx, lessonIdx, getLessonMembers);
 
                 return getLessonRes;
             } else {
-                GetLessonRes getLessonRes = lessonDao.getLessonByIdx(lessonIdx, getLessonMembers);
+                GetLessonRes getLessonRes = lessonDao.getLessonByIdx(userIdx, lessonIdx, getLessonMembers);
 
                 return getLessonRes;
             }

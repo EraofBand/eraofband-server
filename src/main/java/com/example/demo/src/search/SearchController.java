@@ -31,7 +31,6 @@ public class SearchController {
         this.jwtService = jwtService;
     }
 
-
     /**
      * 상단바 유저 검색 API
      * [GET] /search/users/{keyword}
@@ -52,7 +51,6 @@ public class SearchController {
         }
     }
 
-
     /**
      * 상단바 밴드 검색 API
      * [GET] /search/bands/{keyword}
@@ -72,8 +70,6 @@ public class SearchController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
-
-
 
     /**
      * 상단바 레슨 검색 API
