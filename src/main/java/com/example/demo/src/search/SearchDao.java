@@ -25,9 +25,6 @@ public class SearchDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-
-
-
     /**
      * 상단바 유저 검색
      */
@@ -50,7 +47,6 @@ public class SearchDao {
                 getSearchUserParams);
 
     }
-
 
     /**
      * 상단바 밴드 검색
@@ -80,10 +76,7 @@ public class SearchDao {
                         rs.getInt("memberCount")),
                 getSearchBandParams);
 
-
     }
-
-
 
     /**
      * 상단바 레슨 검색
@@ -112,7 +105,6 @@ public class SearchDao {
                         rs.getInt("capacity"),
                         rs.getInt("memberCount")),
                 getSearchLessonParams);
-
 
     }
 
