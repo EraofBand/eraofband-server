@@ -26,7 +26,9 @@ public class SearchProvider {
 
     }
 
-    // 상단바 유저 검색
+    /**
+     * 상단바 유저 검색
+     */
     public List<GetSearchUserRes> getSearchUser(String keyword) throws BaseException {
 
         try {
@@ -40,8 +42,9 @@ public class SearchProvider {
 
     }
 
-
-    // 상단바 밴드 검색
+    /**
+     * 상단바 밴드 검색
+     */
     public List<GetSearchBandRes> getSearchBand(String keyword) throws BaseException {
 
         try {
@@ -55,8 +58,9 @@ public class SearchProvider {
 
     }
 
-
-    // 상단바 레슨 검색
+    /**
+     * 상단바 레슨 검색
+     */
     public List<GetSearchLesRes> getSearchLes(String keyword) throws BaseException {
 
         try {
