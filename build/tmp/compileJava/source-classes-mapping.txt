@@ -170,6 +170,8 @@ com/example/demo/src/search/SearchController.java
  com.example.demo.src.search.SearchController
 com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
+com/example/demo/src/session/model/GetBandNotiInfoRes.java
+ com.example.demo.src.session.model.GetBandNotiInfoRes
 com/example/demo/src/pofol/model/PostPofolReq.java
  com.example.demo.src.pofol.model.PostPofolReq
 com/example/demo/DemoApplication.java

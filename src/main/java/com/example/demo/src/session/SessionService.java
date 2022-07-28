@@ -2,6 +2,7 @@ package com.example.demo.src.session;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.lesson.model.PostLesLikeRes;
+import com.example.demo.src.pofol.model.GetComNotiInfoRes;
 import com.example.demo.src.session.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,11 @@ public class SessionService {
 
         try{
             int bandUserIdx = sessionDao.insertApply(userIdx, bandIdx, postApplyReq);
+
+            //밴드 지원 유저의 정보 얻기
+            GetBandNotiInfoRes getBandNotiInfoRes=sessionDao.Noti(bandUserIdx);
+            //알림 테이블에 추가
+            sessionDao.BandNoti(getBandNotiInfoRes);
             return new PostApplyRes(bandUserIdx);
         } catch (Exception exception) {
             System.out.println(exception);
