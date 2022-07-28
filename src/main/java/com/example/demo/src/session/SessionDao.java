@@ -1,5 +1,6 @@
 package com.example.demo.src.session;
 
+import com.example.demo.src.pofol.model.GetComNotiInfoRes;
 import com.example.demo.src.session.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -71,6 +72,47 @@ public class SessionDao {
                                                rs.getString("bandImgUrl")
                                        ),
                                        getNewBandParams);
+    }
+
+
+    /**
+     * 밴드 지원 유저의 정보 얻기
+     */
+    public GetBandNotiInfoRes Noti(int bandUserIdx){
+        String getBandInfoQuery = "SELECT bu.bandUserIdx as bandUserIdx,\n" +
+                "       bu.userIdx as userIdx,\n" +
+                "       b.userIdx as reciverIdx,\n" +
+                "       b.bandIdx as bandIdx,\n" +
+                "       u.nickName as nickName,\n" +
+                "       u.profileImgUrl as profileImgUrl,\n" +
+                "       b.bandTitle as bandTitle\n" +
+                "FROM BandUser as bu\n" +
+                "join User as u on u.userIdx = bu.userIdx\n" +
+                "left join Band as b  on bu.bandIdx = b.bandIdx\n" +
+                "WHERE bu.bandUserIdx = ? and b.status = 'ACTIVE'\n" +
+                "group by bu.bandUserIdx order by bu.bandUserIdx";
+        int getBandInfoParams = bandUserIdx;
+        return this.jdbcTemplate.queryForObject(getBandInfoQuery,
+                (rs, rowNum) -> new GetBandNotiInfoRes(
+                        rs.getInt("userIdx"),
+                        rs.getInt("reciverIdx"),
+                        rs.getInt("bandIdx"),
+                        rs.getString("nickName"),
+                        rs.getString("profileImgUrl"),
+                        rs.getString("bandTitle")
+                ),
+                getBandInfoParams);
+    }
+
+    /**
+     * 알림 테이블에 추가
+     */
+    public void BandNoti(GetBandNotiInfoRes getBandNotiInfoRes){
+        String updateBandNotiQuery = "INSERT INTO Notice(receiverIdx, image, head, body) VALUES (?,?,?,?)";
+        Object[] updateBandNotiParams = new Object[]{getBandNotiInfoRes.getReciverIdx(), getBandNotiInfoRes.getProfileImgUrl(),"밴드 지원",
+                getBandNotiInfoRes.getNickName()+"님이 회원님의 "+ getBandNotiInfoRes.getBandTitle()+"에 지원하셨습니다."};
+
+        this.jdbcTemplate.update(updateBandNotiQuery, updateBandNotiParams);
     }
 
     /**
@@ -512,4 +554,6 @@ public class SessionDao {
                         rs.getInt("memberCount")),
                 getInfoBandParams);
     }
+
+
 }
