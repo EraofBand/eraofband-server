@@ -347,7 +347,7 @@ public class SessionController {
             @ApiImplicitParam(name="band-region", value="밴드 지역(서울, 경기도, 전체)", required = true),
             @ApiImplicitParam(name="band-session", value="밴드 세션(0, 1, 2, 3, 4, 5)", required = true)
     })
-    public BaseResponse<List<GetInfoBandRes>> getInfoBand(@PathVariable("band-region") String region, @PathVariable("band-session") String session){
+    public BaseResponse<List<GetInfoBandRes>> getInfoBand(@PathVariable("band-region") String region, @PathVariable("band-session") int session){
         try{
 
             List<GetInfoBandRes> getInfoBandRes = sessionProvider.getInfoBand(region, session);
