@@ -203,7 +203,7 @@ public class LessonDao {
                 "                   l.chatRoomLink as chatRoomLink, l.lessonImgUrl as lessonImgUrl,\n" +
                 "                   IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity,\n" +
                 "                   IF(lessonLikeCount is null, 0, lessonLikeCount) as lessonLikeCount,\n" +
-                "                   IF(ll.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
+                "                   IF(ll.status = 'ACTIVE', 'Y', 'N') as likeOrNot, u.token as token\n" +
                 "                FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
                 "                   left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
                 "                   left join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n" +
@@ -230,7 +230,8 @@ public class LessonDao {
                         rs.getString("likeOrNot"),
                         rs.getInt("lessonLikeCount"),
                         rs.getInt("memberCount"),
-                        rs.getInt("capacity")
+                        rs.getInt("capacity"),
+                        rs.getString("token")
                 ),
                 getLessonMemberByIdxParams);
     }
@@ -248,7 +249,7 @@ public class LessonDao {
                 "                       l.lessonImgUrl as lessonImgUrl,\n" +
                 "                       IF(memberCount is null, 0, memberCount) as memberCount, l.capacity as capacity,\n" +
                 "                       IF(lessonLikeCount is null, 0, lessonLikeCount) as lessonLikeCount,\n" +
-                "                       IF(ll.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
+                "                       IF(ll.status = 'ACTIVE', 'Y', 'N') as likeOrNot, u.token as token\n" +
                 "                       FROM Lesson as l JOIN User as u on u.userIdx = l.userIdx\n" +
                 "                       LEFT join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
                 "                       LEFT join (select lessonIdx, userIdx, count(lessonLikeIdx) as lessonLikeCount from LessonLike WHERE status = 'ACTIVE' group by lessonIdx) plc on plc.lessonIdx = l.lessonIdx\n" +
@@ -276,7 +277,8 @@ public class LessonDao {
                         rs.getString("likeOrNot"),
                         rs.getInt("lessonLikeCount"),
                         rs.getInt("memberCount"),
-                        rs.getInt("capacity")
+                        rs.getInt("capacity"),
+                        rs.getString("token")
                 ),
                 getLessonByIdxParams);
     }

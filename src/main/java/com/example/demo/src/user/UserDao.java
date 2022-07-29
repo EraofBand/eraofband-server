@@ -24,7 +24,7 @@ public class UserDao {
      * */
     public GetUserInfoRes getUserByIdx(int myId,int userIdx){
         String getUsersByIdxQuery = "select u.userIdx as userIdx, u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.userSession as userSession,u.region as region," +
-                        "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount, follow as follow\n"+
+                        "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount, follow as follow, u.token as token\n"+
         "from User as u\n"+
             "left join (select userIdx, count(pofolIdx) as pofolCount from Pofol where status='ACTIVE' group by userIdx) p on p.userIdx=u.userIdx\n"+
             "left join (select followerIdx, count(followIdx) as followerCount from Follow where status='ACTIVE' group by followerIdx) fr on fr.followerIdx=u.userIdx\n"+
@@ -45,7 +45,8 @@ public class UserDao {
                         rs.getInt("followerCount"),
                         rs.getInt("followeeCount"),
                         rs.getInt("pofolCount"),
-                        rs.getInt("follow")),
+                        rs.getInt("follow"),
+                        rs.getString("token")),
                 getUsersByIdxParams);
     }
 
