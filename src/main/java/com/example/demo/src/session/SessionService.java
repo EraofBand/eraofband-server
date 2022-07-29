@@ -107,7 +107,7 @@ public class SessionService {
         try{
             sessionDao.acceptSession(bandIdx, userIdx);
 
-            //밴드 리더의 정보 얻기
+            //밴드 정보와 지원자 정보 얻기
             GetSessionNotiInfoRes getSessionNotiInfoRes = sessionDao.SessionNoti(bandIdx, userIdx);
             //알림 테이블에 추가
             sessionDao.AcceptNoti(getSessionNotiInfoRes);
@@ -129,7 +129,7 @@ public class SessionService {
         try{
             sessionDao.rejectSession(bandIdx, userIdx);
 
-            //밴드 리더의 정보 얻기
+            //밴드 정보와 지원자 정보 얻기
             GetSessionNotiInfoRes getSessionNotiInfoRes = sessionDao.SessionNoti(bandIdx, userIdx);
             //알림 테이블에 추가
             sessionDao.RejectNoti(getSessionNotiInfoRes);

@@ -11,4 +11,5 @@ public class Users {
     private int userIdx;
     private String nickName;
     private String profileImgUrl;
+    private String token;
 }
