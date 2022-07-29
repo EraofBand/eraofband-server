@@ -548,32 +548,49 @@ public class SessionDao {
     /**
      * 지역-세션 분류 밴드 검색 조회
      * */
-    public List<GetInfoBandRes> getInfoBandRes(String region, String session){
+    public List<GetInfoBandRes> getInfoBandRes(String region, int session){
 
         String getInfoBandQuery="";
         Object[] getInfoBandParams=new Object[]{};
-        if (region.compareTo("전체") == 0 && session.compareTo("전체") == 0) {
-            getInfoBandParams = new Object[]{};
+        if (region.compareTo("전체") == 0 ) {
+            getInfoBandQuery = "\n"+
+                    "SELECT b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle,\n" +
+                    "                            b.bandIntroduction as bandIntroduction, b.bandRegion as bandRegion,\n" +
+                    "                            IF(memberCount is null, 0, memberCount) as memberCount, b.vocal + b.guitar + b.base + b.keyboard + b.drum + 1 as capacity\n" +
+                    "                            FROM Band as b\n" +
+                    "                            left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
+                    "                            WHERE b.status='ACTIVE' and\n" +
+                    "                                CASE ?\n" +
+                    "                                    WHEN 0 THEN b.vocal>0\n" +
+                    "                                    WHEN 1 THEN b.guitar>0\n" +
+                    "                                    WHEN 2 THEN b.base>0\n" +
+                    "                                    WHEN 3 THEN b.keyboard>0\n" +
+                    "                                    WHEN 4 THEN b.drum>0\n" +
+                    "                                    WHEN 5 THEN b.status='ACTIVE'\n" +
+                    "                                END\n" +
+                    "                            group by b.bandIdx\n" +
+                    "                            order by b.bandIdx;";
 
-        } else if (region.compareTo("전체") == 0 && session.compareTo("전체") != 0) {
             getInfoBandParams = new Object[]{session};
 
-        } else if (region.compareTo("전체") != 0 && session.compareTo("전체") == 0) {
-            getInfoBandParams = new Object[]{region};
-
-        } else if (region.compareTo("전체") != 0 && session.compareTo("전체") != 0) {
+        } else if (region.compareTo("전체") != 0) {
             getInfoBandQuery = "\n"+
-                    "SELECT b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle,"+
-                    "        b.bandIntroduction as bandIntroduction, b.bandRegion as bandRegion,"+
-                    "        IF(memberCount is null, 0, memberCount) as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity," +
-                    "        b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal"+
-                    "        FROM BandUser as bu\n"+
-                    "        JOIN Band as b on b.bandIdx=bu.bandIdx\n"+
-                    "        left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n"+
-                    "        left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
-                    "        WHERE b.status='ACTIVE' and bu.status='ACTIVE' and (SUBSTRING(b.bandRegion, 1, 2)) = ? and COLUMN_NAME =?\n" +
-                    "        group by b.bandIdx\n"+
-                    "        order by b.bandIdx";
+                    "SELECT b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle,\n" +
+                    "                            b.bandIntroduction as bandIntroduction, b.bandRegion as bandRegion,\n" +
+                    "                            IF(memberCount is null, 0, memberCount) as memberCount, b.vocal + b.guitar + b.base + b.keyboard + b.drum + 1 as capacity\n" +
+                    "                            FROM Band as b\n" +
+                    "                            left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
+                    "                            WHERE b.status='ACTIVE' and (SUBSTRING(b.bandRegion, 1, 2)) = ? and\n" +
+                    "                                CASE ?\n" +
+                    "                                    WHEN 0 THEN b.vocal>0\n" +
+                    "                                    WHEN 1 THEN b.guitar>0\n" +
+                    "                                    WHEN 2 THEN b.base>0\n" +
+                    "                                    WHEN 3 THEN b.keyboard>0\n" +
+                    "                                    WHEN 4 THEN b.drum>0\n" +
+                    "                                    WHEN 5 THEN b.status='ACTIVE'\n" +
+                    "                                END\n" +
+                    "                            group by b.bandIdx\n" +
+                    "                            order by b.bandIdx;";
             getInfoBandParams = new Object[]{region,session};
         }
         return this.jdbcTemplate.query(getInfoBandQuery,
