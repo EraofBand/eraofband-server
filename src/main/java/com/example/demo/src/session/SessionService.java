@@ -80,7 +80,6 @@ public class SessionService {
      * 밴드 지원
      * */
     public PostApplyRes applySession(int userIdx, int bandIdx, PostApplyReq postApplyReq) throws BaseException {
-
         try{
             int bandUserIdx = sessionDao.insertApply(userIdx, bandIdx, postApplyReq);
 
@@ -91,6 +90,24 @@ public class SessionService {
             return new PostApplyRes(bandUserIdx);
         } catch (Exception exception) {
             System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
+     *  밴드 탈퇴
+     * */
+    public void withdrawBand(int userIdx, int bandIdx) throws BaseException {
+
+        if(sessionProvider.checkBandExist(bandIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BAND_ID);
+        }
+        try{
+            int result = sessionDao.withdrawBand(userIdx, bandIdx);
+            if(result == 0){
+                throw new BaseException(WITHDRAW_FAIL_BAND);
+            }
+        } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }

@@ -43,6 +43,10 @@ public enum BaseResponseStatus {
     LIKES_FAIL_BAND(false,2029,"밴드 좋아요에 실패했습니다."),
     UNLIKES_FAIL_BAND(false,2023,"밴드 좋아요 취소에 실패했습니다."),
 
+    ALREADY_BAND(false, 2031, "이미 지원한 밴드입니다."),
+    NOT_BAND_MEMBER(false, 2034, "등록하지 않은 밴드입니다."),
+    WITHDRAW_FAIL_BAND(false,2036,"밴드 탈퇴에 실패했습니다."),
+
     // lesson
     DELETE_FAIL_LESSON(false,2019,"레슨 삭제에 실패했습니다."),
 
@@ -52,6 +56,12 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_LESSON(false,2019,"레슨 변경에 실패했습니다."),
 
     LIKES_FAIL_LESSON(false,2022,"레슨 좋아요에 실패했습니다."),
+
+    ALREADY_LESSON(false, 2032, "이미 지원한 레슨입니다."),
+
+    NOT_LESSON_MEMBER(false, 2033, "등록하지 않은 레슨입니다."),
+
+    WITHDRAW_FAIL_LESSON(false,2025,"레슨 탈퇴에 실패했습니다."),
 
     // pofol
     POSTS_EMPTY_POFOL_ID(false,2020,"포트폴리오 아이디 값을 확인해주세요."),

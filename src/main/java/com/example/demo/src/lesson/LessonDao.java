@@ -135,6 +135,18 @@ public class LessonDao {
         this.jdbcTemplate.update(updateLessonNotiQuery, updateLessonNotiParams);
     }
 
+
+    /**
+     *  레슨 탈퇴
+     * */
+    public int withdrawLesson(int userIdx, int lessonIdx) {
+        String updatewithdrawQuery = "DELETE FROM LessonUser WHERE userIdx = ? and lessonIdx = ?";
+        Object[] updatewithdrawParams = new Object[]{userIdx, lessonIdx};
+
+        return this.jdbcTemplate.update(updatewithdrawQuery, updatewithdrawParams);
+    }
+
+
     /**
      * 레슨 멤버 목록
      * */

@@ -102,6 +102,23 @@ public class LessonService {
     }
 
 
+    /**
+     *  레슨 탈퇴
+     * */
+    public void withdrawLesson(int userIdx, int lessonIdx) throws BaseException {
+
+        if(lessonProvider.checkLessonExist(lessonIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_LESSON_ID);
+        }
+        try{
+            int result = lessonDao.withdrawLesson(userIdx, lessonIdx);
+            if(result == 0){
+                throw new BaseException(WITHDRAW_FAIL_LESSON);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
 
     /**
@@ -128,15 +145,13 @@ public class LessonService {
     }
 
 
-
-
     /**
      *  레슨 좋아요 취소
      * */
     public void unlikesLesson(int userIdx, int lessonIdx) throws BaseException {
 
         if(lessonProvider.checkLessonExist(lessonIdx) == 0){
-            throw new BaseException(USERS_EMPTY_USER_ID);
+            throw new BaseException(POSTS_EMPTY_LESSON_ID);
         }
 
 
@@ -148,11 +163,5 @@ public class LessonService {
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
-
-
-
     }
-
-
-
 }

@@ -43,6 +43,17 @@ public class SessionDao {
     }
 
     /**
+     * 밴드 지원자 확인
+     */
+    public int checkBandApply(int userIdx, int bandIdx) {
+        String checkUserExistQuery = "SELECT exists(SELECT bandUserIdx FROM BandUser WHERE userIdx=? and bandIdx=? and status='WAIT')";
+        Object[] checkUserExistParams = new Object[]{userIdx, bandIdx};
+        return this.jdbcTemplate.queryForObject(checkUserExistQuery,
+                int.class,
+                checkUserExistParams);
+    }
+
+    /**
      * 밴드 존재 유무 확인
      */
     public int checkBandExist(int bandIdx) {
@@ -473,6 +484,16 @@ public class SessionDao {
 
         String lastInsertIdQuery = "SELECT last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    /**
+     *  밴드 탈퇴
+     * */
+    public int withdrawBand(int userIdx, int bandIdx) {
+        String updatewithdrawQuery = "DELETE FROM BandUser WHERE userIdx = ? and bandIdx = ?";
+        Object[] updatewithdrawParams = new Object[]{userIdx, bandIdx};
+
+        return this.jdbcTemplate.update(updatewithdrawQuery, updatewithdrawParams);
     }
 
     /**
