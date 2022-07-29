@@ -158,7 +158,7 @@ public class SessionProvider {
     /**
      * 지역-세션 분류 밴드 검색 조회
      * */
-    public List<GetInfoBandRes> getInfoBand(String region, String session) throws BaseException {
+    public List<GetInfoBandRes> getInfoBand(String region, int session) throws BaseException {
 
         try {
                 List<GetInfoBandRes> getInfoBandRes = sessionDao.getInfoBandRes(region, session);
