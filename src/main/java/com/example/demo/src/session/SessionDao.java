@@ -2,6 +2,7 @@ package com.example.demo.src.session;
 
 import com.example.demo.src.pofol.model.GetComNotiInfoRes;
 import com.example.demo.src.session.model.*;
+import com.example.demo.src.user.model.GetUserNotiInfoRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -113,6 +114,42 @@ public class SessionDao {
                 getBandNotiInfoRes.getNickName()+"님이 회원님의 "+ getBandNotiInfoRes.getBandTitle()+"에 지원하셨습니다."};
 
         this.jdbcTemplate.update(updateBandNotiQuery, updateBandNotiParams);
+    }
+
+    /**
+     * 밴드 정보 얻기
+     */
+    public GetSessionNotiInfoRes SessionNoti(int bandIdx, int userIdx){
+        String getInfoQuery = "SELECT bandIdx, bandTitle, bandImgUrl FROM Band WHERE bandIdx=? AND status='ACTIVE'";
+        int getInfoParams = bandIdx;
+        return this.jdbcTemplate.queryForObject(getInfoQuery,
+                                                (rs, rowNum) -> new GetSessionNotiInfoRes(
+                                                        userIdx,
+                                                        rs.getString("bandTitle"),
+                                                        rs.getString("bandImgUrl")),
+                                                getInfoParams);
+    }
+
+    /**
+     * 세션 지원 수락 알림 테이블에 추가
+     */
+    public void AcceptNoti(GetSessionNotiInfoRes getSessionNotiInfoRes){
+        String updateSessionNotiQuery = "INSERT INTO Notice(receiverIdx, image, head, body) VALUES (?,?,?,?)";
+        Object[] updateSessionNotiParams = new Object[]{getSessionNotiInfoRes.getUserIdx(), getSessionNotiInfoRes.getBandImgUrl(), "밴드 가입 수락",
+                getSessionNotiInfoRes.getBandTitle()+"의 가입이 수락되었습니다."};
+
+        this.jdbcTemplate.update(updateSessionNotiQuery, updateSessionNotiParams);
+    }
+
+    /**
+     * 세션 지원 거절 알림 테이블에 추가
+     */
+    public void RejectNoti(GetSessionNotiInfoRes getSessionNotiInfoRes){
+        String updateSessionNotiQuery = "INSERT INTO Notice(receiverIdx, image, head, body) VALUES (?,?,?,?)";
+        Object[] updateSessionNotiParams = new Object[]{getSessionNotiInfoRes.getUserIdx(), getSessionNotiInfoRes.getBandImgUrl(), "밴드 가입 거절",
+                getSessionNotiInfoRes.getBandTitle()+"의 가입이 거절되었습니다."};
+
+        this.jdbcTemplate.update(updateSessionNotiQuery, updateSessionNotiParams);
     }
 
     /**
