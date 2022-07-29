@@ -2,6 +2,7 @@ package com.example.demo.src.lesson;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.lesson.model.*;
+import com.example.demo.src.session.model.GetBandNotiInfoRes;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,6 +89,11 @@ public class LessonService {
 
         try{
             int lessonUserIdx = lessonDao.insertSignUp(userIdx, lessonIdx);
+
+            //밴드 지원 유저의 정보 얻기
+            GetLessonNotiInfoRes getLessonNotiInfoRes=lessonDao.Noti(lessonUserIdx);
+            //알림 테이블에 추가
+            lessonDao.LessonNoti(getLessonNotiInfoRes);
             return new PostSignUpRes(lessonUserIdx);
         } catch (Exception exception) {
             //System.out.println(exception);

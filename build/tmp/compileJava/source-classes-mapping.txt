@@ -12,6 +12,8 @@ com/example/demo/src/search/model/GetSearchBandRes.java
  com.example.demo.src.search.model.GetSearchBandRes
 com/example/demo/src/lesson/model/PostLesLikeRes.java
  com.example.demo.src.lesson.model.PostLesLikeRes
+com/example/demo/src/lesson/model/GetLessonNotiInfoRes.java
+ com.example.demo.src.lesson.model.GetLessonNotiInfoRes
 com/example/demo/src/pofol/model/GetCommentRes.java
  com.example.demo.src.pofol.model.GetCommentRes
 com/example/demo/src/pofol/PofolService.java
@@ -28,6 +30,8 @@ com/example/demo/src/session/model/PostApplyRes.java
  com.example.demo.src.session.model.PostApplyRes
 com/example/demo/src/user/model/GetUserNotiInfoRes.java
  com.example.demo.src.user.model.GetUserNotiInfoRes
+com/example/demo/src/session/model/GetSessionNotiInfoRes.java
+ com.example.demo.src.session.model.GetSessionNotiInfoRes
 com/example/demo/src/session/model/GetNewBandRes.java
  com.example.demo.src.session.model.GetNewBandRes
 com/example/demo/src/session/SessionService.java

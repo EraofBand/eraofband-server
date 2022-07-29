@@ -5,6 +5,7 @@ import com.example.demo.config.BaseException;
 import com.example.demo.src.lesson.model.*;
 
 
+import com.example.demo.src.session.model.GetBandNotiInfoRes;
 import com.example.demo.src.user.model.GetUserLessonRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -92,6 +93,46 @@ public class LessonDao {
 
         String lastInsertIdQuery = "SELECT last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    /**
+     * 레슨 지원 유저의 정보 얻기
+     */
+    public GetLessonNotiInfoRes Noti(int lessonUserIdx) {
+        String getLessonInfoQuery = "SELECT lu.lessonUserIdx as lessonUserIdx,\n" +
+                "       lu.userIdx as userIdx,\n" +
+                "       l.userIdx as reciverIdx,\n" +
+                "       l.lessonIdx as lessonIdx,\n" +
+                "       u.nickName as nickName,\n" +
+                "       u.profileImgUrl as profileImgUrl,\n" +
+                "       l.lessonTitle as lessonTitle\n" +
+                "FROM LessonUser as lu\n" +
+                "join User as u on u.userIdx = lu.userIdx\n" +
+                "left join Lesson as l  on lu.lessonIdx = l.lessonIdx\n" +
+                "WHERE lu.lessonUserIdx = ? and l.status = 'ACTIVE'\n" +
+                "group by lu.lessonUserIdx order by lu.lessonUserIdx";
+        int getLessonInfoParams = lessonUserIdx;
+        return this.jdbcTemplate.queryForObject(getLessonInfoQuery,
+                (rs, rowNum) -> new GetLessonNotiInfoRes(
+                        rs.getInt("userIdx"),
+                        rs.getInt("reciverIdx"),
+                        rs.getInt("lessonIdx"),
+                        rs.getString("nickName"),
+                        rs.getString("profileImgUrl"),
+                        rs.getString("lessonTitle")
+                ),
+                getLessonInfoParams);
+    }
+
+    /**
+     * 알림 테이블에 추가
+     */
+    public void LessonNoti(GetLessonNotiInfoRes getLessonNotiInfoRes) {
+        String updateLessonNotiQuery = "INSERT INTO Notice(receiverIdx, image, head, body) VALUES (?,?,?,?)";
+        Object[] updateLessonNotiParams = new Object[]{getLessonNotiInfoRes.getReciverIdx(), getLessonNotiInfoRes.getProfileImgUrl(), "레슨 지원",
+                getLessonNotiInfoRes.getNickName() + "님이 회원님의 " + getLessonNotiInfoRes.getLessonTitle() + "에 지원하셨습니다."};
+
+        this.jdbcTemplate.update(updateLessonNotiQuery, updateLessonNotiParams);
     }
 
     /**
