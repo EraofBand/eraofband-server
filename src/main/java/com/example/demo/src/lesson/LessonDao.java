@@ -116,7 +116,7 @@ public class LessonDao {
                 (rs, rowNum) -> new GetLessonNotiInfoRes(
                         rs.getInt("userIdx"),
                         rs.getInt("reciverIdx"),
-                        rs.getInt("bandIdx"),
+                        rs.getInt("lessonIdx"),
                         rs.getString("nickName"),
                         rs.getString("profileImgUrl"),
                         rs.getString("lessonTitle")

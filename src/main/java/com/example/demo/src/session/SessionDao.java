@@ -550,7 +550,7 @@ public class SessionDao {
      * 지역-세션 분류 밴드 검색 조회
      */
     public List<GetInfoBandRes> getInfoBandRes(String region, int session) {
-
+        region = region.substring(0, 2);
         String getInfoBandQuery = "";
         Object[] getInfoBandParams = new Object[]{};
         if (region.compareTo("전체") == 0) {
