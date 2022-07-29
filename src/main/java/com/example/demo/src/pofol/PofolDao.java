@@ -165,7 +165,7 @@ public class PofolDao {
     }
 
     /**
-     * 내 포트폴리오 리스트 조회
+     * 포트폴리오 리스트 조회
      * */
     public List<GetPofolRes> selectMyPofol(int userIdx) {
 

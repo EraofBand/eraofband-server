@@ -65,7 +65,7 @@ public class PofolController {
     /**
      * 포트폴리오 리스트 조회 API
      * [GET] /pofols/info/12
-     * 유저 인덱스 검색 내 포트폴리오 조회 API
+     * 유저 인덱스 검색 포트폴리오 조회 API
      * @return BaseResponse<List<GetPofolRes>>
      */
     @ResponseBody

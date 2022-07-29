@@ -118,7 +118,7 @@ public class PofolProvider {
     }
 
     /**
-     * 내 포트폴리오 조회
+     * 포트폴리오 조회
      */
     public List<GetPofolRes> retrieveMyPofol(int userIdx) throws BaseException {
 
