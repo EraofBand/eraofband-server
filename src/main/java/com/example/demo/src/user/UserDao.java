@@ -288,7 +288,7 @@ public class UserDao {
      * 팔로잉 리스트 조회
      */
     public List<Users> getFollowing(int userIdx){
-        String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl\n" +
+        String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.token as token\n" +
                 "from Follow as f\n" +
                 "    left join User as u on u.userIdx=f.followeeIdx\n" +
                 "where u.status='ACTIVE' and f.status='ACTIVE' and f.followerIdx=?\n" +
@@ -299,7 +299,8 @@ public class UserDao {
                 (rs, rowNum) -> new Users(
                         rs.getInt("userIdx"),
                         rs.getString("nickName"),
-                        rs.getString("profileImgUrl")),
+                        rs.getString("profileImgUrl"),
+                        rs.getString("token")),
                 getFollowParams);
     }
 
@@ -307,7 +308,7 @@ public class UserDao {
      * 팔로워 리스트 조회
      */
     public List<Users> getFollower(int userIdx){
-        String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl\n" +
+        String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.token as token\n" +
                 "from Follow as f\n" +
                 "    left join User as u on u.userIdx=f.followerIdx\n" +
                 "where u.status='ACTIVE' and f.status='ACTIVE' and f.followeeIdx=?\n" +
@@ -318,7 +319,8 @@ public class UserDao {
                 (rs, rowNum) -> new Users(
                         rs.getInt("userIdx"),
                         rs.getString("nickName"),
-                        rs.getString("profileImgUrl")),
+                        rs.getString("profileImgUrl"),
+                        rs.getString("token")),
                 getFollowParams);
     }
 }
