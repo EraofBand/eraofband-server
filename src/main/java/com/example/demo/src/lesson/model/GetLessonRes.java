@@ -30,6 +30,6 @@ public class GetLessonRes {
 
     private int memberCount;
     private int capacity;
-
+    private String token;
 
 }
