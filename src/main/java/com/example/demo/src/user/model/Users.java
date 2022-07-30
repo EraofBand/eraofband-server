@@ -12,4 +12,5 @@ public class Users {
     private String nickName;
     private String profileImgUrl;
     private String token;
+    private int follow;
 }
