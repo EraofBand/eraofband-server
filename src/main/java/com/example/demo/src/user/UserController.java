@@ -259,11 +259,13 @@ public class UserController {
      */
     @ResponseBody
     @GetMapping("/info/follow/{userIdx}") // (GET) eraofband.shop/users/info/follow/12
-    @ApiOperation(value = "팔로잉, 팔로워 리스트 조회")
+    @ApiOperation(value = "팔로잉, 팔로워 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="userIdx", value="조회할 유저 인덱스", required = true)
     public BaseResponse<GetFollowRes> getFollow(@PathVariable("userIdx")int userIdx) {
         try{
-            GetFollowRes getFollowRes = userProvider.getFollow(userIdx);
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            GetFollowRes getFollowRes = userProvider.getFollow(userIdxByJwt, userIdx);
             return new BaseResponse<>(getFollowRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
