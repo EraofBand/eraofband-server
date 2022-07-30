@@ -209,8 +209,11 @@ public class SessionController {
     @ApiImplicitParam(name="bandIdx", value="지원할 밴드 인덱스", required = true)
     public BaseResponse<PostApplyRes> applySession(@PathVariable("bandIdx") int bandIdx, @RequestBody PostApplyReq postApplyReq) {
         try {
-
             int userIdxByJwt = jwtService.getUserIdx();
+            if(sessionProvider.checkBandSession(userIdxByJwt, bandIdx) == 1 || sessionProvider.checkBandApply(userIdxByJwt, bandIdx)==1){
+                throw new BaseException(ALREADY_BAND);
+            }
+
             PostApplyRes postApplyRes = sessionService.applySession(userIdxByJwt, bandIdx, postApplyReq);
 
             return new BaseResponse<>(postApplyRes);
@@ -218,6 +221,34 @@ public class SessionController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 밴드 탈퇴 API
+     * [DELETE] /out/{bandIdx}
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @DeleteMapping ("/out/{bandIdx}") // (delete) https://eraofband.shop/sessions/out/2
+    @ApiOperation(value = "밴드 탈퇴 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="bandIdx", value="탈퇴할 밴드 인덱스", required = true)
+    public BaseResponse<String> withdrawBand(@PathVariable("bandIdx") int bandIdx){
+
+        try {
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(sessionProvider.checkBandSession(userIdxByJwt, bandIdx) == 0){
+                throw new BaseException(NOT_BAND_MEMBER);
+            }
+            sessionService.withdrawBand(userIdxByJwt,bandIdx);
+
+            String result = "밴드에서 탈퇴 처리되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
+
 
     /**
      * 세션 지원 수락 API

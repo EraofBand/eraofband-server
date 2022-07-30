@@ -46,6 +46,17 @@ public class SessionProvider {
     }
 
     /**
+     * 밴드 지원자 확인
+     * */
+    public int checkBandApply(int userIdx, int bandIdx) throws BaseException {
+        try {
+            return sessionDao.checkBandApply(userIdx, bandIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
      * 밴드 존재 유무 확인
      * */
     public int checkBandExist(int bandIdx) throws BaseException {

@@ -46,4 +46,6 @@ public class GetBandRes {
 
     private List<GetSessionAppRes> applicants;
 
+    private String token;
+
 }

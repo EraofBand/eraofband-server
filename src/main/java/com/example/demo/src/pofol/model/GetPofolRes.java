@@ -23,5 +23,5 @@ public class GetPofolRes {
     private String updatedAt;
     private String likeOrNot;
     private String videoUrl;
-
+    private String token;
 }

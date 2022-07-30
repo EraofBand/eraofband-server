@@ -166,8 +166,6 @@ public class LessonController {
     }
 
 
-
-
     /**
      * 레슨 신청 API
      * [POST] /lessons/{lessonIdx}
@@ -181,6 +179,10 @@ public class LessonController {
         try{
 
             int userIdxByJwt = jwtService.getUserIdx();
+            if(lessonProvider.checkLessonSession(userIdxByJwt, lessonIdx) == 1){
+                throw new BaseException(ALREADY_LESSON);
+            }
+
             PostSignUpRes postSignUpRes = lessonService.applyLesson(userIdxByJwt, lessonIdx);
 
             return new BaseResponse<>(postSignUpRes);
@@ -189,6 +191,33 @@ public class LessonController {
         }
     }
 
+
+    /**
+     * 레슨 탈퇴 API
+     * [DELETE] /out/{lessonIdx}
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @DeleteMapping ("/out/{lessonIdx}") // (delete) https://eraofband.shop/lessons/out/2
+    @ApiOperation(value = "레슨 탈퇴 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="lessonIdx", value="탈퇴할 레슨 인덱스", required = true)
+    public BaseResponse<String> withdrawLesson(@PathVariable("lessonIdx") int lessonIdx){
+
+        try {
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(lessonProvider.checkLessonSession(userIdxByJwt, lessonIdx) == 0){
+                throw new BaseException(NOT_LESSON_MEMBER);
+            }
+            lessonService.withdrawLesson(userIdxByJwt,lessonIdx);
+
+            String result = "레슨에서 탈퇴 처리되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
 
 
     /**
@@ -263,7 +292,6 @@ public class LessonController {
     }
 
 
-
     /**
      * 지역-세션 분류 레슨 정보 반환 API
      * [GET] /info/list/{lesson-region}/{lesson-session}
@@ -285,16 +313,4 @@ public class LessonController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }
