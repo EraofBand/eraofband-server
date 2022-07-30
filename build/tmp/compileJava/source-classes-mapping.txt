@@ -62,8 +62,8 @@ com/example/demo/src/search/model/GetSearchUserRes.java
  com.example.demo.src.search.model.GetSearchUserRes
 com/example/demo/src/lesson/LessonProvider.java
  com.example.demo.src.lesson.LessonProvider
-com/example/demo/src/lesson/model/PostSignUpRes.java
- com.example.demo.src.lesson.model.PostSignUpRes
+com/example/demo/src/user/UserService.java
+ com.example.demo.src.user.UserService
 com/example/demo/src/lesson/model/GetMemberRes.java
  com.example.demo.src.lesson.model.GetMemberRes
 com/example/demo/src/S33/UploadService.java
@@ -122,8 +122,8 @@ com/example/demo/src/pofol/model/PostCommentReq.java
  com.example.demo.src.pofol.model.PostCommentReq
 com/example/demo/src/pofol/model/GetComNotiInfoRes.java
  com.example.demo.src.pofol.model.GetComNotiInfoRes
-com/example/demo/src/S33/FileUploadService.java
- com.example.demo.src.S33.FileUploadService
+com/example/demo/src/user/UserDao.java
+ com.example.demo.src.user.UserDao
 com/example/demo/src/session/model/PostBandLikeRes.java
  com.example.demo.src.session.model.PostBandLikeRes
 com/example/demo/src/user/model/PatchUserReq.java
@@ -160,8 +160,8 @@ com/example/demo/src/session/model/PostBandReq.java
  com.example.demo.src.session.model.PostBandReq
 com/example/demo/src/lesson/model/PatchLesComReq.java
  com.example.demo.src.lesson.model.PatchLesComReq
-com/example/demo/utils/JwtService.java
- com.example.demo.utils.JwtService
+com/example/demo/src/user/UserController.java
+ com.example.demo.src.user.UserController
 com/example/demo/src/pofol/PofolDao.java
  com.example.demo.src.pofol.PofolDao
 com/example/demo/src/lesson/model/PostLessonReq.java
@@ -180,6 +180,16 @@ com/example/demo/src/pofol/model/PostPofolReq.java
  com.example.demo.src.pofol.model.PostPofolReq
 com/example/demo/DemoApplication.java
  com.example.demo.DemoApplication
+<<<<<<< HEAD
+com/example/demo/utils/JwtService.java
+ com.example.demo.utils.JwtService
+com/example/demo/src/user/UserProvider.java
+ com.example.demo.src.user.UserProvider
+com/example/demo/src/lesson/model/PostSignUpRes.java
+ com.example.demo.src.lesson.model.PostSignUpRes
+com/example/demo/src/S33/FileUploadService.java
+ com.example.demo.src.S33.FileUploadService
+=======
 com/example/demo/src/session/SessionController.java
  com.example.demo.src.session.SessionController
 com/example/demo/src/session/SessionDao.java
@@ -198,3 +208,4 @@ com/example/demo/src/notice/NoticeProvider.java
  com.example.demo.src.notice.NoticeProvider
 com/example/demo/src/notice/NoticeDao.java
  com.example.demo.src.notice.NoticeDao
+>>>>>>> 5c761bcc0b893a64310962b04e7f1e6ccc507ff2

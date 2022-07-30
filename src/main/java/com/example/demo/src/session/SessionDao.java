@@ -68,7 +68,7 @@ public class SessionDao {
      * 최신 밴드 조회
      */
     public List<GetNewBandRes> getNewBand() {
-        String getNewBandQuery = "SELECT b.bandIdx, b.bandRegion, b.bandTitle, b.bandImgUrl, sessionNum, b.vocal+b.guitar+b.base+b.keyboard+b.drum as totalNum\n" +
+        String getNewBandQuery = "SELECT b.bandIdx, b.bandRegion, b.bandTitle, b.bandImgUrl, IF(sessionNum is null, 0, sessionNum) as sessionNum, b.vocal+b.guitar+b.base+b.keyboard+b.drum as totalNum\n" +
                 "                FROM Band as b\n" +
                 "                left join (select bandIdx, count(bandUserIdx) as sessionNum from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
                 "                WHERE status = 'ACTIVE' order by createdAt DESC\n" +
@@ -245,7 +245,7 @@ public class SessionDao {
                 "       b.bandRegion as bandRegion, b.bandContent as bandContent,\n" +
                 "       b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal, vocalComment, b.guitar-IF(b1.guitarCount is null, 0, b1.guitarCount) as guitar, guitarComment, b.base-IF(b2.baseCount is null, 0, b2.baseCount) as base,\n" +
                 "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
-                "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.performTime as performTime," +
+                "       b.chatRoomLink as chatRoomLink, b.performTitle as performTitle, b.performDate as performDate, b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl,\n" +
                 "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount," +
                 "       IF(bandLikeCount is null, 0, bandLikeCount) as bandLikeCount,\n" +
@@ -285,6 +285,7 @@ public class SessionDao {
                         rs.getString("drumComment"),
                         sessionMembers,
                         rs.getString("chatRoomLink"),
+                        rs.getString("performTitle"),
                         rs.getString("performDate"),
                         rs.getString("performTime"),
                         rs.getString("performLocation"),
@@ -309,7 +310,7 @@ public class SessionDao {
                 "       b.bandRegion as bandRegion, b.bandContent as bandContent,\n" +
                 "       b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal, vocalComment, b.guitar-IF(b1.guitarCount is null, 0, b1.guitarCount) as guitar, guitarComment, b.base-IF(b2.baseCount is null, 0, b2.baseCount) as base,\n" +
                 "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
-                "       b.chatRoomLink as chatRoomLink, b.performDate as performDate, b.performTime as performTime," +
+                "       b.chatRoomLink as chatRoomLink, b.performTitle as performTitle, b.performDate as performDate, b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee,b.bandImgUrl as bandImgUrl,\n" +
                 "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount,\n" +
                 "       IF(bandLikeCount is null, 0, bandLikeCount) as bandLikeCount,\n" +
@@ -349,6 +350,7 @@ public class SessionDao {
                         rs.getString("drumComment"),
                         sessionMembers,
                         rs.getString("chatRoomLink"),
+                        rs.getString("performTitle"),
                         rs.getString("performDate"),
                         rs.getString("performTime"),
                         rs.getString("performLocation"),
@@ -373,7 +375,7 @@ public class SessionDao {
                 "       b.bandRegion as bandRegion, b.bandContent as bandContent,\n" +
                 "       b.vocal-IF(b0.vocalCount is null, 0, b0.vocalCount) as vocal, vocalComment, b.guitar-IF(b1.guitarCount is null, 0, b1.guitarCount) as guitar, guitarComment, b.base-IF(b2.baseCount is null, 0, b2.baseCount) as base,\n" +
                 "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
-                "       b.performDate as performDate,  b.performTime as performTime," +
+                "       b.performTitle as performTitle, b.performDate as performDate,  b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl," +
                 "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount,\n" +
                 "       IF(bandLikeCount is null, 0, bandLikeCount) as bandLikeCount,\n" +
@@ -413,6 +415,7 @@ public class SessionDao {
                         rs.getString("drumComment"),
                         sessionMembers,
                         null,
+                        rs.getString("performTitle"),
                         rs.getString("performDate"),
                         rs.getString("performTime"),
                         rs.getString("performLocation"),
@@ -451,12 +454,12 @@ public class SessionDao {
      */
     public int updateBand(int bandIdx, PatchBandReq patchBandReq) {
         String updateBandQuery = "UPDATE Band SET bandTitle=?, bandIntroduction=?, bandRegion=?, bandContent=?," +
-                "vocal=?, vocalComment=?, guitar=?, guitarComment=?, base=?, baseComment=?, keyboard=?, keyboardComment=?, drum=?, drumComment=?, chatRoomLink=?, performDate=?, performTime=?, performLocation=?, performFee=?, bandImgUrl=? WHERE bandIdx = ? and status='ACTIVE'";
+                "vocal=?, vocalComment=?, guitar=?, guitarComment=?, base=?, baseComment=?, keyboard=?, keyboardComment=?, drum=?, drumComment=?, chatRoomLink=?, performTitle=?, performDate=?, performTime=?, performLocation=?, performFee=?, bandImgUrl=? WHERE bandIdx = ? and status='ACTIVE'";
         Object[] updateBandParams = new Object[]{patchBandReq.getBandTitle(), patchBandReq.getBandIntroduction(),
                 patchBandReq.getBandRegion(), patchBandReq.getBandContent(),
                 patchBandReq.getVocal(), patchBandReq.getVocalComment(), patchBandReq.getGuitar(), patchBandReq.getGuitarComment(),
                 patchBandReq.getBase(), patchBandReq.getBaseComment(), patchBandReq.getKeyboard(), patchBandReq.getKeyboardComment(), patchBandReq.getDrum(), patchBandReq.getDrumComment(),
-                patchBandReq.getChatRoomLink(), patchBandReq.getPerformDate(), patchBandReq.getPerformTime(), patchBandReq.getPerformLocation(), patchBandReq.getPerformFee(), patchBandReq.getBandImgUrl(), bandIdx};
+                patchBandReq.getChatRoomLink(), patchBandReq.getPerformTitle(), patchBandReq.getPerformDate(), patchBandReq.getPerformTime(), patchBandReq.getPerformLocation(), patchBandReq.getPerformFee(), patchBandReq.getBandImgUrl(), bandIdx};
 
         return this.jdbcTemplate.update(updateBandQuery, updateBandParams);
     }

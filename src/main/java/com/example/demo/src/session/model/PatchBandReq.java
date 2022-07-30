@@ -28,6 +28,7 @@ public class PatchBandReq {
 
 
     private String chatRoomLink;
+    private String performTitle;
     private String performDate;
     private String performTime;
     private String performLocation;

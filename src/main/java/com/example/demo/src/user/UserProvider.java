@@ -67,10 +67,10 @@ public class UserProvider {
     /**
      * 팔로잉, 팔로워 리스트 조회
      */
-    public GetFollowRes getFollow(int userIdx) throws BaseException{
+    public GetFollowRes getFollow(int userIdxByJwt, int userIdx) throws BaseException{
         try{
-            List<Users> getfollowing=userDao.getFollowing(userIdx);
-            List<Users> getfollower=userDao.getFollower(userIdx);
+            List<Users> getfollowing=userDao.getFollowing(userIdxByJwt,userIdx);
+            List<Users> getfollower=userDao.getFollower(userIdxByJwt ,userIdx);
             GetFollowRes getFollow = new GetFollowRes(getfollowing,getfollower);
             return getFollow;
         }
