@@ -23,4 +23,22 @@ public class NoticeService {
         this.noticeProvider = noticeProvider;
         this.jwtService = jwtService;
     }
+
+    /**
+     * 알림 INACTIVE
+     */
+    public void updateNotice(int userIdx) throws BaseException {
+
+
+        try{
+            int result = noticeDao.updateNoticeStatus(userIdx);
+            if(result == 0){
+
+                throw new BaseException(DATABASE_ERROR);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }

@@ -19,8 +19,7 @@ public class NoticeProvider {
 
     private final NoticeDao noticeDao;
     private final JwtService jwtService;
-    private List<GetMemberRes> getLessonMembers;
-    //private List<GetLessonRes> getApplicants;
+
 
     @Autowired
     public NoticeProvider(NoticeDao noticeDao, JwtService jwtService) {
@@ -30,16 +29,14 @@ public class NoticeProvider {
     }
 
     /**
-     * 알람 조회
+     * 알림 조회
      */
     public List<GetNoticeRes> getMyNotice(int userIdx) throws BaseException {
 
-//        if(checkUserExist(userIdx) ==0){
-//            throw new BaseException(USERS_EMPTY_USER_ID);
-//        }
 
         try{
             List<GetNoticeRes> getMyNotice = noticeDao.getMyNotice(userIdx);
+
             return getMyNotice;
         } catch(Exception exception){
             System.out.println(exception);
