@@ -346,7 +346,7 @@ public class SessionController {
     }
 
     /**
-     * 밴드 좋아요 취소 API
+     * 찜한 밴드 정보 반환 API
      * [GET] /info/likes
      * @return BaseResponse<List<GetLikesBandRes>>
      */
