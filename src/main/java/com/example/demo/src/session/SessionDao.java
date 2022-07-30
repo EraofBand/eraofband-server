@@ -68,12 +68,11 @@ public class SessionDao {
      * 최신 밴드 조회
      */
     public List<GetNewBandRes> getNewBand() {
-        String getNewBandQuery = "SELECT b.bandIdx, bandRegion, bandTitle, bandImgUrl, sessionNum, vocal+guitar+base+keyboard+drum as totalNum\n" +
-                "FROM Band as b\n" +
-                "    left join (SELECT bandIdx, count(bandIdx) as sessionNum \n" +
-                "    from BandUser WHERE status = 'ACTIVE') BU on BU.bandIdx = b.bandIdx\n" +
-                "WHERE status = 'ACTIVE' order by createdAt DESC\n" +
-                "LIMIT 6;";
+        String getNewBandQuery = "SELECT b.bandIdx, b.bandRegion, b.bandTitle, b.bandImgUrl, IF(sessionNum is null, 0, sessionNum) as sessionNum, b.vocal+b.guitar+b.base+b.keyboard+b.drum as totalNum\n" +
+                "                FROM Band as b\n" +
+                "                left join (select bandIdx, count(bandUserIdx) as sessionNum from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
+                "                WHERE status = 'ACTIVE' order by createdAt DESC\n" +
+                "            LIMIT 6;";
         Object[] getNewBandParams = new Object[]{};
         return this.jdbcTemplate.query(getNewBandQuery,
                 (rs, rowNum) -> new GetNewBandRes(
@@ -551,16 +550,16 @@ public class SessionDao {
      */
     public List<GetLikesBandRes> getLikesBand(int userIdx) {
         String getLikesBandQuery = "\n" +
-                "SELECT b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle," +
-                "        b.bandIntroduction as bandIntroduction, b.bandRegion as bandRegion," +
-                "        IF(memberCount is null, 0, memberCount) as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity\n" +
-                "        FROM BandUser as bu\n" +
-                "        left join Band as b on b.bandIdx=bu.bandIdx\n" +
-                "        left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
-                "        left join BandLike as bl on b.bandIdx = bl.bandIdx\n" +
-                "        WHERE b.status='ACTIVE' and bu.status='ACTIVE' and bl.userIdx=?\n" +
-                "        group by b.bandIdx\n" +
-                "        order by b.bandIdx";
+                "SELECT b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle,\n" +
+                "                        b.bandIntroduction as bandIntroduction, b.bandRegion as bandRegion,\n" +
+                "                    IF(memberCount is null, 0, memberCount) as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity\n" +
+                "                        FROM BandUser as bu\n" +
+                "                        join Band as b \n" +
+                "                        left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
+                "                        left join BandLike as bl on b.bandIdx = bl.bandIdx\n" +
+                "                        WHERE b.status='ACTIVE' and bu.status='ACTIVE' and bl.userIdx=? and b.bandIdx = bl.bandIdx\n" +
+                "                        group by b.bandIdx\n" +
+                "                        order by b.bandIdx";
         Object[] getLikesBandParams = new Object[]{userIdx};
         return this.jdbcTemplate.query(getLikesBandQuery,
                 (rs, rowNum) -> new GetLikesBandRes(
