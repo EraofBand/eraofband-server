@@ -290,13 +290,13 @@ public class UserDao {
      */
     public List<Users> getFollowing(int userIdxByJwt, int userIdx){
         String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.token as token,\n" +
-                "       (IF(exists(select followIdx from Follow where followerIdx = ? and followeeIdx = ?), 1, 0)) as follow\n" +
+                "       (IF(exists(select followIdx from Follow where followerIdx = ? and followeeIdx = u.userIdx), 1, 0)) as follow\n" +
                 "                from Follow as f\n" +
                 "                    left join User as u on u.userIdx=f.followeeIdx\n" +
-                "                where u.status='ACTIVE' and f.status='ACTIVE' and f.followerIdx=? and  u.userIdx=f.followeeIdx\n" +
+                "                where u.status='ACTIVE' and f.status='ACTIVE' and f.followerIdx=?\n" +
                 "                group by u.userIdx\n" +
                 "                order by u.userIdx";
-        Object[] getFollowParams = new Object[]{userIdxByJwt, userIdx, userIdx};
+        Object[] getFollowParams = new Object[]{userIdxByJwt, userIdx};
         return this.jdbcTemplate.query(getFollowQuery,
                 (rs, rowNum) -> new Users(
                         rs.getInt("userIdx"),
@@ -313,13 +313,13 @@ public class UserDao {
      */
     public List<Users> getFollower(int userIdxByJwt , int userIdx){
         String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.token as token,\n" +
-                "       (IF(exists(select followIdx from Follow where followerIdx = ? and followeeIdx = ?), 1, 0)) as follow\n" +
+                "       (IF(exists(select followIdx from Follow where followerIdx = ? and followeeIdx = u.userIdx), 1, 0)) as follow\n" +
                 "                from Follow as f\n" +
                 "                    left join User as u on u.userIdx=f.followerIdx\n" +
                 "                where u.status='ACTIVE' and f.status='ACTIVE' and f.followeeIdx=?\n" +
                 "                group by u.userIdx\n" +
                 "                order by u.userIdx";
-        Object[] getFollowParams = new Object[]{userIdxByJwt, userIdx, userIdx};
+        Object[] getFollowParams = new Object[]{userIdxByJwt, userIdx};
         return this.jdbcTemplate.query(getFollowQuery,
                 (rs, rowNum) -> new Users(
                         rs.getInt("userIdx"),

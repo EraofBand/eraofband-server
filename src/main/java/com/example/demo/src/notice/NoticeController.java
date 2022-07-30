@@ -1,11 +1,10 @@
 package com.example.demo.src.notice;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.lesson.LessonProvider;
-import com.example.demo.src.lesson.LessonService;
+
 import com.example.demo.src.lesson.model.*;
 import com.example.demo.src.notice.model.GetNoticeRes;
-import com.example.demo.src.pofol.model.GetPofolRes;
+
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -41,7 +40,7 @@ public class NoticeController {
      * @return BaseResponse<List<GetNoticeRes>>
      */
     @ResponseBody
-    @GetMapping("/notice/{userIdx}")   // (get) https://eraofband.shop/notice
+    @GetMapping("/notice/{userIdx}")   // (get) https://eraofband.shop/notice/12
     @ApiOperation(value = "알림 리스트 조회")
     @ApiImplicitParam(name="userIdx", value="유저 인덱스", required = true)
     public BaseResponse<List<GetNoticeRes>> getMyNotice(@PathVariable("userIdx") int userIdx){
@@ -53,6 +52,7 @@ public class NoticeController {
             }
 
             List<GetNoticeRes> getMyNotice=noticeProvider.getMyNotice(userIdxByJwt);
+            noticeService.updateNotice(userIdx);
             return new BaseResponse<>(getMyNotice);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());

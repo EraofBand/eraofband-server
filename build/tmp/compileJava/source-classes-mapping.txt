@@ -34,8 +34,8 @@ com/example/demo/src/session/model/GetSessionNotiInfoRes.java
  com.example.demo.src.session.model.GetSessionNotiInfoRes
 com/example/demo/src/session/model/GetNewBandRes.java
  com.example.demo.src.session.model.GetNewBandRes
-com/example/demo/src/session/SessionService.java
- com.example.demo.src.session.SessionService
+com/example/demo/src/user/UserService.java
+ com.example.demo.src.user.UserService
 com/example/demo/src/pofol/model/GetPofolRes.java
  com.example.demo.src.pofol.model.GetPofolRes
 com/example/demo/src/pofol/PofolController.java
@@ -78,8 +78,8 @@ com/example/demo/config/SwaggerConfig.java
  com.example.demo.config.SwaggerConfig
 com/example/demo/src/lesson/model/GetSearchLesReq.java
  com.example.demo.src.lesson.model.GetSearchLesReq
-com/example/demo/src/session/SessionProvider.java
- com.example.demo.src.session.SessionProvider
+com/example/demo/src/user/UserDao.java
+ com.example.demo.src.user.UserDao
 com/example/demo/src/lesson/LessonController.java
  com.example.demo.src.lesson.LessonController
 com/example/demo/src/pofol/model/PatchPofComReq.java
@@ -90,10 +90,10 @@ com/example/demo/src/lesson/model/GetLikesLessonRes.java
  com.example.demo.src.lesson.model.GetLikesLessonRes
 com/example/demo/src/session/model/GetFameBandRes.java
  com.example.demo.src.session.model.GetFameBandRes
-com/example/demo/src/session/SessionController.java
- com.example.demo.src.session.SessionController
-com/example/demo/src/session/SessionDao.java
- com.example.demo.src.session.SessionDao
+com/example/demo/src/user/UserProvider.java
+ com.example.demo.src.user.UserProvider
+com/example/demo/src/user/UserController.java
+ com.example.demo.src.user.UserController
 com/example/demo/src/user/model/GetUserFeedRes.java
  com.example.demo.src.user.model.GetUserFeedRes
 com/example/demo/src/session/model/PostBandRes.java
@@ -180,6 +180,7 @@ com/example/demo/src/pofol/model/PostPofolReq.java
  com.example.demo.src.pofol.model.PostPofolReq
 com/example/demo/DemoApplication.java
  com.example.demo.DemoApplication
+<<<<<<< HEAD
 com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
 com/example/demo/src/user/UserProvider.java
@@ -188,3 +189,23 @@ com/example/demo/src/lesson/model/PostSignUpRes.java
  com.example.demo.src.lesson.model.PostSignUpRes
 com/example/demo/src/S33/FileUploadService.java
  com.example.demo.src.S33.FileUploadService
+=======
+com/example/demo/src/session/SessionController.java
+ com.example.demo.src.session.SessionController
+com/example/demo/src/session/SessionDao.java
+ com.example.demo.src.session.SessionDao
+com/example/demo/src/notice/model/GetNoticeRes.java
+ com.example.demo.src.notice.model.GetNoticeRes
+com/example/demo/src/session/SessionService.java
+ com.example.demo.src.session.SessionService
+com/example/demo/src/session/SessionProvider.java
+ com.example.demo.src.session.SessionProvider
+com/example/demo/src/notice/NoticeController.java
+ com.example.demo.src.notice.NoticeController
+com/example/demo/src/notice/NoticeService.java
+ com.example.demo.src.notice.NoticeService
+com/example/demo/src/notice/NoticeProvider.java
+ com.example.demo.src.notice.NoticeProvider
+com/example/demo/src/notice/NoticeDao.java
+ com.example.demo.src.notice.NoticeDao
+>>>>>>> 5c761bcc0b893a64310962b04e7f1e6ccc507ff2
