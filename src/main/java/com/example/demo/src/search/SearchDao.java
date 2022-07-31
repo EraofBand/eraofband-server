@@ -28,22 +28,25 @@ public class SearchDao {
     /**
      * 상단바 유저 검색
      */
-    public List<GetSearchUserRes> getSearchUser(String search){
+    public List<GetSearchUserRes> getSearchUser(int userIdxByJwt, String search){
         String getSearchUserQuery = "\n"+
-                "select u.userIdx as userIdx, u.nickName as nickName,u.profileImgUrl as profileImgUrl,u.userSession as userSession\n" +
+                "select u.userIdx as userIdx, u.nickName as nickName,u.profileImgUrl as profileImgUrl,u.userSession as userSession, u.token as token," +
+                " (IF(exists(select followIdx from Follow where followerIdx = ? and followeeIdx = u.userIdx), 1, 0)) as follow\n" +
                 "        from User as u\n" +
                 "        where u.status='ACTIVE' and u.nickName LIKE CONCAT('%', ?, '%')\n" +
                 "        group by u.userIdx\n" +
                 "        order by u.userIdx";
 
-        Object[] getSearchUserParams = new Object[]{search};
+        Object[] getSearchUserParams = new Object[]{userIdxByJwt, search};
 
         return this.jdbcTemplate.query(getSearchUserQuery,
                 (rs, rowNum) -> new GetSearchUserRes(
                         rs.getInt("userIdx"),
                         rs.getString("profileImgUrl"),
                         rs.getString("nickName"),
-                        rs.getInt("userSession")),
+                        rs.getInt("userSession"),
+                        rs.getString("token"),
+                        rs.getInt("follow")),
                 getSearchUserParams);
 
     }

@@ -38,12 +38,13 @@ public class SearchController {
      */
     @ResponseBody
     @GetMapping("/users/{keyword}") // (get) https://eraofband.shop/search/users/해리
-    @ApiOperation(value = "상단바 유저 검색")
+    @ApiOperation(value = "상단바 유저 검색", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="keyword", value="검색할 유저", required = true)
     public BaseResponse<List<GetSearchUserRes>> getSearchUser(@PathVariable("keyword") String keyword){
         try{
+            int userIdxByJwt = jwtService.getUserIdx();
 
-            List<GetSearchUserRes> getSearchUserRes = searchProvider.getSearchUser(keyword);
+            List<GetSearchUserRes> getSearchUserRes = searchProvider.getSearchUser(userIdxByJwt, keyword);
             return new BaseResponse<>(getSearchUserRes);
 
         } catch (BaseException exception){

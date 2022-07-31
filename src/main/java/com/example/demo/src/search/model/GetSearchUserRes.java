@@ -16,4 +16,8 @@ public class GetSearchUserRes {
 
     private int userSession;
 
+    private String token;
+
+    private int follow=0;
+
 }
