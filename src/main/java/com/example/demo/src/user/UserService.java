@@ -32,6 +32,8 @@ public class UserService {
     private final UserProvider userProvider;
     private final JwtService jwtService;
 
+    private int result;
+
 
     @Autowired
     public UserService(UserDao userDao, UserProvider userProvider, JwtService jwtService) {
@@ -136,11 +138,13 @@ public class UserService {
      */
     public void modifyUserInfo(PatchUserReq patchUserReq) throws BaseException {
         try {
-            int result = userDao.modifyUserInfo(patchUserReq);
-            if (result == 0) {
-                throw new BaseException(MODIFY_FAIL_USER);
-            }} catch (Exception exception) {
+            result = userDao.modifyUserInfo(patchUserReq);
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
+        }
+
+        if (result == 0) {
+            throw new BaseException(MODIFY_FAIL_USER);
         }
     }
 
@@ -149,11 +153,12 @@ public class UserService {
      */
     public void modifyUserSession(PatchSessionReq patchSessionReq) throws BaseException {
         try {
-            int result = userDao.modifyUserSession(patchSessionReq);
-            if (result == 0) {
-                throw new BaseException(MODIFY_FAIL_SESSION);
-            }} catch (Exception exception) {
+            result = userDao.modifyUserSession(patchSessionReq);
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
+        }
+        if (result == 0) {
+            throw new BaseException(MODIFY_FAIL_SESSION);
         }
     }
 
@@ -162,12 +167,13 @@ public class UserService {
      */
     public void deleteUser ( int userIdx) throws BaseException {
         try {
-            int result = userDao.deleteUser(userIdx);
-            if(result == 0){
-                throw new BaseException(DELETE_FAIL_USER);
-            }
+            result = userDao.deleteUser(userIdx);
+
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(DELETE_FAIL_USER);
         }
     }
 
@@ -177,7 +183,7 @@ public class UserService {
     public PostFollowRes followUser(int myIdx, int userIdx) throws BaseException {
 
         try{
-            int result = userDao.updateFollow(myIdx, userIdx);
+            result = userDao.updateFollow(myIdx, userIdx);
             if(result == 0){
                 throw new BaseException(FOLLOW_FAIL_USER);
             }
@@ -199,13 +205,15 @@ public class UserService {
      */
     public void unfollowUser(int myIdx, int userIdx) throws BaseException {
         try{
-            int result = userDao.updateUnFollow(myIdx, userIdx);
-            if(result == 0){
-                throw new BaseException(UNFOLLOW_FAIL_USER);
-            }
+            result = userDao.updateUnFollow(myIdx, userIdx);
+
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
+        }
+
+        if(result == 0){
+            throw new BaseException(UNFOLLOW_FAIL_USER);
         }
 
     }

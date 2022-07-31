@@ -16,6 +16,10 @@ public class LessonService {
     private final LessonProvider lessonProvider;
     private final JwtService jwtService;
 
+
+    private  int result;
+
+
     @Autowired
     public LessonService(LessonDao lessonDao, LessonProvider lessonProvider, JwtService jwtService) {
         this.lessonDao = lessonDao;
@@ -50,13 +54,15 @@ public class LessonService {
         }
 
         try{
-            int result = lessonDao.updateLesson(lessonIdx, patchLessonReq);
-            if(result == 0){
-                throw new BaseException(MODIFY_FAIL_LESSON);
-            }
+            result = lessonDao.updateLesson(lessonIdx, patchLessonReq);
+
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
+        }
+
+        if(result == 0){
+            throw new BaseException(MODIFY_FAIL_LESSON);
         }
     }
 
@@ -71,13 +77,14 @@ public class LessonService {
         }
 
         try{
-            int result = lessonDao.updateLessonStatus(lessonIdx);
-            if(result == 0){
-                throw new BaseException(DELETE_FAIL_LESSON);
-            }
+            result = lessonDao.updateLessonStatus(lessonIdx);
+
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(DELETE_FAIL_LESSON);
         }
     }
 
@@ -111,12 +118,13 @@ public class LessonService {
             throw new BaseException(POSTS_EMPTY_LESSON_ID);
         }
         try{
-            int result = lessonDao.withdrawLesson(userIdx, lessonIdx);
-            if(result == 0){
-                throw new BaseException(WITHDRAW_FAIL_LESSON);
-            }
+            result = lessonDao.withdrawLesson(userIdx, lessonIdx);
+
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(WITHDRAW_FAIL_LESSON);
         }
     }
 
@@ -156,12 +164,13 @@ public class LessonService {
 
 
         try{
-            int result = lessonDao.updateUnlikes(userIdx, lessonIdx);
-            if(result == 0){
-                throw new BaseException(UNLIKES_FAIL_POFOL);
-            }
+            result = lessonDao.updateUnlikes(userIdx, lessonIdx);
+
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(UNLIKES_FAIL_POFOL);
         }
     }
 }
