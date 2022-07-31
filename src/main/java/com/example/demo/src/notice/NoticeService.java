@@ -41,4 +41,21 @@ public class NoticeService {
         }
     }
 
+    /**
+     * 알림 전체 삭제
+     */
+    public void deleteNotice(int userIdx) throws BaseException {
+
+        try{
+            int result = noticeDao.deleteNotice(userIdx);
+            System.out.println(result);
+            if(result == 0){
+                throw new BaseException(DELETE_FAIL_NOTICE);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
+
 }

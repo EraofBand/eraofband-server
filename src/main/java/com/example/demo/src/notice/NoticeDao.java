@@ -65,5 +65,15 @@ public class NoticeDao {
         return this.jdbcTemplate.update(deleteUserQuery, deleteUserParams);
     }
 
+    /**
+     * 알림 전체 삭제
+     */
+    public int deleteNotice(int userIdx) {
+        String deleteNoticeQuery = "DELETE FROM Notice WHERE receiverIdx = ?";
+        Object[] deleteNoticeParams = new Object[]{userIdx};
+
+        return this.jdbcTemplate.update(deleteNoticeQuery, deleteNoticeParams);
+    }
+
 
 }
