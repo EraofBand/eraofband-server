@@ -29,10 +29,10 @@ public class SearchProvider {
     /**
      * 상단바 유저 검색
      */
-    public List<GetSearchUserRes> getSearchUser(int userIdxByJwt, String keyword) throws BaseException {
+    public List<GetSearchUserRes> getSearchUser(String keyword) throws BaseException {
 
         try {
-            List<GetSearchUserRes> getSearchUser = searchDao.getSearchUser(userIdxByJwt, keyword);
+            List<GetSearchUserRes> getSearchUser = searchDao.getSearchUser(keyword);
             return getSearchUser;
 
         } catch (Exception exception) {

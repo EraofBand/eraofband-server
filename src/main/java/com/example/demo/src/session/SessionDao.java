@@ -207,7 +207,7 @@ public class SessionDao {
      * 밴드 지원자 조회
      */
     public List<GetSessionAppRes> getApplicants(int bandIdx) {
-        String getApplicantsQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.introduction as introduction, u.token as token,\n" +
+        String getApplicantsQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.introduction as introduction,\n" +
                 "case\n" +
                 "when timestampdiff(second, BU.updatedAt, current_timestamp) < 60\n" +
                 "then concat(timestampdiff(second, BU.updatedAt, current_timestamp), '초 전')\n" +
@@ -230,8 +230,7 @@ public class SessionDao {
                         rs.getString("profileImgUrl"),
                         rs.getString("nickName"),
                         rs.getString("introduction"),
-                        rs.getString("updatedAt"),
-                        rs.getString("token")),
+                        rs.getString("updatedAt")),
                 getBandByIdxParams);
     }
 
@@ -249,7 +248,7 @@ public class SessionDao {
                 "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl,\n" +
                 "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount," +
                 "       IF(bandLikeCount is null, 0, bandLikeCount) as bandLikeCount,\n" +
-                "       IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot, u.token as token\n" +
+                "       IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName, profileImgUrl, introduction, token FROM User) u on u.userIdx = b.userIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
@@ -295,8 +294,7 @@ public class SessionDao {
                         rs.getInt("bandLikeCount"),
                         rs.getInt("capacity"),
                         rs.getInt("memberCount"),
-                        applicants,
-                        rs.getString("token")),
+                        applicants),
                 getBandByIdxParams);
     }
 
@@ -314,7 +312,7 @@ public class SessionDao {
                 "       b.performLocation as performLocation, b.performFee as performFee,b.bandImgUrl as bandImgUrl,\n" +
                 "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount,\n" +
                 "       IF(bandLikeCount is null, 0, bandLikeCount) as bandLikeCount,\n" +
-                "       IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot, u.token as token\n" +
+                "       IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName, profileImgUrl, introduction, token FROM User) u on u.userIdx = b.userIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
@@ -360,8 +358,7 @@ public class SessionDao {
                         rs.getInt("bandLikeCount"),
                         rs.getInt("capacity"),
                         rs.getInt("memberCount"),
-                        null,
-                        rs.getString("token")),
+                        null),
                 getBandByIdxParams);
     }
 
@@ -379,7 +376,7 @@ public class SessionDao {
                 "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl," +
                 "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount,\n" +
                 "       IF(bandLikeCount is null, 0, bandLikeCount) as bandLikeCount,\n" +
-                "       IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot, u.token as token\n" +
+                "       IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName, profileImgUrl, introduction, token FROM User) u on u.userIdx = b.userIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as vocalCount from BandUser where status='ACTIVE' and buSession=0 group by bandIdx) b0 on b0.bandIdx=b.bandIdx\n" +
@@ -425,8 +422,7 @@ public class SessionDao {
                         rs.getInt("bandLikeCount"),
                         rs.getInt("capacity"),
                         rs.getInt("memberCount"),
-                        null,
-                        rs.getString("token")),
+                        null),
                 getBandByIdxParams);
     }
 
