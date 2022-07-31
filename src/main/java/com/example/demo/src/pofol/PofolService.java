@@ -22,6 +22,8 @@ public class PofolService {
     private final PofolProvider pofolProvider;
     private final JwtService jwtService;
 
+    private int result;
+
 
     @Autowired
     public PofolService(PofolDao pofolDao, PofolProvider pofolProvider, JwtService jwtService) {
@@ -58,13 +60,13 @@ public class PofolService {
         }
 
         try{
-            int result = pofolDao.updatePofol(pofolIdx,patchPofolReq);
-            if(result == 0){
-                throw new BaseException(MODIFY_FAIL_POFOL);
-            }
+            result = pofolDao.updatePofol(pofolIdx,patchPofolReq);
         } catch(Exception exception){
 
             throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(MODIFY_FAIL_POFOL);
         }
     }
 
@@ -82,12 +84,12 @@ public class PofolService {
         }
 
         try{
-            int result = pofolDao.updatePofolStatus(pofolIdx);
-            if(result == 0){
-                throw new BaseException(DELETE_FAIL_POFOL);
-            }
+            result = pofolDao.updatePofolStatus(pofolIdx);
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(DELETE_FAIL_POFOL);
         }
     }
 
@@ -104,10 +106,10 @@ public class PofolService {
         }
 
         try{
-            int result = pofolDao.updateLikes(userIdx, pofolIdx);
-            if(result == 0){
-                throw new BaseException(LIKES_FAIL_POFOL);
-            }
+            result = pofolDao.updateLikes(userIdx, pofolIdx);
+//            if(result == 0){
+//                throw new BaseException(LIKES_FAIL_POFOL);
+//            }
             return new PostLikeRes(result);
         } catch(Exception exception){
             System.out.println(exception);
@@ -129,12 +131,13 @@ public class PofolService {
         }
 
         try{
-            int result = pofolDao.updateUnlikes(userIdx, pofolIdx);
-            if(result == 0){
-                throw new BaseException(UNLIKES_FAIL_POFOL);
-            }
+            result = pofolDao.updateUnlikes(userIdx, pofolIdx);
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
+        }
+
+        if(result == 0){
+            throw new BaseException(UNLIKES_FAIL_POFOL);
         }
 
     }
@@ -182,14 +185,16 @@ public class PofolService {
         }
 
         try{
-            int result = pofolDao.deleteComment(pofolCommentIdx);
-            if(result == 0){
-                throw new BaseException(DELETE_FAIL_POFOL_COMMENT);
-            }
+            result = pofolDao.deleteComment(pofolCommentIdx);
+
+//            if(result == 0){
+//                throw new BaseException(DELETE_FAIL_POFOL_COMMENT);
+//            }
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
+
     }
 
 }

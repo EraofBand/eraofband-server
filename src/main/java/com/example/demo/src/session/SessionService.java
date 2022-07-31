@@ -16,6 +16,9 @@ public class SessionService {
     private final SessionProvider sessionProvider;
     private final JwtService jwtService;
 
+    private int result;
+
+
     @Autowired
     public SessionService(SessionDao sessionDao, SessionProvider sessionProvider, JwtService jwtService) {
         this.sessionDao = sessionDao;
@@ -46,13 +49,14 @@ public class SessionService {
         }
 
         try{
-            int result = sessionDao.updateBand(bandIdx, patchBandReq);
-            if(result == 0){
-                throw new BaseException(MODIFY_FAIL_BAND);
-            }
+            result = sessionDao.updateBand(bandIdx, patchBandReq);
+
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(MODIFY_FAIL_BAND);
         }
     }
 
@@ -66,12 +70,13 @@ public class SessionService {
         }
 
         try{
-            int result = sessionDao.updateBandStatus(bandIdx);
-            if(result == 0){
-                throw new BaseException(DELETE_FAIL_BAND);
-            }
+            result = sessionDao.updateBandStatus(bandIdx);
+
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(DELETE_FAIL_BAND);
         }
     }
 
@@ -103,12 +108,13 @@ public class SessionService {
             throw new BaseException(POSTS_EMPTY_BAND_ID);
         }
         try{
-            int result = sessionDao.withdrawBand(userIdx, bandIdx);
-            if(result == 0){
-                throw new BaseException(WITHDRAW_FAIL_BAND);
-            }
+            result = sessionDao.withdrawBand(userIdx, bandIdx);
+
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(WITHDRAW_FAIL_BAND);
         }
     }
 
@@ -166,10 +172,10 @@ public class SessionService {
         }
 
         try{
-            int result = sessionDao.updateLikes(userIdx, bandIdx);
-            if(result == 0){
-                throw new BaseException(LIKES_FAIL_BAND);
-            }
+            result = sessionDao.updateLikes(userIdx, bandIdx);
+//            if(result == 0){
+//                throw new BaseException(LIKES_FAIL_BAND);
+//            }
             return new PostBandLikeRes(result);
         } catch(Exception exception){
             System.out.println(exception);
@@ -189,12 +195,14 @@ public class SessionService {
         }
 
         try{
-            int result = sessionDao.updateUnlikes(userIdx, bandIdx);
-            if(result == 0){
-                throw new BaseException(UNLIKES_FAIL_BAND);
-            }
+            result = sessionDao.updateUnlikes(userIdx, bandIdx);
+
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
+        }
+
+        if(result == 0){
+            throw new BaseException(UNLIKES_FAIL_BAND);
         }
     }
 }
