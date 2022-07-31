@@ -231,7 +231,7 @@ public class UserController {
 
     /**
      * 팔로우 취소 API
-     *  * status 말고 delete로
+     * delete로
      * [DELETE] /users/unfollow/10
      * @return BaseResponse<String>
      */
