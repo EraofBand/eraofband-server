@@ -59,5 +59,27 @@ public class NoticeController {
         }
 
     }
+
+    /**
+     * 알림 전체 삭제 API
+     * [DELETE] /notice/delete
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @DeleteMapping("/delete") // (delete) https://eraofband.shop/notice/delete
+    @ApiOperation(value = "알림 전체 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    public BaseResponse<String> deleteNotice() {
+
+        try {
+            int userIdxByJwt = jwtService.getUserIdx();
+            noticeService.deleteNotice(userIdxByJwt);
+
+            String result = "알림을 모두 삭제했습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
 }
 

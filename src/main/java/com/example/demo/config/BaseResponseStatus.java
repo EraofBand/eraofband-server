@@ -78,6 +78,10 @@ public enum BaseResponseStatus {
 
     UNLIKES_FAIL_POFOL(false,2023,"포트폴리오 좋아요 취소에 실패했습니다."),
 
+    // notice
+    DELETE_FAIL_NOTICE(false,2024,"알림 삭제에 실패했습니다."),
+
+
 
     /**
      * 3000 : Response 오류
