@@ -30,9 +30,9 @@ public class SearchDao {
      */
     public List<GetSearchUserRes> getSearchUser(int userIdxByJwt, String search){
         String getSearchUserQuery = "\n"+
-                "select u.userIdx as userIdx, u.nickName as nickName,u.profileImgUrl as profileImgUrl,u.userSession as userSession, u.token as token, follow as follow\n" +
+                "select u.userIdx as userIdx, u.nickName as nickName,u.profileImgUrl as profileImgUrl,u.userSession as userSession, u.token as token," +
+                " (IF(exists(select followIdx from Follow where followerIdx = ? and followeeIdx = u.userIdx), 1, 0)) as follow\n" +
                 "        from User as u\n" +
-                "           left join (select exists(select followIdx from Follow where followerIdx=? and followeeIdx=u.userIdx)as follow) fw on fw.follow\n"+
                 "        where u.status='ACTIVE' and u.nickName LIKE CONCAT('%', ?, '%')\n" +
                 "        group by u.userIdx\n" +
                 "        order by u.userIdx";
