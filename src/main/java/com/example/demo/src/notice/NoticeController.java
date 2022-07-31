@@ -62,11 +62,11 @@ public class NoticeController {
 
     /**
      * 알림 전체 삭제 API
-     * [DELETE] /notice/delete
+     * [DELETE] /notice/status
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @DeleteMapping("/delete") // (delete) https://eraofband.shop/notice/delete
+    @DeleteMapping("/status") // (delete) https://eraofband.shop/notice/status
     @ApiOperation(value = "알림 전체 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     public BaseResponse<String> deleteNotice() {
 
