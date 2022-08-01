@@ -198,6 +198,7 @@ public class UserService {
             //알림 테이블에 추가
             userDao.followNoti(getUserNotiInfoRes, userIdx);
 
+
             //푸시 알림 보내기
             GetUserTokenRes getUserTokenRes= userDao.getFCMToken(userIdx);
             System.out.println(getUserTokenRes.getToken());
@@ -219,7 +220,7 @@ public class UserService {
             System.out.println("4");
 
             System.out.println(response.body().string());
-
+            
             return new PostFollowRes(result);
         } catch(Exception exception){
             System.out.println(exception);

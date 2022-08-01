@@ -85,6 +85,11 @@ public class SessionService {
      * 밴드 지원
      * */
     public PostApplyRes applySession(int userIdx, int bandIdx, PostApplyReq postApplyReq) throws BaseException {
+
+        if(sessionProvider.checkBandExist(bandIdx) ==0){
+            throw new BaseException(POSTS_EMPTY_BAND_ID);
+        }
+
         try{
             int bandUserIdx = sessionDao.insertApply(userIdx, bandIdx, postApplyReq);
 
