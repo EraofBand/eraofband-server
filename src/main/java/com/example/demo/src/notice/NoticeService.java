@@ -33,12 +33,12 @@ public class NoticeService {
         try{
             int result = noticeDao.updateNoticeStatus(userIdx);
             if(result == 0){
-
                 throw new BaseException(DATABASE_ERROR);
             }
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
+
     }
 
     /**
@@ -49,9 +49,7 @@ public class NoticeService {
         try{
             int result = noticeDao.deleteNotice(userIdx);
             System.out.println(result);
-            if(result == 0){
-                throw new BaseException(DELETE_FAIL_NOTICE);
-            }
+
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
