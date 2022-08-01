@@ -5,3 +5,5 @@ build/
 .iml
 
 aws.yml
+
+firebase_service_key.json

@@ -327,4 +327,16 @@ public class UserDao {
                 ),
                 getFollowParams);
     }
+
+    /**
+     * FCM 토큰 반환
+     */
+    public String getFCMToken(int userIdx) {
+        String getFCMQuery = "select token FROM User WHERE userIdx= ?";
+        Object[] getFCMParams = new Object[]{userIdx};
+
+        return this.jdbcTemplate.queryForObject(getFCMQuery,
+                String.class,
+                getFCMParams);
+    }
 }
