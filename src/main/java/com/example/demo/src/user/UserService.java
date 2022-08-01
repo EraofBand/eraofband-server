@@ -199,22 +199,26 @@ public class UserService {
             userDao.followNoti(getUserNotiInfoRes, userIdx);
 
             //푸시 알림 보내기
-//            String receiver= userDao.getFCMToken(userIdx);
-//            String message = makeMessage(receiver, "팔로우", getUserNotiInfoRes.getNickName()+"님이 회원님을 팔로우 했습니다.");
-//
-//            OkHttpClient client = new OkHttpClient();
-//            RequestBody requestBody = RequestBody.create(message,
-//                    MediaType.get("application/json; charset=utf-8"));
-//            Request request = new Request.Builder()
-//                    .url(API_URL)
-//                    .post(requestBody)
-//                    .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-//                    .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
-//                    .build();
-//
-//            Response response = client.newCall(request).execute();
-//
-//            System.out.println(response.body().string());
+            GetUserTokenRes getUserTokenRes= userDao.getFCMToken(userIdx);
+            System.out.println(getUserTokenRes.getToken());
+            String message = makeMessage(getUserTokenRes.getToken(), "팔로우", getUserNotiInfoRes.getNickName()+"님이 회원님을 팔로우 했습니다.");
+
+            System.out.println("1");
+            OkHttpClient client = new OkHttpClient();
+            RequestBody requestBody = RequestBody.create(message,
+                    MediaType.get("application/json; charset=utf-8"));
+            System.out.println("2");
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .post(requestBody)
+                    .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                    .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                    .build();
+            System.out.println("3");
+            Response response = client.newCall(request).execute();
+            System.out.println("4");
+
+            System.out.println(response.body().string());
 
             return new PostFollowRes(result);
         } catch(Exception exception){
@@ -225,6 +229,7 @@ public class UserService {
     }
 
     private String makeMessage(String targetToken, String title, String body) throws JsonParseException, JsonProcessingException {
+        System.out.println("5");
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
@@ -235,7 +240,16 @@ public class UserService {
                                 .build()
                         ).build()).validateOnly(false).build();
 
-        return objectMapper.writeValueAsString(fcmMessage);
+        System.out.println("6");
+        try {
+            return objectMapper.writeValueAsString(fcmMessage);
+        } catch (final JsonProcessingException e) {
+            try {
+                throw new Exception("Couldn't process object.", e);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     private String getAccessToken() throws IOException {

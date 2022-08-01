@@ -140,6 +140,13 @@ com/example/demo/src/lesson/model/GetMemberRes.java
  com.example.demo.src.lesson.model.GetMemberRes
 com/example/demo/src/S33/UploadService.java
  com.example.demo.src.S33.UploadService
+com/example/demo/src/user/model/FcmMessage.java
+ com.example.demo.src.user.model.FcmMessage
+ com.example.demo.src.user.model.FcmMessage$FcmMessageBuilder
+ com.example.demo.src.user.model.FcmMessage$Message
+ com.example.demo.src.user.model.FcmMessage$Message$MessageBuilder
+ com.example.demo.src.user.model.FcmMessage$Notification
+ com.example.demo.src.user.model.FcmMessage$Notification$NotificationBuilder
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
 com/example/demo/src/user/model/GetUserInfoRes.java
@@ -158,6 +165,8 @@ com/example/demo/src/session/model/PostBandRes.java
  com.example.demo.src.session.model.PostBandRes
 com/example/demo/src/lesson/LessonDao.java
  com.example.demo.src.lesson.LessonDao
+com/example/demo/src/user/model/GetUserTokenRes.java
+ com.example.demo.src.user.model.GetUserTokenRes
 com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
 com/example/demo/src/notice/NoticeProvider.java
