@@ -1,5 +1,7 @@
 package com.example.demo.src.notice;
 import com.example.demo.config.BaseException;
+import com.example.demo.config.BaseResponse;
+import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.lesson.LessonDao;
 import com.example.demo.src.lesson.LessonProvider;
 import com.example.demo.src.lesson.model.*;
@@ -45,13 +47,17 @@ public class NoticeService {
      * 알림 전체 삭제
      */
     public void deleteNotice(int userIdx) throws BaseException {
-
+        int result;
         try{
-            int result = noticeDao.deleteNotice(userIdx);
+            result = noticeDao.deleteNotice(userIdx);
             System.out.println(result);
 
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
+        }
+
+        if(result == 0){
+            throw new BaseException(DELETE_FAIL_NOTICE);
         }
 
     }

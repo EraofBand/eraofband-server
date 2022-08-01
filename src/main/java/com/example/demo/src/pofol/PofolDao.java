@@ -136,7 +136,7 @@ public class PofolDao {
                 "                    then concat(timestampdiff(day, p.updatedAt, current_timestamp), '일 전')\n" +
                 "                else timestampdiff(year , p.updatedAt, current_timestamp)\n" +
                 "            end as updatedAt,\n" +
-                "            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot, u.token as token\n" +
+                "            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "        FROM Pofol as p\n" +
                 "            join User as u on u.userIdx = p.userIdx\n" +
                 "            left join (select pofolIdx, userIdx, count(pofolLikeIdx) as pofolLikeCount from PofolLike WHERE status = 'ACTIVE' group by pofolIdx) plc on plc.pofolIdx = p.pofolIdx\n" +
@@ -158,8 +158,7 @@ public class PofolDao {
                         rs.getInt("commentCount"),
                         rs.getString("updatedAt"),
                         rs.getString("likeOrNot"),
-                        rs.getString("videoUrl"),
-                        rs.getString("token")
+                        rs.getString("videoUrl")
                 ), selectUserPofolParam);
 
     }
@@ -190,7 +189,7 @@ public class PofolDao {
                 "                    then concat(timestampdiff(day, p.updatedAt, current_timestamp), '일 전')\n" +
                 "                else timestampdiff(year, p.updatedAt, current_timestamp)\n" +
                 "            end as updatedAt,\n" +
-                "            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot, u.token as token\n" +
+                "            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "        FROM Pofol as p\n" +
                 "            join User as u on u.userIdx = p.userIdx\n" +
                 "            left join (select pofolIdx, userIdx, count(pofolLikeIdx) as pofolLikeCount from PofolLike WHERE status = 'ACTIVE' group by pofolIdx) plc on plc.pofolIdx = p.pofolIdx\n" +
@@ -211,8 +210,7 @@ public class PofolDao {
                         rs.getInt("commentCount"),
                         rs.getString("updatedAt"),
                         rs.getString("likeOrNot"),
-                        rs.getString("videoUrl"),
-                        rs.getString("token")
+                        rs.getString("videoUrl")
                 ), selectMyPofolParam);
 
     }

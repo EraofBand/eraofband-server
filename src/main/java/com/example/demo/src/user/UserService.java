@@ -2,24 +2,28 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.pofol.model.PostLikeRes;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
-import com.example.demo.utils.SHA256;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.common.net.HttpHeaders;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
+import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -31,6 +35,8 @@ public class UserService {
     private final UserDao userDao;
     private final UserProvider userProvider;
     private final JwtService jwtService;
+
+    private int result;
 
 
     @Autowired
@@ -136,11 +142,13 @@ public class UserService {
      */
     public void modifyUserInfo(PatchUserReq patchUserReq) throws BaseException {
         try {
-            int result = userDao.modifyUserInfo(patchUserReq);
-            if (result == 0) {
-                throw new BaseException(MODIFY_FAIL_USER);
-            }} catch (Exception exception) {
+            result = userDao.modifyUserInfo(patchUserReq);
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
+        }
+
+        if (result == 0) {
+            throw new BaseException(MODIFY_FAIL_USER);
         }
     }
 
@@ -149,11 +157,12 @@ public class UserService {
      */
     public void modifyUserSession(PatchSessionReq patchSessionReq) throws BaseException {
         try {
-            int result = userDao.modifyUserSession(patchSessionReq);
-            if (result == 0) {
-                throw new BaseException(MODIFY_FAIL_SESSION);
-            }} catch (Exception exception) {
+            result = userDao.modifyUserSession(patchSessionReq);
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
+        }
+        if (result == 0) {
+            throw new BaseException(MODIFY_FAIL_SESSION);
         }
     }
 
@@ -162,22 +171,25 @@ public class UserService {
      */
     public void deleteUser ( int userIdx) throws BaseException {
         try {
-            int result = userDao.deleteUser(userIdx);
-            if(result == 0){
-                throw new BaseException(DELETE_FAIL_USER);
-            }
+            result = userDao.deleteUser(userIdx);
+
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
+        if(result == 0){
+            throw new BaseException(DELETE_FAIL_USER);
+        }
     }
 
+    private final String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
+    private final ObjectMapper objectMapper = null;
     /**
      * 팔로우 하기
      */
     public PostFollowRes followUser(int myIdx, int userIdx) throws BaseException {
 
         try{
-            int result = userDao.updateFollow(myIdx, userIdx);
+            result = userDao.updateFollow(myIdx, userIdx);
             if(result == 0){
                 throw new BaseException(FOLLOW_FAIL_USER);
             }
@@ -185,6 +197,24 @@ public class UserService {
             GetUserNotiInfoRes getUserNotiInfoRes=userDao.Noti(myIdx);
             //알림 테이블에 추가
             userDao.followNoti(getUserNotiInfoRes, userIdx);
+
+            //푸시 알림 보내기
+//            String receiver= userDao.getFCMToken(userIdx);
+//            String message = makeMessage(receiver, "팔로우", getUserNotiInfoRes.getNickName()+"님이 회원님을 팔로우 했습니다.");
+//
+//            OkHttpClient client = new OkHttpClient();
+//            RequestBody requestBody = RequestBody.create(message,
+//                    MediaType.get("application/json; charset=utf-8"));
+//            Request request = new Request.Builder()
+//                    .url(API_URL)
+//                    .post(requestBody)
+//                    .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+//                    .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+//                    .build();
+//
+//            Response response = client.newCall(request).execute();
+//
+//            System.out.println(response.body().string());
 
             return new PostFollowRes(result);
         } catch(Exception exception){
@@ -194,18 +224,45 @@ public class UserService {
 
     }
 
+    private String makeMessage(String targetToken, String title, String body) throws JsonParseException, JsonProcessingException {
+        FcmMessage fcmMessage = FcmMessage.builder()
+                .message(FcmMessage.Message.builder()
+                        .token(targetToken)
+                        .notification(FcmMessage.Notification.builder()
+                                .title(title)
+                                .body(body)
+                                .image(null)
+                                .build()
+                        ).build()).validateOnly(false).build();
+
+        return objectMapper.writeValueAsString(fcmMessage);
+    }
+
+    private String getAccessToken() throws IOException {
+        String firebaseConfigPath = "firebase_service_key.json";
+
+        GoogleCredentials googleCredentials = GoogleCredentials
+                .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
+                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+
+        googleCredentials.refreshIfExpired();
+        return googleCredentials.getAccessToken().getTokenValue();
+    }
+
     /**
      * 팔로우 취소 하기
      */
     public void unfollowUser(int myIdx, int userIdx) throws BaseException {
         try{
-            int result = userDao.updateUnFollow(myIdx, userIdx);
-            if(result == 0){
-                throw new BaseException(UNFOLLOW_FAIL_USER);
-            }
+            result = userDao.updateUnFollow(myIdx, userIdx);
+
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
+        }
+
+        if(result == 0){
+            throw new BaseException(UNFOLLOW_FAIL_USER);
         }
 
     }
