@@ -4,9 +4,7 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.src.pofol.model.PostLikeRes;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +40,11 @@ public class UserController {
     @GetMapping("/info/{userIdx}") // (GET) eraofband.shop/users/info/2
     @ApiOperation(value = "다른 회원 정보 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="userIdx", value="조회할 유저 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<GetUserFeedRes> getUserByIdx(@PathVariable("userIdx")int userIdx) {
             try{
                 //jwt에서 idx 추출
@@ -62,6 +65,11 @@ public class UserController {
     @GetMapping("/info/my-page/{userIdx}") // (GET) eraofband.shop/users/info/my-page/12
     @ApiOperation(value = "마이페이지 정보 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="userIdx", value="조회할 유저 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<GetMyFeedRes> getMypage(@PathVariable("userIdx")int userIdx) {
         try{
             //jwt에서 idx 추출
@@ -86,6 +94,13 @@ public class UserController {
     @ResponseBody
     @PostMapping("/signin/{access-token}") // (POST) eraofband.shop/users/signin/dsfdsbfuewhiuwf...
     @ApiImplicitParam(name="access-token", value="접근 가능 토큰", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2015, message="이메일을 입력해주세요."),
+            @ApiResponse(code=2016, message="이메일 형식을 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<PostUserRes> createKakaoUser(@PathVariable("access-token") String token, @RequestBody PostUserReq postUserReq){
         try{
             String email=userService.getKakaoInfo(token);
@@ -112,6 +127,13 @@ public class UserController {
     @ResponseBody
     @PostMapping("/login/{kakao-email}") // (POST) eraofband.sop/users/login/jdshkf@gmail.com
     @ApiImplicitParam(name="kakao-email", value="회원가입용 이메일", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2015, message="이메일을 입력해주세요."),
+            @ApiResponse(code=2016, message="이메일 형식을 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<PostLoginRes> UserLogin(@PathVariable("kakao-email") String email){
         try {
             //이메일 필수 처리
@@ -138,6 +160,12 @@ public class UserController {
     @ResponseBody
     @PatchMapping("/user-info") // (PATCH) eraofband.shop/users/user-info
     @ApiOperation(value = "회원 정보 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다."),
+            @ApiResponse(code=4014, message="회원 정보 수정에 실패하였습니다.")
+    })
     public BaseResponse<String> modifyUserInfo(@RequestBody PatchUserReq patchUserReq){
         try {
             //jwt에서 idx 추출.
@@ -163,6 +191,12 @@ public class UserController {
     @ResponseBody
     @PatchMapping("/user-session") // (PATCH) eraofband.shop/users/user-session
     @ApiOperation(value = "회원 세션 변경 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다."),
+            @ApiResponse(code=4015, message="회원 정보 수정에 실패하였습니다.")
+    })
     public BaseResponse<String> modifyUserSession(@RequestBody PatchSessionReq patchSessionReq){
         try {
             //jwt에서 idx 추출.
@@ -189,6 +223,12 @@ public class UserController {
     @PatchMapping("/status/{userIdx}") // (PATCH) eraofband.shop/users/status/2
     @ApiOperation(value = "회원 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="userIdx", value="삭제할 유저 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다."),
+            @ApiResponse(code=4016, message="회원 삭제에 실패하였습니다.")
+    })
     public BaseResponse<String> deleteUser(@PathVariable("userIdx") int userIdx){
         try {
             //jwt에서 idx 추출.
@@ -215,6 +255,12 @@ public class UserController {
     @PostMapping("/follow/{userIdx}") // (post) eraofband.shop/users/follow/10
     @ApiOperation(value = "팔로우 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="userIdx", value="팔로우할 유저 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2070, message="유저 팔로우에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<PostFollowRes> followUser(@PathVariable("userIdx") int userIdx){
 //
         try {
@@ -239,6 +285,12 @@ public class UserController {
     @DeleteMapping ("/unfollow/{userIdx}") // (delete) eraofband.shop/users/unfollow/2
     @ApiOperation(value = "팔로우 취소 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="userIdx", value="언팔로우할 유저 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2071, message="유저 팔로우 취소에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<String> unFollowUser(@PathVariable("userIdx") int userIdx){
         try {
             //jwt에서 idx 추출
@@ -261,6 +313,11 @@ public class UserController {
     @GetMapping("/info/follow/{userIdx}") // (GET) eraofband.shop/users/info/follow/12
     @ApiOperation(value = "팔로잉, 팔로워 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="userIdx", value="조회할 유저 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<GetFollowRes> getFollow(@PathVariable("userIdx")int userIdx) {
         try{
             int userIdxByJwt = jwtService.getUserIdx();

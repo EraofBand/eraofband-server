@@ -9,6 +9,8 @@ import com.example.demo.src.search.model.GetSearchUserRes;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +42,9 @@ public class SearchController {
     @GetMapping("/users/{keyword}") // (get) https://eraofband.shop/search/users/해리
     @ApiOperation(value = "상단바 유저 검색")
     @ApiImplicitParam(name="keyword", value="검색할 유저", required = true)
+    @ApiResponses({
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<List<GetSearchUserRes>> getSearchUser(@PathVariable("keyword") String keyword){
         try{
             List<GetSearchUserRes> getSearchUserRes = searchProvider.getSearchUser(keyword);
@@ -59,6 +64,9 @@ public class SearchController {
     @GetMapping("/bands/{keyword}") // (get) https://eraofband.shop/search/bands/락밴드
     @ApiOperation(value = "상단바 밴드 검색")
     @ApiImplicitParam(name="keyword", value="검색할 밴드", required = true)
+    @ApiResponses({
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<List<GetSearchBandRes>> getSearchBand(@PathVariable("keyword") String keyword){
         try{
 
@@ -79,6 +87,9 @@ public class SearchController {
     @GetMapping("/lessons/{keyword}") // (get) https://eraofband.shop/search/lessons/기타레슨
     @ApiOperation(value = "상단바 레슨 검색")
     @ApiImplicitParam(name="keyword", value="검색할 레슨", required = true)
+    @ApiResponses({
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<List<GetSearchLesRes>> getSearchLes(@PathVariable("keyword") String keyword){
         try{
 

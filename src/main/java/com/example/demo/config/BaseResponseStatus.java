@@ -30,56 +30,64 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
 
+
+
+    // band
+    POSTS_EMPTY_BAND_ID(false,2020,"밴드 아이디 값을 확인해주세요."),
+    POST_BANDS_EMPTY_CONTENTS(false,2021,"내용 입력값을 확인해주세요."),
+    POST_BANDS_INVALID_CONTENTS(false,2022,"내용의 글자수를 확인해주세요."),
+    POST_BANDS_EMPTY_IMG(false,2023,"이미지를 입력해주세요."),
+    MODIFY_FAIL_BAND(false,2024,"밴드 변경에 실패했습니다."),
+    DELETE_FAIL_BAND(false,2025,"밴드 삭제에 실패했습니다."),
+    LIKES_FAIL_BAND(false,2026,"밴드 좋아요에 실패했습니다."),
+    UNLIKES_FAIL_BAND(false,2027,"밴드 좋아요 취소에 실패했습니다."),
+
+    ALREADY_BAND(false, 2030, "이미 지원한 밴드입니다."),
+    NOT_BAND_MEMBER(false, 2031, "등록하지 않은 밴드입니다."),
+    WITHDRAW_FAIL_BAND(false,2032,"밴드 탈퇴에 실패했습니다."),
+
+    // lesson
+    DELETE_FAIL_LESSON(false,2040,"레슨 삭제에 실패했습니다."),
+
+
+    POSTS_EMPTY_LESSON_ID(false,2050,"레슨 아이디 값을 확인해주세요."),
+
+    MODIFY_FAIL_LESSON(false,2051,"레슨 수정에 실패했습니다."),
+
+    LIKES_FAIL_LESSON(false,2052,"레슨 좋아요에 실패했습니다."),
+
+    ALREADY_LESSON(false, 2053, "이미 지원한 레슨입니다."),
+
+    NOT_LESSON_MEMBER(false, 2054, "등록하지 않은 레슨입니다."),
+
+    WITHDRAW_FAIL_LESSON(false,2055,"레슨 탈퇴에 실패했습니다."),
+
+    UNLIKES_FAIL_LESSON(false,2056,"레슨 좋아요 취소에 실패했습니다."),
+
+
+    // pofol
+    POSTS_EMPTY_POFOL_ID(false,2060,"포트폴리오 아이디 값을 확인해주세요."),
+    POSTS_EMPTY_POFOL_COMMENT_ID(false,2061,"포트폴리오 댓글 아이디 값을 확인해주세요."),
+    POST_POSTS_INVALID_CONTENTS(false,2062,"내용의 글자수를 확인해주세요."),
+
+    POST_POSTS_EMPTY_VIDEOURL(false,2063,"포트폴리오 동영상을 입력해주세요."),
+    MODIFY_FAIL_POFOL(false,2064,"포트폴리오 수정에 실패했습니다."),
+    DELETE_FAIL_POFOL(false,2065,"포트폴리오 삭제에 실패했습니다."),
+
+    DELETE_FAIL_POFOL_COMMENT(false,2066,"포트폴리오 댓글 삭제에 실패했습니다."),
+
+    LIKES_FAIL_POFOL(false,2067,"포트폴리오 좋아요에 실패했습니다."),
+
+    UNLIKES_FAIL_POFOL(false,2068,"포트폴리오 좋아요 취소에 실패했습니다."),
+
+
+    // follow
     FOLLOW_FAIL_USER(false,2070,"유저 팔로우에 실패했습니다."),
     UNFOLLOW_FAIL_USER(false,2071,"유저 팔로우 취소에 실패했습니다."),
 
-    // band
-    POSTS_EMPTY_BAND_ID(false,2018,"밴드 아이디 값을 확인해주세요."),
-    POST_BANDS_EMPTY_CONTENTS(false,2019,"내용 입력값을 확인해주세요."),
-    POST_BANDS_INVALID_CONTENTS(false,2019,"내용의 글자수를 확인해주세요."),
-    POST_BANDS_EMPTY_IMG(false,2019,"이미지를 입력해주세요."),
-    MODIFY_FAIL_BAND(false,2019,"밴드 변경에 실패했습니다."),
-    DELETE_FAIL_BAND(false,2019,"밴드 삭제에 실패했습니다."),
-    LIKES_FAIL_BAND(false,2029,"밴드 좋아요에 실패했습니다."),
-    UNLIKES_FAIL_BAND(false,2023,"밴드 좋아요 취소에 실패했습니다."),
-
-    ALREADY_BAND(false, 2031, "이미 지원한 밴드입니다."),
-    NOT_BAND_MEMBER(false, 2034, "등록하지 않은 밴드입니다."),
-    WITHDRAW_FAIL_BAND(false,2036,"밴드 탈퇴에 실패했습니다."),
-
-    // lesson
-    DELETE_FAIL_LESSON(false,2019,"레슨 삭제에 실패했습니다."),
-
-
-    POSTS_EMPTY_LESSON_ID(false,2018,"레슨 아이디 값을 확인해주세요."),
-
-    MODIFY_FAIL_LESSON(false,2019,"레슨 변경에 실패했습니다."),
-
-    LIKES_FAIL_LESSON(false,2022,"레슨 좋아요에 실패했습니다."),
-
-    ALREADY_LESSON(false, 2032, "이미 지원한 레슨입니다."),
-
-    NOT_LESSON_MEMBER(false, 2033, "등록하지 않은 레슨입니다."),
-
-    WITHDRAW_FAIL_LESSON(false,2025,"레슨 탈퇴에 실패했습니다."),
-
-    // pofol
-    POSTS_EMPTY_POFOL_ID(false,2020,"포트폴리오 아이디 값을 확인해주세요."),
-    POSTS_EMPTY_POFOL_COMMENT_ID(false,2020,"포트폴리오 댓글 아이디 값을 확인해주세요."),
-    POST_POSTS_INVALID_CONTENTS(false,2021,"내용의 글자수를 확인해주세요."),
-
-    POST_POSTS_EMPTY_VIDEOURL(false,2021,"포트폴리오 동영상을 입력해주세요."),
-    MODIFY_FAIL_POFOL(false,2021,"포트폴리오 변경에 실패했습니다."),
-    DELETE_FAIL_POFOL(false,2021,"포트폴리오 삭제에 실패했습니다."),
-
-    DELETE_FAIL_POFOL_COMMENT(false,2021,"포트폴리오 댓글 삭제에 실패했습니다."),
-
-    LIKES_FAIL_POFOL(false,2022,"포트폴리오 좋아요에 실패했습니다."),
-
-    UNLIKES_FAIL_POFOL(false,2023,"포트폴리오 좋아요 취소에 실패했습니다."),
 
     // notice
-    DELETE_FAIL_NOTICE(false,2024,"알림 삭제에 실패했습니다."),
+    DELETE_FAIL_NOTICE(false,2080,"알림 삭제에 실패했습니다."),
 
 
 
@@ -102,9 +110,9 @@ public enum BaseResponseStatus {
     SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다."),
 
     //[PATCH] /users/{userIdx}
-    MODIFY_FAIL_USER(false,4014,"회원 정보 수정 실패"),
-    MODIFY_FAIL_SESSION(false,4015,"회원 정보 수정 실패"),
-    DELETE_FAIL_USER(false,4016,"회원 삭제 실패"),
+    MODIFY_FAIL_USER(false,4014,"회원 정보 수정에 실패하였습니다."),
+    MODIFY_FAIL_SESSION(false,4015,"회원 정보 수정에 실패하였습니다."),
+    DELETE_FAIL_USER(false,4016,"회원 삭제에 실패하였습니다."),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");

@@ -94,6 +94,10 @@ public class LessonService {
      * */
     public PostSignUpRes applyLesson(int userIdx, int lessonIdx) throws BaseException {
 
+        if(lessonProvider.checkLessonExist(lessonIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_LESSON_ID);
+        }
+
         try{
             int lessonUserIdx = lessonDao.insertSignUp(userIdx, lessonIdx);
 
@@ -170,7 +174,7 @@ public class LessonService {
             throw new BaseException(DATABASE_ERROR);
         }
         if(result == 0){
-            throw new BaseException(UNLIKES_FAIL_POFOL);
+            throw new BaseException(UNLIKES_FAIL_LESSON);
         }
     }
 }

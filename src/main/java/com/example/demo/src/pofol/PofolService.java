@@ -38,6 +38,10 @@ public class PofolService {
      */
     public PostPofolRes createPofol(int userIdx, PostPofolReq postPofolReq) throws BaseException {
 
+        if(pofolProvider.checkUserExist(userIdx) == 0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+
         try{
             int pofolIdx = pofolDao.insertPofol(userIdx, postPofolReq);
             return new PostPofolRes(pofolIdx);
@@ -116,6 +120,8 @@ public class PofolService {
             throw new BaseException(DATABASE_ERROR);
         }
 
+
+
     }
 
     /**
@@ -158,6 +164,13 @@ public class PofolService {
      * 댓글 등록
      */
     public int createComment(int pofolIdx, int userIdx, PostCommentReq postCommentReq) throws BaseException {
+
+        if(pofolProvider.checkUserExist(userIdx) == 0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+        if(pofolProvider.checkPofolExist(pofolIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_POFOL_ID);
+        }
 
         try{
             int pofolCommentIdx = pofolDao.insertComment(pofolIdx, userIdx, postCommentReq);

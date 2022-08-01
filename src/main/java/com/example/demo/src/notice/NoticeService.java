@@ -35,12 +35,12 @@ public class NoticeService {
         try{
             int result = noticeDao.updateNoticeStatus(userIdx);
             if(result == 0){
-
                 throw new BaseException(DATABASE_ERROR);
             }
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
+
     }
 
     /**
