@@ -199,22 +199,22 @@ public class UserService {
             userDao.followNoti(getUserNotiInfoRes, userIdx);
 
             //푸시 알림 보내기
-            String receiver= userDao.getFCMToken(userIdx);
-            String message = makeMessage(receiver, "팔로우", getUserNotiInfoRes.getNickName()+"님이 회원님을 팔로우 했습니다.");
-
-            OkHttpClient client = new OkHttpClient();
-            RequestBody requestBody = RequestBody.create(message,
-                    MediaType.get("application/json; charset=utf-8"));
-            Request request = new Request.Builder()
-                    .url(API_URL)
-                    .post(requestBody)
-                    .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-                    .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
-                    .build();
-
-            Response response = client.newCall(request).execute();
-
-            System.out.println(response.body().string());
+//            String receiver= userDao.getFCMToken(userIdx);
+//            String message = makeMessage(receiver, "팔로우", getUserNotiInfoRes.getNickName()+"님이 회원님을 팔로우 했습니다.");
+//
+//            OkHttpClient client = new OkHttpClient();
+//            RequestBody requestBody = RequestBody.create(message,
+//                    MediaType.get("application/json; charset=utf-8"));
+//            Request request = new Request.Builder()
+//                    .url(API_URL)
+//                    .post(requestBody)
+//                    .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+//                    .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+//                    .build();
+//
+//            Response response = client.newCall(request).execute();
+//
+//            System.out.println(response.body().string());
 
             return new PostFollowRes(result);
         } catch(Exception exception){
