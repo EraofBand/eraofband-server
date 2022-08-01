@@ -7,6 +7,8 @@ import com.example.demo.src.pofol.model.*;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +51,12 @@ public class PofolController {
     @GetMapping("/info/follow/{userIdx}")  // (get) https://eraofband.shop/pofols/info/follow/12
     @ApiOperation(value = " 팔로우 한 유저 포트폴리오 리스트 조회")
     @ApiImplicitParam(name="userIdx", value="팔로우한 유저 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<List<GetPofolRes>> getPofol(@PathVariable("userIdx") int userIdx){
         try{
-            //jwt 없애기
-            //int userIdxByJwt = jwtService.getUserIdx();
-            //List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdxByJwt);
 
             List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdx);
             return new BaseResponse<>(getPofol);
@@ -72,12 +75,13 @@ public class PofolController {
     @GetMapping("/info/{userIdx}")   // (get) https://eraofband.shop/pofols/info/12
     @ApiOperation(value = "포트폴리오 리스트 조회")
     @ApiImplicitParam(name="userIdx", value="해당 유저 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<List<GetPofolRes>> getMyPofol(@PathVariable("userIdx") int userIdx){
 
         try{
-            //jwt 없애기
-            //int userIdxByJwt = jwtService.getUserIdx();
-            //List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdxByJwt);
 
             List<GetPofolRes> getMyPofol=pofolProvider.retrieveMyPofol(userIdx);
             return new BaseResponse<>(getMyPofol);
@@ -95,6 +99,14 @@ public class PofolController {
     @ResponseBody
     @PostMapping("") // (post) https://eraofband.shop/pofol
     @ApiOperation(value = "포트폴리오 생성 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2062, message="내용의 글자수를 확인해주세요."),
+            @ApiResponse(code=2063, message="포트폴리오 동영상을 입력해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<PostPofolRes> createPofol(@RequestBody PostPofolReq postPofolReq) {
 
         if(postPofolReq.getContent().length()>450){
@@ -127,6 +139,15 @@ public class PofolController {
     @PatchMapping("/pofol-info/{pofolIdx}/") // (patch) https://eraofband.shop/pofol/pofol-info/2
     @ApiOperation(value = "포트폴리오 수정 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="pofolIdx", value="수정할 포트폴리오 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2060, message="포트폴리오 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2062, message="내용의 글자수를 확인해주세요."),
+            @ApiResponse(code=2064, message="포트폴리오 수정에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<String> modifyPofol(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PatchPofolReq patchPofolReq){
         try{
 
@@ -158,6 +179,15 @@ public class PofolController {
     @PatchMapping("/status/{pofolIdx}") // (patch) https://eraofband.shop/pofol/status/2
     @ApiOperation(value = "포트폴리오 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="pofolIdx", value="삭제할 포트폴리오 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2060, message="포트폴리오 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2062, message="내용의 글자수를 확인해주세요."),
+            @ApiResponse(code=2065, message="포트폴리오 삭제에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<String> deletePofol(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PatchPofComReq patchPofComReq){
         try {
 
@@ -185,6 +215,13 @@ public class PofolController {
     @PostMapping("/likes/{pofolIdx}") // (post) https://eraofband.shop/pofol/likes/2
     @ApiOperation(value = "포트폴리오 좋아요 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="pofolIdx", value="좋아요할 포트폴리오 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2060, message="포트폴리오 아이디 값을 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<PostLikeRes> likesPofol(@PathVariable("pofolIdx") int pofolIdx){
 //
         try {
@@ -210,6 +247,14 @@ public class PofolController {
     @DeleteMapping ("/unlikes/{pofolIdx}") // (delete) https://eraofband.shop/pofol/unlikes/2
     @ApiOperation(value = "포트폴리오 좋아요 취소 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="pofolIdx", value="좋아요 취소할 포트폴리오 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2060, message="포트폴리오 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2068, message="포트폴리오 좋아요 취소에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<String> unlikesPofol(@PathVariable("pofolIdx") int pofolIdx){
 
         try {
@@ -235,6 +280,14 @@ public class PofolController {
     @PostMapping("/comment/{pofolIdx}") // (post) https://eraofband.shop/pofol/comment/2
     @ApiOperation(value = "포트폴리오 댓글 등록 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="pofolIdx", value="댓글 달 포트폴리오 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2060, message="포트폴리오 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2062, message="내용의 글자수를 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<GetCommentRes> createComment(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PostCommentReq postCommentReq) {
 
         if(postCommentReq.getContent().length()>100){
@@ -268,6 +321,13 @@ public class PofolController {
     @PatchMapping("/comment/status/{pofolCommentIdx}") // (patch) https://eraofband.shop/pofol/comment/status/2
     @ApiOperation(value = "포트폴리오 댓글 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="pofolCommentIdx", value="삭제할 댓글 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2061, message="포트폴리오 댓글 아이디 값을 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<String> deleteComment(@PathVariable("pofolCommentIdx") int pofolCommentIdx, @RequestBody PatchPofComReq patchPofComReq) {
 
         try {
@@ -299,6 +359,13 @@ public class PofolController {
     @GetMapping("/info/comment")  // (get) https://eraofband.shop/pofol/info/comment
     @ApiOperation(value = "포트폴리오 댓글 목록 조회")
     @ApiImplicitParam(name="pofolIdx", value="댓글 조회할 포트폴리오 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2061, message="포트폴리오 댓글 아이디 값을 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<List<GetCommentRes>> getListComment(@RequestParam int pofolIdx){
         try{
             //jwt 없애기

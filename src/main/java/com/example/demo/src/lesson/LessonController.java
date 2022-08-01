@@ -4,9 +4,7 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.lesson.model.*;
 import com.example.demo.utils.JwtService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +40,11 @@ public class LessonController {
     @GetMapping("/info/{lessonIdx}") // (get) https://eraofband.shop/lessons/info/2
     @ApiOperation(value = "레슨 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="lessonIdx", value="조회할 레슨 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000 , message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<GetLessonRes> getLesson(@PathVariable("lessonIdx") int lessonIdx){
         try{
             int userIdxByJwt = jwtService.getUserIdx();
@@ -63,6 +66,14 @@ public class LessonController {
     @ResponseBody
     @PostMapping("") // (post) https://eraofband.shop/lessons
     @ApiOperation(value = "레슨 생성 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2021, message="내용 입력값을 확인해주세요."),
+            @ApiResponse(code=2022, message="내용의 글자수를 확인해주세요."),
+            @ApiResponse(code=2023, message="이미지를 입력해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<PostLessonRes> createLesson(@RequestBody PostLessonReq postLessonReq) {
         if(postLessonReq.getLessonTitle() == null || postLessonReq.getLessonTitle() == ""){
             return new BaseResponse<>(POST_BANDS_EMPTY_CONTENTS);
@@ -114,6 +125,15 @@ public class LessonController {
     @PatchMapping("/lesson-info/{lessonIdx}") // (patch) https://eraofband.shop/lessons/lesson-info/2
     @ApiOperation(value = "레슨 수정 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="lessonIdx", value="수정할 레슨 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2003, message="권한이 없는 유저의 접근입니다."),
+            @ApiResponse(code=2022, message="내용의 글자수를 확인해주세요."),
+            @ApiResponse(code=2050, message="레슨 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2051, message="레슨 수정에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<String> modifyLesson(@PathVariable("lessonIdx") int lessonIdx, @RequestBody PatchLessonReq patchLessonReq){
         try{
 
@@ -147,6 +167,14 @@ public class LessonController {
     @PatchMapping("/status/{lessonIdx}") // (patch) https://eraofband.shop/lessons/status/2
     @ApiOperation(value = "레슨 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="lessonIdx", value="삭제할 레슨 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2003, message="권한이 없는 유저의 접근입니다."),
+            @ApiResponse(code=2050, message="레슨 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2055, message="레슨 삭제에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<String> deleteLesson(@PathVariable("lessonIdx") int lessonIdx, @RequestBody PatchLesComReq patchLesComReq){
         try {
 
@@ -175,6 +203,13 @@ public class LessonController {
     @PostMapping("/{lessonIdx}") // (post) https://eraofband.shop/lessons/2
     @ApiOperation(value = "레슨 신청 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="lessonIdx", value="신청할 레슨 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2050, message="레슨 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2053, message="이미 지원한 레슨입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<PostSignUpRes> applyLesson(@PathVariable("lessonIdx") int lessonIdx) {
         try{
 
@@ -201,6 +236,14 @@ public class LessonController {
     @DeleteMapping ("/out/{lessonIdx}") // (delete) https://eraofband.shop/lessons/out/2
     @ApiOperation(value = "레슨 탈퇴 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="lessonIdx", value="탈퇴할 레슨 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2050, message="레슨 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2054, message="등록하지 않은 레슨입니다."),
+            @ApiResponse(code=2055, message="레슨 탈퇴에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<String> withdrawLesson(@PathVariable("lessonIdx") int lessonIdx){
 
         try {
@@ -229,6 +272,13 @@ public class LessonController {
     @PostMapping("/likes/{lessonIdx}") // (post) https://eraofband.shop/lessons/likes/2
     @ApiOperation(value = "레슨 좋아요 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="lessonIdx", value="좋아요 누를 레슨 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2050, message="레슨 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2052, message="레슨 좋아요에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<PostLesLikeRes> likesLesson(@PathVariable("lessonIdx") int lessonIdx){
 
         try {
@@ -253,6 +303,13 @@ public class LessonController {
     @DeleteMapping ("/unlikes/{lessonIdx}") // (delete) https://eraofband.shop/lessons/unlikes/2
     @ApiOperation(value = "레슨 좋아요 취소 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="lessonIdx", value="좋아요 취소 누를 레슨 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2050, message="레슨 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2056, message="레슨 좋아요 취소에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<String> unlikesLesson(@PathVariable("lessonIdx") int lessonIdx){
 
         try {
@@ -278,6 +335,11 @@ public class LessonController {
     @ResponseBody
     @GetMapping("/info/likes") // (get) https://eraofband.shop/lessons/info/likes
     @ApiOperation(value = "찜한 레슨 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
     public BaseResponse<List<GetLikesLessonRes>> getLikesLesson(){
         try{
 
@@ -302,6 +364,9 @@ public class LessonController {
     @ApiOperation(value = "지역-세션 분류 레슨 정보 반환")
     @ApiImplicitParams({@ApiImplicitParam(name="lesson-region", value="지역(서울,경기도,전체)", required = true),
             @ApiImplicitParam(name="lesson-session", value="세션(0,1,2,3,4,5)", required = true)})
+    @ApiResponses({
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
 
     public BaseResponse<List<GetInfoLessonRes>> getInfoLesson(@PathVariable("lesson-region") String region, @PathVariable("lesson-session") int session){
         try{
