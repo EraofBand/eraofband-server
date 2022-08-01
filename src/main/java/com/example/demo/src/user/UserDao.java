@@ -24,7 +24,7 @@ public class UserDao {
      * */
     public GetUserInfoRes getUserByIdx(int myId,int userIdx){
         String getUsersByIdxQuery = "select u.userIdx as userIdx, u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.userSession as userSession,u.region as region," +
-                        "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount, follow as follow, u.token as token\n"+
+                        "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount, follow as follow\n"+
         "from User as u\n"+
             "left join (select userIdx, count(pofolIdx) as pofolCount from Pofol where status='ACTIVE' group by userIdx) p on p.userIdx=u.userIdx\n"+
             "left join (select followerIdx, count(followIdx) as followerCount from Follow where status='ACTIVE' group by followerIdx) fr on fr.followerIdx=u.userIdx\n"+
@@ -45,8 +45,7 @@ public class UserDao {
                         rs.getInt("followerCount"),
                         rs.getInt("followeeCount"),
                         rs.getInt("pofolCount"),
-                        rs.getInt("follow"),
-                        rs.getString("token")),
+                        rs.getInt("follow")),
                 getUsersByIdxParams);
     }
 
@@ -150,9 +149,9 @@ public class UserDao {
      * 회원가입
      * */
     public int createUser(PostUserReq postUserReq, String email){
-        String createUserQuery = "insert into User (nickName,email,birth,gender,profileImgUrl,userSession,region) VALUES (?,?,?,?,?,?,?)";
+        String createUserQuery = "insert into User (nickName,email,birth,gender,profileImgUrl,userSession,region,token) VALUES (?,?,?,?,?,?,?,?)";
         Object[] createUserParams = new Object[]{postUserReq.getNickName(),email,postUserReq.getBirth(), postUserReq.getGender(),
-                postUserReq.getProfileImgUrl(),postUserReq.getUserSession(),postUserReq.getRegion()};
+                postUserReq.getProfileImgUrl(),postUserReq.getUserSession(),postUserReq.getRegion(), postUserReq.getToken()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
         String lastInsertIdQuery = "select last_insert_id()";
@@ -289,7 +288,7 @@ public class UserDao {
      * 팔로잉 리스트 조회
      */
     public List<Users> getFollowing(int userIdxByJwt, int userIdx){
-        String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.token as token,\n" +
+        String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl,\n" +
                 "       (IF(exists(select followIdx from Follow where followerIdx = ? and followeeIdx = u.userIdx), 1, 0)) as follow\n" +
                 "                from Follow as f\n" +
                 "                    left join User as u on u.userIdx=f.followeeIdx\n" +
@@ -302,7 +301,6 @@ public class UserDao {
                         rs.getInt("userIdx"),
                         rs.getString("nickName"),
                         rs.getString("profileImgUrl"),
-                        rs.getString("token"),
                         rs.getInt("follow")
                 ),
                 getFollowParams);
@@ -312,7 +310,7 @@ public class UserDao {
      * 팔로워 리스트 조회
      */
     public List<Users> getFollower(int userIdxByJwt , int userIdx){
-        String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.token as token,\n" +
+        String getFollowQuery = "select u.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl,\n" +
                 "       (IF(exists(select followIdx from Follow where followerIdx = ? and followeeIdx = u.userIdx), 1, 0)) as follow\n" +
                 "                from Follow as f\n" +
                 "                    left join User as u on u.userIdx=f.followerIdx\n" +
@@ -325,9 +323,20 @@ public class UserDao {
                         rs.getInt("userIdx"),
                         rs.getString("nickName"),
                         rs.getString("profileImgUrl"),
-                        rs.getString("token"),
                         rs.getInt("follow")
                 ),
                 getFollowParams);
+    }
+
+    /**
+     * FCM 토큰 반환
+     */
+    public String getFCMToken(int userIdx) {
+        String getFCMQuery = "select token FROM User WHERE userIdx= ?";
+        Object[] getFCMParams = new Object[]{userIdx};
+
+        return this.jdbcTemplate.queryForObject(getFCMQuery,
+                String.class,
+                getFCMParams);
     }
 }

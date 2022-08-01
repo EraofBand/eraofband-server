@@ -15,4 +15,5 @@ public class PostUserReq {
     private String profileImgUrl;
     private int userSession;
     private String region;
+    private String token;
 }

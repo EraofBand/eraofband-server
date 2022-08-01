@@ -14,5 +14,4 @@ public class GetSessionAppRes {
     private String nickName;
     private String introduction;
     private String updatedAt;
-    private String token;
 }
