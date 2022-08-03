@@ -30,6 +30,16 @@ public class UserProvider {
     }
 
     /**
+     * 유저 존재 유무 확인
+     */
+    public int checkUserExist(int userIdx) throws BaseException {
+        try{
+            return userDao.checkUserExist(userIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+    /**
      * 다른 유저 페이지 조회
      */
     public GetUserFeedRes getUserByIdx(int myId, int userIdx) throws BaseException{
