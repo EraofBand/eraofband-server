@@ -403,6 +403,7 @@ public class PofolDao {
      * 알림 테이블에 추가
      */
     public void CommentNoti(GetComNotiInfoRes getComNotiInfoRes){
+
         String updateComNotiQuery = "INSERT INTO Notice(receiverIdx, image, head, body) VALUES (?,?,?,?)";
         Object[] updateComNotiParams = new Object[]{getComNotiInfoRes.getReciverIdx(), getComNotiInfoRes.getProfileImgUrl(),"포트폴리오 댓글",
                 getComNotiInfoRes.getNickName()+"님이 "+ getComNotiInfoRes.getPofolTitle()+"에 댓글을 남기셨습니다."};
