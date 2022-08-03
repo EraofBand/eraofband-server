@@ -172,13 +172,18 @@ public class PofolService {
             int pofolCommentIdx = pofolDao.insertComment(pofolIdx, userIdx, postCommentReq);
             //포트폴리오 댓글의 정보 얻기
             GetComNotiInfoRes getComNotiInfoRes=pofolDao.Noti(pofolCommentIdx);
+
+
             //알림 테이블에 추가
-            pofolDao.CommentNoti(getComNotiInfoRes);
+            if(userIdx != getComNotiInfoRes.getReciverIdx()){
+                pofolDao.CommentNoti(getComNotiInfoRes);
+            }
             return pofolCommentIdx;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
 
     /**
      * 댓글 삭제
