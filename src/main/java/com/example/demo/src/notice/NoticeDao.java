@@ -2,9 +2,10 @@ package com.example.demo.src.notice;
 import com.example.demo.config.BaseException;
 
 
-
+import com.example.demo.src.notice.model.GetAlarmRes;
 import com.example.demo.src.notice.model.GetNoticeRes;
 
+import com.example.demo.src.session.model.GetBandRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -73,6 +74,24 @@ public class NoticeDao {
         Object[] deleteNoticeParams = new Object[]{userIdx};
 
         return this.jdbcTemplate.update(deleteNoticeQuery, deleteNoticeParams);
+    }
+
+    /**
+     * 홈 화면 새 알림 여부
+     */
+    public GetAlarmRes getNewAlarm(int userIdx) {
+        String getNewAlarmQuery = "SELECT\n" +
+                "       CASE (SELECT n.status FROM Notice as n WHERE n.receiverIdx = ? ORDER BY n.noticeIdx DESC LIMIT 1 )\n" +
+                "           WHEN 'ACTIVE' THEN 1\n" +
+                "           WHEN 'INACTIVE' THEN 0\n" +
+                "       END\n" +
+                "    as newAlarmExist";
+        Object[] getNewAlarmParam = new Object[]{userIdx};
+
+        return this.jdbcTemplate.queryForObject(getNewAlarmQuery,
+                (rs, rowNum) -> new GetAlarmRes(
+                        rs.getInt("newAlarmExist")),
+                getNewAlarmParam);
     }
 
 

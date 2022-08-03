@@ -3,6 +3,7 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 
 import com.example.demo.src.lesson.model.*;
+import com.example.demo.src.notice.model.GetAlarmRes;
 import com.example.demo.src.notice.model.GetNoticeRes;
 
 import com.example.demo.utils.JwtService;
@@ -38,7 +39,7 @@ public class NoticeController {
      * @return BaseResponse<List<GetNoticeRes>>
      */
     @ResponseBody
-    @GetMapping("/notice/{userIdx}")   // (get) https://eraofband.shop/notice/12
+    @GetMapping("/{userIdx}")   // (get) https://eraofband.shop/notice/12
     @ApiOperation(value = "알림 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="userIdx", value="유저 인덱스", required = true)
     @ApiResponses({
@@ -90,5 +91,33 @@ public class NoticeController {
         }
 
     }
+
+    /**
+     * 홈 화면 새 알림 여부 API
+     * [GET] /notice/alarm
+     * @return BaseResponse<GetAlarmRes>
+     */
+    @ResponseBody
+    @GetMapping("/alarm")   // (get) https://eraofband.shop/notice/alarm
+    @ApiOperation(value = "홈 화면 새 알림 여부", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<GetAlarmRes> getNewAlarm(){
+        try{
+
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            GetAlarmRes getNewAlarm=noticeProvider.getNewAlarm(userIdxByJwt);
+            return new BaseResponse<>(getNewAlarm);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+    }
+
+
 }
 

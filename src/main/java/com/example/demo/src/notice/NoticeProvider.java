@@ -3,6 +3,7 @@ package com.example.demo.src.notice;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.lesson.LessonDao;
 import com.example.demo.src.lesson.model.*;
+import com.example.demo.src.notice.model.GetAlarmRes;
 import com.example.demo.src.notice.model.GetNoticeRes;
 import com.example.demo.src.pofol.model.GetPofolRes;
 import com.example.demo.utils.JwtService;
@@ -38,6 +39,21 @@ public class NoticeProvider {
             List<GetNoticeRes> getMyNotice = noticeDao.getMyNotice(userIdx);
 
             return getMyNotice;
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
+     * 홈 화면 새 알림 여부
+     */
+    public GetAlarmRes getNewAlarm(int userIdx) throws BaseException {
+
+        try{
+            GetAlarmRes getNewAlarm = noticeDao.getNewAlarm(userIdx);
+
+            return getNewAlarm;
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
