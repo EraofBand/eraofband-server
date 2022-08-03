@@ -60,7 +60,7 @@ public class LessonController {
 
     /**
      * 레슨 생성 API
-     * [POST] /lessons/info
+     * [POST] /lessons
      * @return BaseResponse<PostLessonRes>
      */
     @ResponseBody
@@ -136,7 +136,6 @@ public class LessonController {
     })
     public BaseResponse<String> modifyLesson(@PathVariable("lessonIdx") int lessonIdx, @RequestBody PatchLessonReq patchLessonReq){
         try{
-
             if(patchLessonReq.getLessonContent().length()>450)
             {
                 return new BaseResponse<>(POST_BANDS_INVALID_CONTENTS);
@@ -177,7 +176,6 @@ public class LessonController {
     })
     public BaseResponse<String> deleteLesson(@PathVariable("lessonIdx") int lessonIdx, @RequestBody PatchLesComReq patchLesComReq){
         try {
-
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
@@ -212,7 +210,6 @@ public class LessonController {
     })
     public BaseResponse<PostSignUpRes> applyLesson(@PathVariable("lessonIdx") int lessonIdx) {
         try{
-
             int userIdxByJwt = jwtService.getUserIdx();
             if(lessonProvider.checkLessonSession(userIdxByJwt, lessonIdx) == 1){
                 throw new BaseException(ALREADY_LESSON);
@@ -229,7 +226,7 @@ public class LessonController {
 
     /**
      * 레슨 탈퇴 API
-     * [DELETE] /out/{lessonIdx}
+     * [DELETE] /lessons/out/{lessonIdx}
      * @return BaseResponse<String>
      */
     @ResponseBody
@@ -282,7 +279,6 @@ public class LessonController {
     public BaseResponse<PostLesLikeRes> likesLesson(@PathVariable("lessonIdx") int lessonIdx){
 
         try {
-
             //jwt에서 idx 추출
             int userIdxByJwt = jwtService.getUserIdx();
             PostLesLikeRes postLesLikeRes = lessonService.likesLesson(userIdxByJwt,lessonIdx);
@@ -329,7 +325,7 @@ public class LessonController {
 
     /**
      * 찜한 레슨 조회 API
-     * [GET] /info/likes
+     * [GET] /lessons/info/likes
      * @return BaseResponse<List<GetLikesLessonRes>>
      */
     @ResponseBody
@@ -356,11 +352,11 @@ public class LessonController {
 
     /**
      * 지역-세션 분류 레슨 정보 반환 API
-     * [GET] /info/list/{lesson-region}/{lesson-session}
+     * [GET] /lessons/info/list/{lesson-region}/{lesson-session}
      * @return BaseResponse<List<GetInfoLessonRes>>
      */
     @ResponseBody
-    @GetMapping("/info/list/{lesson-region}/{lesson-session}") // (get) https://eraofband.shop/lesson/info/list/경기도 성남시/1
+    @GetMapping("/info/list/{lesson-region}/{lesson-session}") // (get) https://eraofband.shop/lessons/info/list/경기도 성남시/1
     @ApiOperation(value = "지역-세션 분류 레슨 정보 반환")
     @ApiImplicitParams({@ApiImplicitParam(name="lesson-region", value="지역(서울,경기도,전체)", required = true),
             @ApiImplicitParam(name="lesson-session", value="세션(0,1,2,3,4,5)", required = true)})

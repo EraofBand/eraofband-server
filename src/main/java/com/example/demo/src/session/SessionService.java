@@ -178,15 +178,12 @@ public class SessionService {
 
         try{
             result = sessionDao.updateLikes(userIdx, bandIdx);
-//            if(result == 0){
-//                throw new BaseException(LIKES_FAIL_BAND);
-//            }
+
             return new PostBandLikeRes(result);
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
-
     }
 
 
