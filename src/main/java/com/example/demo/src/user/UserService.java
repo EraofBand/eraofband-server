@@ -183,12 +183,16 @@ public class UserService {
 
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
     private final ObjectMapper objectMapper = null;
+
     /**
      * 팔로우 하기
      */
     public PostFollowRes followUser(int myIdx, int userIdx) throws BaseException {
 
         try{
+            if(userProvider.checkUserExist(userIdx) == 0){
+                throw new BaseException(USERS_EMPTY_USER_ID);
+            }
             result = userDao.updateFollow(myIdx, userIdx);
             if(result == 0){
                 throw new BaseException(FOLLOW_FAIL_USER);

@@ -39,7 +39,6 @@ public class SearchProvider {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
-
     }
 
     /**
@@ -55,7 +54,6 @@ public class SearchProvider {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
-
     }
 
     /**
@@ -71,6 +69,5 @@ public class SearchProvider {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
-
     }
 }
