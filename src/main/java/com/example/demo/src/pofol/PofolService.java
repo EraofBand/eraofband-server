@@ -111,16 +111,12 @@ public class PofolService {
 
         try{
             result = pofolDao.updateLikes(userIdx, pofolIdx);
-//            if(result == 0){
-//                throw new BaseException(LIKES_FAIL_POFOL);
-//            }
+
             return new PostLikeRes(result);
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
-
-
 
     }
 
@@ -200,14 +196,13 @@ public class PofolService {
         try{
             result = pofolDao.deleteComment(pofolCommentIdx);
 
-//            if(result == 0){
-//                throw new BaseException(DELETE_FAIL_POFOL_COMMENT);
-//            }
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
-
+        if(result == 0){
+            throw new BaseException(DELETE_FAIL_POFOL_COMMENT);
+        }
     }
 
 }

@@ -27,14 +27,12 @@ public class LessonService {
         this.jwtService = jwtService;
     }
 
-
     /**
      *  레슨 생성
      * */
     public PostLessonRes createLesson(int userIdx, PostLessonReq postLessonReq) throws BaseException {
 
         try{
-
             int lessonIdx = lessonDao.insertLesson(userIdx, postLessonReq);
             //lessonDao.insertMy(userIdx, lessonIdx);
             return new PostLessonRes(lessonIdx);
@@ -42,7 +40,6 @@ public class LessonService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
 
     /**
      *  레슨 수정
@@ -66,7 +63,6 @@ public class LessonService {
         }
     }
 
-
     /**
      *  레슨 삭제
      * */
@@ -87,7 +83,6 @@ public class LessonService {
             throw new BaseException(DELETE_FAIL_LESSON);
         }
     }
-
 
     /**
      *  레슨 신청
@@ -112,7 +107,6 @@ public class LessonService {
         }
     }
 
-
     /**
      *  레슨 탈퇴
      * */
@@ -121,6 +115,7 @@ public class LessonService {
         if(lessonProvider.checkLessonExist(lessonIdx) == 0){
             throw new BaseException(POSTS_EMPTY_LESSON_ID);
         }
+
         try{
             result = lessonDao.withdrawLesson(userIdx, lessonIdx);
 
@@ -132,7 +127,6 @@ public class LessonService {
         }
     }
 
-
     /**
      *  레슨 좋아요
      * */
@@ -141,7 +135,6 @@ public class LessonService {
         if(lessonProvider.checkLessonExist(lessonIdx) == 0){
             throw new BaseException(POSTS_EMPTY_LESSON_ID);
         }
-
 
         try{
             int result = lessonDao.updateLikes(userIdx, lessonIdx);
@@ -153,9 +146,7 @@ public class LessonService {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
-
     }
-
 
     /**
      *  레슨 좋아요 취소
@@ -165,7 +156,6 @@ public class LessonService {
         if(lessonProvider.checkLessonExist(lessonIdx) == 0){
             throw new BaseException(POSTS_EMPTY_LESSON_ID);
         }
-
 
         try{
             result = lessonDao.updateUnlikes(userIdx, lessonIdx);

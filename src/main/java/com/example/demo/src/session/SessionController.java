@@ -291,7 +291,7 @@ public class SessionController {
 
     /**
      * 밴드 탈퇴 API
-     * [DELETE] /out/{bandIdx}
+     * [DELETE] /sessions/out/{bandIdx}
      * @return BaseResponse<String>
      */
     @ResponseBody
@@ -326,7 +326,7 @@ public class SessionController {
 
     /**
      * 세션 지원 수락 API
-     * [PATCH] /in/{bandIdx}/{userIdx}
+     * [PATCH] /sessions/in/{bandIdx}/{userIdx}
      * @return BaseResponse<String>
      */
     @ResponseBody
@@ -356,7 +356,7 @@ public class SessionController {
 
     /**
      * 세션 지원 거절 API
-     * [PATCH] /out/{bandIdx}/{userIdx}
+     * [PATCH] /sessions/out/{bandIdx}/{userIdx}
      * @return BaseResponse<String>
      */
     @ResponseBody
@@ -385,11 +385,11 @@ public class SessionController {
 
     /**
      * 밴드 좋아요 API
-     * [POST] /likes/{bandIdx}
+     * [POST] /sessions/likes/{bandIdx}
      * @return BaseResponse<PostBandLikeRes>
      */
     @ResponseBody
-    @PostMapping("/likes/{bandIdx}") // (post) https://eraofband.shop/lesson/likes/2
+    @PostMapping("/likes/{bandIdx}") // (post) https://eraofband.shop/sessions/likes/2
     @ApiOperation(value = "밴드 좋아요 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="bandIdx", value="밴드 인덱스", required = true)
     @ApiResponses({
@@ -399,9 +399,7 @@ public class SessionController {
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
     public BaseResponse<PostBandLikeRes> likesBand(@PathVariable("bandIdx") int bandIdx) {
-
         try {
-
             //jwt에서 idx 추출
             int userIdxByJwt = jwtService.getUserIdx();
             PostBandLikeRes postBandLikeRes = sessionService.likesBand(userIdxByJwt, bandIdx);
@@ -414,11 +412,11 @@ public class SessionController {
 
     /**
      * 밴드 좋아요 취소 API
-     * [DELETE] /unlikes/{bandIdx}
+     * [DELETE] /sessions/unlikes/{bandIdx}
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @DeleteMapping("/unlikes/{bandIdx}") // (delete) https://eraofband.shop/pofol/unlikes/2
+    @DeleteMapping("/unlikes/{bandIdx}") // (delete) https://eraofband.shop/sessions/unlikes/2
     @ApiOperation(value = "밴드 좋아요 취소 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="bandIdx", value="밴드 인덱스", required = true)
     @ApiResponses({
@@ -446,11 +444,11 @@ public class SessionController {
 
     /**
      * 찜한 밴드 정보 반환 API
-     * [GET] /info/likes
+     * [GET] /sessions/info/likes
      * @return BaseResponse<List<GetLikesBandRes>>
      */
     @ResponseBody
-    @GetMapping("/info/likes") // (get) https://eraofband.shop/lesson/info/likes
+    @GetMapping("/info/likes") // (get) https://eraofband.shop/sessions/info/likes
     @ApiOperation(value = "찜한 밴드 정보 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
@@ -472,11 +470,11 @@ public class SessionController {
 
     /**
      * 지역-세션 분류 밴드 검색 조회 API
-     * [GET] /info/list/{band-region}/{band-session}
-     * @return BaseResponse<List<GetLikesBandRes>>
+     * [GET] /sessions/info/list/{band-region}/{band-session}
+     * @return BaseResponse<List<GetInfoBandRes>>
      */
     @ResponseBody
-    @GetMapping("/info/list/{band-region}/{band-session}") // (get) https://eraofband.shop/lesson/info/list/경기도/1
+    @GetMapping("/info/list/{band-region}/{band-session}") // (get) https://eraofband.shop/sessions/info/list/경기도/1
     @ApiOperation(value = "지역-세션 분류 밴드 정보 반환")
     @ApiImplicitParams({
             @ApiImplicitParam(name="band-region", value="밴드 지역(서울, 경기도, 전체)", required = true),

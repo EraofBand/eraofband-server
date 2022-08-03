@@ -1,17 +1,17 @@
-com/example/demo/src/lesson/LessonService.java
- com.example.demo.src.lesson.LessonService
+com/example/demo/src/pofol/PofolDao.java
+ com.example.demo.src.pofol.PofolDao
 com/example/demo/src/lesson/model/GetLessonNotiInfoRes.java
  com.example.demo.src.lesson.model.GetLessonNotiInfoRes
 com/example/demo/src/pofol/model/GetCommentRes.java
  com.example.demo.src.pofol.model.GetCommentRes
-com/example/demo/config/BaseResponseStatus.java
- com.example.demo.config.BaseResponseStatus
+com/example/demo/src/pofol/model/PostCommentReq.java
+ com.example.demo.src.pofol.model.PostCommentReq
 com/example/demo/src/session/model/PatchBandReq.java
  com.example.demo.src.session.model.PatchBandReq
 com/example/demo/src/notice/model/GetNoticeRes.java
  com.example.demo.src.notice.model.GetNoticeRes
-com/example/demo/src/session/SessionService.java
- com.example.demo.src.session.SessionService
+com/example/demo/src/pofol/model/PostLikeRes.java
+ com.example.demo.src.pofol.model.PostLikeRes
 com/example/demo/src/pofol/model/GetPofolRes.java
  com.example.demo.src.pofol.model.GetPofolRes
 com/example/demo/src/session/model/GetBandRes.java
@@ -24,28 +24,28 @@ com/example/demo/src/user/model/PostUserRes.java
  com.example.demo.src.user.model.PostUserRes
 com/example/demo/src/lesson/model/GetInfoLessonRes.java
  com.example.demo.src.lesson.model.GetInfoLessonRes
-com/example/demo/src/lesson/LessonProvider.java
- com.example.demo.src.lesson.LessonProvider
+com/example/demo/src/WebSecurityConfig.java
+ com.example.demo.src.WebSecurityConfig
 com/example/demo/src/user/model/GetMyFeedRes.java
  com.example.demo.src.user.model.GetMyFeedRes
 com/example/demo/src/notice/NoticeDao.java
  com.example.demo.src.notice.NoticeDao
 com/example/demo/src/lesson/model/GetSearchLesReq.java
  com.example.demo.src.lesson.model.GetSearchLesReq
-com/example/demo/src/session/SessionProvider.java
- com.example.demo.src.session.SessionProvider
-com/example/demo/src/lesson/LessonController.java
- com.example.demo.src.lesson.LessonController
+com/example/demo/src/user/model/PostUserReq.java
+ com.example.demo.src.user.model.PostUserReq
+com/example/demo/src/lesson/LessonDao.java
+ com.example.demo.src.lesson.LessonDao
 com/example/demo/src/lesson/model/GetLikesLessonRes.java
  com.example.demo.src.lesson.model.GetLikesLessonRes
 com/example/demo/src/session/SessionDao.java
  com.example.demo.src.session.SessionDao
 com/example/demo/src/user/model/GetUserFeedRes.java
  com.example.demo.src.user.model.GetUserFeedRes
-com/example/demo/src/notice/NoticeController.java
- com.example.demo.src.notice.NoticeController
-com/example/demo/src/S33/FileUploadController.java
- com.example.demo.src.S33.FileUploadController
+com/example/demo/src/session/model/GetBandNotiInfoRes.java
+ com.example.demo.src.session.model.GetBandNotiInfoRes
+com/example/demo/src/user/model/User.java
+ com.example.demo.src.user.model.User
 com/example/demo/utils/SHA256.java
  com.example.demo.utils.SHA256
 com/example/demo/src/search/SearchService.java
@@ -54,8 +54,8 @@ com/example/demo/src/session/model/PostApplyReq.java
  com.example.demo.src.session.model.PostApplyReq
 com/example/demo/src/search/model/GetSearchLesRes.java
  com.example.demo.src.search.model.GetSearchLesRes
-com/example/demo/src/search/SearchProvider.java
- com.example.demo.src.search.SearchProvider
+com/example/demo/src/session/model/GetSessionAppRes.java
+ com.example.demo.src.session.model.GetSessionAppRes
 com/example/demo/src/user/model/PostLoginRes.java
  com.example.demo.src.user.model.PostLoginRes
 com/example/demo/src/user/UserDao.java
@@ -72,8 +72,8 @@ com/example/demo/src/test/TestController.java
  com.example.demo.src.test.TestController
 com/example/demo/src/lesson/model/GetLessonRes.java
  com.example.demo.src.lesson.model.GetLessonRes
-com/example/demo/src/pofol/PofolProvider.java
- com.example.demo.src.pofol.PofolProvider
+com/example/demo/DemoApplication.java
+ com.example.demo.DemoApplication
 com/example/demo/src/S33/S3Component.java
  com.example.demo.src.S33.S3Component
 com/example/demo/src/session/model/GetLikesBandRes.java
@@ -82,18 +82,18 @@ com/example/demo/src/session/model/PostBandReq.java
  com.example.demo.src.session.model.PostBandReq
 com/example/demo/src/lesson/model/PatchLesComReq.java
  com.example.demo.src.lesson.model.PatchLesComReq
-com/example/demo/src/user/UserController.java
- com.example.demo.src.user.UserController
+com/example/demo/src/search/SearchDao.java
+ com.example.demo.src.search.SearchDao
 com/example/demo/src/user/model/GetFollowRes.java
  com.example.demo.src.user.model.GetFollowRes
-com/example/demo/src/search/SearchController.java
- com.example.demo.src.search.SearchController
+com/example/demo/src/pofol/model/PostPofolRes.java
+ com.example.demo.src.pofol.model.PostPofolRes
 com/example/demo/src/pofol/model/PostPofolReq.java
  com.example.demo.src.pofol.model.PostPofolReq
-com/example/demo/utils/JwtService.java
- com.example.demo.utils.JwtService
-com/example/demo/src/user/UserProvider.java
- com.example.demo.src.user.UserProvider
+com/example/demo/src/S33/AwsS3UploadService.java
+ com.example.demo.src.S33.AwsS3UploadService
+com/example/demo/src/session/model/PostBandRes.java
+ com.example.demo.src.session.model.PostBandRes
 com/example/demo/src/S33/FileUploadService.java
  com.example.demo.src.S33.FileUploadService
 com/example/demo/src/pofol/model/PatchPofolReq.java
@@ -108,8 +108,8 @@ com/example/demo/src/search/model/GetSearchBandRes.java
  com.example.demo.src.search.model.GetSearchBandRes
 com/example/demo/src/lesson/model/PostLesLikeRes.java
  com.example.demo.src.lesson.model.PostLesLikeRes
-com/example/demo/src/pofol/PofolService.java
- com.example.demo.src.pofol.PofolService
+com/example/demo/src/session/model/DeleteBandReq.java
+ com.example.demo.src.session.model.DeleteBandReq
 com/example/demo/src/session/model/GetInfoBandRes.java
  com.example.demo.src.session.model.GetInfoBandRes
 com/example/demo/src/lesson/model/PostLessonRes.java
@@ -122,20 +122,20 @@ com/example/demo/src/session/model/GetSessionNotiInfoRes.java
  com.example.demo.src.session.model.GetSessionNotiInfoRes
 com/example/demo/src/session/model/GetNewBandRes.java
  com.example.demo.src.session.model.GetNewBandRes
-com/example/demo/src/pofol/PofolController.java
- com.example.demo.src.pofol.PofolController
+com/example/demo/src/lesson/model/PostLessonReq.java
+ com.example.demo.src.lesson.model.PostLessonReq
 com/example/demo/config/secret/Secret.java
  com.example.demo.config.secret.Secret
 com/example/demo/src/user/model/GetUserLessonRes.java
  com.example.demo.src.user.model.GetUserLessonRes
-com/example/demo/config/BaseResponse.java
- com.example.demo.config.BaseResponse
+com/example/demo/src/user/model/GetUserPofolRes.java
+ com.example.demo.src.user.model.GetUserPofolRes
 com/example/demo/src/lesson/model/PatchLessonReq.java
  com.example.demo.src.lesson.model.PatchLessonReq
 com/example/demo/src/search/model/GetSearchUserRes.java
  com.example.demo.src.search.model.GetSearchUserRes
-com/example/demo/src/user/UserService.java
- com.example.demo.src.user.UserService
+com/example/demo/src/pofol/model/GetComNotiInfoRes.java
+ com.example.demo.src.pofol.model.GetComNotiInfoRes
 com/example/demo/src/lesson/model/GetMemberRes.java
  com.example.demo.src.lesson.model.GetMemberRes
 com/example/demo/src/S33/UploadService.java
@@ -147,8 +147,8 @@ com/example/demo/src/user/model/FcmMessage.java
  com.example.demo.src.user.model.FcmMessage$Message$MessageBuilder
  com.example.demo.src.user.model.FcmMessage$Notification
  com.example.demo.src.user.model.FcmMessage$Notification$NotificationBuilder
-com/example/demo/config/BaseException.java
- com.example.demo.config.BaseException
+com/example/demo/src/user/model/GetMyInfoRes.java
+ com.example.demo.src.user.model.GetMyInfoRes
 com/example/demo/src/user/model/GetUserInfoRes.java
  com.example.demo.src.user.model.GetUserInfoRes
 com/example/demo/config/SwaggerConfig.java
@@ -159,8 +159,11 @@ com/example/demo/src/user/model/PatchSessionReq.java
  com.example.demo.src.user.model.PatchSessionReq
 com/example/demo/src/session/model/GetFameBandRes.java
  com.example.demo.src.session.model.GetFameBandRes
+com/example/demo/src/lesson/model/PostSignUpRes.java
+ com.example.demo.src.lesson.model.PostSignUpRes
 com/example/demo/src/session/SessionController.java
  com.example.demo.src.session.SessionController
+<<<<<<< HEAD
 com/example/demo/src/session/model/PostBandRes.java
  com.example.demo.src.session.model.PostBandRes
 com/example/demo/src/lesson/LessonDao.java
@@ -169,41 +172,47 @@ com/example/demo/src/user/model/GetUserTokenRes.java
  com.example.demo.src.user.model.GetUserTokenRes
 com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
+=======
+com/example/demo/src/pofol/PofolProvider.java
+ com.example.demo.src.pofol.PofolProvider
+com/example/demo/src/notice/NoticeController.java
+ com.example.demo.src.notice.NoticeController
+com/example/demo/src/S33/FileUploadController.java
+ com.example.demo.src.S33.FileUploadController
+com/example/demo/src/session/SessionService.java
+ com.example.demo.src.session.SessionService
+com/example/demo/src/pofol/PofolController.java
+ com.example.demo.src.pofol.PofolController
+com/example/demo/src/lesson/LessonService.java
+ com.example.demo.src.lesson.LessonService
+>>>>>>> 7eb11d6517faffeabd2accdb3685df231f876253
 com/example/demo/src/notice/NoticeProvider.java
  com.example.demo.src.notice.NoticeProvider
-com/example/demo/src/user/model/GetMyInfoRes.java
- com.example.demo.src.user.model.GetMyInfoRes
-com/example/demo/src/pofol/model/PostCommentReq.java
- com.example.demo.src.pofol.model.PostCommentReq
-com/example/demo/src/pofol/model/GetComNotiInfoRes.java
- com.example.demo.src.pofol.model.GetComNotiInfoRes
+com/example/demo/src/user/UserController.java
+ com.example.demo.src.user.UserController
+com/example/demo/config/BaseResponse.java
+ com.example.demo.config.BaseResponse
+com/example/demo/src/search/SearchProvider.java
+ com.example.demo.src.search.SearchProvider
+com/example/demo/src/search/SearchController.java
+ com.example.demo.src.search.SearchController
+com/example/demo/src/lesson/LessonProvider.java
+ com.example.demo.src.lesson.LessonProvider
 com/example/demo/src/notice/NoticeService.java
  com.example.demo.src.notice.NoticeService
-com/example/demo/src/session/model/DeleteBandReq.java
- com.example.demo.src.session.model.DeleteBandReq
-com/example/demo/src/WebSecurityConfig.java
- com.example.demo.src.WebSecurityConfig
-com/example/demo/src/pofol/model/PostPofolRes.java
- com.example.demo.src.pofol.model.PostPofolRes
-com/example/demo/src/session/model/GetSessionAppRes.java
- com.example.demo.src.session.model.GetSessionAppRes
-com/example/demo/src/user/model/GetUserPofolRes.java
- com.example.demo.src.user.model.GetUserPofolRes
-com/example/demo/src/search/SearchDao.java
- com.example.demo.src.search.SearchDao
-com/example/demo/src/S33/AwsS3UploadService.java
- com.example.demo.src.S33.AwsS3UploadService
-com/example/demo/src/pofol/PofolDao.java
- com.example.demo.src.pofol.PofolDao
-com/example/demo/src/lesson/model/PostLessonReq.java
- com.example.demo.src.lesson.model.PostLessonReq
-com/example/demo/src/pofol/model/PostLikeRes.java
- com.example.demo.src.pofol.model.PostLikeRes
-com/example/demo/src/user/model/User.java
- com.example.demo.src.user.model.User
-com/example/demo/src/session/model/GetBandNotiInfoRes.java
- com.example.demo.src.session.model.GetBandNotiInfoRes
-com/example/demo/DemoApplication.java
- com.example.demo.DemoApplication
-com/example/demo/src/lesson/model/PostSignUpRes.java
- com.example.demo.src.lesson.model.PostSignUpRes
+com/example/demo/src/pofol/PofolService.java
+ com.example.demo.src.pofol.PofolService
+com/example/demo/src/user/UserService.java
+ com.example.demo.src.user.UserService
+com/example/demo/config/BaseResponseStatus.java
+ com.example.demo.config.BaseResponseStatus
+com/example/demo/config/BaseException.java
+ com.example.demo.config.BaseException
+com/example/demo/utils/JwtService.java
+ com.example.demo.utils.JwtService
+com/example/demo/src/session/SessionProvider.java
+ com.example.demo.src.session.SessionProvider
+com/example/demo/src/lesson/LessonController.java
+ com.example.demo.src.lesson.LessonController
+com/example/demo/src/user/UserProvider.java
+ com.example.demo.src.user.UserProvider

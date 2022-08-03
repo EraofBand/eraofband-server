@@ -1,7 +1,6 @@
 package com.example.demo.src.user;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.pofol.model.PostLikeRes;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.*;
@@ -147,8 +146,8 @@ public class UserController {
             if(!isRegexEmail(email)){
                 return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
             }
-                PostLoginRes postLoginRes = userService.logIn(email);
-                return new BaseResponse<>(postLoginRes);
+            PostLoginRes postLoginRes = userService.logIn(email);
+            return new BaseResponse<>(postLoginRes);
 
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -251,7 +250,7 @@ public class UserController {
 
     /**
      * 팔로우 하기 API
-     * [POST] /users/follow/10
+     * [POST] /users/follow/{userIdx}
      * @return BaseResponse<PostFollowRes>
      */
     @ResponseBody
@@ -284,7 +283,7 @@ public class UserController {
     /**
      * 팔로우 취소 API
      * delete로
-     * [DELETE] /users/unfollow/10
+     * [DELETE] /users/unfollow/{userIdx}
      * @return BaseResponse<String>
      */
     @ResponseBody
@@ -312,7 +311,7 @@ public class UserController {
 
     /**
      * 팔로잉, 팔로워 리스트 조회 API
-     * [GET] /users/info/follow/10
+     * [GET] /users/info/follow/{userIdx}
      * @return BaseResponse<GetFollowRes>
      */
     @ResponseBody

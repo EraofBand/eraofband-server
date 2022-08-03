@@ -19,6 +19,18 @@ public class UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+
+    /**
+     * 유저 존재 유무 확인
+     */
+    public int checkUserExist(int userIdx) {
+        String checkUserExistQuery = "SELECT exists(SELECT userIdx FROM User WHERE userIdx = ? and status='ACTIVE')";
+        int checkUserExistParams = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserExistQuery,
+                                                int.class,
+                                                checkUserExistParams);
+    }
+
     /**
      * 다른 유저 페이지 조회
      * */

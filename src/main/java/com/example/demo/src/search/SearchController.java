@@ -69,7 +69,6 @@ public class SearchController {
     })
     public BaseResponse<List<GetSearchBandRes>> getSearchBand(@PathVariable("keyword") String keyword){
         try{
-
             List<GetSearchBandRes> getSearchBandRes = searchProvider.getSearchBand(keyword);
             return new BaseResponse<>(getSearchBandRes);
 
@@ -92,7 +91,6 @@ public class SearchController {
     })
     public BaseResponse<List<GetSearchLesRes>> getSearchLes(@PathVariable("keyword") String keyword){
         try{
-
             List<GetSearchLesRes> getSearchLesRes = searchProvider.getSearchLes(keyword);
             return new BaseResponse<>(getSearchLesRes);
 

@@ -39,7 +39,7 @@ public class NoticeController {
      */
     @ResponseBody
     @GetMapping("/notice/{userIdx}")   // (get) https://eraofband.shop/notice/12
-    @ApiOperation(value = "알림 리스트 조회")
+    @ApiOperation(value = "알림 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="userIdx", value="유저 인덱스", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
