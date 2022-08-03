@@ -343,12 +343,13 @@ public class UserDao {
     /**
      * FCM 토큰 반환
      */
-    public String getFCMToken(int userIdx) {
+    public GetUserTokenRes getFCMToken(int userIdx) {
         String getFCMQuery = "select token FROM User WHERE userIdx= ?";
-        Object[] getFCMParams = new Object[]{userIdx};
+        int getFCMParams = userIdx;
 
         return this.jdbcTemplate.queryForObject(getFCMQuery,
-                String.class,
+                (rs, rowNum) -> new GetUserTokenRes(
+                        rs.getString("token")),
                 getFCMParams);
     }
 }

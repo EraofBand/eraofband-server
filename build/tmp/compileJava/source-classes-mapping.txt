@@ -1,5 +1,5 @@
-com/example/demo/src/user/UserService.java
- com.example.demo.src.user.UserService
+com/example/demo/src/pofol/PofolDao.java
+ com.example.demo.src.pofol.PofolDao
 com/example/demo/src/lesson/model/GetLessonNotiInfoRes.java
  com.example.demo.src.lesson.model.GetLessonNotiInfoRes
 com/example/demo/src/pofol/model/GetCommentRes.java
@@ -48,8 +48,8 @@ com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
 com/example/demo/utils/SHA256.java
  com.example.demo.utils.SHA256
-com/example/demo/config/BaseException.java
- com.example.demo.config.BaseException
+com/example/demo/src/search/SearchService.java
+ com.example.demo.src.search.SearchService
 com/example/demo/src/session/model/PostApplyReq.java
  com.example.demo.src.session.model.PostApplyReq
 com/example/demo/src/search/model/GetSearchLesRes.java
@@ -58,8 +58,8 @@ com/example/demo/src/session/model/GetSessionAppRes.java
  com.example.demo.src.session.model.GetSessionAppRes
 com/example/demo/src/user/model/PostLoginRes.java
  com.example.demo.src.user.model.PostLoginRes
-com/example/demo/src/notice/NoticeService.java
- com.example.demo.src.notice.NoticeService
+com/example/demo/src/user/UserDao.java
+ com.example.demo.src.user.UserDao
 com/example/demo/src/session/model/PostBandLikeRes.java
  com.example.demo.src.session.model.PostBandLikeRes
 com/example/demo/src/user/model/PatchUserReq.java
@@ -161,47 +161,58 @@ com/example/demo/src/session/model/GetFameBandRes.java
  com.example.demo.src.session.model.GetFameBandRes
 com/example/demo/src/lesson/model/PostSignUpRes.java
  com.example.demo.src.lesson.model.PostSignUpRes
-com/example/demo/src/notice/NoticeProvider.java
- com.example.demo.src.notice.NoticeProvider
-com/example/demo/src/user/UserProvider.java
- com.example.demo.src.user.UserProvider
-com/example/demo/config/BaseResponse.java
- com.example.demo.config.BaseResponse
-com/example/demo/src/S33/FileUploadController.java
- com.example.demo.src.S33.FileUploadController
-com/example/demo/src/session/SessionProvider.java
- com.example.demo.src.session.SessionProvider
-com/example/demo/utils/JwtService.java
- com.example.demo.utils.JwtService
-com/example/demo/config/BaseResponseStatus.java
- com.example.demo.config.BaseResponseStatus
 com/example/demo/src/session/SessionController.java
  com.example.demo.src.session.SessionController
+<<<<<<< HEAD
+com/example/demo/src/session/model/PostBandRes.java
+ com.example.demo.src.session.model.PostBandRes
+com/example/demo/src/lesson/LessonDao.java
+ com.example.demo.src.lesson.LessonDao
+com/example/demo/src/user/model/GetUserTokenRes.java
+ com.example.demo.src.user.model.GetUserTokenRes
+com/example/demo/src/user/model/PostUserReq.java
+ com.example.demo.src.user.model.PostUserReq
+=======
+com/example/demo/src/pofol/PofolProvider.java
+ com.example.demo.src.pofol.PofolProvider
 com/example/demo/src/notice/NoticeController.java
  com.example.demo.src.notice.NoticeController
+com/example/demo/src/S33/FileUploadController.java
+ com.example.demo.src.S33.FileUploadController
 com/example/demo/src/session/SessionService.java
  com.example.demo.src.session.SessionService
-com/example/demo/src/lesson/LessonController.java
- com.example.demo.src.lesson.LessonController
-com/example/demo/src/search/SearchService.java
- com.example.demo.src.search.SearchService
+com/example/demo/src/pofol/PofolController.java
+ com.example.demo.src.pofol.PofolController
 com/example/demo/src/lesson/LessonService.java
  com.example.demo.src.lesson.LessonService
+>>>>>>> 7eb11d6517faffeabd2accdb3685df231f876253
+com/example/demo/src/notice/NoticeProvider.java
+ com.example.demo.src.notice.NoticeProvider
 com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
+com/example/demo/config/BaseResponse.java
+ com.example.demo.config.BaseResponse
 com/example/demo/src/search/SearchProvider.java
  com.example.demo.src.search.SearchProvider
 com/example/demo/src/search/SearchController.java
  com.example.demo.src.search.SearchController
-com/example/demo/src/user/UserDao.java
- com.example.demo.src.user.UserDao
 com/example/demo/src/lesson/LessonProvider.java
  com.example.demo.src.lesson.LessonProvider
-com/example/demo/src/pofol/PofolProvider.java
- com.example.demo.src.pofol.PofolProvider
-com/example/demo/src/pofol/PofolDao.java
- com.example.demo.src.pofol.PofolDao
-com/example/demo/src/pofol/PofolController.java
- com.example.demo.src.pofol.PofolController
+com/example/demo/src/notice/NoticeService.java
+ com.example.demo.src.notice.NoticeService
 com/example/demo/src/pofol/PofolService.java
  com.example.demo.src.pofol.PofolService
+com/example/demo/src/user/UserService.java
+ com.example.demo.src.user.UserService
+com/example/demo/config/BaseResponseStatus.java
+ com.example.demo.config.BaseResponseStatus
+com/example/demo/config/BaseException.java
+ com.example.demo.config.BaseException
+com/example/demo/utils/JwtService.java
+ com.example.demo.utils.JwtService
+com/example/demo/src/session/SessionProvider.java
+ com.example.demo.src.session.SessionProvider
+com/example/demo/src/lesson/LessonController.java
+ com.example.demo.src.lesson.LessonController
+com/example/demo/src/user/UserProvider.java
+ com.example.demo.src.user.UserProvider

@@ -40,11 +40,12 @@ public class UserService {
 
 
     @Autowired
-    public UserService(UserDao userDao, UserProvider userProvider, JwtService jwtService) {
+    public UserService(UserDao userDao, UserProvider userProvider, JwtService jwtService, ObjectMapper objectMapper) {
         this.userDao = userDao;
         this.userProvider = userProvider;
         this.jwtService = jwtService;
 
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -182,7 +183,8 @@ public class UserService {
     }
 
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
-    private final ObjectMapper objectMapper = null;
+
+    private final ObjectMapper objectMapper;
 
     /**
      * 팔로우 하기
@@ -197,35 +199,38 @@ public class UserService {
             if(result == 0){
                 throw new BaseException(FOLLOW_FAIL_USER);
             }
-            //팔로우 요청자의 정보 얻기
-            GetUserNotiInfoRes getUserNotiInfoRes=userDao.Noti(myIdx);
-            //알림 테이블에 추가
-            userDao.followNoti(getUserNotiInfoRes, userIdx);
-
-//            푸시 알림 보내기
-//            String receiver= userDao.getFCMToken(userIdx);
-//            String message = makeMessage(receiver, "팔로우", getUserNotiInfoRes.getNickName()+"님이 회원님을 팔로우 했습니다.");
-//
-//            OkHttpClient client = new OkHttpClient();
-//            RequestBody requestBody = RequestBody.create(message,
-//                    MediaType.get("application/json; charset=utf-8"));
-//            Request request = new Request.Builder()
-//                    .url(API_URL)
-//                    .post(requestBody)
-//                    .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-//                    .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
-//                    .build();
-//
-//            Response response = client.newCall(request).execute();
-//
-//            System.out.println(response.body().string());
-
             return new PostFollowRes(result);
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
 
+    }
+
+
+    public void sendMessageTo(int myIdx, int userIdx) throws IOException {
+        //팔로우 요청자의 정보 얻기
+        GetUserNotiInfoRes getUserNotiInfoRes=userDao.Noti(myIdx);
+        //알림 테이블에 추가
+        userDao.followNoti(getUserNotiInfoRes, userIdx);
+
+        GetUserTokenRes getUserTokenRes= userDao.getFCMToken(userIdx);
+        String message = makeMessage(getUserTokenRes.getToken(), "팔로우", getUserNotiInfoRes.getNickName()+"님이 회원님을 팔로우 했습니다.");
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(message,
+                MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        System.out.println(response.body().string());
     }
 
     private String makeMessage(String targetToken, String title, String body) throws JsonParseException, JsonProcessingException {
@@ -239,7 +244,15 @@ public class UserService {
                                 .build()
                         ).build()).validateOnly(false).build();
 
-        return objectMapper.writeValueAsString(fcmMessage);
+        try {
+            return objectMapper.writeValueAsString(fcmMessage);
+        } catch (final JsonProcessingException e) {
+            try {
+                throw new Exception("Couldn't process object.", e);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     private String getAccessToken() throws IOException {
