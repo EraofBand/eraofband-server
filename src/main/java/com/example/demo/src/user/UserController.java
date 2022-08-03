@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.io.IOException;
+
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexEmail;
 
@@ -28,6 +30,7 @@ public class UserController {
         this.userService = userService;
         this.jwtService = jwtService;
     }
+
 
     /**
      * 다른 유저 페이지 조회 API
@@ -260,13 +263,16 @@ public class UserController {
             @ApiResponse(code=2070, message="유저 팔로우에 실패했습니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<PostFollowRes> followUser(@PathVariable("userIdx") int userIdx){
-//
+    public BaseResponse<PostFollowRes> followUser(@PathVariable("userIdx") int userIdx) throws IOException {
         try {
             //jwt에서 idx 추출
             int userIdxByJwt = jwtService.getUserIdx();
 
             PostFollowRes postFollowRes = userService.followUser(userIdxByJwt,userIdx);
+            userService.sendMessageTo(
+                    userIdxByJwt,
+                    userIdx);
+
             return new BaseResponse<>(postFollowRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

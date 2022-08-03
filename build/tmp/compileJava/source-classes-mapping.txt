@@ -163,6 +163,16 @@ com/example/demo/src/lesson/model/PostSignUpRes.java
  com.example.demo.src.lesson.model.PostSignUpRes
 com/example/demo/src/session/SessionController.java
  com.example.demo.src.session.SessionController
+<<<<<<< HEAD
+com/example/demo/src/session/model/PostBandRes.java
+ com.example.demo.src.session.model.PostBandRes
+com/example/demo/src/lesson/LessonDao.java
+ com.example.demo.src.lesson.LessonDao
+com/example/demo/src/user/model/GetUserTokenRes.java
+ com.example.demo.src.user.model.GetUserTokenRes
+com/example/demo/src/user/model/PostUserReq.java
+ com.example.demo.src.user.model.PostUserReq
+=======
 com/example/demo/src/pofol/PofolProvider.java
  com.example.demo.src.pofol.PofolProvider
 com/example/demo/src/notice/NoticeController.java
@@ -175,6 +185,7 @@ com/example/demo/src/pofol/PofolController.java
  com.example.demo.src.pofol.PofolController
 com/example/demo/src/lesson/LessonService.java
  com.example.demo.src.lesson.LessonService
+>>>>>>> 7eb11d6517faffeabd2accdb3685df231f876253
 com/example/demo/src/notice/NoticeProvider.java
  com.example.demo.src.notice.NoticeProvider
 com/example/demo/src/user/UserController.java
