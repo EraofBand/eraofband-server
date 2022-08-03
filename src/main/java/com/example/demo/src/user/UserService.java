@@ -199,6 +199,10 @@ public class UserService {
             if(result == 0){
                 throw new BaseException(FOLLOW_FAIL_USER);
             }
+            //팔로우 요청자의 정보 얻기
+            GetUserNotiInfoRes getUserNotiInfoRes=userDao.Noti(myIdx);
+            //알림 테이블에 추가
+            userDao.followNoti(getUserNotiInfoRes, userIdx);
             return new PostFollowRes(result);
         } catch(Exception exception){
             System.out.println(exception);
@@ -208,14 +212,12 @@ public class UserService {
     }
 
 
-    public void sendMessageTo(int myIdx, int userIdx) throws IOException {
+    public void sendMessageTo(int myIdx, int userIdx, String title, String body) throws IOException {
         //팔로우 요청자의 정보 얻기
         GetUserNotiInfoRes getUserNotiInfoRes=userDao.Noti(myIdx);
-        //알림 테이블에 추가
-        userDao.followNoti(getUserNotiInfoRes, userIdx);
 
         GetUserTokenRes getUserTokenRes= userDao.getFCMToken(userIdx);
-        String message = makeMessage(getUserTokenRes.getToken(), "팔로우", getUserNotiInfoRes.getNickName()+"님이 회원님을 팔로우 했습니다.");
+        String message = makeMessage(getUserTokenRes.getToken(), title, getUserNotiInfoRes.getNickName()+body);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message,
