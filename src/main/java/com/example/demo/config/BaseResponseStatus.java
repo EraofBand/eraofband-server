@@ -90,6 +90,11 @@ public enum BaseResponseStatus {
     DELETE_FAIL_NOTICE(false,2080,"알림 삭제에 실패했습니다."),
 
 
+    //chat
+    POSTS_EMPTY_CHAT_ID(false,2090,"채팅방 아이디 값을 확인해주세요."),
+    DELETE_FAIL_CHAT(false,2091,"채팅방 삭제에 실패했습니다."),
+
+
 
     /**
      * 3000 : Response 오류
