@@ -62,7 +62,7 @@ public class SearchDao {
                     "                        left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
                     "                        WHERE b.status='ACTIVE' and bu.status='ACTIVE' and b.bandTitle LIKE CONCAT('%', ?, '%')\n" +
                     "                        group by b.bandIdx\n" +
-                    "                        order by b.bandIdx";
+                    "                        order by b.bandIdx DESC";
         Object[] getSearchBandParams = new Object[]{search};
 
         return this.jdbcTemplate.query(getSearchBandQuery,
@@ -92,7 +92,7 @@ public class SearchDao {
                 "                left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
                 "                WHERE l.status='ACTIVE' and lu.status='ACTIVE' and l.lessonTitle LIKE CONCAT('%', ?, '%')\n" +
                 "                group by l.lessonIdx\n" +
-                "                order by l.lessonIdx";
+                "                order by l.lessonIdx DESC";
         Object[] getSearchLessonParams = new Object[]{search};
 
         return this.jdbcTemplate.query(getSearchLessonQuery,

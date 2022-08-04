@@ -593,7 +593,7 @@ public class SessionDao {
                     "                                    WHEN 5 THEN b.status='ACTIVE'\n" +
                     "                                END\n" +
                     "                            group by b.bandIdx\n" +
-                    "                            order by b.bandIdx;";
+                    "                            order by b.bandIdx DESC";
 
             getInfoBandParams = new Object[]{session};
 
@@ -614,7 +614,7 @@ public class SessionDao {
                     "                                    WHEN 5 THEN b.status='ACTIVE'\n" +
                     "                                END\n" +
                     "                            group by b.bandIdx\n" +
-                    "                            order by b.bandIdx;";
+                    "                            order by b.bandIdx DESC";
             getInfoBandParams = new Object[]{region, session};
         }
         return this.jdbcTemplate.query(getInfoBandQuery,
