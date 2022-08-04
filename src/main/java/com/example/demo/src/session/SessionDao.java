@@ -68,7 +68,7 @@ public class SessionDao {
      * 최신 밴드 조회
      */
     public List<GetNewBandRes> getNewBand() {
-        String getNewBandQuery = "SELECT b.bandIdx, b.bandRegion, b.bandTitle, b.bandImgUrl, IF(sessionNum is null, 0, sessionNum) as sessionNum, b.vocal+b.guitar+b.base+b.keyboard+b.drum as totalNum\n" +
+        String getNewBandQuery = "SELECT b.bandIdx, b.bandRegion, b.bandTitle, b.bandImgUrl, IF(sessionNum is null, 0, sessionNum)+1 as sessionNum, b.vocal+b.guitar+b.base+b.keyboard+b.drum+1 as totalNum\n" +
                 "                FROM Band as b\n" +
                 "                left join (select bandIdx, count(bandUserIdx) as sessionNum from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
                 "                WHERE status = 'ACTIVE' order by createdAt DESC\n" +
@@ -246,7 +246,7 @@ public class SessionDao {
                 "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
                 "       b.chatRoomLink as chatRoomLink, b.performTitle as performTitle, b.performDate as performDate, b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl,\n" +
-                "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount," +
+                "       b.vocal+b.guitar+b.base+b.keyboard+b.drum+1 as capacity, IF(memberCount is null, 0, memberCount)+1 as memberCount," +
                 "       IF(bandLikeCount is null, 0, bandLikeCount) as bandLikeCount,\n" +
                 "       IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName, profileImgUrl, introduction, token FROM User) u on u.userIdx = b.userIdx\n" +
@@ -310,7 +310,7 @@ public class SessionDao {
                 "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
                 "       b.chatRoomLink as chatRoomLink, b.performTitle as performTitle, b.performDate as performDate, b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee,b.bandImgUrl as bandImgUrl,\n" +
-                "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount,\n" +
+                "       b.vocal+b.guitar+b.base+b.keyboard+b.drum+1 as capacity, IF(memberCount is null, 0, memberCount)+1 as memberCount,\n" +
                 "       IF(bandLikeCount is null, 0, bandLikeCount) as bandLikeCount,\n" +
                 "       IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName, profileImgUrl, introduction, token FROM User) u on u.userIdx = b.userIdx\n" +
@@ -374,7 +374,7 @@ public class SessionDao {
                 "       baseComment, b.keyboard-IF(b3.keyboardCount is null, 0, b3.keyboardCount) as keyboard, keyboardComment, b.drum-IF(b4.drumCount is null, 0, b4.drumCount) as drum, drumComment,\n" +
                 "       b.performTitle as performTitle, b.performDate as performDate,  b.performTime as performTime," +
                 "       b.performLocation as performLocation, b.performFee as performFee, b.bandImgUrl as bandImgUrl," +
-                "       b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity, IF(memberCount is null, 0, memberCount) as memberCount,\n" +
+                "       b.vocal+b.guitar+b.base+b.keyboard+b.drum+1 as capacity, IF(memberCount is null, 0, memberCount)+1 as memberCount,\n" +
                 "       IF(bandLikeCount is null, 0, bandLikeCount) as bandLikeCount,\n" +
                 "       IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "FROM Band as b JOIN (SELECT userIdx, nickName, profileImgUrl, introduction, token FROM User) u on u.userIdx = b.userIdx\n" +
@@ -548,7 +548,7 @@ public class SessionDao {
         String getLikesBandQuery = "\n" +
                 "SELECT b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle,\n" +
                 "                        b.bandIntroduction as bandIntroduction, b.bandRegion as bandRegion,\n" +
-                "                    IF(memberCount is null, 0, memberCount) as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity\n" +
+                "                    IF(memberCount is null, 0, memberCount)+1 as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum+1 as capacity\n" +
                 "                        FROM BandUser as bu\n" +
                 "                        join Band as b \n" +
                 "                        left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
@@ -580,7 +580,7 @@ public class SessionDao {
             getInfoBandQuery = "\n" +
                     "SELECT b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle,\n" +
                     "                            b.bandIntroduction as bandIntroduction, b.bandRegion as bandRegion,\n" +
-                    "                            IF(memberCount is null, 0, memberCount) as memberCount, b.vocal + b.guitar + b.base + b.keyboard + b.drum + 1 as capacity\n" +
+                    "                            IF(memberCount is null, 0, memberCount)+1 as memberCount, b.vocal + b.guitar + b.base + b.keyboard + b.drum + 1 as capacity\n" +
                     "                            FROM Band as b\n" +
                     "                            left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
                     "                            WHERE b.status='ACTIVE' and\n" +
@@ -601,7 +601,7 @@ public class SessionDao {
             getInfoBandQuery = "\n" +
                     "SELECT b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle,\n" +
                     "                            b.bandIntroduction as bandIntroduction, b.bandRegion as bandRegion,\n" +
-                    "                            IF(memberCount is null, 0, memberCount) as memberCount, b.vocal + b.guitar + b.base + b.keyboard + b.drum + 1 as capacity\n" +
+                    "                            IF(memberCount is null, 0, memberCount)+1 as memberCount, b.vocal + b.guitar + b.base + b.keyboard + b.drum + 1 as capacity\n" +
                     "                            FROM Band as b\n" +
                     "                            left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
                     "                            WHERE b.status='ACTIVE' and (SUBSTRING(b.bandRegion, 1, 2)) = ? and\n" +
