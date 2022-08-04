@@ -111,7 +111,7 @@ public class UserDao {
      * */
     public List<GetUserBandRes> getUserBand(int userIdx){
         String getBandsByIdxQuery = "select b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction," +
-                "b.bandRegion as bandRegion, IF(memberCount is null, 0, memberCount) as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum as capacity\n" +
+                "b.bandRegion as bandRegion, IF(memberCount is null, 0, memberCount)+1 as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum+1 as capacity\n" +
                 "from BandUser as bu\n" +
                 "   left join Band as b on b.bandIdx=bu.bandIdx\n" +
                 "   left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n"+
