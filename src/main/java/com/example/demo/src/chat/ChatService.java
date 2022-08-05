@@ -1,6 +1,7 @@
 package com.example.demo.src.chat;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.chat.model.PostChatReq;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,31 @@ public class ChatService {
         this.jwtService = jwtService;
     }
 
+
+    /**
+     *  채팅방 생성
+     * */
+    public void createChatRoom(PostChatReq postChatReq) throws BaseException {
+
+        try{
+            result = chatDao.createChatRoom(postChatReq);
+
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(POST_FAIL_CHAT);
+        }
+    }
+
+
+
+
+
+
+
+
     /**
      *  채팅방 나가기
      * */
@@ -38,7 +64,7 @@ public class ChatService {
             result = chatDao.updateChatRoomStatus(userIdx, chatRoomIdx);
 
         } catch(Exception exception){
-            System.out.println(exception);
+            //System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
         if(result == 0){

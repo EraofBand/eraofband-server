@@ -94,6 +94,8 @@ public enum BaseResponseStatus {
     POSTS_EMPTY_CHAT_ID(false,2090,"채팅방 아이디 값을 확인해주세요."),
     DELETE_FAIL_CHAT(false,2091,"채팅방 삭제에 실패했습니다."),
 
+    POST_FAIL_CHAT(false,2092,"채팅방 생성에 실패했습니다."),
+
 
 
     /**
