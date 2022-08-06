@@ -3,6 +3,7 @@ package com.example.demo.src.chat;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.chat.model.GetChatRoomRes;
+import com.example.demo.src.chat.model.PostChatReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,22 @@ public class ChatDao {
     @Autowired
     public void setDataSource(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+
+
+
+
+
+    /**
+     *  채팅방 생성
+     * */
+    public int createChatRoom(PostChatReq postChatReq){
+        String checkChatRoomExistQuery = "INSERT INTO ChatContent (chatUserIdx, chatRoomIdx)\n" +
+                "VALUES (?,?), (?,?)";
+        Object[] checkChatRoomExistParams = new Object[]{ postChatReq.getFirstUserIdx(),postChatReq.getChatRoomIdx(),postChatReq.getSecondUserIdx(),postChatReq.getChatRoomIdx() };
+
+        return this.jdbcTemplate.update(checkChatRoomExistQuery,checkChatRoomExistParams);
     }
 
 

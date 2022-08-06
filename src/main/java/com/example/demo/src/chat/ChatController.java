@@ -3,6 +3,9 @@ package com.example.demo.src.chat;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.chat.model.GetChatRoomRes;
+import com.example.demo.src.chat.model.PostChatReq;
+import com.example.demo.src.lesson.model.PostLessonReq;
+import com.example.demo.src.lesson.model.PostLessonRes;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -53,6 +56,30 @@ public class ChatController {
 
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 채팅방 생성 API
+     * [POST] /chat
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PostMapping("") // (post) https://eraofband.shop/chat
+    @ApiOperation(value = "채팅방 생성 처리")
+    @ApiResponses({
+            @ApiResponse(code=2092, message="채팅방 생성에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> createChatRoom(@RequestBody PostChatReq postChatReq) {
+        try {
+
+            chatService.createChatRoom(postChatReq);
+
+            String result = "채팅방 생성이 완료되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 
