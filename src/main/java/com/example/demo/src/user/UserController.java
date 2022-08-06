@@ -269,11 +269,11 @@ public class UserController {
             int userIdxByJwt = jwtService.getUserIdx();
 
             PostFollowRes postFollowRes = userService.followUser(userIdxByJwt,userIdx);
-            userService.sendMessageTo(
-                    userIdxByJwt,
-                    userIdx,
-                    "팔로우",
-                    "님이 회원님을 팔로우 했습니다.");
+            //userService.sendMessageTo(
+            //        userIdxByJwt,
+            //        userIdx,
+            //        "팔로우",
+            //        "님이 회원님을 팔로우 했습니다.");
 
             return new BaseResponse<>(postFollowRes);
         } catch (BaseException exception) {
