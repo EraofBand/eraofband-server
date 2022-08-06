@@ -2,14 +2,14 @@ package com.example.demo.src.chat;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.chat.model.GetChatRoomRes;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.demo.config.BaseResponseStatus.POSTS_EMPTY_CHAT_ID;
-import static com.example.demo.config.BaseResponseStatus.POSTS_EMPTY_LESSON_ID;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @Service
 public class ChatProvider {
@@ -33,6 +33,20 @@ public class ChatProvider {
             return chatDao.checkChatRoomExist(userIdx, chatRoomIdx);
         } catch (Exception exception) {
             throw new BaseException(POSTS_EMPTY_CHAT_ID);
+        }
+    }
+
+    /**
+     * 채팅방 리스트 조회
+     */
+    public List<GetChatRoomRes> getChatRoom(int userIdx) throws BaseException {
+
+        try{
+            List<GetChatRoomRes> getChatRoomRes = chatDao.getChatRoom(userIdx);
+            return getChatRoomRes;
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 }
