@@ -41,7 +41,7 @@ public class ChatController {
      * @return BaseResponse<List<GetChatRoomRes>>
      */
     @ResponseBody
-    @GetMapping("/") // (get) https://eraofband.shop/chat
+    @GetMapping("/chat-room") // (get) https://eraofband.shop/chat
     @ApiOperation(value = "채팅방 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiResponses({
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
@@ -90,7 +90,7 @@ public class ChatController {
      */
     @ResponseBody
     @PatchMapping("/status/{chatRoomIdx}") // (patch) https://eraofband.shop/chat/status/2
-    @ApiOperation(value = "레슨 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "채팅 나가기 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="chatRoomIdx", value="나갈 채팅방 인덱스", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),

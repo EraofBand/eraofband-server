@@ -2,6 +2,7 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.SendPushMessage;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -182,10 +183,6 @@ public class UserService {
         }
     }
 
-    private final String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
-
-    private final ObjectMapper objectMapper;
-
     /**
      * 팔로우 하기
      */
@@ -212,12 +209,16 @@ public class UserService {
     }
 
 
+
+    private final ObjectMapper objectMapper;
     public void sendMessageTo(int myIdx, int userIdx, String title, String body) throws IOException {
+        String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
         //팔로우 요청자의 정보 얻기
         GetUserNotiInfoRes getUserNotiInfoRes=userDao.Noti(myIdx);
 
         GetUserTokenRes getUserTokenRes= userDao.getFCMToken(userIdx);
-        String message = makeMessage(getUserTokenRes.getToken(), title, getUserNotiInfoRes.getNickName()+body);
+        SendPushMessage sendPushMessage=new SendPushMessage(objectMapper);
+        String message = sendPushMessage.makeMessage(getUserTokenRes.getToken(), title, getUserNotiInfoRes.getNickName()+body);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message,
@@ -226,47 +227,15 @@ public class UserService {
         Request request = new Request.Builder()
                 .url(API_URL)
                 .post(requestBody)
-                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + sendPushMessage.getAccessToken())
                 .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
                 .build();
 
         Response response = client.newCall(request).execute();
 
-        System.out.println(response.body().string());
+        //System.out.println(response.body().string());
     }
 
-    private String makeMessage(String targetToken, String title, String body) throws JsonParseException, JsonProcessingException {
-        FcmMessage fcmMessage = FcmMessage.builder()
-                .message(FcmMessage.Message.builder()
-                        .token(targetToken)
-                        .notification(FcmMessage.Notification.builder()
-                                .title(title)
-                                .body(body)
-                                .image(null)
-                                .build()
-                        ).build()).validateOnly(false).build();
-
-        try {
-            return objectMapper.writeValueAsString(fcmMessage);
-        } catch (final JsonProcessingException e) {
-            try {
-                throw new Exception("Couldn't process object.", e);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-    }
-
-    private String getAccessToken() throws IOException {
-        String firebaseConfigPath = "firebase_service_key.json";
-
-        GoogleCredentials googleCredentials = GoogleCredentials
-                .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
-
-        googleCredentials.refreshIfExpired();
-        return googleCredentials.getAccessToken().getTokenValue();
-    }
 
     /**
      * 팔로우 취소 하기
@@ -284,5 +253,16 @@ public class UserService {
             throw new BaseException(UNFOLLOW_FAIL_USER);
         }
 
+    }
+
+    /**
+     * 유저 신고 하기
+     */
+    public void reportUser(int reporterIdx, PostReportReq postReportReq) throws BaseException {
+        try{
+            result = userDao.reportUser(reporterIdx, postReportReq);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 }
