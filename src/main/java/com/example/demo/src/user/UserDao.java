@@ -352,4 +352,14 @@ public class UserDao {
                         rs.getString("token")),
                 getFCMParams);
     }
+
+    /**
+     * 신고 테이블에 추가
+     */
+    public int reportUser(int reporterIdx, PostReportReq postReportReq) {
+        String insertReportQuery = "INSERT INTO Report(reporterIdx, reportedIdx, reportContent) VALUES (?,?,?)";
+        Object[] insertReportParams = new Object[]{ reporterIdx, postReportReq.getUserIdx(), postReportReq.getMessage() };
+
+        return this.jdbcTemplate.update(insertReportQuery, insertReportParams);
+    }
 }

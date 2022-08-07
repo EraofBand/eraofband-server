@@ -254,4 +254,15 @@ public class UserService {
         }
 
     }
+
+    /**
+     * 유저 신고 하기
+     */
+    public void reportUser(int reporterIdx, PostReportReq postReportReq) throws BaseException {
+        try{
+            result = userDao.reportUser(reporterIdx, postReportReq);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
