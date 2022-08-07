@@ -7,7 +7,6 @@ import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.net.HttpHeaders;
 import com.google.gson.JsonElement;
