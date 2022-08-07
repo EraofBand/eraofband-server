@@ -1,7 +1,6 @@
 package com.example.demo.src.user;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.session.model.PostBandLikeRes;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.*;
