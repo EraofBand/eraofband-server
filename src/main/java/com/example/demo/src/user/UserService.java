@@ -7,6 +7,7 @@ import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.net.HttpHeaders;
 import com.google.gson.JsonElement;
@@ -253,5 +254,16 @@ public class UserService {
             throw new BaseException(UNFOLLOW_FAIL_USER);
         }
 
+    }
+
+    /**
+     * 유저 신고 하기
+     */
+    public void reportUser(int reporterIdx, PostReportReq postReportReq) throws BaseException {
+        try{
+            result = userDao.reportUser(reporterIdx, postReportReq);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 }
