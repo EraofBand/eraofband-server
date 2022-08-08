@@ -2,9 +2,6 @@ package com.example.demo.src.pofol;
 
 
 import com.example.demo.src.pofol.model.*;
-import com.example.demo.src.user.model.GetUserNotiInfoRes;
-import com.example.demo.src.user.model.PatchUserReq;
-import com.example.demo.src.user.model.PostUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

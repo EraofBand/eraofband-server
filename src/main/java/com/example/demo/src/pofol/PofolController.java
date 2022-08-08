@@ -70,30 +70,27 @@ public class PofolController {
 
     /**
      * 팔로우 한 유저 포트폴리오 리스트 조회 API
-     * [GET] /pofols/info/follow/12/0
+     * [GET] /pofols/info/follow/0
      * 유저 인덱스 검색 포트폴리오 리스트 조회 API
      * @return BaseResponse<List<GetPofolRes>>
      */
     @ResponseBody
-    @GetMapping("/info/follow/{userIdx}/{pofolIdx}")  // (get) https://eraofband.shop/pofols/info/follow/12/0
+    @GetMapping("/info/follow/{pofolIdx}")  // (get) https://eraofband.shop/pofols/info/follow/0
     @ApiOperation(value = " 팔로우 한 유저 포트폴리오 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    @ApiImplicitParams({@ApiImplicitParam(name="userIdx", value="유저 인덱스", required = true),
-            @ApiImplicitParam(name="pofolIdx", value="현재 조회중인 포폴 인덱스(기준으로 아래 20개 불러오기, 초기값 0)", required = true)})
+    @ApiImplicitParam(name="pofolIdx", value="현재 조회중인 포폴 인덱스(기준으로 아래 20개 불러오기, 초기값 0)", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
             @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
             @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<List<GetPofolRes>> getFollowPofol(@PathVariable("userIdx") int userIdx, @PathVariable("pofolIdx") int pofolIdx){
+    public BaseResponse<List<GetPofolRes>> getFollowPofol(@PathVariable("pofolIdx") int pofolIdx){
         try{
 
             int userIdxByJwt = jwtService.getUserIdx();
-            if(userIdx!= userIdxByJwt){
-                return new BaseResponse<>(INVALID_JWT);
-            }
 
-            List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdx, pofolIdx);
+
+            List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdxByJwt, pofolIdx);
             return new BaseResponse<>(getPofol);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
@@ -171,7 +168,7 @@ public class PofolController {
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/pofol-info/{pofolIdx}/") // (patch) https://eraofband.shop/pofol/pofol-info/2
+    @PatchMapping("/pofol-info/{pofolIdx}") // (patch) https://eraofband.shop/pofol/pofol-info/2
     @ApiOperation(value = "포트폴리오 수정 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="pofolIdx", value="수정할 포트폴리오 인덱스", required = true)
     @ApiResponses({
