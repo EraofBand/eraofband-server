@@ -5,10 +5,7 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.pofol.model.*;
 import com.example.demo.utils.JwtService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,24 +38,62 @@ public class PofolController {
         this.jwtService = jwtService;
     }
 
+
     /**
-     * 팔로우 한 유저 포트폴리오 리스트 조회 API
-     * [GET] /pofols/info/follow/12
+     * 전체 포트폴리오 리스트 조회 API
+     * [GET] /pofols/info/all/0
      * 유저 인덱스 검색 포트폴리오 리스트 조회 API
      * @return BaseResponse<List<GetPofolRes>>
      */
     @ResponseBody
-    @GetMapping("/info/follow/{userIdx}")  // (get) https://eraofband.shop/pofols/info/follow/12
-    @ApiOperation(value = " 팔로우 한 유저 포트폴리오 리스트 조회")
-    @ApiImplicitParam(name="userIdx", value="팔로우한 유저 인덱스", required = true)
+    @GetMapping("/info/all/{pofolIdx}")  // (get) https://eraofband.shop/pofols/info/all/0
+    @ApiOperation(value = "전체 포트폴리오 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="pofolIdx", value="현재 조회중인 포폴 인덱스(기준으로 아래 20개 불러오기, 초기값 0)", required = true)
     @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
             @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<List<GetPofolRes>> getPofol(@PathVariable("userIdx") int userIdx){
+    public BaseResponse<List<GetPofolRes>> getPofol(@PathVariable("pofolIdx") int pofolIdx){
         try{
 
-            List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdx);
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            List<GetPofolRes> getPofol=pofolProvider.retrieveAllPofol(userIdxByJwt, pofolIdx);
+            return new BaseResponse<>(getPofol);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
+    /**
+     * 팔로우 한 유저 포트폴리오 리스트 조회 API
+     * [GET] /pofols/info/follow/12/0
+     * 유저 인덱스 검색 포트폴리오 리스트 조회 API
+     * @return BaseResponse<List<GetPofolRes>>
+     */
+    @ResponseBody
+    @GetMapping("/info/follow/{userIdx}/{pofolIdx}")  // (get) https://eraofband.shop/pofols/info/follow/12/0
+    @ApiOperation(value = " 팔로우 한 유저 포트폴리오 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParams({@ApiImplicitParam(name="userIdx", value="유저 인덱스", required = true),
+            @ApiImplicitParam(name="pofolIdx", value="현재 조회중인 포폴 인덱스(기준으로 아래 20개 불러오기, 초기값 0)", required = true)})
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<List<GetPofolRes>> getFollowPofol(@PathVariable("userIdx") int userIdx, @PathVariable("pofolIdx") int pofolIdx){
+        try{
+
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx!= userIdxByJwt){
+                return new BaseResponse<>(INVALID_JWT);
+            }
+
+            List<GetPofolRes> getPofol=pofolProvider.retrievePofol(userIdx, pofolIdx);
             return new BaseResponse<>(getPofol);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());

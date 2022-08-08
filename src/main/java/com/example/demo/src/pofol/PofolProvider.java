@@ -100,16 +100,34 @@ public class PofolProvider {
     }
 
     /**
-     * 포트폴리오 리스트 조회
+     * 전체 포트폴리오 리스트 조회
      */
-    public List<GetPofolRes> retrievePofol(int userIdx) throws BaseException {
+    public List<GetPofolRes> retrieveAllPofol(int userIdx, int pofolIdx) throws BaseException {
 
         if(checkUserExist(userIdx) ==0){
             throw new BaseException(USERS_EMPTY_USER_ID);
         }
 
         try{
-            List<GetPofolRes> getPofol = pofolDao.selectPofol(userIdx);
+            List<GetPofolRes> getPofol = pofolDao.selectAllPofol(userIdx, pofolIdx);
+            return getPofol;
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
+     * 팔로우 포트폴리오 리스트 조회
+     */
+    public List<GetPofolRes> retrievePofol(int userIdx, int pofolIdx) throws BaseException {
+
+        if(checkUserExist(userIdx) ==0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+
+        try{
+            List<GetPofolRes> getPofol = pofolDao.selectPofol(userIdx, pofolIdx);
             return getPofol;
         } catch(Exception exception){
             System.out.println(exception);
