@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -275,7 +276,7 @@ public class SessionController {
             @ApiResponse(code=2030, message="이미 지원한 밴드입니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<PostApplyRes> applySession(@PathVariable("bandIdx") int bandIdx, @RequestBody PostApplyReq postApplyReq) {
+    public BaseResponse<PostApplyRes> applySession(@PathVariable("bandIdx") int bandIdx, @RequestBody PostApplyReq postApplyReq) throws IOException {
         try {
             int userIdxByJwt = jwtService.getUserIdx();
             if(sessionProvider.checkBandSession(userIdxByJwt, bandIdx) == 1 || sessionProvider.checkBandApply(userIdxByJwt, bandIdx)==1){
@@ -283,6 +284,9 @@ public class SessionController {
             }
 
             PostApplyRes postApplyRes = sessionService.applySession(userIdxByJwt, bandIdx, postApplyReq);
+            //sessionService.sendMessageTo(
+            //        "밴드 지원",
+            //        "에 지원하셨습니다.");
 
             return new BaseResponse<>(postApplyRes);
         } catch (BaseException exception) {
@@ -338,17 +342,20 @@ public class SessionController {
             @ApiImplicitParam(name="userIdx", value="지원한 유저 인덱스", required = true)
     })
     @ApiResponses({
-            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
-            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
             @ApiResponse(code=2020, message="밴드 아이디 값을 확인해주세요."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<String> acceptSession(@PathVariable("bandIdx") int bandIdx, @PathVariable("userIdx") int userIdx) {
+    public BaseResponse<String> acceptSession(@PathVariable("bandIdx") int bandIdx, @PathVariable("userIdx") int userIdx) throws IOException {
         try {
 
             sessionService.acceptSession(bandIdx, userIdx);
 
             String result = "세션 지원이 수락되었습니다.";
+            //sessionService.sendMessage(
+            //        bandIdx,
+            //        userIdx,
+            //        "밴드 가입 수락",
+            //        "의 가입이 수락되었습니다.");
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -368,16 +375,19 @@ public class SessionController {
             @ApiImplicitParam(name="userIdx", value="지원한 유저 인덱스", required = true)
     })
     @ApiResponses({
-            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
-            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
             @ApiResponse(code=2020, message="밴드 아이디 값을 확인해주세요."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<String> rejectSession(@PathVariable("bandIdx") int bandIdx, @PathVariable("userIdx") int userIdx) {
+    public BaseResponse<String> rejectSession(@PathVariable("bandIdx") int bandIdx, @PathVariable("userIdx") int userIdx) throws IOException {
         try {
             sessionService.rejectSession(bandIdx, userIdx);
 
             String result = "세션 지원이 거절되었습니다.";
+            //sessionService.sendMessage(
+            //        bandIdx,
+            //        userIdx,
+            //        "밴드 가입 거절",
+            //        "의 가입이 거절되었습니다.");
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

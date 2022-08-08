@@ -1,5 +1,6 @@
 package com.example.demo.src.session;
 
+import com.example.demo.src.GetUserTokenRes;
 import com.example.demo.src.pofol.model.GetComNotiInfoRes;
 import com.example.demo.src.session.model.*;
 import com.example.demo.src.user.model.GetUserNotiInfoRes;
@@ -627,5 +628,18 @@ public class SessionDao {
                         rs.getInt("capacity"),
                         rs.getInt("memberCount")),
                 getInfoBandParams);
+    }
+
+    /**
+     * FCM 토큰 반환
+     */
+    public GetUserTokenRes getFCMToken(int userIdx) {
+        String getFCMQuery = "select token FROM User WHERE userIdx= ?";
+        int getFCMParams = userIdx;
+
+        return this.jdbcTemplate.queryForObject(getFCMQuery,
+                (rs, rowNum) -> new GetUserTokenRes(
+                        rs.getString("token")),
+                getFCMParams);
     }
 }
