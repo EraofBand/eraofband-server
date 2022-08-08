@@ -1,14 +1,21 @@
 package com.example.demo.src.pofol;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.GetUserTokenRes;
+import com.example.demo.src.SendPushMessage;
+import com.example.demo.src.lesson.model.GetLessonNotiInfoRes;
 import com.example.demo.src.pofol.model.*;
 //import com.example.demo.utils.AES128;
-import com.example.demo.src.user.model.GetUserNotiInfoRes;
 import com.example.demo.utils.JwtService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.net.HttpHeaders;
+import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -26,11 +33,12 @@ public class PofolService {
 
 
     @Autowired
-    public PofolService(PofolDao pofolDao, PofolProvider pofolProvider, JwtService jwtService) {
+    public PofolService(PofolDao pofolDao, PofolProvider pofolProvider, JwtService jwtService, ObjectMapper objectMapper) {
         this.pofolDao = pofolDao;
         this.pofolProvider = pofolProvider;
         this.jwtService = jwtService;
 
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -156,6 +164,7 @@ public class PofolService {
 //        }
 //    }
 
+    private int pofolCommentIdx=0;
     /**
      * 댓글 등록
      */
@@ -169,7 +178,7 @@ public class PofolService {
         }
 
         try{
-            int pofolCommentIdx = pofolDao.insertComment(pofolIdx, userIdx, postCommentReq);
+            pofolCommentIdx = pofolDao.insertComment(pofolIdx, userIdx, postCommentReq);
             //포트폴리오 댓글의 정보 얻기
             GetComNotiInfoRes getComNotiInfoRes=pofolDao.Noti(pofolCommentIdx);
 
@@ -182,6 +191,32 @@ public class PofolService {
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    private final ObjectMapper objectMapper;
+    public void sendMessageTo(String title, String body) throws IOException {
+        String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
+        //포트폴리오 댓글의 정보 얻기
+        GetComNotiInfoRes getComNotiInfoRes=pofolDao.Noti(pofolCommentIdx);
+
+        GetUserTokenRes getUserTokenRes= pofolDao.getFCMToken(getComNotiInfoRes.getReciverIdx());
+        SendPushMessage sendPushMessage=new SendPushMessage(objectMapper);
+        String message = sendPushMessage.makeMessage(getUserTokenRes.getToken(), title, getComNotiInfoRes.getNickName()+"님이 "+getComNotiInfoRes.getPofolTitle()+body);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(message,
+                MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + sendPushMessage.getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        //System.out.println(response.body().string());
     }
 
 

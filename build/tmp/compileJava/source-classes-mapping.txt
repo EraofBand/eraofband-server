@@ -197,6 +197,8 @@ com/example/demo/src/session/model/DeleteBandReq.java
  com.example.demo.src.session.model.DeleteBandReq
 com/example/demo/src/WebSecurityConfig.java
  com.example.demo.src.WebSecurityConfig
+com/example/demo/src/chat/model/GetChatRoomRes.java
+ com.example.demo.src.chat.model.GetChatRoomRes
 com/example/demo/src/pofol/model/PostPofolRes.java
  com.example.demo.src.pofol.model.PostPofolRes
 com/example/demo/src/session/model/GetSessionAppRes.java
@@ -217,6 +219,8 @@ com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
 com/example/demo/src/session/model/GetBandNotiInfoRes.java
  com.example.demo.src.session.model.GetBandNotiInfoRes
+com/example/demo/src/user/model/PostReportReq.java
+ com.example.demo.src.user.model.PostReportReq
 com/example/demo/DemoApplication.java
  com.example.demo.DemoApplication
 com/example/demo/src/lesson/model/PostSignUpRes.java

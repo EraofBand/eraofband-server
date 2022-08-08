@@ -1,6 +1,7 @@
 package com.example.demo.src.pofol;
 
 
+import com.example.demo.src.GetUserTokenRes;
 import com.example.demo.src.pofol.model.*;
 import com.example.demo.src.user.model.GetUserNotiInfoRes;
 import com.example.demo.src.user.model.PatchUserReq;
@@ -550,4 +551,16 @@ public class PofolDao {
         this.jdbcTemplate.update(updateComNotiQuery, updateComNotiParams);
     }
 
+    /**
+     * FCM 토큰 반환
+     */
+    public GetUserTokenRes getFCMToken(int userIdx) {
+        String getFCMQuery = "select token FROM User WHERE userIdx= ?";
+        int getFCMParams = userIdx;
+
+        return this.jdbcTemplate.queryForObject(getFCMQuery,
+                (rs, rowNum) -> new GetUserTokenRes(
+                        rs.getString("token")),
+                getFCMParams);
+    }
 }

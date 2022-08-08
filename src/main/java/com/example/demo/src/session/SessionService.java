@@ -1,12 +1,17 @@
 package com.example.demo.src.session;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.lesson.model.PostLesLikeRes;
-import com.example.demo.src.pofol.model.GetComNotiInfoRes;
+import com.example.demo.src.SendPushMessage;
 import com.example.demo.src.session.model.*;
+import com.example.demo.src.GetUserTokenRes;
 import com.example.demo.utils.JwtService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.net.HttpHeaders;
+import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -20,10 +25,11 @@ public class SessionService {
 
 
     @Autowired
-    public SessionService(SessionDao sessionDao, SessionProvider sessionProvider, JwtService jwtService) {
+    public SessionService(SessionDao sessionDao, SessionProvider sessionProvider, JwtService jwtService, ObjectMapper objectMapper) {
         this.sessionDao = sessionDao;
         this.sessionProvider = sessionProvider;
         this.jwtService = jwtService;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -80,7 +86,7 @@ public class SessionService {
         }
     }
 
-
+    private int bandUserIdx=0;
     /**
      * 밴드 지원
      * */
@@ -91,7 +97,7 @@ public class SessionService {
         }
 
         try{
-            int bandUserIdx = sessionDao.insertApply(userIdx, bandIdx, postApplyReq);
+            bandUserIdx = sessionDao.insertApply(userIdx, bandIdx, postApplyReq);
 
             //밴드 지원 유저의 정보 얻기
             GetBandNotiInfoRes getBandNotiInfoRes=sessionDao.Noti(bandUserIdx);
@@ -102,6 +108,32 @@ public class SessionService {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    private final ObjectMapper objectMapper;
+    public void sendMessageTo(String title, String body) throws IOException {
+        String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
+        //밴드 지원 유저의 정보 얻기
+        GetBandNotiInfoRes getBandNotiInfoRes=sessionDao.Noti(bandUserIdx);
+
+        GetUserTokenRes getUserTokenRes= sessionDao.getFCMToken(getBandNotiInfoRes.getReciverIdx());
+        SendPushMessage sendPushMessage=new SendPushMessage(objectMapper);
+        String message = sendPushMessage.makeMessage(getUserTokenRes.getToken(), title, getBandNotiInfoRes.getNickName()+"님이 회원님의 "+getBandNotiInfoRes.getBandTitle()+body);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(message,
+                MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + sendPushMessage.getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        //System.out.println(response.body().string());
     }
 
     /**
@@ -165,6 +197,31 @@ public class SessionService {
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    public void sendMessage(int bandIdx, int userIdx, String title, String body) throws IOException {
+        String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
+        //밴드 정보와 지원자 정보 얻기
+        GetSessionNotiInfoRes getSessionNotiInfoRes = sessionDao.SessionNoti(bandIdx, userIdx);
+
+        GetUserTokenRes getUserTokenRes= sessionDao.getFCMToken(getSessionNotiInfoRes.getUserIdx());
+        SendPushMessage sendPushMessage=new SendPushMessage(objectMapper);
+        String message = sendPushMessage.makeMessage(getUserTokenRes.getToken(), title, getSessionNotiInfoRes.getBandTitle()+body);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(message,
+                MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + sendPushMessage.getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        //System.out.println(response.body().string());
     }
 
     /**

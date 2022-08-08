@@ -8,6 +8,7 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -208,7 +209,7 @@ public class LessonController {
             @ApiResponse(code=2053, message="이미 지원한 레슨입니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<PostSignUpRes> applyLesson(@PathVariable("lessonIdx") int lessonIdx) {
+    public BaseResponse<PostSignUpRes> applyLesson(@PathVariable("lessonIdx") int lessonIdx) throws IOException {
         try{
             int userIdxByJwt = jwtService.getUserIdx();
             if(lessonProvider.checkLessonSession(userIdxByJwt, lessonIdx) == 1){
@@ -216,6 +217,9 @@ public class LessonController {
             }
 
             PostSignUpRes postSignUpRes = lessonService.applyLesson(userIdxByJwt, lessonIdx);
+            //lessonService.sendMessageTo(
+            //        "레슨 등록",
+            //        "에 등록하셨습니다.");
 
             return new BaseResponse<>(postSignUpRes);
         } catch(BaseException exception){
