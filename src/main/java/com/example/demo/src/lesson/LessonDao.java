@@ -2,6 +2,7 @@ package com.example.demo.src.lesson;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.GetUserTokenRes;
 import com.example.demo.src.lesson.model.*;
 
 
@@ -417,7 +418,18 @@ public class LessonDao {
                 getInfoLessonParams);
     }
 
+    /**
+     * FCM 토큰 반환
+     */
+    public GetUserTokenRes getFCMToken(int userIdx) {
+        String getFCMQuery = "select token FROM User WHERE userIdx= ?";
+        int getFCMParams = userIdx;
 
+        return this.jdbcTemplate.queryForObject(getFCMQuery,
+                (rs, rowNum) -> new GetUserTokenRes(
+                        rs.getString("token")),
+                getFCMParams);
+    }
 
 
 

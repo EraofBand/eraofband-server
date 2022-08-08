@@ -1,11 +1,18 @@
 package com.example.demo.src.lesson;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.GetUserTokenRes;
+import com.example.demo.src.SendPushMessage;
 import com.example.demo.src.lesson.model.*;
 import com.example.demo.src.session.model.GetBandNotiInfoRes;
 import com.example.demo.utils.JwtService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.net.HttpHeaders;
+import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -21,10 +28,11 @@ public class LessonService {
 
 
     @Autowired
-    public LessonService(LessonDao lessonDao, LessonProvider lessonProvider, JwtService jwtService) {
+    public LessonService(LessonDao lessonDao, LessonProvider lessonProvider, JwtService jwtService, ObjectMapper objectMapper) {
         this.lessonDao = lessonDao;
         this.lessonProvider = lessonProvider;
         this.jwtService = jwtService;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -84,6 +92,7 @@ public class LessonService {
         }
     }
 
+    private int lessonUserIdx=0;
     /**
      *  레슨 신청
      * */
@@ -94,7 +103,7 @@ public class LessonService {
         }
 
         try{
-            int lessonUserIdx = lessonDao.insertSignUp(userIdx, lessonIdx);
+            lessonUserIdx = lessonDao.insertSignUp(userIdx, lessonIdx);
 
             //밴드 지원 유저의 정보 얻기
             GetLessonNotiInfoRes getLessonNotiInfoRes=lessonDao.Noti(lessonUserIdx);
@@ -105,6 +114,32 @@ public class LessonService {
             //System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    private final ObjectMapper objectMapper;
+    public void sendMessageTo(String title, String body) throws IOException {
+        String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
+        //레슨 지원 유저의 정보 얻기
+        GetLessonNotiInfoRes getLessonNotiInfoRes=lessonDao.Noti(lessonUserIdx);
+
+        GetUserTokenRes getUserTokenRes= lessonDao.getFCMToken(getLessonNotiInfoRes.getReciverIdx());
+        SendPushMessage sendPushMessage=new SendPushMessage(objectMapper);
+        String message = sendPushMessage.makeMessage(getUserTokenRes.getToken(), title, getLessonNotiInfoRes.getNickName()+"님이 회원님의 "+getLessonNotiInfoRes.getLessonTitle()+body);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(message,
+                MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + sendPushMessage.getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        //System.out.println(response.body().string());
     }
 
     /**

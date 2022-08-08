@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -320,7 +321,7 @@ public class PofolController {
             @ApiResponse(code=2062, message="내용의 글자수를 확인해주세요."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<GetCommentRes> createComment(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PostCommentReq postCommentReq) {
+    public BaseResponse<GetCommentRes> createComment(@PathVariable("pofolIdx") int pofolIdx, @RequestBody PostCommentReq postCommentReq) throws IOException {
 
         if(postCommentReq.getContent().length()>100){
             return new BaseResponse<>(POST_POSTS_INVALID_CONTENTS);
@@ -335,6 +336,9 @@ public class PofolController {
             int pofolCommentIdx = pofolService.createComment(pofolIdx, userIdxByJwt,postCommentReq);
 
             GetCommentRes getComment = pofolProvider.certainComment(pofolCommentIdx);
+            //pofolService.sendMessageTo(
+            //        "포트폴리오 댓글",
+            //        "에 댓글을 남기셨습니다.");
             return new BaseResponse<>(getComment);
 
 

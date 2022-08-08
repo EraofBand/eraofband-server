@@ -1,5 +1,3 @@
-com/example/demo/src/lesson/model/PostSignUpRes.java
- com.example.demo.src.lesson.model.PostSignUpRes
 com/example/demo/src/lesson/LessonService.java
  com.example.demo.src.lesson.LessonService
 com/example/demo/src/lesson/model/GetLessonNotiInfoRes.java
@@ -10,8 +8,6 @@ com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/src/session/model/PatchBandReq.java
  com.example.demo.src.session.model.PatchBandReq
-com/example/demo/src/session/model/GetBandNotiInfoRes.java
- com.example.demo.src.session.model.GetBandNotiInfoRes
 com/example/demo/src/notice/model/GetNoticeRes.java
  com.example.demo.src.notice.model.GetNoticeRes
 com/example/demo/src/session/SessionService.java
@@ -34,8 +30,6 @@ com/example/demo/src/lesson/LessonProvider.java
  com.example.demo.src.lesson.LessonProvider
 com/example/demo/src/user/model/GetMyFeedRes.java
  com.example.demo.src.user.model.GetMyFeedRes
-com/example/demo/src/user/model/PostReportReq.java
- com.example.demo.src.user.model.PostReportReq
 com/example/demo/src/notice/NoticeDao.java
  com.example.demo.src.notice.NoticeDao
 com/example/demo/src/lesson/model/GetSearchLesReq.java
@@ -66,8 +60,6 @@ com/example/demo/src/search/SearchProvider.java
  com.example.demo.src.search.SearchProvider
 com/example/demo/src/user/model/PostLoginRes.java
  com.example.demo.src.user.model.PostLoginRes
-com/example/demo/src/board/model/PostBoardRes.java
- com.example.demo.src.board.model.PostBoardRes
 com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
 com/example/demo/src/session/model/PostBandLikeRes.java
@@ -138,8 +130,6 @@ com/example/demo/src/chat/ChatProvider.java
  com.example.demo.src.chat.ChatProvider
 com/example/demo/src/session/model/GetNewBandRes.java
  com.example.demo.src.session.model.GetNewBandRes
-com/example/demo/src/board/model/PostBoardReq.java
- com.example.demo.src.board.model.PostBoardReq
 com/example/demo/src/pofol/PofolController.java
  com.example.demo.src.pofol.PofolController
 com/example/demo/config/secret/Secret.java
@@ -193,8 +183,6 @@ com/example/demo/src/user/model/GetUserTokenRes.java
  com.example.demo.src.user.model.GetUserTokenRes
 com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
-com/example/demo/DemoApplication.java
- com.example.demo.DemoApplication
 com/example/demo/src/notice/NoticeProvider.java
  com.example.demo.src.notice.NoticeProvider
 com/example/demo/src/user/model/GetMyInfoRes.java
@@ -229,13 +217,11 @@ com/example/demo/src/pofol/model/PostLikeRes.java
  com.example.demo.src.pofol.model.PostLikeRes
 com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
-com/example/demo/src/board/BoardProvider.java
- com.example.demo.src.board.BoardProvider
-com/example/demo/src/board/BoardService.java
- com.example.demo.src.board.BoardService
-com/example/demo/src/board/model/PatchBoardReq.java
- com.example.demo.src.board.model.PatchBoardReq
-com/example/demo/src/board/BoardDao.java
- com.example.demo.src.board.BoardDao
-com/example/demo/src/board/BoardController.java
- com.example.demo.src.board.BoardController
+com/example/demo/src/session/model/GetBandNotiInfoRes.java
+ com.example.demo.src.session.model.GetBandNotiInfoRes
+com/example/demo/src/user/model/PostReportReq.java
+ com.example.demo.src.user.model.PostReportReq
+com/example/demo/DemoApplication.java
+ com.example.demo.DemoApplication
+com/example/demo/src/lesson/model/PostSignUpRes.java
+ com.example.demo.src.lesson.model.PostSignUpRes

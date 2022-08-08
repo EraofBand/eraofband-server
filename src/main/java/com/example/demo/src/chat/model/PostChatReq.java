@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostChatReq {
 
-    private int chatRoomIdx;
+    private String chatRoomIdx;
     private int firstUserIdx;
     private int secondUserIdx;
 
