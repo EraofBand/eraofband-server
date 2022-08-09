@@ -217,7 +217,6 @@ public class PofolController {
             @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
             @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
             @ApiResponse(code=2060, message="포트폴리오 아이디 값을 확인해주세요."),
-            @ApiResponse(code=2062, message="내용의 글자수를 확인해주세요."),
             @ApiResponse(code=2065, message="포트폴리오 삭제에 실패했습니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })

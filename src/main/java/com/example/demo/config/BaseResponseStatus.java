@@ -99,7 +99,8 @@ public enum BaseResponseStatus {
     // board
     POSTS_EMPTY_BOARD_ID(false,2100,"게시글 아이디 값을 확인해주세요."),
     POST_BOARD_EMPTY_TITLE(false,2101,"게시글 제목을 입력해주세요."),
-    MODIFY_FAIL_BOARD(false,2102,"게시글 삭제에 실패했습니다."),
+    MODIFY_FAIL_BOARD(false,2102,"게시글 수정에 실패했습니다."),
+    DELETE_FAIL_BOARD(false,2103,"게시글 삭제에 실패했습니다."),
 
 
 

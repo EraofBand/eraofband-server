@@ -82,4 +82,27 @@ public class BoardService {
             throw new BaseException(MODIFY_FAIL_BOARD);
         }
     }
+
+    /**
+     * 게시판 게시물 삭제
+     */
+    public void deleteBoard(int userIdx,int boardIdx) throws BaseException {
+
+        if(boardProvider.checkBoardExist(boardIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BOARD_ID);
+        }
+
+        if(boardProvider.checkUserExist(userIdx) == 0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+
+        try{
+            result = boardDao.updateBoardStatus(boardIdx);
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(DELETE_FAIL_BOARD);
+        }
+    }
 }
