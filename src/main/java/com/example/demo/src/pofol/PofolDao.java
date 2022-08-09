@@ -403,16 +403,16 @@ public class PofolDao {
      * 포트폴리오 삭제
      * */
     public int updatePofolStatus(int pofolIdx) {
-        String deleteUserQuery = "update Pofol p" +
+        String deletePofolQuery = "update Pofol p" +
                 "    left join PofolComment as pc on (pc.pofolIdx=p.pofolIdx)\n" +
                 "    left join PofolLike as pl on (pl.pofolIdx=p.pofolIdx)\n" +
                 "        set p.status='INACTIVE',\n" +
                 "            pc.status='INACTIVE',\n" +
                 "            pl.status='INACTIVE'\n" +
                 "   where p.pofolIdx = ? ";
-        Object[] deleteUserParams = new Object[]{pofolIdx};
+        Object[] deletePofolParams = new Object[]{pofolIdx};
 
-        return this.jdbcTemplate.update(deleteUserQuery, deleteUserParams);
+        return this.jdbcTemplate.update(deletePofolQuery, deletePofolParams);
     }
 
     /**
