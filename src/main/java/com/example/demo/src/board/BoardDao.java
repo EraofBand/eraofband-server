@@ -141,16 +141,16 @@ public class BoardDao {
                 "            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
                 "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                 "            case\n" +
-                "                when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
-                "                    then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
-                "                when timestampdiff(minute, b.createdAt, current_timestamp) < 60\n" +
-                "                    then concat(timestampdiff(minute, b.createdAt, current_timestamp), '분 전')\n" +
-                "                when timestampdiff(hour, b.createdAt, current_timestamp) < 24\n" +
-                "                    then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
-                "                when timestampdiff(day, b.createdAt, current_timestamp) < 365\n" +
-                "                    then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
-                "                else timestampdiff(year, b.createdAt, current_timestamp)\n" +
-                "            end as createdAt\n" +
+                "                when timestampdiff(second, b.updatedAt, current_timestamp) < 60\n" +
+                "                    then concat(timestampdiff(second, b.updatedAt, current_timestamp), '초 전')\n" +
+                "                when timestampdiff(minute, b.updatedAt, current_timestamp) < 60\n" +
+                "                    then concat(timestampdiff(minute, b.updatedAt, current_timestamp), '분 전')\n" +
+                "                when timestampdiff(hour, b.updatedAt, current_timestamp) < 24\n" +
+                "                    then concat(timestampdiff(hour, b.updatedAt, current_timestamp), '시간 전')\n" +
+                "                when timestampdiff(day, b.updatedAt, current_timestamp) < 365\n" +
+                "                    then concat(timestampdiff(day, b.updatedAt, current_timestamp), '일 전')\n" +
+                "                else timestampdiff(year, b.updatedAt, current_timestamp)\n" +
+                "            end as updatedAt\n" +
                 "        FROM Board as b\n" +
                 "            join User as u on u.userIdx = b.userIdx\n" +
                 "            left join (select boardIdx, userIdx, count(boardLikeIdx) as boardLikeCount from BoardLike WHERE status = 'ACTIVE' group by boardIdx) blc on blc.boardIdx = b.boardIdx\n" +
@@ -169,7 +169,7 @@ public class BoardDao {
                         rs.getInt("views"),
                         rs.getInt("boardLikeCount"),
                         rs.getInt("commentCount"),
-                        rs.getString("createdAt")
+                        rs.getString("updatedAt")
                 ), selectBoardListParam);
     }
 
@@ -189,16 +189,16 @@ public class BoardDao {
                 "            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
                 "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                 "            case\n" +
-                "                when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
-                "                    then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
-                "                when timestampdiff(minute, b.createdAt, current_timestamp) < 60\n" +
-                "                    then concat(timestampdiff(minute, b.createdAt, current_timestamp), '분 전')\n" +
-                "                when timestampdiff(hour, b.createdAt, current_timestamp) < 24\n" +
-                "                    then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
-                "                when timestampdiff(day, b.createdAt, current_timestamp) < 365\n" +
-                "                    then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
-                "                else timestampdiff(year, b.createdAt, current_timestamp)\n" +
-                "            end as createdAt,\n" +
+                "                when timestampdiff(second, b.updatedAt, current_timestamp) < 60\n" +
+                "                    then concat(timestampdiff(second, b.updatedAt, current_timestamp), '초 전')\n" +
+                "                when timestampdiff(minute, b.updatedAt, current_timestamp) < 60\n" +
+                "                    then concat(timestampdiff(minute, b.updatedAt, current_timestamp), '분 전')\n" +
+                "                when timestampdiff(hour, b.updatedAt, current_timestamp) < 24\n" +
+                "                    then concat(timestampdiff(hour, b.updatedAt, current_timestamp), '시간 전')\n" +
+                "                when timestampdiff(day, b.updatedAt, current_timestamp) < 365\n" +
+                "                    then concat(timestampdiff(day, b.updatedAt, current_timestamp), '일 전')\n" +
+                "                else timestampdiff(year, b.updatedAt, current_timestamp)\n" +
+                "            end as updatedAt,\n" +
                 "            IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "        FROM Board as b\n" +
                 "            join User as u on u.userIdx = b.userIdx\n" +
@@ -220,7 +220,7 @@ public class BoardDao {
                         rs.getInt("views"),
                         rs.getInt("boardLikeCount"),
                         rs.getInt("commentCount"),
-                        rs.getString("createdAt"),
+                        rs.getString("updatedAt"),
                         rs.getString("LikeOrNot"),
                         getBoardComments
                 ), selectBoardInfoParam);

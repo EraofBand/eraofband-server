@@ -18,5 +18,5 @@ public class GetBoardRes {
     private int views;
     private int boardLikeCount;
     private int commentCount;
-    private String createdAt;
+    private String updatedAt;
 }
