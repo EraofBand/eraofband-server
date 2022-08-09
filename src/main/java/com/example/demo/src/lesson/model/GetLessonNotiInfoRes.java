@@ -8,7 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetLessonNotiInfoRes {
     private int userIdx;
-    private int reciverIdx;
+    private int receiverIdx;
     private int lessonIdx;
     private String nickName;
     private String profileImgUrl;

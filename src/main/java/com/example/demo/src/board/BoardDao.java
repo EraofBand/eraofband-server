@@ -1,11 +1,9 @@
 package com.example.demo.src.board;
 
+import com.example.demo.src.GetUserTokenRes;
 import com.example.demo.src.board.model.*;
 import com.example.demo.src.lesson.model.GetMemberRes;
-import com.example.demo.src.pofol.model.GetCommentRes;
-import com.example.demo.src.pofol.model.GetPofolRes;
-import com.example.demo.src.pofol.model.PatchPofolReq;
-import com.example.demo.src.pofol.model.PostPofolReq;
+import com.example.demo.src.pofol.model.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -50,6 +48,85 @@ public class BoardDao {
     }
 
     /**
+     * 게시글 댓글 확인
+     * */
+    public int checkCommentExist(int boardCommentIdx) {
+        String checkCommentExistQuery = "select exists(select boardCommentIdx from BoardComment where boardCommentIdx = ? and status = 'ACTIVE')";
+        int checkCommentExistParams = boardCommentIdx;
+        return this.jdbcTemplate.queryForObject(checkCommentExistQuery,
+                int.class,
+                checkCommentExistParams);
+
+    }
+
+    /**
+     * 댓글 작성
+     * */
+    public int insertComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) {
+
+        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content) VALUES (?, ?, ?)";
+
+        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent()};
+
+        this.jdbcTemplate.update(insertCommentQuery, insertCommentParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    /**
+     * 댓글 삭제
+     * */
+    public int deleteComment(int boardCommentIdx) {
+        String deleteCommentQuery = "UPDATE BoardComment SET status = 'INACTIVE' WHERE boardCommentIdx = ? ";
+        Object[] deleteCommentParams = new Object[]{boardCommentIdx};
+
+        return this.jdbcTemplate.update(deleteCommentQuery, deleteCommentParams);
+
+    }
+
+    /**
+     * 댓글 조회
+     * */
+    public GetBoardCommentRes certainComment(int boardCommentIdx) {
+
+        String selectCommentQuery = "SELECT b.boardCommentIdx as boardCommentIdx,\n" +
+                "b.boardIdx as boardIdx, \n" +
+                "b.userIdx as userIdx,\n" +
+                "u.nickName as nickName,\n" +
+                "u.profileImgUrl as profileImgUrl,\n" +
+                "b.content as content,\n" +
+                "case\n" +
+                "when timestampdiff(second, b.updatedAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(second, b.updatedAt, current_timestamp), '초 전')\n" +
+                "when timestampdiff(minute , b.updatedAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(minute, b.updatedAt, current_timestamp), '분 전')\n" +
+                "when timestampdiff(hour , b.updatedAt, current_timestamp) < 24\n" +
+                "then concat(timestampdiff(hour, b.updatedAt, current_timestamp), '시간 전')\n" +
+                "when timestampdiff(day , b.updatedAt, current_timestamp) < 365\n" +
+                "then concat(timestampdiff(day, b.updatedAt, current_timestamp), '일 전')\n" +
+                "else timestampdiff(year , b.updatedAt, current_timestamp)\n" +
+                "end as updatedAt\n" +
+                "FROM BoardComment as b\n" +
+                "join User as u on u.userIdx = b.userIdx\n" +
+                "WHERE b.boardCommentIdx = ? and b.status = 'ACTIVE'\n " +
+                "group by b.boardCommentIdx order by b.boardCommentIdx DESC; \n";
+
+        int selectCommentParam = boardCommentIdx;
+        return this.jdbcTemplate.queryForObject(selectCommentQuery,
+                (rs, rowNum) -> new GetBoardCommentRes(
+                        rs.getInt("boardCommentIdx"),
+                        rs.getInt("boardIdx"),
+                        rs.getInt("userIdx"),
+                        rs.getString("nickName"),
+                        rs.getString("profileImgUrl"),
+                        rs.getString("content"),
+                        rs.getString("updatedAt")
+                ), selectCommentParam);
+
+    }
+
+    /**
      * 게시물 리스트 조회
      * */
     public List<GetBoardRes> selectBoardList(int category) {
@@ -60,6 +137,7 @@ public class BoardDao {
                 "            u.nickName as nickName,\n" +
                 "            b.title as title,\n" +
                 "            b.imgUrl as imgUrl,\n" +
+                "            b.views as views,\n" +
                 "            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
                 "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                 "            case\n" +
@@ -88,6 +166,7 @@ public class BoardDao {
                         rs.getString("title"),
                         rs.getString("imgUrl"),
                         rs.getString("nickName"),
+                        rs.getInt("views"),
                         rs.getInt("boardLikeCount"),
                         rs.getInt("commentCount"),
                         rs.getString("createdAt")
@@ -234,6 +313,61 @@ public class BoardDao {
         String updateBoardCountQuery = "UPDATE Board SET views=views+1 WHERE boardIdx = ? and status='ACTIVE'\n";
         Object[] updateBoardCountParams = new Object[]{boardIdx};
         return this.jdbcTemplate.update(updateBoardCountQuery, updateBoardCountParams);
+    }
+
+    /**
+     * 댓글 작성자의 정보 얻기
+     */
+    public GetBoardComNotiInfoRes Noti(int boardCommentIdx){
+        String getInfoQuery = "SELECT bc.boardCommentIdx as boardCommentIdx,\n" +
+                "                b.userIdx as reciverIdx,\n" +
+                "                bc.boardIdx as boardIdx,\n" +
+                "                bc.userIdx as userIdx,\n" +
+                "                u.nickName as nickName,\n" +
+                "                u.profileImgUrl as profileImgUrl,\n" +
+                "                b.title as title\n" +
+                "FROM BoardComment as bc\n" +
+                "                join User as u on u.userIdx = bc.userIdx\n" +
+                "left join Board as b on b.boardIdx = bc.boardIdx\n" +
+                "                WHERE bc.boardCommentIdx = ? and bc.status = 'ACTIVE'\n" +
+                "                group by bc.boardCommentIdx order by bc.boardCommentIdx";
+        int getInfoParams = boardCommentIdx;
+        return this.jdbcTemplate.queryForObject(getInfoQuery,
+                (rs, rowNum) -> new GetBoardComNotiInfoRes(
+                        rs.getInt("boardCommentIdx"),
+                        rs.getInt("receiverIdx"),
+                        rs.getInt("boardIdx"),
+                        rs.getInt("userIdx"),
+                        rs.getString("nickName"),
+                        rs.getString("profileImgUrl"),
+                        rs.getString("title")
+                ),
+                getInfoParams);
+    }
+
+    /**
+     * 알림 테이블에 추가
+     */
+    public void CommentNoti(GetBoardComNotiInfoRes getBoardComNotiInfoRes){
+
+        String updateComNotiQuery = "INSERT INTO Notice(receiverIdx, image, head, body) VALUES (?,?,?,?)";
+        Object[] updateComNotiParams = new Object[]{getBoardComNotiInfoRes.getReceiverIdx(), getBoardComNotiInfoRes.getProfileImgUrl(),"게시물 댓글",
+                getBoardComNotiInfoRes.getNickName()+"님이 "+ getBoardComNotiInfoRes.getTitle()+"에 댓글을 남기셨습니다."};
+
+        this.jdbcTemplate.update(updateComNotiQuery, updateComNotiParams);
+    }
+
+    /**
+     * FCM 토큰 반환
+     */
+    public GetUserTokenRes getFCMToken(int userIdx) {
+        String getFCMQuery = "select token FROM User WHERE userIdx= ?";
+        int getFCMParams = userIdx;
+
+        return this.jdbcTemplate.queryForObject(getFCMQuery,
+                (rs, rowNum) -> new GetUserTokenRes(
+                        rs.getString("token")),
+                getFCMParams);
     }
 
 }

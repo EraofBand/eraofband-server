@@ -5,6 +5,7 @@ import com.example.demo.src.board.model.GetBoardCommentRes;
 import com.example.demo.src.board.model.GetBoardInfoRes;
 import com.example.demo.src.board.model.GetBoardRes;
 import com.example.demo.src.pofol.PofolDao;
+import com.example.demo.src.pofol.model.GetCommentRes;
 import com.example.demo.src.pofol.model.GetPofolRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
@@ -53,6 +54,33 @@ public class BoardProvider {
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    /**
+     * 게시글 댓글 확인
+     */
+    public int checkCommentExist(int boardCommentIdx) throws BaseException{
+        try{
+            return boardDao.checkCommentExist(boardCommentIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
+     * 특정 댓글 조회
+     */
+    public GetBoardCommentRes certainComment (int boardCommentIdx) throws BaseException {
+
+        try{
+            GetBoardCommentRes getCommentRes = boardDao.certainComment(boardCommentIdx);
+            return getCommentRes;
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+
     }
 
     /**

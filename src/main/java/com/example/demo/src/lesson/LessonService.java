@@ -122,7 +122,7 @@ public class LessonService {
         //레슨 지원 유저의 정보 얻기
         GetLessonNotiInfoRes getLessonNotiInfoRes=lessonDao.Noti(lessonUserIdx);
 
-        GetUserTokenRes getUserTokenRes= lessonDao.getFCMToken(getLessonNotiInfoRes.getReciverIdx());
+        GetUserTokenRes getUserTokenRes= lessonDao.getFCMToken(getLessonNotiInfoRes.getReceiverIdx());
         SendPushMessage sendPushMessage=new SendPushMessage(objectMapper);
         String message = sendPushMessage.makeMessage(getUserTokenRes.getToken(), title, getLessonNotiInfoRes.getNickName()+"님이 회원님의 "+getLessonNotiInfoRes.getLessonTitle()+body);
 
