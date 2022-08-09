@@ -1,11 +1,6 @@
 package com.example.demo.src.notice;
 import com.example.demo.config.BaseException;
-import com.example.demo.config.BaseResponse;
-import com.example.demo.config.BaseResponseStatus;
-import com.example.demo.src.lesson.LessonDao;
-import com.example.demo.src.lesson.LessonProvider;
-import com.example.demo.src.lesson.model.*;
-import com.example.demo.src.session.model.GetBandNotiInfoRes;
+import com.example.demo.src.notice.model.PostReportReq;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,6 +55,17 @@ public class NoticeService {
             throw new BaseException(DELETE_FAIL_NOTICE);
         }
 
+    }
+
+    /**
+     * 신고 하기
+     */
+    public void insertReport(int reporterIdx, PostReportReq postReportReq) throws BaseException {
+        try{
+            noticeDao.insertReport(reporterIdx, postReportReq);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
 }
