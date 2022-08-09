@@ -189,7 +189,7 @@ public class BoardDao {
      * 게시판 게시물 생성
      * */
     public int insertBoard(int userIdx, PostBoardReq postBoardReq) {
-        String insertBoardQuery = "INSERT INTO Board(userIdx, category, content, imgUrl, title) VALUES (?, ?, ?, ?, ?)";
+        String insertBoardQuery = "INSERT INTO Board(userIdx, category, content, imgUrl, title, views) VALUES (?, ?, ?, ?, ?, 0)";
         Object[] insertBoardParams = new Object[]{userIdx, postBoardReq.getCategory(), postBoardReq.getContent(), postBoardReq.getImgUrl(), postBoardReq.getTitle()};
         this.jdbcTemplate.update(insertBoardQuery, insertBoardParams);
 
@@ -207,6 +207,22 @@ public class BoardDao {
         Object[] updateBoardParams = new Object[]{patchBoardReq.getTitle(), patchBoardReq.getContent(), patchBoardReq.getImgUrl(), boardIdx};
 
         return this.jdbcTemplate.update(updateBoardQuery, updateBoardParams);
+    }
+
+    /**
+     * 게시판 게시물 삭제
+     * */
+    public int updateBoardStatus(int boardIdx) {
+        String deleteBoardQuery = "update Board b" +
+                "    left join BoardComment as bc on (bc.boardIdx=b.boardIdx)\n" +
+                "    left join BoardLike as bl on (bl.boardIdx=b.boardIdx)\n" +
+                "        set b.status='INACTIVE',\n" +
+                "            bc.status='INACTIVE',\n" +
+                "            bl.status='INACTIVE'\n" +
+                "   where b.boardIdx = ? ";
+        Object[] deleteBoardParams = new Object[]{boardIdx};
+
+        return this.jdbcTemplate.update(deleteBoardQuery, deleteBoardParams);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.demo.src.user.model;
+package com.example.demo.src.board.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostReportReq {
+public class PatchBoardComReq {
     private int userIdx;
-    private String message;
+
+    public PatchBoardComReq(){
+
+    }
 }
