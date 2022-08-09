@@ -1,22 +1,21 @@
 package com.example.demo.src.board;
 import com.example.demo.config.BaseException;
-import com.example.demo.config.BaseResponse;
-import com.example.demo.src.board.model.PatchBoardReq;
-import com.example.demo.src.board.model.PostBoardReq;
-import com.example.demo.src.board.model.PostBoardRes;
-import com.example.demo.src.pofol.PofolDao;
-import com.example.demo.src.pofol.PofolProvider;
-import com.example.demo.src.pofol.model.PatchPofolReq;
-import com.example.demo.src.pofol.model.PostPofolReq;
-import com.example.demo.src.pofol.model.PostPofolRes;
+import com.example.demo.src.GetUserTokenRes;
+import com.example.demo.src.SendPushMessage;
+import com.example.demo.src.board.model.*;
+import com.example.demo.src.pofol.model.*;
 import com.example.demo.utils.JwtService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.net.HttpHeaders;
+import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 import static com.example.demo.config.BaseResponseStatus.*;
-import static com.example.demo.config.BaseResponseStatus.MODIFY_FAIL_POFOL;
 
 @Service
 public class BoardService {
@@ -31,11 +30,12 @@ public class BoardService {
 
 
     @Autowired
-    public BoardService(BoardDao boardDao, BoardProvider boardProvider, JwtService jwtService) {
+    public BoardService(BoardDao boardDao, BoardProvider boardProvider, JwtService jwtService, ObjectMapper objectMapper) {
         this.boardDao = boardDao;
         this.boardProvider = boardProvider;
         this.jwtService = jwtService;
 
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -122,6 +122,88 @@ public class BoardService {
         }
         if(result == 0){
             throw new BaseException(ADD_FAIL_BOARD);
+        }
+    }
+
+    private int boardCommentIdx=0;
+    /**
+     * 댓글 등록
+     */
+    public int createComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) throws BaseException {
+
+        if(boardProvider.checkUserExist(userIdx) == 0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+        if(boardProvider.checkBoardExist(boardIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BOARD_ID);
+        }
+
+        try{
+            boardCommentIdx = boardDao.insertComment(boardIdx, userIdx, postBoardCommentReq);
+            //게시글 댓글의 정보 얻기
+            GetBoardComNotiInfoRes getBoardComNotiInfoRes =boardDao.Noti(boardCommentIdx);
+
+
+            //알림 테이블에 추가
+            if(userIdx != getBoardComNotiInfoRes.getReceiverIdx()){
+                boardDao.CommentNoti(getBoardComNotiInfoRes);
+            }
+            return boardCommentIdx;
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    private final ObjectMapper objectMapper;
+    public void sendMessageTo(String title, String body) throws IOException {
+        String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
+        //포트폴리오 댓글의 정보 얻기
+        GetBoardComNotiInfoRes getBoardComNotiInfoRes =boardDao.Noti(boardCommentIdx);
+
+        GetUserTokenRes getUserTokenRes= boardDao.getFCMToken(getBoardComNotiInfoRes.getReceiverIdx());
+        SendPushMessage sendPushMessage=new SendPushMessage(objectMapper);
+        String message = sendPushMessage.makeMessage(getUserTokenRes.getToken(), title, getBoardComNotiInfoRes.getNickName()+"님이 "+getBoardComNotiInfoRes.getTitle()+body);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(message,
+                MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + sendPushMessage.getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        //System.out.println(response.body().string());
+    }
+
+
+    /**
+     * 댓글 삭제
+     */
+    public void deleteComment(int userIdx, int boardCommentIdx) throws BaseException {
+
+        if(boardProvider.checkCommentExist(boardCommentIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BOARD_COMMENT_ID);
+        }
+
+        if(boardProvider.checkUserExist(userIdx) == 0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+
+        try{
+            result = boardDao.deleteComment(boardCommentIdx);
+
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(DELETE_FAIL_BOARD_COMMENT);
         }
     }
 }

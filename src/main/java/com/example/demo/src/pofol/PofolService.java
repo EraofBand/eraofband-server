@@ -184,7 +184,7 @@ public class PofolService {
 
 
             //알림 테이블에 추가
-            if(userIdx != getComNotiInfoRes.getReciverIdx()){
+            if(userIdx != getComNotiInfoRes.getReceiverIdx()){
                 pofolDao.CommentNoti(getComNotiInfoRes);
             }
             return pofolCommentIdx;
@@ -199,7 +199,7 @@ public class PofolService {
         //포트폴리오 댓글의 정보 얻기
         GetComNotiInfoRes getComNotiInfoRes=pofolDao.Noti(pofolCommentIdx);
 
-        GetUserTokenRes getUserTokenRes= pofolDao.getFCMToken(getComNotiInfoRes.getReciverIdx());
+        GetUserTokenRes getUserTokenRes= pofolDao.getFCMToken(getComNotiInfoRes.getReceiverIdx());
         SendPushMessage sendPushMessage=new SendPushMessage(objectMapper);
         String message = sendPushMessage.makeMessage(getUserTokenRes.getToken(), title, getComNotiInfoRes.getNickName()+"님이 "+getComNotiInfoRes.getPofolTitle()+body);
 
