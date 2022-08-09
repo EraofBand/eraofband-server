@@ -1,11 +1,10 @@
 package com.example.demo.src.notice;
-import com.example.demo.config.BaseException;
 
 
 import com.example.demo.src.notice.model.GetAlarmRes;
 import com.example.demo.src.notice.model.GetNoticeRes;
 
-import com.example.demo.src.session.model.GetBandRes;
+import com.example.demo.src.notice.model.PostReportReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -94,5 +93,15 @@ public class NoticeDao {
                 getNewAlarmParam);
     }
 
+    /**
+     * 신고 테이블에 추가
+     */
+    public int insertReport(int reporterIdx, PostReportReq postReportReq) {
+        String insertReportQuery = "INSERT INTO Report(reporterIdx, reportedIdx, reportLocation, reportLocationIdx, reportContent) VALUES (?,?,?,?,?)";
+        Object[] insertReportParams = new Object[]{ reporterIdx, postReportReq.getUserIdx(),
+                postReportReq.getReportLocation(), postReportReq.getReportLocationIdx(), postReportReq.getMessage() };
 
+        return this.jdbcTemplate.update(insertReportQuery, insertReportParams);
+    }
 }
+
