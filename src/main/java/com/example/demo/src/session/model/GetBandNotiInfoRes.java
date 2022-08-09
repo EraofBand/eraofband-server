@@ -8,7 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetBandNotiInfoRes {
     private int userIdx;
-    private int reciverIdx;
+    private int receiverIdx;
     private int bandIdx;
     private String nickName;
     private String profileImgUrl;

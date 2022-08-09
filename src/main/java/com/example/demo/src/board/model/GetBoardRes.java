@@ -15,7 +15,8 @@ public class GetBoardRes {
     private String title;
     private String imgUrl;
     private String nickName;
+    private int views;
     private int boardLikeCount;
     private int commentCount;
-    private String createdAt;
+    private String updatedAt;
 }

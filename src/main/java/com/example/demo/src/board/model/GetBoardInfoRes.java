@@ -22,7 +22,7 @@ public class GetBoardInfoRes {
     private int views;
     private int boardLikeCount;
     private int commentCount;
-    private String createdAt;
+    private String updatedAt;
     private String likeOrNot;
     private List<GetBoardCommentRes> getBoardComments;
 }

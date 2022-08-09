@@ -130,7 +130,7 @@ public class LessonDao {
      */
     public void LessonNoti(GetLessonNotiInfoRes getLessonNotiInfoRes) {
         String updateLessonNotiQuery = "INSERT INTO Notice(receiverIdx, image, head, body) VALUES (?,?,?,?)";
-        Object[] updateLessonNotiParams = new Object[]{getLessonNotiInfoRes.getReciverIdx(), getLessonNotiInfoRes.getProfileImgUrl(), "레슨 지원",
+        Object[] updateLessonNotiParams = new Object[]{getLessonNotiInfoRes.getReceiverIdx(), getLessonNotiInfoRes.getProfileImgUrl(), "레슨 지원",
                 getLessonNotiInfoRes.getNickName() + "님이 회원님의 " + getLessonNotiInfoRes.getLessonTitle() + "에 지원하셨습니다."};
 
         this.jdbcTemplate.update(updateLessonNotiQuery, updateLessonNotiParams);

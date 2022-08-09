@@ -1,3 +1,5 @@
+com/example/demo/src/board/model/PostBoardCommentReq.java
+ com.example.demo.src.board.model.PostBoardCommentReq
 com/example/demo/src/board/BoardProvider.java
  com.example.demo.src.board.BoardProvider
 com/example/demo/src/lesson/LessonService.java
@@ -156,6 +158,8 @@ com/example/demo/src/board/model/PostBoardReq.java
  com.example.demo.src.board.model.PostBoardReq
 com/example/demo/src/pofol/PofolController.java
  com.example.demo.src.pofol.PofolController
+com/example/demo/src/board/model/GetBoardComNotiInfoRes.java
+ com.example.demo.src.board.model.GetBoardComNotiInfoRes
 com/example/demo/src/GetUserTokenRes.java
  com.example.demo.src.GetUserTokenRes
 com/example/demo/config/secret/Secret.java

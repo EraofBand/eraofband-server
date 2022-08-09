@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -53,7 +54,7 @@ public class BoardController {
      * @return BaseResponse<List<GetBoardRes>>
      */
     @ResponseBody
-    @GetMapping("/list/info/{category}")   // (get) https://eraofband.shop/board/info/1
+    @GetMapping("/list/info/{category}")   // (get) https://eraofband.shop/board/list/info/1
     @ApiOperation(value = "게시물 리스트 조회")
     @ApiImplicitParam(name="category", value="게시 유형 인덱스", required = true)
     @ApiResponses({
@@ -213,6 +214,88 @@ public class BoardController {
             boardService.deleteBoard(userIdxByJwt,boardIdx);
 
             String result = "게시판 게시물이 삭제되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 게시물 댓글 등록 API
+     * [POST] /board/comment/2
+     * @return BaseResponse<GetBoardCommentRes>
+     */
+    @ResponseBody
+    @PostMapping("/comment/{boardIdx}") // (post) https://eraofband.shop/board/comment/2
+    @ApiOperation(value = "게시물 댓글 등록 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="boardIdx", value="댓글 달 게시물 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2100, message="게시글 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2062, message="내용의 글자수를 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<GetBoardCommentRes> createComment(@PathVariable("boardIdx") int boardIdx, @RequestBody PostBoardCommentReq postBoardCommentReq) throws IOException {
+
+        if(postBoardCommentReq.getContent().length()>100){
+            return new BaseResponse<>(POST_POSTS_INVALID_CONTENTS);
+        }
+
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(postBoardCommentReq.getUserIdx()!= userIdxByJwt){
+                return new BaseResponse<>(INVALID_JWT);
+            }
+
+            int boardCommentIdx = boardService.createComment(boardIdx, userIdxByJwt,postBoardCommentReq);
+
+            GetBoardCommentRes getComment = boardProvider.certainComment(boardCommentIdx);
+            //boardService.sendMessageTo(
+            //        "게시물 댓글",
+            //        "에 댓글을 남기셨습니다.");
+            return new BaseResponse<>(getComment);
+
+
+        } catch(BaseException exception){
+            System.out.println(exception);
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
+
+    /**
+     * 게시물 댓글 삭제 API
+     * [PATCH] /board/comment/status/2
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/comment/status/{boardCommentIdx}") // (patch) https://eraofband.shop/board/comment/status/2
+    @ApiOperation(value = "게시글 댓글 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="boardCommentIdx", value="삭제할 댓글 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2100, message="게시글 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2105, message="게시글 댓글 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2106, message="게시글 댓글 삭제에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> deleteComment(@PathVariable("boardCommentIdx") int boardCommentIdx, @RequestBody PatchBoardComReq patchBoardComReq) {
+
+        try {
+
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            if(patchBoardComReq.getUserIdx()!= userIdxByJwt){
+                return new BaseResponse<>(INVALID_JWT);
+            }
+            boardService.deleteComment(userIdxByJwt,boardCommentIdx);
+
+            String result = "게시글 댓글이 삭제되었습니다.";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

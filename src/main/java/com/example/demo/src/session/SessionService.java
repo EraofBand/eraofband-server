@@ -116,7 +116,7 @@ public class SessionService {
         //밴드 지원 유저의 정보 얻기
         GetBandNotiInfoRes getBandNotiInfoRes=sessionDao.Noti(bandUserIdx);
 
-        GetUserTokenRes getUserTokenRes= sessionDao.getFCMToken(getBandNotiInfoRes.getReciverIdx());
+        GetUserTokenRes getUserTokenRes= sessionDao.getFCMToken(getBandNotiInfoRes.getReceiverIdx());
         SendPushMessage sendPushMessage=new SendPushMessage(objectMapper);
         String message = sendPushMessage.makeMessage(getUserTokenRes.getToken(), title, getBandNotiInfoRes.getNickName()+"님이 회원님의 "+getBandNotiInfoRes.getBandTitle()+body);
 

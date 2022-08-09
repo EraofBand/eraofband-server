@@ -123,7 +123,7 @@ public class SessionDao {
      */
     public void BandNoti(GetBandNotiInfoRes getBandNotiInfoRes) {
         String updateBandNotiQuery = "INSERT INTO Notice(receiverIdx, image, head, body) VALUES (?,?,?,?)";
-        Object[] updateBandNotiParams = new Object[]{getBandNotiInfoRes.getReciverIdx(), getBandNotiInfoRes.getProfileImgUrl(), "밴드 지원",
+        Object[] updateBandNotiParams = new Object[]{getBandNotiInfoRes.getReceiverIdx(), getBandNotiInfoRes.getProfileImgUrl(), "밴드 지원",
                 getBandNotiInfoRes.getNickName() + "님이 회원님의 " + getBandNotiInfoRes.getBandTitle() + "에 지원하셨습니다."};
 
         this.jdbcTemplate.update(updateBandNotiQuery, updateBandNotiParams);
