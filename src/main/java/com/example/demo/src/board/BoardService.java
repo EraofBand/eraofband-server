@@ -105,4 +105,23 @@ public class BoardService {
             throw new BaseException(DELETE_FAIL_BOARD);
         }
     }
+
+    /**
+     * 게시물 조회 수 증가
+     */
+    public void addViewCount(int boardIdx) throws BaseException {
+
+        if(boardProvider.checkBoardExist(boardIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BOARD_ID);
+        }
+
+        try{
+            result = boardDao.updateBoardCount(boardIdx);
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(ADD_FAIL_BOARD);
+        }
+    }
 }
