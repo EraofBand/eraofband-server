@@ -19,6 +19,7 @@ public class GetBoardInfoRes {
     private String imgUrl;
     private String nickName;
     private String content;
+    private int views;
     private int boardLikeCount;
     private int commentCount;
     private String createdAt;

@@ -85,11 +85,13 @@ public class BoardController {
             @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
             @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
             @ApiResponse(code=2100, message="게시글 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2104, message="게시글 조회 수 증가에 실패했습니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
     public BaseResponse<GetBoardInfoRes> getBoardInfo(@PathVariable("boardIdx") int boardIdx){
 
         try{
+            boardService.addViewCount(boardIdx);
             int userIdxByJwt = jwtService.getUserIdx();
             GetBoardInfoRes getBoardInfo=boardProvider.retrieveBoardInfo(userIdxByJwt, boardIdx);
             return new BaseResponse<>(getBoardInfo);

@@ -95,7 +95,7 @@ public class BoardDao {
     }
 
     /**
-     * 게시물  조회
+     * 게시물 조회
      * */
     public GetBoardInfoRes selectBoardInfo(int userIdx, int boardIdx,  List<GetBoardCommentRes> getBoardComments) {
         String selectBoardInfoQuery = "\n" +
@@ -106,6 +106,7 @@ public class BoardDao {
                 "            b.title as title,\n" +
                 "            b.imgUrl as imgUrl,\n" +
                 "            b.content as content,\n" +
+                "            b.views as views,\n" +
                 "            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
                 "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                 "            case\n" +
@@ -137,6 +138,7 @@ public class BoardDao {
                         rs.getString("imgUrl"),
                         rs.getString("nickName"),
                         rs.getString("content"),
+                        rs.getInt("views"),
                         rs.getInt("boardLikeCount"),
                         rs.getInt("commentCount"),
                         rs.getString("createdAt"),
@@ -223,6 +225,15 @@ public class BoardDao {
         Object[] deleteBoardParams = new Object[]{boardIdx};
 
         return this.jdbcTemplate.update(deleteBoardQuery, deleteBoardParams);
+    }
+
+    /**
+     * 게시물 조회 수 증가
+     * */
+    public int updateBoardCount(int boardIdx) {
+        String updateBoardCountQuery = "UPDATE Board SET views=views+1 WHERE boardIdx = ? and status='ACTIVE'\n";
+        Object[] updateBoardCountParams = new Object[]{boardIdx};
+        return this.jdbcTemplate.update(updateBoardCountQuery, updateBoardCountParams);
     }
 
 }
