@@ -101,6 +101,7 @@ public enum BaseResponseStatus {
     POST_BOARD_EMPTY_TITLE(false,2101,"게시글 제목을 입력해주세요."),
     MODIFY_FAIL_BOARD(false,2102,"게시글 수정에 실패했습니다."),
     DELETE_FAIL_BOARD(false,2103,"게시글 삭제에 실패했습니다."),
+    ADD_FAIL_BOARD(false,2104,"게시글 조회 수 증가에 실패했습니다."),
 
 
 
