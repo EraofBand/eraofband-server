@@ -1,6 +1,7 @@
 package com.example.demo.src.session;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.pofol.model.GetPofolRes;
 import com.example.demo.src.session.model.*;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @Service
 public class SessionProvider {
@@ -179,5 +180,34 @@ public class SessionProvider {
             throw new BaseException(DATABASE_ERROR);
         }
 
+    }
+
+    /**
+     * 밴드 앨범 존재 유무 확인
+     * */
+    public int checkAlbumExist(int albumIdx) throws BaseException {
+        try{
+            return sessionDao.checkAlbumExist(albumIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
+     * 밴드 앨범 리스트 조회
+     */
+    public List<GetAlbumRes> getBandAlbum(int bandIdx) throws BaseException {
+
+        if(checkBandExist(bandIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BAND_ID);
+        }
+
+        try{
+            List<GetAlbumRes> getBandAlbum = sessionDao.selectBandAlbum(bandIdx);
+            return getBandAlbum;
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 }

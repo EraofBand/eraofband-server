@@ -46,6 +46,10 @@ public enum BaseResponseStatus {
     NOT_BAND_MEMBER(false, 2031, "등록하지 않은 밴드입니다."),
     WITHDRAW_FAIL_BAND(false,2032,"밴드 탈퇴에 실패했습니다."),
 
+    POSTS_EMPTY_ALBUM_ID(false,2033,"밴드 앨범 아이디 값을 확인해주세요."),
+
+    DELETE_FAIL_ALBUM(false,2034,"밴드 앨범 삭제에 실패했습니다."),
+
     // lesson
     DELETE_FAIL_LESSON(false,2040,"레슨 삭제에 실패했습니다."),
 

@@ -264,4 +264,38 @@ public class SessionService {
             throw new BaseException(UNLIKES_FAIL_BAND);
         }
     }
+
+
+    /**
+     * 밴드 앨범 생성
+     * */
+    public PostAlbumRes createAlbum(PostAlbumReq postAlbumReq) throws BaseException {
+
+        try{
+            int bandAlbumIdx = sessionDao.insertAlbum(postAlbumReq);
+            return new PostAlbumRes(bandAlbumIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
+     * 밴드 앨범 삭제
+     * */
+    public void deleteAlbum(int albumIdx) throws BaseException {
+
+        if(sessionProvider.checkAlbumExist(albumIdx) ==0){
+            throw new BaseException(POSTS_EMPTY_ALBUM_ID);
+        }
+
+        try{
+            result = sessionDao.updateAlbumStatus(albumIdx);
+
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(DELETE_FAIL_ALBUM);
+        }
+    }
 }
