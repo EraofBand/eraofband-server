@@ -3,9 +3,7 @@ package com.example.demo.src.board;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.board.model.PatchBoardReq;
-import com.example.demo.src.board.model.PostBoardReq;
-import com.example.demo.src.board.model.PostBoardRes;
+import com.example.demo.src.board.model.*;
 import com.example.demo.src.pofol.model.*;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.*;
@@ -41,6 +39,58 @@ public class BoardController {
         this.boardProvider = boardProvider;
         this.boardService = boardService;
         this.jwtService = jwtService;
+    }
+
+    /**
+     * 게시물 리스트 조회 API
+     * [GET] /board/list/info/12
+     * @return BaseResponse<List<GetBoardRes>>
+     */
+    @ResponseBody
+    @GetMapping("/list/info/{category}")   // (get) https://eraofband.shop/board/info/1
+    @ApiOperation(value = "게시물 리스트 조회")
+    @ApiImplicitParam(name="category", value="게시 유형 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<List<GetBoardRes>> getBoardList(@PathVariable("category") int category){
+
+        try{
+
+            List<GetBoardRes> getBoardList=boardProvider.retrieveBoard(category);
+            return new BaseResponse<>(getBoardList);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+    }
+
+    /**
+     * 게시물 조회 API
+     * [GET] /board/info/12
+     * @return BaseResponse<GetBoardInfoRes>
+     */
+    @ResponseBody
+    @GetMapping("/info/{boardIdx}")   // (get) https://eraofband.shop/board/info/1
+    @ApiOperation(value = "게시물 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="boardIdx", value="게시물 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2100, message="게시글 아이디 값을 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<GetBoardInfoRes> getBoardInfo(@PathVariable("boardIdx") int boardIdx){
+
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            GetBoardInfoRes getBoardInfo=boardProvider.retrieveBoardInfo(userIdxByJwt, boardIdx);
+            return new BaseResponse<>(getBoardInfo);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+
     }
 
     /**
