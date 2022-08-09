@@ -2,10 +2,10 @@ package com.example.demo.src.notice;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 
-import com.example.demo.src.lesson.model.*;
 import com.example.demo.src.notice.model.GetAlarmRes;
 import com.example.demo.src.notice.model.GetNoticeRes;
 
+import com.example.demo.src.notice.model.PostReportReq;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +116,32 @@ public class NoticeController {
             return new BaseResponse<>(exception.getStatus());
         }
 
+    }
+
+    /**
+     * 신고 API
+     * [POST] /notice/report
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PostMapping("/report") // (post) https://eraofband.shop/notice/report
+    @ApiOperation(value = "신고 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> insertReport(@RequestBody PostReportReq postReportReq) {
+        try {
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+            noticeService.insertReport(userIdxByJwt, postReportReq);
+
+            String result = "신고를 완료했습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
     }
 
 
