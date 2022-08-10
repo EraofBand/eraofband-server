@@ -351,7 +351,7 @@ public class BoardDao {
      */
     public GetBoardComNotiInfoRes Noti(int boardCommentIdx){
         String getInfoQuery = "SELECT bc.boardCommentIdx as boardCommentIdx,\n" +
-                "                b.userIdx as reciverIdx,\n" +
+                "                b.userIdx as receiverIdx,\n" +
                 "                bc.boardIdx as boardIdx,\n" +
                 "                bc.userIdx as userIdx,\n" +
                 "                u.nickName as nickName,\n" +

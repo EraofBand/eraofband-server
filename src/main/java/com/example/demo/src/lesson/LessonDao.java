@@ -102,7 +102,7 @@ public class LessonDao {
     public GetLessonNotiInfoRes Noti(int lessonUserIdx) {
         String getLessonInfoQuery = "SELECT lu.lessonUserIdx as lessonUserIdx,\n" +
                 "       lu.userIdx as userIdx,\n" +
-                "       l.userIdx as reciverIdx,\n" +
+                "       l.userIdx as receiverIdx,\n" +
                 "       l.lessonIdx as lessonIdx,\n" +
                 "       u.nickName as nickName,\n" +
                 "       u.profileImgUrl as profileImgUrl,\n" +
@@ -116,7 +116,7 @@ public class LessonDao {
         return this.jdbcTemplate.queryForObject(getLessonInfoQuery,
                 (rs, rowNum) -> new GetLessonNotiInfoRes(
                         rs.getInt("userIdx"),
-                        rs.getInt("reciverIdx"),
+                        rs.getInt("receiverIdx"),
                         rs.getInt("lessonIdx"),
                         rs.getString("nickName"),
                         rs.getString("profileImgUrl"),
