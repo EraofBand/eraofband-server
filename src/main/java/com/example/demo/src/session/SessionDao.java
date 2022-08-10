@@ -211,15 +211,15 @@ public class SessionDao {
     public List<GetSessionAppRes> getApplicants(int bandIdx) {
         String getApplicantsQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.introduction as introduction,\n" +
                 "case\n" +
-                "when timestampdiff(second, BU.updatedAt, current_timestamp) < 60\n" +
-                "then concat(timestampdiff(second, BU.updatedAt, current_timestamp), '초 전')\n" +
-                "when timestampdiff(minute , BU.updatedAt, current_timestamp) < 60\n" +
-                "then concat(timestampdiff(minute, BU.updatedAt, current_timestamp), '분 전')\n" +
-                "when timestampdiff(hour , BU.updatedAt, current_timestamp) < 24\n" +
-                "then concat(timestampdiff(hour, BU.updatedAt, current_timestamp), '시간 전')\n" +
-                "when timestampdiff(day , BU.updatedAt, current_timestamp) < 365\n" +
-                "then concat(timestampdiff(day, BU.updatedAt, current_timestamp), '일 전')\n" +
-                "else timestampdiff(year , BU.updatedAt, current_timestamp)\n" +
+                "when timestampdiff(second, BU.createdAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(second, BU.createdAt, current_timestamp), '초 전')\n" +
+                "when timestampdiff(minute , BU.createdAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(minute, BU.createdAt, current_timestamp), '분 전')\n" +
+                "when timestampdiff(hour , BU.createdAt, current_timestamp) < 24\n" +
+                "then concat(timestampdiff(hour, BU.createdAt, current_timestamp), '시간 전')\n" +
+                "when timestampdiff(day , BU.createdAt, current_timestamp) < 7\n" +
+                "then concat(timestampdiff(day, BU.createdAt, current_timestamp), '일 전')\n" +
+                "else date_format(BU.createdAt, '%Y-%m-%d')\n" +
                 "end as updatedAt\n" +
                 "FROM BandUser as BU\n" +
                 "JOIN(SELECT userIdx, nickName, profileImgUrl, introduction, token FROM User) u on u.userIdx = BU.userIdx\n" +
