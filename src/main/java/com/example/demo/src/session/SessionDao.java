@@ -95,7 +95,7 @@ public class SessionDao {
     public GetBandNotiInfoRes Noti(int bandUserIdx) {
         String getBandInfoQuery = "SELECT bu.bandUserIdx as bandUserIdx,\n" +
                 "       bu.userIdx as userIdx,\n" +
-                "       b.userIdx as reciverIdx,\n" +
+                "       b.userIdx as receiverIdx,\n" +
                 "       b.bandIdx as bandIdx,\n" +
                 "       u.nickName as nickName,\n" +
                 "       u.profileImgUrl as profileImgUrl,\n" +
@@ -109,7 +109,7 @@ public class SessionDao {
         return this.jdbcTemplate.queryForObject(getBandInfoQuery,
                 (rs, rowNum) -> new GetBandNotiInfoRes(
                         rs.getInt("userIdx"),
-                        rs.getInt("reciverIdx"),
+                        rs.getInt("receiverIdx"),
                         rs.getInt("bandIdx"),
                         rs.getString("nickName"),
                         rs.getString("profileImgUrl"),

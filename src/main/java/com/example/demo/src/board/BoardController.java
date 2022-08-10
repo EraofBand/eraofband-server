@@ -250,7 +250,9 @@ public class BoardController {
             }
 
             int boardCommentIdx = boardService.createComment(boardIdx, userIdxByJwt,postBoardCommentReq);
-
+            //댓글 그룹 추가
+            boardService.addGroupNum(boardCommentIdx);
+            //생성한 댓글 조회
             GetBoardCommentRes getComment = boardProvider.certainComment(boardCommentIdx);
             //boardService.sendMessageTo(
             //        "게시물 댓글",

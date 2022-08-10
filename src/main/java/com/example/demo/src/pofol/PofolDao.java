@@ -511,7 +511,7 @@ public class PofolDao {
      */
     public GetComNotiInfoRes Noti(int pofolCommentIdx){
         String getInfoQuery = "SELECT pc.pofolCommentIdx as pofolCommentIdx,\n" +
-                "                p.userIdx as reciverIdx,\n" +
+                "                p.userIdx as receiverIdx,\n" +
                 "                pc.pofolIdx as pofolIdx,\n" +
                 "                pc.userIdx as userIdx,\n" +
                 "                u.nickName as nickName,\n" +
@@ -526,7 +526,7 @@ public class PofolDao {
         return this.jdbcTemplate.queryForObject(getInfoQuery,
                 (rs, rowNum) -> new GetComNotiInfoRes(
                         rs.getInt("pofolCommentIdx"),
-                        rs.getInt("reciverIdx"),
+                        rs.getInt("receiverIdx"),
                         rs.getInt("pofolIdx"),
                         rs.getInt("userIdx"),
                         rs.getString("nickName"),

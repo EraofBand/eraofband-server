@@ -114,6 +114,8 @@ com/example/demo/src/pofol/model/PostPofolReq.java
  com.example.demo.src.pofol.model.PostPofolReq
 com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
+com/example/demo/src/board/model/PostBoardLikeRes.java
+ com.example.demo.src.board.model.PostBoardLikeRes
 com/example/demo/src/user/UserProvider.java
  com.example.demo.src.user.UserProvider
 com/example/demo/src/chat/ChatService.java

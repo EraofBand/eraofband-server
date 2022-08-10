@@ -180,6 +180,23 @@ public class BoardService {
         //System.out.println(response.body().string());
     }
 
+    /**
+     * 댓글 그룹 추가
+     */
+    public void addGroupNum(int boardCommentIdx) throws BaseException {
+
+        if(boardProvider.checkCommentExist(boardCommentIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BOARD_COMMENT_ID);
+        }
+        try{
+            result = boardDao.insertCommentGroup(boardCommentIdx);
+
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 
     /**
      * 댓글 삭제

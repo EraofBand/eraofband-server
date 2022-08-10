@@ -76,14 +76,25 @@ public class BoardDao {
      * */
     public int insertComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) {
 
-        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content) VALUES (?, ?, ?)";
+        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum) VALUES (?, ?, ?, ?)";
 
-        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent()};
+        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent(), postBoardCommentReq.getClassNum()};
 
         this.jdbcTemplate.update(insertCommentQuery, insertCommentParams);
 
         String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    /**
+     * 댓글 그룹 추가
+     * */
+    public int insertCommentGroup(int boardCommentIdx) {
+        String insertCommentGroupQuery = "UPDATE BoardComment SET groupNum = ? WHERE boardCommentIdx = ? ";
+        Object[] insertCommentGroupParams = new Object[]{boardCommentIdx, boardCommentIdx};
+
+        return this.jdbcTemplate.update(insertCommentGroupQuery, insertCommentGroupParams);
+
     }
 
     /**
@@ -108,6 +119,8 @@ public class BoardDao {
                 "u.nickName as nickName,\n" +
                 "u.profileImgUrl as profileImgUrl,\n" +
                 "b.content as content,\n" +
+                "b.classNum as classNum,\n" +
+                "b.groupNum as groupNum,\n" +
                 "case\n" +
                 "when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
                 "then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
@@ -133,6 +146,8 @@ public class BoardDao {
                         rs.getString("nickName"),
                         rs.getString("profileImgUrl"),
                         rs.getString("content"),
+                        rs.getInt("classNum"),
+                        rs.getInt("groupNum"),
                         rs.getString("updatedAt")
                 ), selectCommentParam);
 
@@ -248,6 +263,8 @@ public class BoardDao {
                 "u.nickName as nickName,\n" +
                 "u.profileImgUrl as profileImgUrl,\n" +
                 "b.content as content,\n" +
+                "b.classNum as classNum,\n" +
+                "b.groupNum as groupNum,\n" +
                 "case\n" +
                 "when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
                 "then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
@@ -272,6 +289,8 @@ public class BoardDao {
                         rs.getString("nickName"),
                         rs.getString("profileImgUrl"),
                         rs.getString("content"),
+                        rs.getInt("classNum"),
+                        rs.getInt("groupNum"),
                         rs.getString("updatedAt")
                 ), selectCommentParam);
 
@@ -332,7 +351,7 @@ public class BoardDao {
      */
     public GetBoardComNotiInfoRes Noti(int boardCommentIdx){
         String getInfoQuery = "SELECT bc.boardCommentIdx as boardCommentIdx,\n" +
-                "                b.userIdx as reciverIdx,\n" +
+                "                b.userIdx as receiverIdx,\n" +
                 "                bc.boardIdx as boardIdx,\n" +
                 "                bc.userIdx as userIdx,\n" +
                 "                u.nickName as nickName,\n" +

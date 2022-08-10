@@ -14,5 +14,7 @@ public class GetBoardCommentRes {
     private String nickName;
     private String profileImgUrl;
     private String content;
+    private int classNum;
+    private int groupNum;
     private String updatedAt;
 }
