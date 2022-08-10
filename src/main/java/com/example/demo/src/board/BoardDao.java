@@ -87,6 +87,22 @@ public class BoardDao {
     }
 
     /**
+     * 대댓글 작성
+     * */
+    public int insertReComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) {
+
+        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum, groupNum) VALUES (?, ?, ?, ?, ?)";
+
+        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent(), postBoardCommentReq.getClassNum(), postBoardCommentReq.getGroupNum()};
+
+        this.jdbcTemplate.update(insertCommentQuery, insertCommentParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+
+    /**
      * 댓글 그룹 추가
      * */
     public int insertCommentGroup(int boardCommentIdx) {
@@ -377,6 +393,36 @@ public class BoardDao {
     }
 
     /**
+     * 대댓글 작성자의 정보 얻기
+     */
+    public GetBoardComNotiInfoRes NotiRe(int boardReCommentIdx, int boardCommentIdx){
+        String getReInfoQuery = "SELECT bc.boardCommentIdx as boardCommentIdx,\n" +
+                "       (select userIdx as receiverIdx from BoardComment where boardCommentIdx = ?) as receiverIdx,\n" +
+                "                                bc.boardIdx as boardIdx,\n" +
+                "                                bc.userIdx as userIdx,\n" +
+                "                                u.nickName as nickName,\n" +
+                "                                u.profileImgUrl as profileImgUrl,\n" +
+                "                                b.title as title\n" +
+                "                FROM BoardComment as bc\n" +
+                "                                join User as u on u.userIdx = bc.userIdx\n" +
+                "                left join Board as b on b.boardIdx = bc.boardIdx\n" +
+                "                WHERE bc.boardCommentIdx = ? and bc.status = 'ACTIVE'\n" +
+                "                                group by bc.boardCommentIdx order by bc.boardCommentIdx";
+        Object[] getReInfoParams = new Object[]{boardCommentIdx, boardReCommentIdx};
+        return this.jdbcTemplate.queryForObject(getReInfoQuery,
+                (rs, rowNum) -> new GetBoardComNotiInfoRes(
+                        rs.getInt("boardCommentIdx"),
+                        rs.getInt("receiverIdx"),
+                        rs.getInt("boardIdx"),
+                        rs.getInt("userIdx"),
+                        rs.getString("nickName"),
+                        rs.getString("profileImgUrl"),
+                        rs.getString("title")
+                ),
+                getReInfoParams);
+    }
+
+    /**
      * 알림 테이블에 추가
      */
     public void CommentNoti(GetBoardComNotiInfoRes getBoardComNotiInfoRes){
@@ -384,6 +430,18 @@ public class BoardDao {
         String updateComNotiQuery = "INSERT INTO Notice(receiverIdx, image, head, body) VALUES (?,?,?,?)";
         Object[] updateComNotiParams = new Object[]{getBoardComNotiInfoRes.getReceiverIdx(), getBoardComNotiInfoRes.getProfileImgUrl(),"게시물 댓글",
                 getBoardComNotiInfoRes.getNickName()+"님이 "+ getBoardComNotiInfoRes.getTitle()+"에 댓글을 남기셨습니다."};
+
+        this.jdbcTemplate.update(updateComNotiQuery, updateComNotiParams);
+    }
+
+    /**
+     * 대댓글 알림 테이블에 추가
+     */
+    public void CommentReNoti(GetBoardComNotiInfoRes getBoardComNotiInfoRes){
+
+        String updateComNotiQuery = "INSERT INTO Notice(receiverIdx, image, head, body) VALUES (?,?,?,?)";
+        Object[] updateComNotiParams = new Object[]{getBoardComNotiInfoRes.getReceiverIdx(), getBoardComNotiInfoRes.getProfileImgUrl(),getBoardComNotiInfoRes.getTitle()+" 답글",
+                getBoardComNotiInfoRes.getNickName()+"님이 회원님의 댓글에 답글을 남기셨습니다."};
 
         this.jdbcTemplate.update(updateComNotiQuery, updateComNotiParams);
     }
