@@ -60,6 +60,18 @@ public class BoardDao {
     }
 
     /**
+     * 게시글 좋아요 중복 확인
+     * */
+    public int checkBoardLiked(int userIdx, int boardIdx) {
+        String checkBoardLikedQuery = "SELECT exists(SELECT boardLikeIdx FROM BoardLike WHERE userIdx=? and boardIdx=?)";
+        Object[] checkBoardLikedParams = new Object[]{userIdx, boardIdx};
+        return this.jdbcTemplate.queryForObject(checkBoardLikedQuery,
+                                                int.class,
+                                                checkBoardLikedParams);
+
+    }
+
+    /**
      * 댓글 작성
      * */
     public int insertComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) {
@@ -368,6 +380,19 @@ public class BoardDao {
                 (rs, rowNum) -> new GetUserTokenRes(
                         rs.getString("token")),
                 getFCMParams);
+    }
+
+    /**
+     * 게시물 좋아요
+     * */
+    public int updateLikes(int userIdx, int boardIdx) {
+        String updateLikesQuery = "INSERT INTO BoardLike(userIdx, boardIdx) VALUES (?,?)";
+        Object[] updateLikesParams = new Object[]{userIdx, boardIdx};
+
+        this.jdbcTemplate.update(updateLikesQuery, updateLikesParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
 }

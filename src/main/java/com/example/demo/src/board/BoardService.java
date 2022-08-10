@@ -3,7 +3,6 @@ import com.example.demo.config.BaseException;
 import com.example.demo.src.GetUserTokenRes;
 import com.example.demo.src.SendPushMessage;
 import com.example.demo.src.board.model.*;
-import com.example.demo.src.pofol.model.*;
 import com.example.demo.utils.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.net.HttpHeaders;
@@ -204,6 +203,31 @@ public class BoardService {
         }
         if(result == 0){
             throw new BaseException(DELETE_FAIL_BOARD_COMMENT);
+        }
+    }
+
+    /**
+     * 게시물 좋아요
+     */
+    public PostBoardLikeRes likesBoard(int userIdx, int boardIdx) throws BaseException {
+
+        if(boardProvider.checkUserExist(userIdx) == 0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+        if(boardProvider.checkBoardExist(boardIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BOARD_ID);
+        }
+        if(boardProvider.checkBoardLiked(userIdx, boardIdx) == 1){
+            throw new BaseException(DUPLICATED_BOARD_LIKE);
+        }
+
+        try{
+            result = boardDao.updateLikes(userIdx, boardIdx);
+
+            return new PostBoardLikeRes(result);
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 }

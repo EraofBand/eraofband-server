@@ -116,4 +116,15 @@ public class BoardProvider {
         }
     }
 
+    /**
+     * 게시물 좋아요 중복 확인
+     */
+    public int checkBoardLiked(int userIdx, int boardIdx) throws BaseException{
+        try{
+            return boardDao.checkBoardLiked(userIdx, boardIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }
