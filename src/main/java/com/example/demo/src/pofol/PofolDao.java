@@ -79,15 +79,15 @@ public class PofolDao {
                                          "u.profileImgUrl as profileImgUrl,\n" +
                                          "p.content as content,\n" +
                                          "case\n" +
-                                         "when timestampdiff(second, p.updatedAt, current_timestamp) < 60\n" +
-                                         "then concat(timestampdiff(second, p.updatedAt, current_timestamp), '초 전')\n" +
-                                         "when timestampdiff(minute , p.updatedAt, current_timestamp) < 60\n" +
-                                         "then concat(timestampdiff(minute, p.updatedAt, current_timestamp), '분 전')\n" +
-                                         "when timestampdiff(hour , p.updatedAt, current_timestamp) < 24\n" +
-                                         "then concat(timestampdiff(hour, p.updatedAt, current_timestamp), '시간 전')\n" +
-                                         "when timestampdiff(day , p.updatedAt, current_timestamp) < 365\n" +
-                                         "then concat(timestampdiff(day, p.updatedAt, current_timestamp), '일 전')\n" +
-                                         "else timestampdiff(year , p.updatedAt, current_timestamp)\n" +
+                                         "when timestampdiff(second, p.createdAt, current_timestamp) < 60\n" +
+                                         "then concat(timestampdiff(second, p.createdAt, current_timestamp), '초 전')\n" +
+                                         "when timestampdiff(minute , p.createdAt, current_timestamp) < 60\n" +
+                                         "then concat(timestampdiff(minute, p.createdAt, current_timestamp), '분 전')\n" +
+                                         "when timestampdiff(hour , p.createdAt, current_timestamp) < 24\n" +
+                                         "then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
+                                         "when timestampdiff(day , p.createdAt, current_timestamp) < 7\n" +
+                                         "then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
+                                         "else date_format(p.createdAt, '%Y-%m-%d')\n" +
                                          "end as updatedAt\n" +
                                          "FROM PofolComment as p\n" +
                                          "join User as u on u.userIdx = p.userIdx\n" +
@@ -128,15 +128,15 @@ public class PofolDao {
                     "                            IF(pofolLikeCount is null, 0, pofolLikeCount) as pofolLikeCount,\n" +
                     "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                     "                            case\n" +
-                    "                                when timestampdiff(second, p.updatedAt, current_timestamp) < 60\n" +
-                    "                                    then concat(timestampdiff(second, p.updatedAt, current_timestamp), '초 전')\n" +
-                    "                                when timestampdiff(minute , p.updatedAt, current_timestamp) < 60\n" +
-                    "                                    then concat(timestampdiff(minute, p.updatedAt, current_timestamp), '분 전')\n" +
-                    "                                when timestampdiff(hour , p.updatedAt, current_timestamp) < 24\n" +
-                    "                                    then concat(timestampdiff(hour, p.updatedAt, current_timestamp), '시간 전')\n" +
-                    "                                when timestampdiff(day , p.updatedAt, current_timestamp) < 365\n" +
-                    "                                    then concat(timestampdiff(day, p.updatedAt, current_timestamp), '일 전')\n" +
-                    "                                else timestampdiff(year , p.updatedAt, current_timestamp)\n" +
+                    "                                when timestampdiff(second, p.createdAt, current_timestamp) < 60\n" +
+                    "                                    then concat(timestampdiff(second, p.createdAt, current_timestamp), '초 전')\n" +
+                    "                                when timestampdiff(minute , p.createdAt, current_timestamp) < 60\n" +
+                    "                                    then concat(timestampdiff(minute, p.createdAt, current_timestamp), '분 전')\n" +
+                    "                                when timestampdiff(hour , p.createdAt, current_timestamp) < 24\n" +
+                    "                                    then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
+                    "                                when timestampdiff(day , p.createdAt, current_timestamp) < 7\n" +
+                    "                                    then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
+                    "                                else date_format(p.createdAt, '%Y-%m-%d')\n" +
                     "                            end as updatedAt,\n" +
                     "                            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                     "                        FROM Pofol as p\n" +
@@ -162,15 +162,15 @@ public class PofolDao {
                     "                            IF(pofolLikeCount is null, 0, pofolLikeCount) as pofolLikeCount,\n" +
                     "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                     "                            case\n" +
-                    "                                when timestampdiff(second, p.updatedAt, current_timestamp) < 60\n" +
-                    "                                    then concat(timestampdiff(second, p.updatedAt, current_timestamp), '초 전')\n" +
-                    "                                when timestampdiff(minute , p.updatedAt, current_timestamp) < 60\n" +
-                    "                                    then concat(timestampdiff(minute, p.updatedAt, current_timestamp), '분 전')\n" +
-                    "                                when timestampdiff(hour , p.updatedAt, current_timestamp) < 24\n" +
-                    "                                    then concat(timestampdiff(hour, p.updatedAt, current_timestamp), '시간 전')\n" +
-                    "                                when timestampdiff(day , p.updatedAt, current_timestamp) < 365\n" +
-                    "                                    then concat(timestampdiff(day, p.updatedAt, current_timestamp), '일 전')\n" +
-                    "                                else timestampdiff(year , p.updatedAt, current_timestamp)\n" +
+                    "                                when timestampdiff(second, p.createdAt, current_timestamp) < 60\n" +
+                    "                                    then concat(timestampdiff(second, p.createdAt, current_timestamp), '초 전')\n" +
+                    "                                when timestampdiff(minute , p.createdAt, current_timestamp) < 60\n" +
+                    "                                    then concat(timestampdiff(minute, p.createdAt, current_timestamp), '분 전')\n" +
+                    "                                when timestampdiff(hour , p.createdAt, current_timestamp) < 24\n" +
+                    "                                    then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
+                    "                                when timestampdiff(day , p.createdAt, current_timestamp) < 7\n" +
+                    "                                    then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
+                    "                                else date_format(p.createdAt, '%Y-%m-%d')\n" +
                     "                            end as updatedAt,\n" +
                     "                            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                     "                        FROM Pofol as p\n" +
@@ -224,15 +224,15 @@ public class PofolDao {
                     "                            IF(pofolLikeCount is null, 0, pofolLikeCount) as pofolLikeCount,\n" +
                     "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                     "                            case\n" +
-                    "                                when timestampdiff(second, p.updatedAt, current_timestamp) < 60\n" +
-                    "                                    then concat(timestampdiff(second, p.updatedAt, current_timestamp), '초 전')\n" +
-                    "                                when timestampdiff(minute , p.updatedAt, current_timestamp) < 60\n" +
-                    "                                    then concat(timestampdiff(minute, p.updatedAt, current_timestamp), '분 전')\n" +
-                    "                                when timestampdiff(hour , p.updatedAt, current_timestamp) < 24\n" +
-                    "                                    then concat(timestampdiff(hour, p.updatedAt, current_timestamp), '시간 전')\n" +
-                    "                                when timestampdiff(day , p.updatedAt, current_timestamp) < 365\n" +
-                    "                                    then concat(timestampdiff(day, p.updatedAt, current_timestamp), '일 전')\n" +
-                    "                                else timestampdiff(year , p.updatedAt, current_timestamp)\n" +
+                    "                                when timestampdiff(second, p.createdAt, current_timestamp) < 60\n" +
+                    "                                    then concat(timestampdiff(second, p.createdAt, current_timestamp), '초 전')\n" +
+                    "                                when timestampdiff(minute , p.createdAt, current_timestamp) < 60\n" +
+                    "                                    then concat(timestampdiff(minute, p.createdAt, current_timestamp), '분 전')\n" +
+                    "                                when timestampdiff(hour , p.createdAt, current_timestamp) < 24\n" +
+                    "                                    then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
+                    "                                when timestampdiff(day , p.createdAt, current_timestamp) < 7\n" +
+                    "                                    then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
+                    "                                else date_format(p.createdAt, '%Y-%m-%d')\n" +
                     "                            end as updatedAt,\n" +
                     "                            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                     "                        FROM Pofol as p\n" +
@@ -259,15 +259,15 @@ public class PofolDao {
                     "            IF(pofolLikeCount is null, 0, pofolLikeCount) as pofolLikeCount,\n" +
                     "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                     "            case\n" +
-                    "                when timestampdiff(second, p.updatedAt, current_timestamp) < 60\n" +
-                    "                    then concat(timestampdiff(second, p.updatedAt, current_timestamp), '초 전')\n" +
-                    "                when timestampdiff(minute , p.updatedAt, current_timestamp) < 60\n" +
-                    "                    then concat(timestampdiff(minute, p.updatedAt, current_timestamp), '분 전')\n" +
-                    "                when timestampdiff(hour , p.updatedAt, current_timestamp) < 24\n" +
-                    "                    then concat(timestampdiff(hour, p.updatedAt, current_timestamp), '시간 전')\n" +
-                    "                when timestampdiff(day , p.updatedAt, current_timestamp) < 365\n" +
-                    "                    then concat(timestampdiff(day, p.updatedAt, current_timestamp), '일 전')\n" +
-                    "                else timestampdiff(year , p.updatedAt, current_timestamp)\n" +
+                    "                when timestampdiff(second, p.createdAt, current_timestamp) < 60\n" +
+                    "                    then concat(timestampdiff(second, p.createdAt, current_timestamp), '초 전')\n" +
+                    "                when timestampdiff(minute , p.createdAt, current_timestamp) < 60\n" +
+                    "                    then concat(timestampdiff(minute, p.createdAt, current_timestamp), '분 전')\n" +
+                    "                when timestampdiff(hour , p.createdAt, current_timestamp) < 24\n" +
+                    "                    then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
+                    "                when timestampdiff(day , p.createdAt, current_timestamp) < 7\n" +
+                    "                    then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
+                    "                else date_format(p.createdAt, '%Y-%m-%d')\n" +
                     "            end as updatedAt,\n" +
                     "            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                     "        FROM Pofol as p\n" +
@@ -316,15 +316,15 @@ public class PofolDao {
                 "            IF(pofolLikeCount is null, 0, pofolLikeCount) as pofolLikeCount,\n" +
                 "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                 "            case\n" +
-                "                when timestampdiff(second, p.updatedAt, current_timestamp) < 60\n" +
-                "                    then concat(timestampdiff(second, p.updatedAt, current_timestamp), '초 전')\n" +
-                "                when timestampdiff(minute, p.updatedAt, current_timestamp) < 60\n" +
-                "                    then concat(timestampdiff(minute, p.updatedAt, current_timestamp), '분 전')\n" +
-                "                when timestampdiff(hour, p.updatedAt, current_timestamp) < 24\n" +
-                "                    then concat(timestampdiff(hour, p.updatedAt, current_timestamp), '시간 전')\n" +
-                "                when timestampdiff(day, p.updatedAt, current_timestamp) < 365\n" +
-                "                    then concat(timestampdiff(day, p.updatedAt, current_timestamp), '일 전')\n" +
-                "                else timestampdiff(year, p.updatedAt, current_timestamp)\n" +
+                "                when timestampdiff(second, p.createdAt, current_timestamp) < 60\n" +
+                "                    then concat(timestampdiff(second, p.createdAt, current_timestamp), '초 전')\n" +
+                "                when timestampdiff(minute, p.createdAt, current_timestamp) < 60\n" +
+                "                    then concat(timestampdiff(minute, p.createdAt, current_timestamp), '분 전')\n" +
+                "                when timestampdiff(hour, p.createdAt, current_timestamp) < 24\n" +
+                "                    then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
+                "                when timestampdiff(day, p.createdAt, current_timestamp) < 7\n" +
+                "                    then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
+                "                else date_format(p.createdAt, '%Y-%m-%d')\n" +
                 "            end as updatedAt,\n" +
                 "            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "        FROM Pofol as p\n" +
@@ -466,15 +466,15 @@ public class PofolDao {
                 "u.profileImgUrl as profileImgUrl,\n" +
                 "p.content as content,\n" +
                 "case\n" +
-                "when timestampdiff(second, p.updatedAt, current_timestamp) < 60\n" +
-                "then concat(timestampdiff(second, p.updatedAt, current_timestamp), '초 전')\n" +
-                "when timestampdiff(minute , p.updatedAt, current_timestamp) < 60\n" +
-                "then concat(timestampdiff(minute, p.updatedAt, current_timestamp), '분 전')\n" +
-                "when timestampdiff(hour , p.updatedAt, current_timestamp) < 24\n" +
-                "then concat(timestampdiff(hour, p.updatedAt, current_timestamp), '시간 전')\n" +
-                "when timestampdiff(day , p.updatedAt, current_timestamp) < 365\n" +
-                "then concat(timestampdiff(day, p.updatedAt, current_timestamp), '일 전')\n" +
-                "else timestampdiff(year , p.updatedAt, current_timestamp)\n" +
+                "when timestampdiff(second, p.createdAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(second, p.createdAt, current_timestamp), '초 전')\n" +
+                "when timestampdiff(minute , p.createdAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(minute, p.createdAt, current_timestamp), '분 전')\n" +
+                "when timestampdiff(hour , p.createdAt, current_timestamp) < 24\n" +
+                "then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
+                "when timestampdiff(day , p.createdAt, current_timestamp) < 7\n" +
+                "then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
+                "else date_format(p.createdAt, '%Y-%m-%d')\n" +
                 "end as updatedAt\n" +
                 "FROM PofolComment as p\n" +
                 "join User as u on u.userIdx = p.userIdx\n" +

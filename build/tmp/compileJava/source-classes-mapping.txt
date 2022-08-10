@@ -32,6 +32,8 @@ com/example/demo/src/user/model/PostUserRes.java
  com.example.demo.src.user.model.PostUserRes
 com/example/demo/src/chat/ChatDao.java
  com.example.demo.src.chat.ChatDao
+com/example/demo/src/session/model/DeleteAlbumReq.java
+ com.example.demo.src.session.model.DeleteAlbumReq
 com/example/demo/src/lesson/model/GetInfoLessonRes.java
  com.example.demo.src.lesson.model.GetInfoLessonRes
 com/example/demo/src/lesson/LessonProvider.java
@@ -120,8 +122,12 @@ com/example/demo/src/S33/FileUploadService.java
  com.example.demo.src.S33.FileUploadService
 com/example/demo/src/pofol/model/PatchPofolReq.java
  com.example.demo.src.pofol.model.PatchPofolReq
+com/example/demo/src/session/model/GetAlbumRes.java
+ com.example.demo.src.session.model.GetAlbumRes
 com/example/demo/config/Constant.java
  com.example.demo.config.Constant
+com/example/demo/src/session/model/PostAlbumRes.java
+ com.example.demo.src.session.model.PostAlbumRes
 com/example/demo/src/user/model/Users.java
  com.example.demo.src.user.model.Users
 com/example/demo/utils/ValidationRegex.java
@@ -168,6 +174,8 @@ com/example/demo/src/user/model/GetUserLessonRes.java
  com.example.demo.src.user.model.GetUserLessonRes
 com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
+com/example/demo/src/session/model/PostAlbumReq.java
+ com.example.demo.src.session.model.PostAlbumReq
 com/example/demo/src/lesson/model/PatchLessonReq.java
  com.example.demo.src.lesson.model.PatchLessonReq
 com/example/demo/src/search/model/GetSearchUserRes.java

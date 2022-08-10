@@ -2,6 +2,7 @@ package com.example.demo.src.session;
 
 import com.example.demo.src.GetUserTokenRes;
 import com.example.demo.src.pofol.model.GetComNotiInfoRes;
+import com.example.demo.src.pofol.model.GetCommentRes;
 import com.example.demo.src.session.model.*;
 import com.example.demo.src.user.model.GetUserNotiInfoRes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -210,15 +211,15 @@ public class SessionDao {
     public List<GetSessionAppRes> getApplicants(int bandIdx) {
         String getApplicantsQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.introduction as introduction,\n" +
                 "case\n" +
-                "when timestampdiff(second, BU.updatedAt, current_timestamp) < 60\n" +
-                "then concat(timestampdiff(second, BU.updatedAt, current_timestamp), '초 전')\n" +
-                "when timestampdiff(minute , BU.updatedAt, current_timestamp) < 60\n" +
-                "then concat(timestampdiff(minute, BU.updatedAt, current_timestamp), '분 전')\n" +
-                "when timestampdiff(hour , BU.updatedAt, current_timestamp) < 24\n" +
-                "then concat(timestampdiff(hour, BU.updatedAt, current_timestamp), '시간 전')\n" +
-                "when timestampdiff(day , BU.updatedAt, current_timestamp) < 365\n" +
-                "then concat(timestampdiff(day, BU.updatedAt, current_timestamp), '일 전')\n" +
-                "else timestampdiff(year , BU.updatedAt, current_timestamp)\n" +
+                "when timestampdiff(second, BU.createdAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(second, BU.createdAt, current_timestamp), '초 전')\n" +
+                "when timestampdiff(minute , BU.createdAt, current_timestamp) < 60\n" +
+                "then concat(timestampdiff(minute, BU.createdAt, current_timestamp), '분 전')\n" +
+                "when timestampdiff(hour , BU.createdAt, current_timestamp) < 24\n" +
+                "then concat(timestampdiff(hour, BU.createdAt, current_timestamp), '시간 전')\n" +
+                "when timestampdiff(day , BU.createdAt, current_timestamp) < 7\n" +
+                "then concat(timestampdiff(day, BU.createdAt, current_timestamp), '일 전')\n" +
+                "else date_format(BU.createdAt, '%Y-%m-%d')\n" +
                 "end as updatedAt\n" +
                 "FROM BandUser as BU\n" +
                 "JOIN(SELECT userIdx, nickName, profileImgUrl, introduction, token FROM User) u on u.userIdx = BU.userIdx\n" +
@@ -642,4 +643,63 @@ public class SessionDao {
                         rs.getString("token")),
                 getFCMParams);
     }
+
+    /**
+     * 밴드 앨범 생성
+     */
+    public int insertAlbum(PostAlbumReq postAlbumReq) {
+        String insertAlbumQuery = "INSERT INTO BandAlbum(bandIdx, imgTitle, imgUrl, imgDate) VALUES (?, ?, ?, ?)";
+        Object[] insertAlbumParams = new Object[]{postAlbumReq.getBandIdx(), postAlbumReq.getAlbumTitle(),
+                postAlbumReq.getAlbumImgUrl(), postAlbumReq.getAlbumDate()
+        };
+        this.jdbcTemplate.update(insertAlbumQuery, insertAlbumParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    /**
+     * 밴드 앨범 존재 유무 확인
+     */
+    public int checkAlbumExist(int albumIdx) {
+        String checkAlbumExistQuery = "SELECT exists(SELECT bandAlbumIdx FROM BandAlbum WHERE bandAlbumIdx = ? and status='ACTIVE')";
+        int checkAlbumExistParams = albumIdx;
+        return this.jdbcTemplate.queryForObject(checkAlbumExistQuery,
+                int.class,
+                checkAlbumExistParams);
+    }
+
+
+    /**
+     * 밴드 앨범 삭제
+     */
+    public int updateAlbumStatus(int albumIdx) {
+        String deleteAlbumQuery = "UPDATE BandAlbum SET status = 'INACTIVE' WHERE bandAlbumIdx = ? ";
+        Object[] deleteAlbumParams = new Object[]{albumIdx};
+
+        return this.jdbcTemplate.update(deleteAlbumQuery, deleteAlbumParams);
+    }
+
+    /**
+     * 밴드 앨범 리스트 조회
+     * */
+    public List<GetAlbumRes> selectBandAlbum(int bandIdx) {
+        String selectAlbumQuery = "SELECT ba.bandAlbumIdx as bandAlbumIdx,\n" +
+                "                ba.imgTitle as albumTitle,\n" +
+                "                ba.imgUrl as albumImgUrl,\n" +
+                "                ba.imgDate as albumDate\n" +
+                "                FROM BandAlbum as ba\n" +
+                "                WHERE ba.bandIdx = ? and ba.status = 'ACTIVE'\n" +
+                "                group by ba.bandAlbumIdx order by ba.bandAlbumIdx DESC; \n";
+        int selectAlbumParam = bandIdx;
+        return this.jdbcTemplate.query(selectAlbumQuery,
+                (rs, rowNum) -> new GetAlbumRes(
+                        rs.getInt("bandAlbumIdx"),
+                        rs.getString("albumTitle"),
+                        rs.getString("albumImgUrl"),
+                        rs.getString("albumDate")
+                ), selectAlbumParam);
+
+    }
+
 }

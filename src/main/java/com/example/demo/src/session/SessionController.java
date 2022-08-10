@@ -226,6 +226,7 @@ public class SessionController {
         }
     }
 
+
     /**
      * 밴드 삭제 API
      * [PATCH] /sessions/status/{bandIdx}
@@ -504,5 +505,108 @@ public class SessionController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+
+    /**
+     * 밴드 앨범 생성 API
+     * [POST] /sessions/album
+     * @return BaseResponse<PostAlbumRes>
+     */
+    @ResponseBody
+    @PostMapping("/album") // (post) https://eraofband.shop/sessions/album
+    @ApiOperation(value = "밴드 앨범 생성 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2022, message="내용의 글자수를 확인해주세요."),
+            @ApiResponse(code=2023, message="이미지를 입력해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<PostAlbumRes> createBandAlbums(@RequestBody PostAlbumReq postAlbumReq) {
+        //validation 처리
+        if (postAlbumReq.getAlbumTitle() == null || postAlbumReq.getAlbumTitle() == "") {
+            return new BaseResponse<>(POST_BANDS_EMPTY_CONTENTS);
+        }
+
+        if (postAlbumReq.getAlbumImgUrl().length() < 1) {
+            return new BaseResponse<>(POST_BANDS_EMPTY_IMG);
+        }
+
+        try {
+
+            int userIdxByJwt = jwtService.getUserIdx();
+            if (postAlbumReq.getUserIdx() != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            PostAlbumRes postAlbumRes = sessionService.createAlbum(postAlbumReq);
+
+            return new BaseResponse<>(postAlbumRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+    /**
+     * 밴드 앨범 삭제 API
+     * [PATCH] /sessions/album/status/{albumIdx}
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/album/status/{albumIdx}") // (patch) https://eraofband.shop/sessions/album/status/2
+    @ApiOperation(value = "밴드 앨범 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="albumIdx", value="삭제할 밴드 앨범 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2033, message="밴드 앨범 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2034, message="밴드 앨범 삭제에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> deleteBand(@PathVariable("albumIdx") int albumIdx, @RequestBody DeleteAlbumReq deleteAlbumReq) {
+        try {
+
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if (deleteAlbumReq.getUserIdx() != userIdxByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            sessionService.deleteAlbum(albumIdx);
+
+            String result = "밴드 앨범이 삭제되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 밴드 앨범 조회 API
+     * [GET] /sessions/album/info/{bandIdx}
+     * @return BaseResponse<GetAlbumRes>
+     */
+    @ResponseBody
+    @GetMapping("/album/info/{bandIdx}") // (get) https://eraofband.shop/sessions/album/info/2
+    @ApiOperation(value = "밴드 앨범 리스트 반환", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="bandIdx", value="앨범 조회할 밴드 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2020, message="밴드 아이디 값을 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<List<GetAlbumRes>> getBandAlbum(@PathVariable("bandIdx") int bandIdx) {
+        try {
+            //int userIdxByJwt = jwtService.getUserIdx();
+            List<GetAlbumRes> getAlbumRes = sessionProvider.getBandAlbum(bandIdx);
+
+            return new BaseResponse<>(getAlbumRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
 
 }
