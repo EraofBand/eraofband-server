@@ -268,6 +268,53 @@ public class BoardController {
     }
 
     /**
+     * 게시물 대댓글 등록 API
+     * [POST] /board/re-comment/2
+     * @return BaseResponse<GetBoardCommentRes>
+     */
+    @ResponseBody
+    @PostMapping("/re-comment/{boardIdx}") // (post) https://eraofband.shop/board/re-comment/2
+    @ApiOperation(value = "게시물 대댓글 등록 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="boardIdx", value="대댓글 달 게시물 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2100, message="게시글 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2105, message="게시글 댓글 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2062, message="내용의 글자수를 확인해주세요."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<GetBoardCommentRes> createReComment(@PathVariable("boardIdx") int boardIdx, @RequestBody PostBoardCommentReq postBoardCommentReq) throws IOException {
+
+        if(postBoardCommentReq.getContent().length()>100){
+            return new BaseResponse<>(POST_POSTS_INVALID_CONTENTS);
+        }
+
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(postBoardCommentReq.getUserIdx()!= userIdxByJwt){
+                return new BaseResponse<>(INVALID_JWT);
+            }
+
+            int boardCommentIdx = boardService.createReComment(boardIdx, userIdxByJwt,postBoardCommentReq);
+
+            //생성한 댓글 조회
+            GetBoardCommentRes getComment = boardProvider.certainComment(boardCommentIdx);
+//            boardService.sendReMessageTo(
+//                    "게시물 답글",
+//                    "회원님의 댓글에 답글을 달았습니다.", postBoardCommentReq);
+            return new BaseResponse<>(getComment);
+
+
+        } catch(BaseException exception){
+            System.out.println(exception);
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
+
+    /**
      * 게시물 댓글 삭제 API
      * [PATCH] /board/comment/status/2
      * @return BaseResponse<String>
