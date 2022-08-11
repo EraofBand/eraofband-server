@@ -2,6 +2,8 @@ package com.example.demo.src.chat;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.chat.model.GetChatRoomExistReq;
+import com.example.demo.src.chat.model.GetChatRoomExistRes;
 import com.example.demo.src.chat.model.GetChatRoomRes;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,4 +51,16 @@ public class ChatProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    /**
+     *  채팅방 유무 확인
+     * */
+    public GetChatRoomExistRes getChatRoomExist(GetChatRoomExistReq getChatRoomExistReq) throws BaseException {
+        try {
+            return chatDao.checkUserChatRoomExist(getChatRoomExistReq);
+        } catch (Exception exception) {
+            throw new BaseException(POSTS_EMPTY_CHAT_ID);
+        }
+    }
+
 }
