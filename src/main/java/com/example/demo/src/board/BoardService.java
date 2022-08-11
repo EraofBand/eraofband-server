@@ -273,6 +273,10 @@ public class BoardService {
             throw new BaseException(USERS_EMPTY_USER_ID);
         }
 
+        if(boardProvider.checkReplyExist(boardCommentIdx) == 1){
+            throw new BaseException(DELETE_FAIL_BOARD_COMMENT_REPLY);
+        }
+
         try{
             result = boardDao.deleteComment(boardCommentIdx);
 
