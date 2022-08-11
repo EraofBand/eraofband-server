@@ -2,6 +2,7 @@ package com.example.demo.src.chat;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.GetUserTokenRes;
 import com.example.demo.src.chat.model.GetChatRoomExistReq;
 import com.example.demo.src.chat.model.GetChatRoomExistRes;
 import com.example.demo.src.chat.model.GetChatRoomRes;
@@ -89,17 +90,18 @@ public class ChatDao {
 
 
 
-//    /**
-//     * 채팅방 유무 확인
-//     * */
-//    public GetChatRoomExistRes checkUserChatRoomExist(GetChatRoomExistReq getChatRoomExistReq){
-//        String checkChatRoomExistQuery = "";
-//        Object[] checkChatRoomExistParams = new Object[]{ getChatRoomExistReq.getFirstUserIdx(), getChatRoomExistReq.getSecondUserIdx() };
-//        return (GetChatRoomExistRes) this.jdbcTemplate.query(checkChatRoomExistQuery,
-//                (rs, rowNum) -> new GetChatRoomExistRes(rs.getString("chatRoomIdx")
-//                ),
-//                checkChatRoomExistParams);
-//    }
+    /**
+     * 채팅방 유무 확인
+     * */
+    public GetChatRoomExistRes checkUserChatRoomExist(GetChatRoomExistReq getChatRoomExistReq){
+        String checkChatRoomExistQuery = "";
+        Object[] checkChatRoomExistParams = new Object[]{ getChatRoomExistReq.getFirstUserIdx(), getChatRoomExistReq.getSecondUserIdx() };
+
+        return this.jdbcTemplate.queryForObject(checkChatRoomExistQuery,
+                (rs, rowNum) -> new GetChatRoomExistRes(
+                        rs.getString("chatRoomIdx")),
+                checkChatRoomExistParams);
+    }
 
 
 
