@@ -11,7 +11,6 @@ public class PostBoardCommentReq {
 
     private int userIdx;
     private String content;
-    private int classNum;
     private int groupNum;
 
 }

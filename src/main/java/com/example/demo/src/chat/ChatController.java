@@ -2,6 +2,8 @@ package com.example.demo.src.chat;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.chat.model.GetChatRoomExistReq;
+import com.example.demo.src.chat.model.GetChatRoomExistRes;
 import com.example.demo.src.chat.model.GetChatRoomRes;
 import com.example.demo.src.chat.model.PostChatReq;
 import com.example.demo.src.lesson.model.PostLessonReq;
@@ -37,11 +39,11 @@ public class ChatController {
 
     /**
      * 채팅방 리스트 조회 API
-     * [GET] /chat
+     * [GET] /chat/chat-room
      * @return BaseResponse<List<GetChatRoomRes>>
      */
     @ResponseBody
-    @GetMapping("/chat-room") // (get) https://eraofband.shop/chat
+    @GetMapping("/chat-room") // (get) https://eraofband.shop/chat/chat-room
     @ApiOperation(value = "채팅방 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiResponses({
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
@@ -110,6 +112,28 @@ public class ChatController {
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 채팅방 유무 여부 조회 API
+     * [GET] /chat/chat-room/exist
+     * @return BaseResponse<List<GetChatRoomRes>>
+     */
+    @ResponseBody
+    @GetMapping("/chat-room/exist") // (get) https://eraofband.shop/chat/chat-room/exist
+    @ApiOperation(value = "채팅방 유무 여부 조회")
+    @ApiResponses({
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<GetChatRoomExistRes> getChatRoomExist(@RequestBody GetChatRoomExistReq getChatRoomExistReq){
+        try{
+
+            GetChatRoomExistRes getChatRoomExistRes = chatProvider.getChatRoomExist(getChatRoomExistReq);
+            return new BaseResponse<>(getChatRoomExistRes);
+
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
         }
     }
 

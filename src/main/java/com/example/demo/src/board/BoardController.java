@@ -330,6 +330,7 @@ public class BoardController {
             @ApiResponse(code=2100, message="게시글 아이디 값을 확인해주세요."),
             @ApiResponse(code=2105, message="게시글 댓글 아이디 값을 확인해주세요."),
             @ApiResponse(code=2106, message="게시글 댓글 삭제에 실패했습니다."),
+            @ApiResponse(code=2107, message="답글이 있는 댓글은 삭제할 수 없습니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
     public BaseResponse<String> deleteComment(@PathVariable("boardCommentIdx") int boardCommentIdx, @RequestBody PatchBoardComReq patchBoardComReq) {
@@ -365,7 +366,7 @@ public class BoardController {
             @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
             @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
             @ApiResponse(code=2100, message="게시글 아이디 값을 확인해주세요."),
-            @ApiResponse(code=2107, message="이미 추천한 게시글입니다."),
+            @ApiResponse(code=2108, message="이미 추천한 게시글입니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
     public BaseResponse<PostBoardLikeRes> likesBoard(@PathVariable("boardIdx") int boardIdx){

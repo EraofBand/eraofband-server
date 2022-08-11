@@ -2,8 +2,11 @@ package com.example.demo.src.chat;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.chat.model.GetChatRoomExistReq;
+import com.example.demo.src.chat.model.GetChatRoomExistRes;
 import com.example.demo.src.chat.model.GetChatRoomRes;
 import com.example.demo.src.chat.model.PostChatReq;
+import com.example.demo.src.lesson.model.GetMemberRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -83,6 +86,20 @@ public class ChatDao {
 
         return this.jdbcTemplate.update(deleteChatRoomQuery,deleteChatRoomParams);
     }
+
+
+
+//    /**
+//     * 채팅방 유무 확인
+//     * */
+//    public GetChatRoomExistRes checkUserChatRoomExist(GetChatRoomExistReq getChatRoomExistReq){
+//        String checkChatRoomExistQuery = "";
+//        Object[] checkChatRoomExistParams = new Object[]{ getChatRoomExistReq.getFirstUserIdx(), getChatRoomExistReq.getSecondUserIdx() };
+//        return (GetChatRoomExistRes) this.jdbcTemplate.query(checkChatRoomExistQuery,
+//                (rs, rowNum) -> new GetChatRoomExistRes(rs.getString("chatRoomIdx")
+//                ),
+//                checkChatRoomExistParams);
+//    }
 
 
 
