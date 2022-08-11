@@ -76,9 +76,9 @@ public class BoardDao {
      * */
     public int insertComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) {
 
-        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum) VALUES (?, ?, ?, ?)";
+        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum) VALUES (?, ?, ?, 0)";
 
-        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent(), postBoardCommentReq.getClassNum()};
+        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent() };
 
         this.jdbcTemplate.update(insertCommentQuery, insertCommentParams);
 
@@ -91,9 +91,9 @@ public class BoardDao {
      * */
     public int insertReComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) {
 
-        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum, groupNum) VALUES (?, ?, ?, ?, ?)";
+        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum, groupNum) VALUES (?, ?, ?, 1, ?)";
 
-        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent(), postBoardCommentReq.getClassNum(), postBoardCommentReq.getGroupNum()};
+        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent(), postBoardCommentReq.getGroupNum()};
 
         this.jdbcTemplate.update(insertCommentQuery, insertCommentParams);
 
