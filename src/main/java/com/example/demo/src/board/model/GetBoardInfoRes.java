@@ -19,6 +19,7 @@ public class GetBoardInfoRes {
     private String nickName;
     private String profileImgUrl;
     private String content;
+    private List<GetBoardImgsRes> getBoardImgs;
     private int views;
     private int boardLikeCount;
     private int commentCount;

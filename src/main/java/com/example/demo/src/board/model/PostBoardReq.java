@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,5 +15,6 @@ public class PostBoardReq {
     private int category;
     private String content;
     private String title;
+    private List<PostImgsUrlReq> postImgsUrl;
 
 }
