@@ -68,6 +68,17 @@ public class BoardProvider {
     }
 
     /**
+     * 대댓글 여부 확인
+     */
+    public int checkReplyExist(int boardCommentIdx) throws BaseException{
+        try{
+            return boardDao.checkReplyExist(boardCommentIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
      * 특정 댓글 조회
      */
     public GetBoardCommentRes certainComment (int boardCommentIdx) throws BaseException {

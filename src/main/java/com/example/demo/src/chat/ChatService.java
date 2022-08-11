@@ -54,7 +54,7 @@ public class ChatService {
     /**
      *  채팅방 나가기
      * */
-    public void deleteChatRoom(int userIdx, int chatRoomIdx) throws BaseException {
+    public void deleteChatRoom(int userIdx, String chatRoomIdx) throws BaseException {
 
         if(chatProvider.checkChatRoomExist(userIdx, chatRoomIdx) ==0){
             throw new BaseException(POSTS_EMPTY_CHAT_ID);

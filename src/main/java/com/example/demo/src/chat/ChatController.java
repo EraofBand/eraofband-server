@@ -99,7 +99,7 @@ public class ChatController {
             @ApiResponse(code=2091, message="채팅방 삭제에 실패했습니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<String> deleteChatRoom(@PathVariable("chatRoomIdx") int chatRoomIdx){
+    public BaseResponse<String> deleteChatRoom(@PathVariable("chatRoomIdx") String chatRoomIdx){
         try {
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();

@@ -60,6 +60,18 @@ public class BoardDao {
     }
 
     /**
+     * 게시글 대댓글 여부 확인
+     * */
+    public int checkReplyExist(int boardCommentIdx) {
+        String checkReplyExistQuery = "SELECT exists(SELECT boardCommentIdx FROM BoardComment WHERE groupNum=? and classNum=1 and status='ACTIVE')";
+        int checkReplyExistParams = boardCommentIdx;
+        return this.jdbcTemplate.queryForObject(checkReplyExistQuery,
+                                                int.class,
+                                                checkReplyExistParams);
+
+    }
+
+    /**
      * 게시글 좋아요 중복 확인
      * */
     public int checkBoardLiked(int userIdx, int boardIdx) {

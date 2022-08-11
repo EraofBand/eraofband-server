@@ -158,7 +158,7 @@ public class BoardService {
     private final ObjectMapper objectMapper;
     public void sendMessageTo(String title, String body) throws IOException {
         String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
-        //포트폴리오 댓글의 정보 얻기
+        //게시글 댓글의 정보 얻기
         GetBoardComNotiInfoRes getBoardComNotiInfoRes =boardDao.Noti(boardCommentIdx);
 
         GetUserTokenRes getUserTokenRes= boardDao.getFCMToken(getBoardComNotiInfoRes.getReceiverIdx());
@@ -183,7 +183,7 @@ public class BoardService {
 
     public void sendReMessageTo(String title, String body, PostBoardCommentReq postBoardCommentReq) throws IOException {
         String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
-        //포트폴리오 댓글의 정보 얻기
+        //게시글 댓글의 정보 얻기
         GetBoardComNotiInfoRes getBoardComNotiInfoRes =boardDao.NotiRe(boardCommentIdx, postBoardCommentReq.getGroupNum());
 
         GetUserTokenRes getUserTokenRes= boardDao.getFCMToken(getBoardComNotiInfoRes.getReceiverIdx());
@@ -271,6 +271,10 @@ public class BoardService {
 
         if(boardProvider.checkUserExist(userIdx) == 0){
             throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+
+        if(boardProvider.checkReplyExist(boardCommentIdx) == 1){
+            throw new BaseException(DELETE_FAIL_BOARD_COMMENT_REPLY);
         }
 
         try{
