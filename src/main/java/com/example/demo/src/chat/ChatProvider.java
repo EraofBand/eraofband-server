@@ -28,7 +28,7 @@ public class ChatProvider {
     /**
      *  채팅방 확인
      * */
-    public int checkChatRoomExist(int userIdx, int chatRoomIdx) throws BaseException {
+    public int checkChatRoomExist(int userIdx, String chatRoomIdx) throws BaseException {
         try {
             return chatDao.checkChatRoomExist(userIdx, chatRoomIdx);
         } catch (Exception exception) {

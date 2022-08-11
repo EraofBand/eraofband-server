@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetChatRoomRes {
-    private int chatRoomIdx;
+    private String chatRoomIdx;
     private String nickName;
     private String profileImgUrl;
 
