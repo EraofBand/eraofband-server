@@ -43,7 +43,7 @@ public class ChatDao {
     /**
      * 채팅방 확인
      * */
-    public int checkChatRoomExist(int userIdx, int chatRoomIdx){
+    public int checkChatRoomExist(int userIdx, String chatRoomIdx){
         String checkChatRoomExistQuery = "SELECT exists(SELECT chatIdx FROM ChatContent WHERE chatUserIdx = ? and chatRoomIdx = ? and status = 'ACTIVE')";
         Object[] checkChatRoomExistParams = new Object[]{ userIdx, chatRoomIdx };
         return this.jdbcTemplate.queryForObject(checkChatRoomExistQuery,
@@ -65,7 +65,7 @@ public class ChatDao {
         Object[] getChatRoomParams = new Object[]{ userIdx };
         return this.jdbcTemplate.query(getChatRoomQuery,
                                        (rs, rowNum) -> new GetChatRoomRes(
-                                               rs.getInt("chatRoomIdx"),
+                                               rs.getString("chatRoomIdx"),
                                                rs.getString("nickName"),
                                                rs.getString("profileImgUrl")
                                        ),
@@ -75,7 +75,7 @@ public class ChatDao {
     /**
      * 채팅방 삭제
      * */
-    public int updateChatRoomStatus(int userIdx, int chatRoomIdx){
+    public int updateChatRoomStatus(int userIdx, String chatRoomIdx){
         String deleteChatRoomQuery = "update ChatContent as c\n" +
                 "set c.status='INACTIVE'\n" +
                 "where c.chatUserIdx = ? and c.chatRoomIdx = ?";
