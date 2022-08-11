@@ -179,7 +179,6 @@ public class BoardDao {
                 "            b.category as category,\n" +
                 "            u.nickName as nickName,\n" +
                 "            b.title as title,\n" +
-                "            b.imgUrl as imgUrl,\n" +
                 "            b.views as views,\n" +
                 "            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
                 "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
@@ -207,7 +206,6 @@ public class BoardDao {
                         rs.getInt("userIdx"),
                         rs.getInt("category"),
                         rs.getString("title"),
-                        rs.getString("imgUrl"),
                         rs.getString("nickName"),
                         rs.getInt("views"),
                         rs.getInt("boardLikeCount"),
@@ -225,8 +223,8 @@ public class BoardDao {
                 "                            u.userIdx as userIdx,\n" +
                 "                            b.category as category,\n" +
                 "                            u.nickName as nickName,\n" +
+                "                            u.profileImgUrl as profileImgUrl,\n" +
                 "                            b.title as title,\n" +
-                "                            b.imgUrl as imgUrl,\n" +
                 "                            b.content as content,\n" +
                 "                            b.views as views,\n" +
                 "                            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
@@ -257,8 +255,8 @@ public class BoardDao {
                         rs.getInt("userIdx"),
                         rs.getInt("category"),
                         rs.getString("title"),
-                        rs.getString("imgUrl"),
                         rs.getString("nickName"),
+                        rs.getString("profileImgUrl"),
                         rs.getString("content"),
                         rs.getInt("views"),
                         rs.getInt("boardLikeCount"),
@@ -317,8 +315,8 @@ public class BoardDao {
      * 게시판 게시물 생성
      * */
     public int insertBoard(int userIdx, PostBoardReq postBoardReq) {
-        String insertBoardQuery = "INSERT INTO Board(userIdx, category, content, imgUrl, title, views) VALUES (?, ?, ?, ?, ?, 0)";
-        Object[] insertBoardParams = new Object[]{userIdx, postBoardReq.getCategory(), postBoardReq.getContent(), postBoardReq.getImgUrl(), postBoardReq.getTitle()};
+        String insertBoardQuery = "INSERT INTO Board(userIdx, category, content, title, views) VALUES (?, ?, ?, ?, 0)";
+        Object[] insertBoardParams = new Object[]{userIdx, postBoardReq.getCategory(), postBoardReq.getContent(), postBoardReq.getTitle()};
         this.jdbcTemplate.update(insertBoardQuery, insertBoardParams);
 
         String lastInsertIdQuery = "select last_insert_id()";
@@ -331,8 +329,8 @@ public class BoardDao {
      * 게시판 게시물 수정
      * */
     public int updateBoard(int boardIdx, PatchBoardReq patchBoardReq) {
-        String updateBoardQuery = "UPDATE Board SET title = ?, content = ?, imgUrl = ? WHERE boardIdx = ? and status='ACTIVE'\n";
-        Object[] updateBoardParams = new Object[]{patchBoardReq.getTitle(), patchBoardReq.getContent(), patchBoardReq.getImgUrl(), boardIdx};
+        String updateBoardQuery = "UPDATE Board SET title = ?, content = ? WHERE boardIdx = ? and status='ACTIVE'\n";
+        Object[] updateBoardParams = new Object[]{patchBoardReq.getTitle(), patchBoardReq.getContent(), boardIdx};
 
         return this.jdbcTemplate.update(updateBoardQuery, updateBoardParams);
     }

@@ -12,5 +12,4 @@ public class PatchBoardReq {
     private int userIdx;
     private String title;
     private String content;
-    private String imgUrl;
 }

@@ -12,7 +12,6 @@ public class PostBoardReq {
     private int userIdx;
     private int category;
     private String content;
-    private String imgUrl;
     private String title;
 
 }
