@@ -125,6 +125,7 @@ public class BoardService {
     }
 
     private int boardCommentIdx=0;
+
     /**
      * 댓글 등록
      */
@@ -180,6 +181,32 @@ public class BoardService {
         //System.out.println(response.body().string());
     }
 
+    public void sendReMessageTo(String title, String body, PostBoardCommentReq postBoardCommentReq) throws IOException {
+        String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
+        //포트폴리오 댓글의 정보 얻기
+        GetBoardComNotiInfoRes getBoardComNotiInfoRes =boardDao.NotiRe(boardCommentIdx, postBoardCommentReq.getGroupNum());
+
+        GetUserTokenRes getUserTokenRes= boardDao.getFCMToken(getBoardComNotiInfoRes.getReceiverIdx());
+        SendPushMessage sendPushMessage=new SendPushMessage(objectMapper);
+        String message = sendPushMessage.makeMessage(getUserTokenRes.getToken(), title, getBoardComNotiInfoRes.getNickName()+"님이 "+body);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(message,
+                MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + sendPushMessage.getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        //System.out.println(response.body().string());
+    }
+
+
     /**
      * 댓글 그룹 추가
      */
@@ -192,6 +219,41 @@ public class BoardService {
             result = boardDao.insertCommentGroup(boardCommentIdx);
 
         } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
+    /**
+     * 대댓글 등록
+     */
+    private int boardReCommentIdx=0;
+    public int createReComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) throws BaseException {
+
+        if(boardProvider.checkUserExist(userIdx) == 0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+        if(boardProvider.checkBoardExist(boardIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BOARD_ID);
+        }
+
+        if(boardProvider.checkCommentExist(postBoardCommentReq.getGroupNum()) == 0){
+            throw new BaseException(POSTS_EMPTY_BOARD_COMMENT_ID);
+        }
+
+        try{
+            boardReCommentIdx = boardDao.insertReComment(boardIdx, userIdx, postBoardCommentReq);
+            //게시글 댓글의 정보 얻기
+            GetBoardComNotiInfoRes getBoardComNotiInfoRes =boardDao.NotiRe(boardReCommentIdx, postBoardCommentReq.getGroupNum());
+
+
+            //알림 테이블에 추가
+            if(userIdx != getBoardComNotiInfoRes.getReceiverIdx()){
+                boardDao.CommentReNoti(getBoardComNotiInfoRes);
+            }
+            return boardReCommentIdx;
+        } catch (Exception exception) {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
