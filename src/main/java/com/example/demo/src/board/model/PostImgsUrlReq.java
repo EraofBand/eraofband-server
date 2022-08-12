@@ -7,9 +7,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PatchBoardReq {
+public class PostImgsUrlReq {
 
-    private int userIdx;
-    private String title;
-    private String content;
+    private String imgUrl;
+
+    public PostImgsUrlReq(){
+
+    }
+
 }

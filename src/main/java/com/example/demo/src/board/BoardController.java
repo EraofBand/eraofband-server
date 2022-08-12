@@ -109,7 +109,9 @@ public class BoardController {
      */
     @ResponseBody
     @PostMapping("") // (post) https://eraofband.shop/board
-    @ApiOperation(value = "게시판 게시물 생성 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "게시판 게시물 생성 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값), \n" +
+            "이미지 없을 시 공백 처리 imgUrl : '''',\n" +
+            "이미지 여러개일 시 {}추가 (사이에 , 도 추가)")
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
             @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),

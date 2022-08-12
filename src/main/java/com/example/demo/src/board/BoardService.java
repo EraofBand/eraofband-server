@@ -48,6 +48,12 @@ public class BoardService {
 
         try{
             int boardIdx = boardDao.insertBoard(userIdx, postBoardReq);
+            if(postBoardReq.getPostImgsUrl().get(0).getImgUrl()!="") {
+                //이미지 추가
+                for (int i = 0; i < postBoardReq.getPostImgsUrl().size(); i++) {
+                    boardDao.insertBoardImgs(boardIdx, postBoardReq.getPostImgsUrl().get(i));
+                }
+            }
             return new PostBoardRes(boardIdx);
         } catch (Exception exception) {
 

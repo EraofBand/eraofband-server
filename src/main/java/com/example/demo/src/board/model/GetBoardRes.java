@@ -13,8 +13,8 @@ public class GetBoardRes {
     private int userIdx;
     private int category;
     private String title;
-    private String imgUrl;
     private String nickName;
+    private String imgUrl;
     private int views;
     private int boardLikeCount;
     private int commentCount;

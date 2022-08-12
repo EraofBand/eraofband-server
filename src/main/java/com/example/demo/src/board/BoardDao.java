@@ -4,6 +4,7 @@ import com.example.demo.src.GetUserTokenRes;
 import com.example.demo.src.board.model.*;
 import com.example.demo.src.lesson.model.GetMemberRes;
 import com.example.demo.src.pofol.model.*;
+import com.example.demo.src.session.model.GetSessionMemRes;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -190,8 +191,8 @@ public class BoardDao {
                 "            u.userIdx as userIdx,\n" +
                 "            b.category as category,\n" +
                 "            u.nickName as nickName,\n" +
+                "            bi.imgUrl as imgUrl,\n" +
                 "            b.title as title,\n" +
-                "            b.imgUrl as imgUrl,\n" +
                 "            b.views as views,\n" +
                 "            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
                 "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
@@ -210,6 +211,7 @@ public class BoardDao {
                 "            join User as u on u.userIdx = b.userIdx\n" +
                 "            left join (select boardIdx, userIdx, count(boardLikeIdx) as boardLikeCount from BoardLike WHERE status = 'ACTIVE' group by boardIdx) blc on blc.boardIdx = b.boardIdx\n" +
                 "            left join (select boardIdx, count(boardCommentIdx) as commentCount from BoardComment WHERE status = 'ACTIVE' group by boardIdx) c on c.boardIdx = b.boardIdx\n" +
+                "            left join BoardImage as bi on bi.boardIdx=b.boardIdx and bi.status='ACTIVE'\n"+
                 "        WHERE b.category = ? and b.status = 'ACTIVE'\n" +
                 "        group by b.boardIdx order by b.boardIdx DESC;\n";
         int selectBoardListParam = category;
@@ -219,8 +221,8 @@ public class BoardDao {
                         rs.getInt("userIdx"),
                         rs.getInt("category"),
                         rs.getString("title"),
-                        rs.getString("imgUrl"),
                         rs.getString("nickName"),
+                        rs.getString("imgUrl"),
                         rs.getInt("views"),
                         rs.getInt("boardLikeCount"),
                         rs.getInt("commentCount"),
@@ -231,14 +233,14 @@ public class BoardDao {
     /**
      * 게시물 조회
      * */
-    public GetBoardInfoRes selectBoardInfo(int userIdx, int boardIdx,  List<GetBoardCommentRes> getBoardComments) {
+    public GetBoardInfoRes selectBoardInfo(int userIdx, int boardIdx,  List<GetBoardImgsRes> getBoardImgsRes, List<GetBoardCommentRes> getBoardComments) {
         String selectBoardInfoQuery = "\n" +
                 "SELECT b.boardIdx as boardIdx,\n" +
                 "                            u.userIdx as userIdx,\n" +
                 "                            b.category as category,\n" +
                 "                            u.nickName as nickName,\n" +
+                "                            u.profileImgUrl as profileImgUrl,\n" +
                 "                            b.title as title,\n" +
-                "                            b.imgUrl as imgUrl,\n" +
                 "                            b.content as content,\n" +
                 "                            b.views as views,\n" +
                 "                            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
@@ -269,9 +271,10 @@ public class BoardDao {
                         rs.getInt("userIdx"),
                         rs.getInt("category"),
                         rs.getString("title"),
-                        rs.getString("imgUrl"),
                         rs.getString("nickName"),
+                        rs.getString("profileImgUrl"),
                         rs.getString("content"),
+                        getBoardImgsRes,
                         rs.getInt("views"),
                         rs.getInt("boardLikeCount"),
                         rs.getInt("commentCount"),
@@ -279,6 +282,21 @@ public class BoardDao {
                         rs.getString("LikeOrNot"),
                         getBoardComments
                 ), selectBoardInfoParam);
+    }
+
+    /**
+     * 게시물 이미지 조회
+     */
+    public List<GetBoardImgsRes> getBoardImgsRes (int boardIdx) {
+        String getBoardImgsQuery = "SELECT boardImgIdx,imgUrl\n" +
+                "FROM BoardImage as b\n" +
+                "WHERE boardIdx = ? and status = 'ACTIVE'";
+        int getBoardImgsParams = boardIdx;
+        return this.jdbcTemplate.query(getBoardImgsQuery,
+                (rs, rowNum) -> new GetBoardImgsRes(
+                        rs.getInt("boardImgIdx"),
+                        rs.getString("imgUrl")),
+                getBoardImgsParams);
     }
 
     /**
@@ -329,9 +347,22 @@ public class BoardDao {
      * 게시판 게시물 생성
      * */
     public int insertBoard(int userIdx, PostBoardReq postBoardReq) {
-        String insertBoardQuery = "INSERT INTO Board(userIdx, category, content, imgUrl, title, views) VALUES (?, ?, ?, ?, ?, 0)";
-        Object[] insertBoardParams = new Object[]{userIdx, postBoardReq.getCategory(), postBoardReq.getContent(), postBoardReq.getImgUrl(), postBoardReq.getTitle()};
+        String insertBoardQuery = "INSERT INTO Board(userIdx, category, content, title, views) VALUES (?, ?, ?, ?, 0)";
+        Object[] insertBoardParams = new Object[]{userIdx, postBoardReq.getCategory(), postBoardReq.getContent(), postBoardReq.getTitle()};
         this.jdbcTemplate.update(insertBoardQuery, insertBoardParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+
+    }
+
+    /**
+     * 게시판 게시물 이미지 생성
+     * */
+    public int insertBoardImgs(int boardIdx, PostImgsUrlReq postImgsUrl) {
+        String insertBoardImgsQuery = "INSERT INTO BoardImage(boardIdx, imgUrl) VALUES (?, ?)";
+        Object[] insertBoardImgsParams = new Object[]{boardIdx,postImgsUrl.getImgUrl()};
+        this.jdbcTemplate.update(insertBoardImgsQuery, insertBoardImgsParams);
 
         String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
@@ -343,8 +374,8 @@ public class BoardDao {
      * 게시판 게시물 수정
      * */
     public int updateBoard(int boardIdx, PatchBoardReq patchBoardReq) {
-        String updateBoardQuery = "UPDATE Board SET title = ?, content = ?, imgUrl = ? WHERE boardIdx = ? and status='ACTIVE'\n";
-        Object[] updateBoardParams = new Object[]{patchBoardReq.getTitle(), patchBoardReq.getContent(), patchBoardReq.getImgUrl(), boardIdx};
+        String updateBoardQuery = "UPDATE Board SET title = ?, content = ? WHERE boardIdx = ? and status='ACTIVE'\n";
+        Object[] updateBoardParams = new Object[]{patchBoardReq.getTitle(), patchBoardReq.getContent(), boardIdx};
 
         return this.jdbcTemplate.update(updateBoardQuery, updateBoardParams);
     }

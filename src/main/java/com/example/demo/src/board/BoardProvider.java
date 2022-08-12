@@ -2,11 +2,13 @@ package com.example.demo.src.board;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.board.model.GetBoardCommentRes;
+import com.example.demo.src.board.model.GetBoardImgsRes;
 import com.example.demo.src.board.model.GetBoardInfoRes;
 import com.example.demo.src.board.model.GetBoardRes;
 import com.example.demo.src.pofol.PofolDao;
 import com.example.demo.src.pofol.model.GetCommentRes;
 import com.example.demo.src.pofol.model.GetPofolRes;
+import com.example.demo.src.session.model.GetSessionMemRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,7 @@ public class BoardProvider {
 
     private List<GetBoardCommentRes> getBoardComments;
 
+    private List<GetBoardImgsRes> getBoardImgsRes;
 
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -111,6 +114,7 @@ public class BoardProvider {
      * 게시물 조회
      */
     public GetBoardInfoRes retrieveBoardInfo(int userIdx, int boardIdx) throws BaseException {
+        getBoardImgsRes=retrieveBoardImgs(boardIdx);
         if(checkUserExist(userIdx) ==0){
             throw new BaseException(USERS_EMPTY_USER_ID);
         }
@@ -119,8 +123,21 @@ public class BoardProvider {
         }
         try{
             getBoardComments=boardDao.selectComment(boardIdx);
-            GetBoardInfoRes getBoardInfo = boardDao.selectBoardInfo(userIdx, boardIdx, getBoardComments);
+            GetBoardInfoRes getBoardInfo = boardDao.selectBoardInfo(userIdx, boardIdx, getBoardImgsRes, getBoardComments);
             return getBoardInfo;
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
+     * 게시물 이미지 리스트 조회
+     */
+    public List<GetBoardImgsRes> retrieveBoardImgs(int boardIdx) throws BaseException {
+        try{
+            List<GetBoardImgsRes> getBoardImgList = boardDao.getBoardImgsRes(boardIdx);
+            return getBoardImgList;
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
