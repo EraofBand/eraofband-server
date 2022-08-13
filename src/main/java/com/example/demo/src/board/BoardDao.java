@@ -254,7 +254,7 @@ public class BoardDao {
                 "                                    then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
                 "                                when timestampdiff(day, b.createdAt, current_timestamp) < 7\n" +
                 "                                    then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
-                "                                else date_format(b.createdAt, '%Y.%m.%d. %h:%i')\n" +
+                "                                else date_format(b.createdAt, '%Y.%m.%d.  %h:%i')\n" +
                 "                           end as updatedAt,\n" +
                 "                           IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "                        FROM Board as b\n" +
@@ -367,6 +367,16 @@ public class BoardDao {
         String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
 
+    }
+
+    /**
+     * 게시판 게시물 이미지 삭제
+     * */
+    public int deleteBoardImg(int boardImgIdx) {
+        String deleteBoardImgQuery = "update BoardImage BI set BI.status='INACTIVE' where BI.boardImgIdx = ? ";
+        Object[] deleteBoardImgParams = new Object[]{boardImgIdx};
+
+        return this.jdbcTemplate.update(deleteBoardImgQuery, deleteBoardImgParams);
     }
 
 
