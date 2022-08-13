@@ -396,6 +396,8 @@ public class BoardDao {
         return this.jdbcTemplate.update(deleteBoardQuery, deleteBoardParams);
     }
 
+
+
     /**
      * 게시물 조회 수 증가
      * */
