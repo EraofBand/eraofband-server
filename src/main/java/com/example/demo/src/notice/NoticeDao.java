@@ -36,7 +36,7 @@ public class NoticeDao {
                 "                                    then concat(timestampdiff(hour, n.createdAt, current_timestamp), '시간 전')\n" +
                 "                                when timestampdiff(day, n.createdAt, current_timestamp) < 7\n" +
                 "                                    then concat(timestampdiff(day, n.createdAt, current_timestamp), '일 전')\n" +
-                "                                else date_format(n.createdAt, '%Y-%m-%d')\n" +
+                "                                else date_format(n.createdAt, '%Y.%m.%d.')\n" +
                 "                            end as updatedAt, status\n" +
                 "FROM Notice as n WHERE n.receiverIdx=? ORDER BY createdAt DESC\n" +
                 "LIMIT 30;\n";

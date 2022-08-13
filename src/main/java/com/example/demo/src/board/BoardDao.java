@@ -159,12 +159,12 @@ public class BoardDao {
                 "then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
                 "when timestampdiff(day , b.createdAt, current_timestamp) < 7\n" +
                 "then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
-                "else date_format(b.createdAt, '%Y-%m-%d')\n" +
+                "else date_format(b.createdAt, '%Y.%m.%d.')\n" +
                 "end as updatedAt\n" +
                 "FROM BoardComment as b\n" +
                 "join User as u on u.userIdx = b.userIdx\n" +
                 "WHERE b.boardCommentIdx = ? and b.status = 'ACTIVE'\n " +
-                "group by b.boardCommentIdx order by b.boardCommentIdx DESC; \n";
+                "group by b.boardCommentIdx order by b.boardCommentIdx; \n";
 
         int selectCommentParam = boardCommentIdx;
         return this.jdbcTemplate.queryForObject(selectCommentQuery,
@@ -205,7 +205,7 @@ public class BoardDao {
                 "                    then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
                 "                when timestampdiff(day, b.createdAt, current_timestamp) < 7\n" +
                 "                    then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
-                "                else date_format(b.createdAt, '%Y-%m-%d')\n" +
+                "                else date_format(b.createdAt, '%Y.%m.%d.')\n" +
                 "            end as updatedAt\n" +
                 "        FROM Board as b\n" +
                 "            join User as u on u.userIdx = b.userIdx\n" +
@@ -254,7 +254,7 @@ public class BoardDao {
                 "                                    then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
                 "                                when timestampdiff(day, b.createdAt, current_timestamp) < 7\n" +
                 "                                    then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
-                "                                else date_format(b.createdAt, '%Y-%m-%d %h:%i:%s')\n" +
+                "                                else date_format(b.createdAt, '%Y.%m.%d. %h:%i')\n" +
                 "                           end as updatedAt,\n" +
                 "                           IF(bl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "                        FROM Board as b\n" +
@@ -320,7 +320,7 @@ public class BoardDao {
                 "then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
                 "when timestampdiff(day , b.createdAt, current_timestamp) < 7\n" +
                 "then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
-                "else date_format(b.createdAt, '%Y-%m-%d')\n" +
+                "else date_format(b.createdAt, '%Y.%m.%d.')\n" +
                 "end as updatedAt\n" +
                 "FROM BoardComment as b\n" +
                 "join User as u on u.userIdx = b.userIdx\n" +
