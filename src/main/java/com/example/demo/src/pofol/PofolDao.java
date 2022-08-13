@@ -87,12 +87,12 @@ public class PofolDao {
                                          "then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
                                          "when timestampdiff(day , p.createdAt, current_timestamp) < 7\n" +
                                          "then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
-                                         "else date_format(p.createdAt, '%Y-%m-%d')\n" +
+                                         "else date_format(p.createdAt, '%Y.%m.%d.')\n" +
                                          "end as updatedAt\n" +
                                          "FROM PofolComment as p\n" +
                                          "join User as u on u.userIdx = p.userIdx\n" +
                                          "WHERE p.pofolIdx = ? and p.status = 'ACTIVE'\n " +
-                                         "group by p.pofolCommentIdx order by p.pofolCommentIdx DESC; \n";
+                                         "group by p.pofolCommentIdx order by p.pofolCommentIdx; \n";
         int selectCommentPofolParam = pofolIdx;
         return this.jdbcTemplate.query(selectCommentPofolQuery,
                 (rs, rowNum) -> new GetCommentRes(
@@ -136,7 +136,7 @@ public class PofolDao {
                     "                                    then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
                     "                                when timestampdiff(day , p.createdAt, current_timestamp) < 7\n" +
                     "                                    then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
-                    "                                else date_format(p.createdAt, '%Y-%m-%d')\n" +
+                    "                                else date_format(p.createdAt, '%Y.%m.%d.')\n" +
                     "                            end as updatedAt,\n" +
                     "                            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                     "                        FROM Pofol as p\n" +
@@ -170,7 +170,7 @@ public class PofolDao {
                     "                                    then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
                     "                                when timestampdiff(day , p.createdAt, current_timestamp) < 7\n" +
                     "                                    then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
-                    "                                else date_format(p.createdAt, '%Y-%m-%d')\n" +
+                    "                                else date_format(p.createdAt, '%Y.%m.%d.')\n" +
                     "                            end as updatedAt,\n" +
                     "                            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                     "                        FROM Pofol as p\n" +
@@ -232,7 +232,7 @@ public class PofolDao {
                     "                                    then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
                     "                                when timestampdiff(day , p.createdAt, current_timestamp) < 7\n" +
                     "                                    then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
-                    "                                else date_format(p.createdAt, '%Y-%m-%d')\n" +
+                    "                                else date_format(p.createdAt, '%Y.%m.%d.')\n" +
                     "                            end as updatedAt,\n" +
                     "                            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                     "                        FROM Pofol as p\n" +
@@ -267,7 +267,7 @@ public class PofolDao {
                     "                    then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
                     "                when timestampdiff(day , p.createdAt, current_timestamp) < 7\n" +
                     "                    then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
-                    "                else date_format(p.createdAt, '%Y-%m-%d')\n" +
+                    "                else date_format(p.createdAt, '%Y.%m.%d.')\n" +
                     "            end as updatedAt,\n" +
                     "            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                     "        FROM Pofol as p\n" +
@@ -324,7 +324,7 @@ public class PofolDao {
                 "                    then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
                 "                when timestampdiff(day, p.createdAt, current_timestamp) < 7\n" +
                 "                    then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
-                "                else date_format(p.createdAt, '%Y-%m-%d')\n" +
+                "                else date_format(p.createdAt, '%Y.%m.%d.')\n" +
                 "            end as updatedAt,\n" +
                 "            IF(pl.status = 'ACTIVE', 'Y', 'N') as likeOrNot\n" +
                 "        FROM Pofol as p\n" +
@@ -474,7 +474,7 @@ public class PofolDao {
                 "then concat(timestampdiff(hour, p.createdAt, current_timestamp), '시간 전')\n" +
                 "when timestampdiff(day , p.createdAt, current_timestamp) < 7\n" +
                 "then concat(timestampdiff(day, p.createdAt, current_timestamp), '일 전')\n" +
-                "else date_format(p.createdAt, '%Y-%m-%d')\n" +
+                "else date_format(p.createdAt, '%Y.%m.%d.')\n" +
                 "end as updatedAt\n" +
                 "FROM PofolComment as p\n" +
                 "join User as u on u.userIdx = p.userIdx\n" +

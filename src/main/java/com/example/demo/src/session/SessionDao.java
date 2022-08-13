@@ -219,7 +219,7 @@ public class SessionDao {
                 "then concat(timestampdiff(hour, BU.createdAt, current_timestamp), '시간 전')\n" +
                 "when timestampdiff(day , BU.createdAt, current_timestamp) < 7\n" +
                 "then concat(timestampdiff(day, BU.createdAt, current_timestamp), '일 전')\n" +
-                "else date_format(BU.createdAt, '%Y-%m-%d')\n" +
+                "else date_format(BU.createdAt, '%Y.%m.%d.')\n" +
                 "end as updatedAt\n" +
                 "FROM BandUser as BU\n" +
                 "JOIN(SELECT userIdx, nickName, profileImgUrl, introduction, token FROM User) u on u.userIdx = BU.userIdx\n" +
