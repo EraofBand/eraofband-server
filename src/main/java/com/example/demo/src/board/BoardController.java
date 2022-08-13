@@ -222,6 +222,9 @@ public class BoardController {
         }
     }
 
+
+
+
     /**
      * 게시물 댓글 등록 API
      * [POST] /board/comment/2
