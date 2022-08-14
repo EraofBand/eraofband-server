@@ -528,6 +528,89 @@ public class BoardDao {
     }
 
     /**
+     * 작성 게시물 리스트 조회
+     * */
+    public List<GetMyBoardRes> selectMyBoardList(int userIdx) {
+        String selectMyBoardListQuery = "\n" +
+                "        SELECT b.boardIdx as boardIdx,\n" +
+                "            b.userIdx as userIdx,\n" +
+                "            b.category as category,\n" +
+                "            b.title as title,\n" +
+                "            b.views as views,\n" +
+                "            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
+                "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
+                "            case\n" +
+                "                when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
+                "                    then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
+                "                when timestampdiff(minute, b.createdAt, current_timestamp) < 60\n" +
+                "                    then concat(timestampdiff(minute, b.createdAt, current_timestamp), '분 전')\n" +
+                "                when timestampdiff(hour, b.createdAt, current_timestamp) < 24\n" +
+                "                    then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
+                "                when timestampdiff(day, b.createdAt, current_timestamp) < 7\n" +
+                "                    then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
+                "                else date_format(b.createdAt, '%Y.%m.%d.')\n" +
+                "            end as updatedAt\n" +
+                "        FROM Board as b\n" +
+                "            left join (select boardIdx, userIdx, count(boardLikeIdx) as boardLikeCount from BoardLike WHERE status = 'ACTIVE' group by boardIdx) blc on blc.boardIdx = b.boardIdx\n" +
+                "            left join (select boardIdx, count(boardCommentIdx) as commentCount from BoardComment WHERE status = 'ACTIVE' group by boardIdx) c on c.boardIdx = b.boardIdx\n" +
+                "        WHERE b.userIdx = ? and b.status = 'ACTIVE'\n" +
+                "        group by b.boardIdx order by b.boardIdx DESC;\n";
+        int selectMyBoardListParam = userIdx;
+        return this.jdbcTemplate.query(selectMyBoardListQuery,
+                                       (rs, rowNum) -> new GetMyBoardRes(
+                                               rs.getInt("boardIdx"),
+                                               rs.getInt("category"),
+                                               rs.getString("title"),
+                                               rs.getInt("views"),
+                                               rs.getInt("boardLikeCount"),
+                                               rs.getInt("commentCount"),
+                                               rs.getString("updatedAt")
+                                       ), selectMyBoardListParam);
+    }
+
+    /**
+     * 댓글 단 게시물 리스트 조회
+     * */
+    public List<GetMyBoardRes> selectMyCommentBoardList(int userIdx) {
+        String selectMyCommentBoardListQuery = "\n" +
+                "        SELECT b.boardIdx as boardIdx,\n" +
+                "            b.userIdx as userIdx,\n" +
+                "            b.category as category,\n" +
+                "            b.title as title,\n" +
+                "            b.views as views,\n" +
+                "            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
+                "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
+                "            case\n" +
+                "                when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
+                "                    then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
+                "                when timestampdiff(minute, b.createdAt, current_timestamp) < 60\n" +
+                "                    then concat(timestampdiff(minute, b.createdAt, current_timestamp), '분 전')\n" +
+                "                when timestampdiff(hour, b.createdAt, current_timestamp) < 24\n" +
+                "                    then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
+                "                when timestampdiff(day, b.createdAt, current_timestamp) < 7\n" +
+                "                    then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
+                "                else date_format(b.createdAt, '%Y.%m.%d.')\n" +
+                "            end as updatedAt\n" +
+                "        FROM Board as b\n" +
+                "            left join (select boardIdx, userIdx, count(boardLikeIdx) as boardLikeCount from BoardLike WHERE status = 'ACTIVE' group by boardIdx) blc on blc.boardIdx = b.boardIdx\n" +
+                "            left join (select boardIdx, count(boardCommentIdx) as commentCount from BoardComment WHERE status = 'ACTIVE' group by boardIdx) c on c.boardIdx = b.boardIdx\n" +
+                "            join(SELECT boardIdx, userIdx FROM BoardComment) as BC on BC.userIdx = ?\n" +
+                "        WHERE b.boardIdx = BC.boardIdx and b.status = 'ACTIVE'\n" +
+                "        group by b.boardIdx order by b.boardIdx DESC;\n";
+        int selectMyCommentBoardListParam = userIdx;
+        return this.jdbcTemplate.query(selectMyCommentBoardListQuery,
+                                       (rs, rowNum) -> new GetMyBoardRes(
+                                               rs.getInt("boardIdx"),
+                                               rs.getInt("category"),
+                                               rs.getString("title"),
+                                               rs.getInt("views"),
+                                               rs.getInt("boardLikeCount"),
+                                               rs.getInt("commentCount"),
+                                               rs.getString("updatedAt")
+                                       ), selectMyCommentBoardListParam);
+    }
+
+    /**
      * 게시물 좋아요 취소
      * */
     public int updateUnlikes(int userIdx, int boardIdx) {
@@ -536,6 +619,5 @@ public class BoardDao {
 
         return this.jdbcTemplate.update(updateUnlikesQuery, updateUnlikesParams);
     }
-
 
 }
