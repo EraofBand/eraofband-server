@@ -45,15 +45,29 @@ public class ChatService {
     }
 
 
-
-
-
-
-
-
     /**
-     *  채팅방 나가기
+     *  채팅방 활성화
      * */
+    public void activeChatroom(int userIdx, String chatRoomIdx) throws BaseException {
+
+        try {
+            result = chatDao.activeChatroom(userIdx, chatRoomIdx);
+
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
+
+
+
+
+
+
+        /**
+         *  채팅방 나가기
+         * */
     public void deleteChatRoom(int userIdx, String chatRoomIdx) throws BaseException {
 
         if(chatProvider.checkChatRoomExist(userIdx, chatRoomIdx) ==0){

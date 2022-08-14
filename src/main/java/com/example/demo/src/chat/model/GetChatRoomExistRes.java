@@ -9,6 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetChatRoomExistRes {
     private String chatRoomIdx;
+    private int status;
 
     public GetChatRoomExistRes(){
 
