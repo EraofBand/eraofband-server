@@ -111,14 +111,14 @@ public class UserDao {
      * 유저 소속 밴드 조회
      */
     public List<GetUserBandRes> getUserBand(int userIdx) {
-        String getBandsByIdxQuery = "select b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction," +
-                "b.bandRegion as bandRegion, IF(memberCount is null, 0, memberCount)+1 as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum+1 as capacity\n" +
-                "from BandUser as bu\n" +
-                "   left join Band as b on b.bandIdx=bu.bandIdx\n" +
-                "   left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
-                "where b.status='ACTIVE' and bu.status='ACTIVE' and (bu.userIdx=? or b.userIdx=?)\n" +
-                "group by b.bandIdx\n" +
-                "order by b.bandIdx";
+        String getBandsByIdxQuery = "select b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle, b.bandIntroduction as bandIntroduction,\n" +
+                "                b.bandRegion as bandRegion, IF(memberCount is null, 0, memberCount)+1 as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum+1 as capacity\n" +
+                "                from Band as b\n" +
+                "                   left join BandUser as bu on bu.bandIdx=b.bandIdx\n" +
+                "                   left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +
+                "                where b.status='ACTIVE' and ((bu.userIdx=? and bu.status='ACTIVE') or b.userIdx=?)\n" +
+                "                group by b.bandIdx\n" +
+                "                order by b.bandIdx";
         Object[] getBandsByIdxParams = new Object[]{userIdx, userIdx};
         return this.jdbcTemplate.query(getBandsByIdxQuery,
                                        (rs, rowNum) -> new GetUserBandRes(
@@ -141,7 +141,7 @@ public class UserDao {
                 "from LessonUser as lu\n" +
                 "   join Lesson as l on l.lessonIdx=lu.lessonIdx\n" +
                 "   left join (select lessonIdx, count(lessonUserIdx) as memberCount from LessonUser where status='ACTIVE' group by lessonIdx) lm on lm.lessonIdx=l.lessonIdx\n" +
-                "where l.status='ACTIVE' and lu.status='ACTIVE' and (lu.userIdx=? or l.userIdx=?)\n" +
+                "where l.status='ACTIVE' and ((lu.userIdx=? and lu.status='ACTIVE') or l.userIdx=?)\n" +
                 "group by l.lessonIdx\n" +
                 "order by l.lessonIdx";
         Object[] getLessonsByIdxParams = new Object[]{userIdx, userIdx};
