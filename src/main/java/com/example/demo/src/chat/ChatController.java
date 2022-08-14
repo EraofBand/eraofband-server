@@ -157,9 +157,7 @@ public class ChatController {
                 else if (getFirst.getStatus() == 0 && getSecond.getStatus() == 1) {
                     //두 번째 유저가 속해 있는 채팅방 반환
                     getChatRoomExistRes.setChatRoomIdx(getSecond.getChatRoomIdx());
-                    getChatRoomExistRes.setStatus(getSecond.getStatus());
-                    //active로 만들기
-                    chatService.activeChatroom(getChatRoomExistReq.getFirstUserIdx(), getSecond.getChatRoomIdx());
+                    getChatRoomExistRes.setStatus(getFirst.getStatus());
                 }
 
                 //두 번째 유저만 나간 경우
