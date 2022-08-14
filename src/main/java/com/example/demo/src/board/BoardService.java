@@ -357,4 +357,28 @@ public class BoardService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    /**
+     * 게시물 좋아요 취소
+     */
+    public void unlikesBoard(int userIdx, int boardIdx) throws BaseException {
+
+        if(boardProvider.checkUserExist(userIdx) == 0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+        if(boardProvider.checkBoardExist(boardIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BOARD_ID);
+        }
+
+        try{
+            result = boardDao.updateUnlikes(userIdx, boardIdx);
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+        if(result == 0){
+            throw new BaseException(UNLIKES_FAIL_BOARD);
+        }
+
+    }
 }

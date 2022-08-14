@@ -408,13 +408,13 @@ public class BoardController {
     }
 
     /**
-     * 게시물 추천 API
+     * 게시물 좋아요 API
      * [POST] /board/likes/{boardIdx}
      * @return BaseResponse<PostBoardLikeRes>
      */
     @ResponseBody
     @PostMapping("/likes/{boardIdx}") // (post) https://eraofband.shop/board/likes/2
-    @ApiOperation(value = "게시물 좋아요", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "게시물 좋아요 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="boardIdx", value="좋아요할 게시물 인덱스", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
@@ -435,5 +435,39 @@ public class BoardController {
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
+    }
+
+    /**
+     * 게시물 좋아요 취소 API
+     *  * status 말고 delete로
+     * [DELETE] /board/unlikes/2
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @DeleteMapping ("/unlikes/{boardIdx}") // (delete) https://eraofband.shop/board/unlikes/2
+    @ApiOperation(value = "게시물 좋아요 취소 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="boardIdx", value="좋아요 취소할 게시물 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2100, message="게시글 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2111, message="게시물 좋아요 취소에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> unlikesBoard(@PathVariable("boardIdx") int boardIdx){
+
+        try {
+
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+            boardService.unlikesBoard(userIdxByJwt,boardIdx);
+
+            String result = "게시물 좋아요 취소를 완료하였습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
     }
 }

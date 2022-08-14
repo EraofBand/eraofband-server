@@ -112,6 +112,7 @@ public enum BaseResponseStatus {
     DUPLICATED_BOARD_LIKE(false,2108,"이미 추천한 게시글입니다."),
     MODIFY_FAIL_BOARD_IMG(false,2109,"게시글 사진 수정에 실패했습니다."),
     DELETE_FAIL_BOARD_IMG(false,2110,"게시글 사진 삭제에 실패했습니다."),
+    UNLIKES_FAIL_BOARD(false,2111,"게시글 좋아요 취소에 실패했습니다."),
 
 
 

@@ -527,4 +527,15 @@ public class BoardDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
+    /**
+     * 게시물 좋아요 취소
+     * */
+    public int updateUnlikes(int userIdx, int boardIdx) {
+        String updateUnlikesQuery = "DELETE FROM BoardLike WHERE userIdx = ? and boardIdx = ?";
+        Object[] updateUnlikesParams = new Object[]{userIdx, boardIdx};
+
+        return this.jdbcTemplate.update(updateUnlikesQuery, updateUnlikesParams);
+    }
+
+
 }
