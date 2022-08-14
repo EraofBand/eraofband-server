@@ -111,6 +111,42 @@ public class BoardService {
         }
     }
 
+    /**
+     * 게시판 게시물 사진 수정
+     */
+    public void modifyBoardImg(int boardIdx, PostImgsUrlReq postImgsUrlReq) throws BaseException {
+
+        if(boardProvider.checkBoardExist(boardIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BOARD_ID);
+        }
+
+        try{
+            result = boardDao.insertBoardImgs(boardIdx,postImgsUrlReq);
+        } catch(Exception exception){
+
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(MODIFY_FAIL_BOARD_IMG);
+        }
+    }
+
+
+    /**
+     * 게시판 게시물 사진 삭제
+     */
+    public void deleteBoardImg(int boardImgIdx) throws BaseException {
+
+        try{
+            result = boardDao.deleteBoardImg(boardImgIdx);
+        } catch(Exception exception){
+
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(DELETE_FAIL_BOARD_IMG);
+        }
+    }
 
 
     /**
@@ -320,5 +356,29 @@ public class BoardService {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    /**
+     * 게시물 좋아요 취소
+     */
+    public void unlikesBoard(int userIdx, int boardIdx) throws BaseException {
+
+        if(boardProvider.checkUserExist(userIdx) == 0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+        if(boardProvider.checkBoardExist(boardIdx) == 0){
+            throw new BaseException(POSTS_EMPTY_BOARD_ID);
+        }
+
+        try{
+            result = boardDao.updateUnlikes(userIdx, boardIdx);
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+        if(result == 0){
+            throw new BaseException(UNLIKES_FAIL_BOARD);
+        }
+
     }
 }

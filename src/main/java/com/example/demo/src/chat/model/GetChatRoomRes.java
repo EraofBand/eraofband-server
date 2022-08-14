@@ -11,6 +11,7 @@ public class GetChatRoomRes {
     private String chatRoomIdx;
     private String nickName;
     private String profileImgUrl;
+    private int status;
 
 
 }
