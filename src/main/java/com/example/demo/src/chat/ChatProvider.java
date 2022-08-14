@@ -52,14 +52,48 @@ public class ChatProvider {
         }
     }
 
+
     /**
-     *  채팅방 유무 확인
+     *  첫 번째 유저가 속해 있는 채팅방 반환
      * */
-    public GetChatRoomExistRes getChatRoomExist(GetChatRoomExistReq getChatRoomExistReq) throws BaseException {
+    public GetChatRoomExistRes getFirstUserExist(GetChatRoomExistReq getChatRoomExistReq) throws BaseException {
         try {
-            return chatDao.checkUserChatRoomExist(getChatRoomExistReq);
+            return chatDao.checkFirstUserExist(getChatRoomExistReq);
         } catch (Exception exception) {
-            throw new BaseException(POSTS_EMPTY_CHAT_ID);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
+     *  두 번째 유저가 속해 있는 채팅방 반환
+     * */
+    public GetChatRoomExistRes getSecondUserExist(GetChatRoomExistReq getChatRoomExistReq) throws BaseException {
+        try {
+            return chatDao.checkSecondUserExist(getChatRoomExistReq);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
+     *  첫 번째 유저 채팅방 확인
+     * */
+    public int checkFirstExist(int firstIdx, int secondIdx) throws BaseException {
+        try {
+            return chatDao.checkFirstExist(firstIdx, secondIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
+     *  두 번째 유저 채팅방 확인
+     * */
+    public int checkSecondExist(int firstIdx, int secondIdx) throws BaseException {
+        try {
+            return chatDao.checkSecondExist(firstIdx, secondIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 
