@@ -216,8 +216,8 @@ com/example/demo/src/lesson/LessonDao.java
  com.example.demo.src.lesson.LessonDao
 com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
-com/example/demo/src/board/BoardService.java
- com.example.demo.src.board.BoardService
+com/example/demo/src/lesson/model/PostSignUpRes.java
+ com.example.demo.src.lesson.model.PostSignUpRes
 com/example/demo/src/notice/NoticeProvider.java
  com.example.demo.src.notice.NoticeProvider
 com/example/demo/src/user/model/GetMyInfoRes.java
@@ -252,8 +252,8 @@ com/example/demo/src/lesson/model/PostLessonReq.java
  com.example.demo.src.lesson.model.PostLessonReq
 com/example/demo/src/pofol/model/PostLikeRes.java
  com.example.demo.src.pofol.model.PostLikeRes
-com/example/demo/src/board/BoardController.java
- com.example.demo.src.board.BoardController
+com/example/demo/DemoApplication.java
+ com.example.demo.DemoApplication
 com/example/demo/src/FcmMessage.java
  com.example.demo.src.FcmMessage
  com.example.demo.src.FcmMessage$FcmMessageBuilder
@@ -265,7 +265,7 @@ com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
 com/example/demo/src/session/model/GetBandNotiInfoRes.java
  com.example.demo.src.session.model.GetBandNotiInfoRes
-com/example/demo/DemoApplication.java
- com.example.demo.DemoApplication
-com/example/demo/src/lesson/model/PostSignUpRes.java
- com.example.demo.src.lesson.model.PostSignUpRes
+com/example/demo/src/board/BoardService.java
+ com.example.demo.src.board.BoardService
+com/example/demo/src/board/BoardController.java
+ com.example.demo.src.board.BoardController

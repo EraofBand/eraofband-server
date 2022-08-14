@@ -124,7 +124,7 @@ public class PofolDao {
                     "                            u.profileImgUrl as profileImgUrl,\n" +
                     "                            p.title as title,\n" +
                     "                            p.content as content,\n" +
-                    "                            p.videoUrl as videoUrl,\n" +
+                    "                            p.videoUrl as videoUrl, p.imgUrl as imgUrl,\n" +
                     "                            IF(pofolLikeCount is null, 0, pofolLikeCount) as pofolLikeCount,\n" +
                     "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                     "                            case\n" +
@@ -158,7 +158,7 @@ public class PofolDao {
                     "                            u.profileImgUrl as profileImgUrl,\n" +
                     "                            p.title as title,\n" +
                     "                            p.content as content,\n" +
-                    "                            p.videoUrl as videoUrl,\n" +
+                    "                            p.videoUrl as videoUrl, p.imgUrl as imgUrl,\n" +
                     "                            IF(pofolLikeCount is null, 0, pofolLikeCount) as pofolLikeCount,\n" +
                     "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                     "                            case\n" +
@@ -198,7 +198,8 @@ public class PofolDao {
                         rs.getInt("commentCount"),
                         rs.getString("updatedAt"),
                         rs.getString("likeOrNot"),
-                        rs.getString("videoUrl")
+                        rs.getString("videoUrl"),
+                        rs.getString("imgUrl")
                 ), selectAllUserPofolParam);
 
     }
@@ -220,7 +221,7 @@ public class PofolDao {
                     "                            u.profileImgUrl as profileImgUrl,\n" +
                     "                            p.title as title,\n" +
                     "                            p.content as content,\n" +
-                    "                            p.videoUrl as videoUrl,\n" +
+                    "                            p.videoUrl as videoUrl, p.imgUrl as imgUrl,\n" +
                     "                            IF(pofolLikeCount is null, 0, pofolLikeCount) as pofolLikeCount,\n" +
                     "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                     "                            case\n" +
@@ -255,7 +256,7 @@ public class PofolDao {
                     "            u.profileImgUrl as profileImgUrl,\n" +
                     "            p.title as title,\n" +
                     "            p.content as content,\n" +
-                    "            p.videoUrl as videoUrl,\n" +
+                    "            p.videoUrl as videoUrl, p.imgUrl as imgUrl,\n" +
                     "            IF(pofolLikeCount is null, 0, pofolLikeCount) as pofolLikeCount,\n" +
                     "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                     "            case\n" +
@@ -295,7 +296,8 @@ public class PofolDao {
                         rs.getInt("commentCount"),
                         rs.getString("updatedAt"),
                         rs.getString("likeOrNot"),
-                        rs.getString("videoUrl")
+                        rs.getString("videoUrl"),
+                        rs.getString("imgUrl")
                 ), selectUserPofolParam);
 
     }
@@ -312,7 +314,7 @@ public class PofolDao {
                 "                            u.profileImgUrl as profileImgUrl,\n" +
                 "                            p.title as title,\n" +
                 "                            p.content as content,\n" +
-                "                            p.videoUrl as videoUrl,\n" +
+                "                            p.videoUrl as videoUrl, p.imgUrl as imgUrl,\n" +
                 "                            IF(pofolLikeCount is null, 0, pofolLikeCount) as pofolLikeCount,\n" +
                 "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
                 "                            case\n" +
@@ -347,7 +349,8 @@ public class PofolDao {
                         rs.getInt("commentCount"),
                         rs.getString("updatedAt"),
                         rs.getString("likeOrNot"),
-                        rs.getString("videoUrl")
+                        rs.getString("videoUrl"),
+                        rs.getString("imgUrl")
                 ), selectMyPofolParam);
 
     }
