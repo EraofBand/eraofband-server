@@ -109,7 +109,7 @@ public class BoardController {
      */
     @ResponseBody
     @PostMapping("") // (post) https://eraofband.shop/board
-    @ApiOperation(value = "게시판 게시물 생성 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값), \n" +
+    @ApiOperation(value = "게시판 게시물 생성", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값), \n" +
             "이미지 없을 시 공백 처리 imgUrl : '''',\n" +
             "이미지 여러개일 시 {}추가 (사이에 , 도 추가)")
     @ApiResponses({
@@ -153,7 +153,7 @@ public class BoardController {
      */
     @ResponseBody
     @PatchMapping("/board-info/{boardIdx}") // (patch) https://eraofband.shop/board/board-info/2
-    @ApiOperation(value = "게시판 게시물 수정 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "게시판 게시물 수정", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="boardIdx", value="수정할 게시물 인덱스", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
@@ -194,7 +194,7 @@ public class BoardController {
      */
     @ResponseBody
     @PatchMapping("/status/{boardIdx}") // (patch) https://eraofband.shop/board/status/2
-    @ApiOperation(value = "게시판 게시물 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "게시판 게시물 삭제", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="boardIdx", value="삭제할 게시물 인덱스", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
@@ -223,13 +223,66 @@ public class BoardController {
     }
 
     /**
+     * 게시판 게시물 사진 수정 API
+     * [POST] /board/board-img/2
+     * @return BaseResponse<GetBoardCommentRes>
+     */
+    @ResponseBody
+    @PostMapping("/board-img/{boardIdx}") // (post) https://eraofband.shop/board/board-img/2
+    @ApiOperation(value = "게시판 게시물 사진 수정", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="boardIdx", value="사진 수정할 게시물 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2100, message="게시글 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2109, message="게시글 사진 수정에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> modifyBoardImg(@PathVariable("boardIdx") int boardIdx, @RequestBody PostImgsUrlReq postImgsUrlReq){
+        try{
+
+            boardService.modifyBoardImg(boardIdx, postImgsUrlReq);
+
+            String result = "게시물 사진 수정을 완료하였습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+    /**
+     * 게시판 게시물 사진 삭제 API
+     * [PATCH] /board/status-img/2
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/status-img/{boardImgIdx}") // (patch) https://eraofband.shop/board/status-img/2
+    @ApiOperation(value = "게시판 게시물 사진 삭제", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="boardImgIdx", value="삭제할 사진 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2110, message="게시글 사진 삭제에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> deleteBoardImg(@PathVariable("boardImgIdx") int boardImgIdx){
+        try {
+            boardService.deleteBoardImg(boardImgIdx);
+
+            String result = "게시물 사진이 삭제되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+
+    /**
      * 게시물 댓글 등록 API
      * [POST] /board/comment/2
      * @return BaseResponse<GetBoardCommentRes>
      */
     @ResponseBody
     @PostMapping("/comment/{boardIdx}") // (post) https://eraofband.shop/board/comment/2
-    @ApiOperation(value = "게시물 댓글 등록 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "게시물 댓글 등록", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="boardIdx", value="댓글 달 게시물 인덱스", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
@@ -276,7 +329,7 @@ public class BoardController {
      */
     @ResponseBody
     @PostMapping("/re-comment/{boardIdx}") // (post) https://eraofband.shop/board/re-comment/2
-    @ApiOperation(value = "게시물 대댓글 등록 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "게시물 대댓글 등록", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="boardIdx", value="대댓글 달 게시물 인덱스", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
@@ -323,7 +376,7 @@ public class BoardController {
      */
     @ResponseBody
     @PatchMapping("/comment/status/{boardCommentIdx}") // (patch) https://eraofband.shop/board/comment/status/2
-    @ApiOperation(value = "게시글 댓글 삭제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "게시글 댓글 삭제", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="boardCommentIdx", value="삭제할 댓글 인덱스", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
@@ -355,7 +408,7 @@ public class BoardController {
     }
 
     /**
-     * 게시물 추천 API
+     * 게시물 좋아요 API
      * [POST] /board/likes/{boardIdx}
      * @return BaseResponse<PostBoardLikeRes>
      */
@@ -382,5 +435,39 @@ public class BoardController {
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
+    }
+
+    /**
+     * 게시물 좋아요 취소 API
+     *  * status 말고 delete로
+     * [DELETE] /board/unlikes/2
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @DeleteMapping ("/unlikes/{boardIdx}") // (delete) https://eraofband.shop/board/unlikes/2
+    @ApiOperation(value = "게시물 좋아요 취소 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="boardIdx", value="좋아요 취소할 게시물 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2100, message="게시글 아이디 값을 확인해주세요."),
+            @ApiResponse(code=2111, message="게시물 좋아요 취소에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> unlikesBoard(@PathVariable("boardIdx") int boardIdx){
+
+        try {
+
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+            boardService.unlikesBoard(userIdxByJwt,boardIdx);
+
+            String result = "게시물 좋아요 취소를 완료하였습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
     }
 }

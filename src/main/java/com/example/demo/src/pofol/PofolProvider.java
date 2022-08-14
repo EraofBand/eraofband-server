@@ -138,14 +138,14 @@ public class PofolProvider {
     /**
      * 포트폴리오 조회
      */
-    public List<GetPofolRes> retrieveMyPofol(int userIdx) throws BaseException {
+    public List<GetPofolRes> retrieveMyPofol(int myUserIdx, int userIdx) throws BaseException {
 
         if(checkUserExist(userIdx) ==0){
             throw new BaseException(USERS_EMPTY_USER_ID);
         }
 
         try{
-            List<GetPofolRes> getMyPofol = pofolDao.selectMyPofol(userIdx);
+            List<GetPofolRes> getMyPofol = pofolDao.selectMyPofol(myUserIdx, userIdx);
             return getMyPofol;
         } catch(Exception exception){
             System.out.println(exception);

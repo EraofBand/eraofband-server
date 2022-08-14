@@ -106,17 +106,20 @@ public class PofolController {
      */
     @ResponseBody
     @GetMapping("/info/{userIdx}")   // (get) https://eraofband.shop/pofols/info/12
-    @ApiOperation(value = "포트폴리오 리스트 조회")
+    @ApiOperation(value = "포트폴리오 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiImplicitParam(name="userIdx", value="해당 유저 인덱스", required = true)
     @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
             @ApiResponse(code=2010, message="유저 아이디 값을 확인해주세요."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
     public BaseResponse<List<GetPofolRes>> getMyPofol(@PathVariable("userIdx") int userIdx){
 
         try{
+            int userIdxByJwt = jwtService.getUserIdx();
 
-            List<GetPofolRes> getMyPofol=pofolProvider.retrieveMyPofol(userIdx);
+            List<GetPofolRes> getMyPofol=pofolProvider.retrieveMyPofol(userIdxByJwt, userIdx);
             return new BaseResponse<>(getMyPofol);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
