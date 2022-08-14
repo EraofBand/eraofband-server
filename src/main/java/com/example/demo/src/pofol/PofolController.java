@@ -49,7 +49,7 @@ public class PofolController {
     @ResponseBody
     @GetMapping("/info/all/{pofolIdx}")  // (get) https://eraofband.shop/pofols/info/all/0
     @ApiOperation(value = "전체 포트폴리오 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    @ApiImplicitParam(name="pofolIdx", value="현재 조회중인 포폴 인덱스(기준으로 아래 20개 불러오기, 초기값 0)", required = true)
+    @ApiImplicitParam(name="pofolIdx", value="현재 조회중인 포폴 인덱스(기준으로 아래 10개 불러오기, 초기값 0)", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
             @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
@@ -78,7 +78,7 @@ public class PofolController {
     @ResponseBody
     @GetMapping("/info/follow/{pofolIdx}")  // (get) https://eraofband.shop/pofols/info/follow/0
     @ApiOperation(value = " 팔로우 한 유저 포트폴리오 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
-    @ApiImplicitParam(name="pofolIdx", value="현재 조회중인 포폴 인덱스(기준으로 아래 20개 불러오기, 초기값 0)", required = true)
+    @ApiImplicitParam(name="pofolIdx", value="현재 조회중인 포폴 인덱스(기준으로 아래 10개 불러오기, 초기값 0)", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
             @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
