@@ -1,10 +1,7 @@
 package com.example.demo.src.board;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.board.model.GetBoardCommentRes;
-import com.example.demo.src.board.model.GetBoardImgsRes;
-import com.example.demo.src.board.model.GetBoardInfoRes;
-import com.example.demo.src.board.model.GetBoardRes;
+import com.example.demo.src.board.model.*;
 import com.example.demo.src.pofol.PofolDao;
 import com.example.demo.src.pofol.model.GetCommentRes;
 import com.example.demo.src.pofol.model.GetPofolRes;
@@ -151,6 +148,32 @@ public class BoardProvider {
         try{
             return boardDao.checkBoardLiked(userIdx, boardIdx);
         } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
+     * 작성 게시물 리스트 조회
+     */
+    public List<GetMyBoardRes> retrieveMyBoard(int userIdx) throws BaseException {
+        try{
+            List<GetMyBoardRes> getMyBoardList = boardDao.selectMyBoardList(userIdx);
+            return getMyBoardList;
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
+     * 댓글 단 게시물 리스트 조회
+     */
+    public List<GetMyBoardRes> retrieveMyCommentBoard(int userIdx) throws BaseException {
+        try{
+            List<GetMyBoardRes> getMyCommentBoardList = boardDao.selectMyCommentBoardList(userIdx);
+            return getMyCommentBoardList;
+        } catch(Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }

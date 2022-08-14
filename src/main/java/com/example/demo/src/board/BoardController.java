@@ -386,4 +386,52 @@ public class BoardController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 작성 게시물 리스트 조회 API
+     * [GET] /board/my
+     * @return BaseResponse<List<GetMyBoardRes>>
+     */
+    @ResponseBody
+    @GetMapping("/my")   // (get) https://eraofband.shop/board/my
+    @ApiOperation(value = "작성 게시물 리스트 조회")
+    @ApiResponses({
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<List<GetMyBoardRes>> getMyBoardList(){
+        try{
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            List<GetMyBoardRes> getMyBoardList = boardProvider.retrieveMyBoard(userIdxByJwt);
+            return new BaseResponse<>(getMyBoardList);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+    }
+
+    /**
+     * 댓글 단 게시물 리스트 조회 API
+     * [GET] /board/my-comment
+     * @return BaseResponse<List<GetBoardRes>>
+     */
+    @ResponseBody
+    @GetMapping("/my-comment")   // (get) https://eraofband.shop/board/my-comment
+    @ApiOperation(value = "댓글 단 게시물 리스트 조회")
+    @ApiResponses({
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<List<GetMyBoardRes>> getMyCommentList(){
+        try{
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            List<GetMyBoardRes> getMyCommentBoardList = boardProvider.retrieveMyCommentBoard(userIdxByJwt);
+            return new BaseResponse<>(getMyCommentBoardList);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+    }
 }
