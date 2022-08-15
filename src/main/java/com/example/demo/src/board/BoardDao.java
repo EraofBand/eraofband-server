@@ -2,13 +2,9 @@ package com.example.demo.src.board;
 
 import com.example.demo.src.GetUserTokenRes;
 import com.example.demo.src.board.model.*;
-import com.example.demo.src.lesson.model.GetMemberRes;
-import com.example.demo.src.pofol.model.*;
-import com.example.demo.src.session.model.GetSessionMemRes;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -101,12 +97,12 @@ public class BoardDao {
 
     /**
      * 대댓글 작성
-     */
-    public int insertReComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) {
+     * */
+    public int insertReComment(int boardIdx, int userIdx, PostBoardReCommentReq postBoardReCommentReq) {
 
         String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum, groupNum) VALUES (?, ?, ?, 1, ?)";
 
-        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent(), postBoardCommentReq.getGroupNum()};
+        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardReCommentReq.getContent(), postBoardReCommentReq.getGroupNum()};
 
         this.jdbcTemplate.update(insertCommentQuery, insertCommentParams);
 
@@ -199,6 +195,7 @@ public class BoardDao {
                     "                            u.nickName as nickName,\n" +
                     "                            bi.imgUrl as imgUrl,\n" +
                     "                            b.title as title,\n" +
+                    "                            b.content as content,\n" +
                     "                            b.views as views,\n" +
                     "                            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
                     "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
@@ -230,6 +227,7 @@ public class BoardDao {
                     "                            u.nickName as nickName,\n" +
                     "                            bi.imgUrl as imgUrl,\n" +
                     "                            b.title as title,\n" +
+                    "                            b.content as content,\n" +
                     "                            b.views as views,\n" +
                     "                            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
                     "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
@@ -260,6 +258,7 @@ public class BoardDao {
                             rs.getInt("userIdx"),
                             rs.getInt("category"),
                             rs.getString("title"),
+                            rs.getString("content"),
                             rs.getString("nickName"),
                             rs.getString("imgUrl"),
                             rs.getInt("views"),
