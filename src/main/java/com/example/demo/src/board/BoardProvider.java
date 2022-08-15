@@ -97,9 +97,9 @@ public class BoardProvider {
     /**
      * 게시물 리스트 조회
      */
-    public List<GetBoardRes> retrieveBoard(int category) throws BaseException {
+    public List<GetBoardRes> retrieveBoard(int category, int boardIdx) throws BaseException {
         try{
-            List<GetBoardRes> getBoardList = boardDao.selectBoardList(category);
+            List<GetBoardRes> getBoardList = boardDao.selectBoardList(category, boardIdx);
             return getBoardList;
         } catch(Exception exception){
             System.out.println(exception);
