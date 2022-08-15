@@ -137,7 +137,7 @@ public class ChatController {
 
             GetChatRoomExistRes getChatRoomExistRes = new GetChatRoomExistRes();
             if(first==0 && second==0){
-                getChatRoomExistRes.setChatRoomIdx(null);
+                getChatRoomExistRes.setChatRoomIdx("null");
                 getChatRoomExistRes.setStatus(0);
             }
             else {
