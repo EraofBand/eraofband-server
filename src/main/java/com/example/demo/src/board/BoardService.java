@@ -225,10 +225,10 @@ public class BoardService {
         //System.out.println(response.body().string());
     }
 
-    public void sendReMessageTo(String title, String body, PostBoardCommentReq postBoardCommentReq) throws IOException {
+    public void sendReMessageTo(String title, String body, PostBoardReCommentReq postBoardReCommentReq) throws IOException {
         String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
         //게시글 댓글의 정보 얻기
-        GetBoardComNotiInfoRes getBoardComNotiInfoRes =boardDao.NotiRe(boardCommentIdx, postBoardCommentReq.getGroupNum());
+        GetBoardComNotiInfoRes getBoardComNotiInfoRes =boardDao.NotiRe(boardCommentIdx, postBoardReCommentReq.getGroupNum());
 
         GetUserTokenRes getUserTokenRes= boardDao.getFCMToken(getBoardComNotiInfoRes.getReceiverIdx());
         SendPushMessage sendPushMessage=new SendPushMessage(objectMapper);
@@ -273,7 +273,7 @@ public class BoardService {
      * 대댓글 등록
      */
     private int boardReCommentIdx=0;
-    public int createReComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) throws BaseException {
+    public int createReComment(int boardIdx, int userIdx, PostBoardReCommentReq postBoardReCommentReq) throws BaseException {
 
         if(boardProvider.checkUserExist(userIdx) == 0){
             throw new BaseException(USERS_EMPTY_USER_ID);
@@ -282,14 +282,14 @@ public class BoardService {
             throw new BaseException(POSTS_EMPTY_BOARD_ID);
         }
 
-        if(boardProvider.checkCommentExist(postBoardCommentReq.getGroupNum()) == 0){
+        if(boardProvider.checkCommentExist(postBoardReCommentReq.getGroupNum()) == 0){
             throw new BaseException(POSTS_EMPTY_BOARD_COMMENT_ID);
         }
 
         try{
-            boardReCommentIdx = boardDao.insertReComment(boardIdx, userIdx, postBoardCommentReq);
+            boardReCommentIdx = boardDao.insertReComment(boardIdx, userIdx, postBoardReCommentReq);
             //게시글 댓글의 정보 얻기
-            GetBoardComNotiInfoRes getBoardComNotiInfoRes =boardDao.NotiRe(boardReCommentIdx, postBoardCommentReq.getGroupNum());
+            GetBoardComNotiInfoRes getBoardComNotiInfoRes =boardDao.NotiRe(boardReCommentIdx, postBoardReCommentReq.getGroupNum());
 
 
             //알림 테이블에 추가

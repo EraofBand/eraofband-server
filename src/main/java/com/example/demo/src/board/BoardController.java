@@ -10,11 +10,8 @@ import com.example.demo.src.board.model.PatchBoardReq;
 import com.example.demo.src.board.model.PostBoardReq;
 import com.example.demo.src.board.model.PostBoardRes;
 
-import com.example.demo.src.pofol.model.*;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
-import com.example.demo.src.pofol.PofolProvider;
-import com.example.demo.src.pofol.PofolService;
-import com.example.demo.utils.JwtService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -304,7 +298,7 @@ public class BoardController {
                 return new BaseResponse<>(INVALID_JWT);
             }
 
-            int boardCommentIdx = boardService.createComment(boardIdx, userIdxByJwt,postBoardCommentReq);
+            int boardCommentIdx = boardService.createComment(boardIdx, userIdxByJwt, postBoardCommentReq);
             //댓글 그룹 추가
             boardService.addGroupNum(boardCommentIdx);
             //생성한 댓글 조회
@@ -340,19 +334,19 @@ public class BoardController {
             @ApiResponse(code=2062, message="내용의 글자수를 확인해주세요."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<GetBoardCommentRes> createReComment(@PathVariable("boardIdx") int boardIdx, @RequestBody PostBoardCommentReq postBoardCommentReq) throws IOException {
+    public BaseResponse<GetBoardCommentRes> createReComment(@PathVariable("boardIdx") int boardIdx, @RequestBody PostBoardReCommentReq postBoardReCommentReq) throws IOException {
 
-        if(postBoardCommentReq.getContent().length()>100){
+        if(postBoardReCommentReq.getContent().length()>100){
             return new BaseResponse<>(POST_POSTS_INVALID_CONTENTS);
         }
 
         try{
             int userIdxByJwt = jwtService.getUserIdx();
-            if(postBoardCommentReq.getUserIdx()!= userIdxByJwt){
+            if(postBoardReCommentReq.getUserIdx()!= userIdxByJwt){
                 return new BaseResponse<>(INVALID_JWT);
             }
 
-            int boardCommentIdx = boardService.createReComment(boardIdx, userIdxByJwt,postBoardCommentReq);
+            int boardCommentIdx = boardService.createReComment(boardIdx, userIdxByJwt, postBoardReCommentReq);
 
             //생성한 댓글 조회
             GetBoardCommentRes getComment = boardProvider.certainComment(boardCommentIdx);
