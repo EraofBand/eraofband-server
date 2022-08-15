@@ -193,6 +193,7 @@ public class BoardDao {
                 "            u.nickName as nickName,\n" +
                 "            bi.imgUrl as imgUrl,\n" +
                 "            b.title as title,\n" +
+                "            b.content as content,\n" +
                 "            b.views as views,\n" +
                 "            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
                 "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
@@ -221,6 +222,7 @@ public class BoardDao {
                         rs.getInt("userIdx"),
                         rs.getInt("category"),
                         rs.getString("title"),
+                        rs.getString("content"),
                         rs.getString("nickName"),
                         rs.getString("imgUrl"),
                         rs.getInt("views"),
