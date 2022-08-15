@@ -54,19 +54,22 @@ public class BoardController {
      * @return BaseResponse<List<GetBoardRes>>
      */
     @ResponseBody
-    @GetMapping("/list/info/{category}")   // (get) https://eraofband.shop/board/list/info/1
+    @GetMapping("/list/info/{category}/{boardIdx}")   // (get) https://eraofband.shop/board/list/info/1
     @ApiOperation(value = "게시물 리스트 조회")
-    @ApiImplicitParam(name="category", value="게시 유형 인덱스", required = true)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="category", value="게시 유형 인덱스", required = true),
+            @ApiImplicitParam(name="boardIdx", value="현재 조회중인 게시글 인덱스(기준으로 아래 20개 불러오기, 초기값 0)", required = true)
+    })
     @ApiResponses({
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<List<GetBoardRes>> getBoardList(@PathVariable("category") int category){
+    public BaseResponse<List<GetBoardRes>> getBoardList(@PathVariable("category") int category, @PathVariable("boardIdx")int boardIdx) {
 
-        try{
+        try {
 
-            List<GetBoardRes> getBoardList=boardProvider.retrieveBoard(category);
+            List<GetBoardRes> getBoardList = boardProvider.retrieveBoard(category, boardIdx);
             return new BaseResponse<>(getBoardList);
-        } catch (BaseException exception){
+        } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
 
@@ -229,9 +232,10 @@ public class BoardController {
      */
     @ResponseBody
     @PostMapping("/board-img/{boardIdx}") // (post) https://eraofband.shop/board/board-img/2
-    @ApiOperation(value = "게시판 게시물 사진 수정", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "게시판 게시물 사진 수정")
     @ApiImplicitParam(name="boardIdx", value="사진 수정할 게시물 인덱스", required = true)
     @ApiResponses({
+
             @ApiResponse(code=2100, message="게시글 아이디 값을 확인해주세요."),
             @ApiResponse(code=2109, message="게시글 사진 수정에 실패했습니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
@@ -256,9 +260,10 @@ public class BoardController {
      */
     @ResponseBody
     @PatchMapping("/status-img/{boardImgIdx}") // (patch) https://eraofband.shop/board/status-img/2
-    @ApiOperation(value = "게시판 게시물 사진 삭제", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiOperation(value = "게시판 게시물 사진 삭제")
     @ApiImplicitParam(name="boardImgIdx", value="삭제할 사진 인덱스", required = true)
     @ApiResponses({
+
             @ApiResponse(code=2110, message="게시글 사진 삭제에 실패했습니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
@@ -444,7 +449,7 @@ public class BoardController {
      */
     @ResponseBody
     @GetMapping("/my")   // (get) https://eraofband.shop/board/my
-    @ApiOperation(value = "작성 게시물 리스트 조회")
+    @ApiOperation(value = "작성 게시물 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiResponses({
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
@@ -467,7 +472,7 @@ public class BoardController {
      */
     @ResponseBody
     @GetMapping("/my-comment")   // (get) https://eraofband.shop/board/my-comment
-    @ApiOperation(value = "댓글 단 게시물 리스트 조회")
+    @ApiOperation(value = "댓글 단 게시물 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiResponses({
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })

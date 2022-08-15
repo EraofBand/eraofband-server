@@ -26,7 +26,7 @@ public class BoardDao {
 
     /**
      * 유저 확인
-     * */
+     */
     public int checkUserExist(int userIdx) {
         String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ? and status = 'ACTIVE')";
         int checkUserExistParams = userIdx;
@@ -38,7 +38,7 @@ public class BoardDao {
 
     /**
      * 게시판 게시물 확인
-     * */
+     */
     public int checkBoardExist(int boardIdx) {
         String checkPostExistQuery = "select exists(select boardIdx from Board where boardIdx = ? and status = 'ACTIVE')";
         int checkPostExistParams = boardIdx;
@@ -50,7 +50,7 @@ public class BoardDao {
 
     /**
      * 게시글 댓글 확인
-     * */
+     */
     public int checkCommentExist(int boardCommentIdx) {
         String checkCommentExistQuery = "select exists(select boardCommentIdx from BoardComment where boardCommentIdx = ? and status = 'ACTIVE')";
         int checkCommentExistParams = boardCommentIdx;
@@ -62,36 +62,36 @@ public class BoardDao {
 
     /**
      * 게시글 대댓글 여부 확인
-     * */
+     */
     public int checkReplyExist(int boardCommentIdx) {
         String checkReplyExistQuery = "SELECT exists(SELECT boardCommentIdx FROM BoardComment WHERE groupNum=? and classNum=1 and status='ACTIVE')";
         int checkReplyExistParams = boardCommentIdx;
         return this.jdbcTemplate.queryForObject(checkReplyExistQuery,
-                                                int.class,
-                                                checkReplyExistParams);
+                int.class,
+                checkReplyExistParams);
 
     }
 
     /**
      * 게시글 좋아요 중복 확인
-     * */
+     */
     public int checkBoardLiked(int userIdx, int boardIdx) {
         String checkBoardLikedQuery = "SELECT exists(SELECT boardLikeIdx FROM BoardLike WHERE userIdx=? and boardIdx=?)";
         Object[] checkBoardLikedParams = new Object[]{userIdx, boardIdx};
         return this.jdbcTemplate.queryForObject(checkBoardLikedQuery,
-                                                int.class,
-                                                checkBoardLikedParams);
+                int.class,
+                checkBoardLikedParams);
 
     }
 
     /**
      * 댓글 작성
-     * */
+     */
     public int insertComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) {
 
         String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum) VALUES (?, ?, ?, 0)";
 
-        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent() };
+        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent()};
 
         this.jdbcTemplate.update(insertCommentQuery, insertCommentParams);
 
@@ -101,7 +101,7 @@ public class BoardDao {
 
     /**
      * 대댓글 작성
-     * */
+     */
     public int insertReComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) {
 
         String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum, groupNum) VALUES (?, ?, ?, 1, ?)";
@@ -117,7 +117,7 @@ public class BoardDao {
 
     /**
      * 댓글 그룹 추가
-     * */
+     */
     public int insertCommentGroup(int boardCommentIdx) {
         String insertCommentGroupQuery = "UPDATE BoardComment SET groupNum = ? WHERE boardCommentIdx = ? ";
         Object[] insertCommentGroupParams = new Object[]{boardCommentIdx, boardCommentIdx};
@@ -128,7 +128,7 @@ public class BoardDao {
 
     /**
      * 댓글 삭제
-     * */
+     */
     public int deleteComment(int boardCommentIdx) {
         String deleteCommentQuery = "UPDATE BoardComment SET status = 'INACTIVE' WHERE boardCommentIdx = ? ";
         Object[] deleteCommentParams = new Object[]{boardCommentIdx};
@@ -139,7 +139,7 @@ public class BoardDao {
 
     /**
      * 댓글 조회
-     * */
+     */
     public GetBoardCommentRes certainComment(int boardCommentIdx) {
 
         String selectCommentQuery = "SELECT b.boardCommentIdx as boardCommentIdx,\n" +
@@ -184,53 +184,93 @@ public class BoardDao {
 
     /**
      * 게시물 리스트 조회
-     * */
-    public List<GetBoardRes> selectBoardList(int category) {
-        String selectBoardListQuery = "\n" +
-                "        SELECT b.boardIdx as boardIdx,\n" +
-                "            u.userIdx as userIdx,\n" +
-                "            b.category as category,\n" +
-                "            u.nickName as nickName,\n" +
-                "            bi.imgUrl as imgUrl,\n" +
-                "            b.title as title,\n" +
-                "            b.content as content,\n" +
-                "            b.views as views,\n" +
-                "            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
-                "            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
-                "            case\n" +
-                "                when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
-                "                    then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
-                "                when timestampdiff(minute, b.createdAt, current_timestamp) < 60\n" +
-                "                    then concat(timestampdiff(minute, b.createdAt, current_timestamp), '분 전')\n" +
-                "                when timestampdiff(hour, b.createdAt, current_timestamp) < 24\n" +
-                "                    then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
-                "                when timestampdiff(day, b.createdAt, current_timestamp) < 7\n" +
-                "                    then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
-                "                else date_format(b.createdAt, '%Y.%m.%d.')\n" +
-                "            end as updatedAt\n" +
-                "        FROM Board as b\n" +
-                "            join User as u on u.userIdx = b.userIdx\n" +
-                "            left join (select boardIdx, userIdx, count(boardLikeIdx) as boardLikeCount from BoardLike WHERE status = 'ACTIVE' group by boardIdx) blc on blc.boardIdx = b.boardIdx\n" +
-                "            left join (select boardIdx, count(boardCommentIdx) as commentCount from BoardComment WHERE status = 'ACTIVE' group by boardIdx) c on c.boardIdx = b.boardIdx\n" +
-                "            left join BoardImage as bi on bi.boardIdx=b.boardIdx and bi.status='ACTIVE'\n"+
-                "        WHERE b.category = ? and b.status = 'ACTIVE'\n" +
-                "        group by b.boardIdx order by b.boardIdx DESC;\n";
-        int selectBoardListParam = category;
-        return this.jdbcTemplate.query(selectBoardListQuery,
-                (rs, rowNum) -> new GetBoardRes(
-                        rs.getInt("boardIdx"),
-                        rs.getInt("userIdx"),
-                        rs.getInt("category"),
-                        rs.getString("title"),
-                        rs.getString("content"),
-                        rs.getString("nickName"),
-                        rs.getString("imgUrl"),
-                        rs.getInt("views"),
-                        rs.getInt("boardLikeCount"),
-                        rs.getInt("commentCount"),
-                        rs.getString("updatedAt")
-                ), selectBoardListParam);
+     */
+    public List<GetBoardRes> selectBoardList(int category, int boardIdx) {
+
+        String selectBoardListQuery = "";
+        Object[] selectBoardListParam = new Object[]{};
+
+        if (boardIdx != 0) {
+
+            selectBoardListQuery = "\n" +
+                    "SELECT b.boardIdx as boardIdx,\n" +
+                    "                            u.userIdx as userIdx,\n" +
+                    "                            b.category as category,\n" +
+                    "                            u.nickName as nickName,\n" +
+                    "                            bi.imgUrl as imgUrl,\n" +
+                    "                            b.title as title,\n" +
+                    "                            b.views as views,\n" +
+                    "                            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
+                    "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
+                    "                            case\n" +
+                    "                                when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
+                    "                                    then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
+                    "                                when timestampdiff(minute, b.createdAt, current_timestamp) < 60\n" +
+                    "                                    then concat(timestampdiff(minute, b.createdAt, current_timestamp), '분 전')\n" +
+                    "                                when timestampdiff(hour, b.createdAt, current_timestamp) < 24\n" +
+                    "                                    then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
+                    "                                when timestampdiff(day, b.createdAt, current_timestamp) < 7\n" +
+                    "                                    then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
+                    "                                else date_format(b.createdAt, '%Y.%m.%d.')\n" +
+                    "                            end as updatedAt\n" +
+                    "                        FROM Board as b\n" +
+                    "                            join User as u on u.userIdx = b.userIdx\n" +
+                    "                            left join (select boardIdx, userIdx, count(boardLikeIdx) as boardLikeCount from BoardLike WHERE status = 'ACTIVE' group by boardIdx) blc on blc.boardIdx = b.boardIdx\n" +
+                    "                            left join (select boardIdx, count(boardCommentIdx) as commentCount from BoardComment WHERE status = 'ACTIVE' group by boardIdx) c on c.boardIdx = b.boardIdx\n" +
+                    "                            left join BoardImage as bi on bi.boardIdx=b.boardIdx and bi.status='ACTIVE'\n" +
+                    "                        WHERE b.category = ? and b.status = 'ACTIVE' and b.boardIdx<?\n" +
+                    "                        group by b.boardIdx order by b.boardIdx DESC LIMIT 20;";
+
+            selectBoardListParam = new Object[]{category, boardIdx};
+        } else {
+            selectBoardListQuery = "\n" +
+                    "SELECT b.boardIdx as boardIdx,\n" +
+                    "                            u.userIdx as userIdx,\n" +
+                    "                            b.category as category,\n" +
+                    "                            u.nickName as nickName,\n" +
+                    "                            bi.imgUrl as imgUrl,\n" +
+                    "                            b.title as title,\n" +
+                    "                            b.views as views,\n" +
+                    "                            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
+                    "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
+                    "                            case\n" +
+                    "                                when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
+                    "                                    then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
+                    "                                when timestampdiff(minute, b.createdAt, current_timestamp) < 60\n" +
+                    "                                    then concat(timestampdiff(minute, b.createdAt, current_timestamp), '분 전')\n" +
+                    "                                when timestampdiff(hour, b.createdAt, current_timestamp) < 24\n" +
+                    "                                    then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
+                    "                                when timestampdiff(day, b.createdAt, current_timestamp) < 7\n" +
+                    "                                    then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
+                    "                                else date_format(b.createdAt, '%Y.%m.%d.')\n" +
+                    "                            end as updatedAt\n" +
+                    "                        FROM Board as b\n" +
+                    "                            join User as u on u.userIdx = b.userIdx\n" +
+                    "                            left join (select boardIdx, userIdx, count(boardLikeIdx) as boardLikeCount from BoardLike WHERE status = 'ACTIVE' group by boardIdx) blc on blc.boardIdx = b.boardIdx\n" +
+                    "                            left join (select boardIdx, count(boardCommentIdx) as commentCount from BoardComment WHERE status = 'ACTIVE' group by boardIdx) c on c.boardIdx = b.boardIdx\n" +
+                    "                            left join BoardImage as bi on bi.boardIdx=b.boardIdx and bi.status='ACTIVE'\n" +
+                    "                        WHERE b.category = ? and b.status = 'ACTIVE'\n" +
+                    "                        group by b.boardIdx order by b.boardIdx DESC LIMIT 20;";
+
+            selectBoardListParam = new Object[]{category};
+        }
+            return this.jdbcTemplate.query(selectBoardListQuery,
+                    (rs, rowNum) -> new GetBoardRes(
+                            rs.getInt("boardIdx"),
+                            rs.getInt("userIdx"),
+                            rs.getInt("category"),
+                            rs.getString("title"),
+                            rs.getString("nickName"),
+                            rs.getString("imgUrl"),
+                            rs.getInt("views"),
+                            rs.getInt("boardLikeCount"),
+                            rs.getInt("commentCount"),
+                            rs.getString("updatedAt")
+                    ), selectBoardListParam);
+
     }
+
+
 
     /**
      * 게시물 조회
