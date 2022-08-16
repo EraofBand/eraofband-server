@@ -269,7 +269,7 @@ public class BoardDao {
                     "                            left join (select boardIdx, userIdx, count(boardLikeIdx) as boardLikeCount from BoardLike WHERE status = 'ACTIVE' group by boardIdx) blc on blc.boardIdx = b.boardIdx\n" +
                     "                            left join (select boardIdx, count(boardCommentIdx) as commentCount from BoardComment WHERE status = 'ACTIVE' group by boardIdx) c on c.boardIdx = b.boardIdx\n" +
                     "                            left join BoardImage as bi on bi.boardIdx=b.boardIdx and bi.status='ACTIVE'\n" +
-                    "                        WHERE b.category = ? and b.status = 'ACTIVE'\n" +
+                    "                        WHERE b.category = ? and b.status = 'ACTIVE' \n" +
                     "                        group by b.boardIdx order by b.boardIdx DESC LIMIT 20;";
 
             selectBoardListParam = new Object[]{category};
