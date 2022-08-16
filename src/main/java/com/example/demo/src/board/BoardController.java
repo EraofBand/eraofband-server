@@ -10,6 +10,7 @@ import com.example.demo.src.board.model.PatchBoardReq;
 import com.example.demo.src.board.model.PostBoardReq;
 import com.example.demo.src.board.model.PostBoardRes;
 
+import com.example.demo.src.chat.model.GetChatRoomExistRes;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +92,7 @@ public class BoardController {
         try{
             boardService.addViewCount(boardIdx);
             int userIdxByJwt = jwtService.getUserIdx();
+
             GetBoardInfoRes getBoardInfo=boardProvider.retrieveBoardInfo(userIdxByJwt, boardIdx);
             return new BaseResponse<>(getBoardInfo);
         } catch (BaseException exception){
@@ -128,11 +130,13 @@ public class BoardController {
         }
 
 
+
         try{
             int userIdxByJwt = jwtService.getUserIdx();
             if(postBoardReq.getUserIdx()!= userIdxByJwt){
                 return new BaseResponse<>(INVALID_JWT);
             }
+
 
             PostBoardRes postBoardRes = boardService.createBoard(userIdxByJwt,postBoardReq);
             return new BaseResponse<>(postBoardRes);
