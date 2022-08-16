@@ -121,6 +121,7 @@ public class UserService {
             if (userProvider.checkEmail(email) == 1) {
                 User user = userDao.getUserIdx(email);
                 int userIdx = user.getUserIdx();
+                userDao.loginUser(userIdx);
 
                 //새 jwt 발급
                 String jwt = jwtService.createJwt(userIdx);
@@ -164,6 +165,23 @@ public class UserService {
             throw new BaseException(MODIFY_FAIL_SESSION);
         }
     }
+
+
+    /**
+     * 회원 로그아웃
+     */
+    public void logoutUser ( int userIdx) throws BaseException {
+        try {
+            result = userDao.logoutUser(userIdx);
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(LOGOUT_FAIL_USER);
+        }
+    }
+
 
     /**
      * 회원 삭제

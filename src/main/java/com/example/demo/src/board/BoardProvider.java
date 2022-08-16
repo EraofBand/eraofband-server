@@ -124,6 +124,7 @@ public class BoardProvider {
      */
     public GetBoardInfoRes retrieveBoardInfo(int userIdx, int boardIdx) throws BaseException {
         getBoardImgsRes=retrieveBoardImgs(boardIdx);
+
         if(checkUserExist(userIdx) ==0){
             throw new BaseException(USERS_EMPTY_USER_ID);
         }
