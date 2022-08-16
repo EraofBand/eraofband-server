@@ -150,5 +150,15 @@ public class ChatDao {
         return this.jdbcTemplate.update(deleteChatRoomQuery,deleteChatRoomParams);
     }
 
+    /**
+     * 차단 당한 유저인지 확인
+     * */
+    public int checkBlockedUser(int firstIdx, int secondIdx){
+        String checkSecondExistQuery = "SELECT exists(SELECT blockIdx FROM Block WHERE blockedIdx = ? and blockerIdx= ?)";
+        Object[] checkSecondExistParams = new Object[]{ firstIdx, secondIdx };
+        return this.jdbcTemplate.queryForObject(checkSecondExistQuery,
+                                                int.class,
+                                                checkSecondExistParams);
+    }
 
 }

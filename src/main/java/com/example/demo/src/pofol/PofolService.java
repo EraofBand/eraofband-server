@@ -176,6 +176,9 @@ public class PofolService {
         if(pofolProvider.checkPofolExist(pofolIdx) == 0){
             throw new BaseException(POSTS_EMPTY_POFOL_ID);
         }
+        if(pofolProvider.checkBlockedUser(pofolIdx, userIdx) == 1){
+            throw new BaseException(POST_FAIL_BLOCKED);
+        }
 
         try{
             pofolCommentIdx = pofolDao.insertComment(pofolIdx, userIdx, postCommentReq);

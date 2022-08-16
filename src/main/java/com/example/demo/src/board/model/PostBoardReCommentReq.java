@@ -7,9 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostBoardCommentReq {
+public class PostBoardReCommentReq {
 
     private int userIdx;
     private String content;
+    private int groupNum;
 
 }

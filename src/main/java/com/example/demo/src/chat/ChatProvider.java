@@ -97,4 +97,15 @@ public class ChatProvider {
         }
     }
 
+    /**
+     *  차단 당한 유저인지 확인
+     * */
+    public int checkBlockedUser(int firstIdx, int secondIdx) throws BaseException {
+        try {
+            return chatDao.checkBlockedUser(firstIdx, secondIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }

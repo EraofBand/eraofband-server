@@ -2,13 +2,9 @@ package com.example.demo.src.board;
 
 import com.example.demo.src.GetUserTokenRes;
 import com.example.demo.src.board.model.*;
-import com.example.demo.src.lesson.model.GetMemberRes;
-import com.example.demo.src.pofol.model.*;
-import com.example.demo.src.session.model.GetSessionMemRes;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -46,6 +42,28 @@ public class BoardDao {
                 int.class,
                 checkPostExistParams);
 
+    }
+
+    /**
+     * 게시물 작성 유저 id 반환
+     * */
+    public int selectBoardUserIdx(int boardIdx){
+        String selectBoardUserQuery = "SELECT userIdx FROM Board WHERE boardIdx=?";
+        int selectBoardUserParams = boardIdx;
+        return this.jdbcTemplate.queryForObject(selectBoardUserQuery,
+                                                int.class,
+                                                selectBoardUserParams);
+    }
+
+    /**
+     * 차단 당한 유저인지 확인
+     * */
+    public int checkBlockedUser(int firstIdx, int secondIdx){
+        String checkSecondExistQuery = "SELECT exists(SELECT blockIdx FROM Block WHERE blockedIdx = ? and blockerIdx= ?)";
+        Object[] checkSecondExistParams = new Object[]{ firstIdx, secondIdx };
+        return this.jdbcTemplate.queryForObject(checkSecondExistQuery,
+                                                int.class,
+                                                checkSecondExistParams);
     }
 
     /**
@@ -101,12 +119,12 @@ public class BoardDao {
 
     /**
      * 대댓글 작성
-     */
-    public int insertReComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) {
+     * */
+    public int insertReComment(int boardIdx, int userIdx, PostBoardReCommentReq postBoardReCommentReq) {
 
         String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum, groupNum) VALUES (?, ?, ?, 1, ?)";
 
-        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent(), postBoardCommentReq.getGroupNum()};
+        Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardReCommentReq.getContent(), postBoardReCommentReq.getGroupNum()};
 
         this.jdbcTemplate.update(insertCommentQuery, insertCommentParams);
 
