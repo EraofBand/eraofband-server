@@ -199,6 +199,7 @@ public class BoardDao {
                     "                            u.nickName as nickName,\n" +
                     "                            bi.imgUrl as imgUrl,\n" +
                     "                            b.title as title,\n" +
+                    "                            b.content as content,\n" +
                     "                            b.views as views,\n" +
                     "                            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
                     "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
@@ -230,6 +231,7 @@ public class BoardDao {
                     "                            u.nickName as nickName,\n" +
                     "                            bi.imgUrl as imgUrl,\n" +
                     "                            b.title as title,\n" +
+                    "                            b.content as content,\n" +
                     "                            b.views as views,\n" +
                     "                            IF(boardLikeCount is null, 0, boardLikeCount) as boardLikeCount,\n" +
                     "                            IF(commentCount is null, 0, commentCount) as commentCount,\n" +
@@ -249,7 +251,7 @@ public class BoardDao {
                     "                            left join (select boardIdx, userIdx, count(boardLikeIdx) as boardLikeCount from BoardLike WHERE status = 'ACTIVE' group by boardIdx) blc on blc.boardIdx = b.boardIdx\n" +
                     "                            left join (select boardIdx, count(boardCommentIdx) as commentCount from BoardComment WHERE status = 'ACTIVE' group by boardIdx) c on c.boardIdx = b.boardIdx\n" +
                     "                            left join BoardImage as bi on bi.boardIdx=b.boardIdx and bi.status='ACTIVE'\n" +
-                    "                        WHERE b.category = ? and b.status = 'ACTIVE'\n" +
+                    "                        WHERE b.category = ? and b.status = 'ACTIVE' \n" +
                     "                        group by b.boardIdx order by b.boardIdx DESC LIMIT 20;";
 
             selectBoardListParam = new Object[]{category};
@@ -260,6 +262,7 @@ public class BoardDao {
                             rs.getInt("userIdx"),
                             rs.getInt("category"),
                             rs.getString("title"),
+                            rs.getString("content"),
                             rs.getString("nickName"),
                             rs.getString("imgUrl"),
                             rs.getInt("views"),

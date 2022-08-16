@@ -235,7 +235,6 @@ public class BoardController {
     @ApiOperation(value = "게시판 게시물 사진 수정")
     @ApiImplicitParam(name="boardIdx", value="사진 수정할 게시물 인덱스", required = true)
     @ApiResponses({
-
             @ApiResponse(code=2100, message="게시글 아이디 값을 확인해주세요."),
             @ApiResponse(code=2109, message="게시글 사진 수정에 실패했습니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
@@ -263,7 +262,6 @@ public class BoardController {
     @ApiOperation(value = "게시판 게시물 사진 삭제")
     @ApiImplicitParam(name="boardImgIdx", value="삭제할 사진 인덱스", required = true)
     @ApiResponses({
-
             @ApiResponse(code=2110, message="게시글 사진 삭제에 실패했습니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
@@ -451,6 +449,8 @@ public class BoardController {
     @GetMapping("/my")   // (get) https://eraofband.shop/board/my
     @ApiOperation(value = "작성 게시물 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
     public BaseResponse<List<GetMyBoardRes>> getMyBoardList(){
@@ -474,6 +474,8 @@ public class BoardController {
     @GetMapping("/my-comment")   // (get) https://eraofband.shop/board/my-comment
     @ApiOperation(value = "댓글 단 게시물 리스트 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
     public BaseResponse<List<GetMyBoardRes>> getMyCommentList() {
