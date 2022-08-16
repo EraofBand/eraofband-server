@@ -4,6 +4,7 @@ package com.example.demo.src.user;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.GetUserTokenRes;
 import com.example.demo.src.SendPushMessage;
+import com.example.demo.src.notice.model.PostReportReq;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -249,6 +250,17 @@ public class UserService {
             throw new BaseException(UNFOLLOW_FAIL_USER);
         }
 
+    }
+
+    /**
+     * 차단 하기
+     */
+    public void insertBlock(int blockerIdx, int blockedIdx) throws BaseException {
+        try{
+            userDao.insertBlock(blockerIdx, blockedIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
 

@@ -181,6 +181,9 @@ public class BoardService {
         if(boardProvider.checkBoardExist(boardIdx) == 0){
             throw new BaseException(POSTS_EMPTY_BOARD_ID);
         }
+        if(boardProvider.checkBlockedUser(boardIdx, userIdx) == 1){
+            throw new BaseException(POST_FAIL_BLOCKED);
+        }
 
         try{
             boardCommentIdx = boardDao.insertComment(boardIdx, userIdx, postBoardCommentReq);
@@ -280,6 +283,10 @@ public class BoardService {
         }
         if(boardProvider.checkBoardExist(boardIdx) == 0){
             throw new BaseException(POSTS_EMPTY_BOARD_ID);
+        }
+
+        if(boardProvider.checkBlockedUser(boardIdx, userIdx) == 1){
+            throw new BaseException(POST_FAIL_BLOCKED);
         }
 
         if(boardProvider.checkCommentExist(postBoardReCommentReq.getGroupNum()) == 0){

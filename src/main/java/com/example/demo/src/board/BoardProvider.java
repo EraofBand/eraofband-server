@@ -57,6 +57,18 @@ public class BoardProvider {
     }
 
     /**
+     *  차단 당한 유저인지 확인
+     * */
+    public int checkBlockedUser(int boardIdx, int firstIdx) throws BaseException {
+        try {
+            int secondIdx = boardDao.selectBoardUserIdx(boardIdx);
+            return boardDao.checkBlockedUser(firstIdx, secondIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /**
      * 게시글 댓글 확인
      */
     public int checkCommentExist(int boardCommentIdx) throws BaseException{

@@ -32,6 +32,10 @@ public class ChatService {
      * */
     public void createChatRoom(PostChatReq postChatReq) throws BaseException {
 
+        if(chatProvider.checkBlockedUser(postChatReq.getFirstUserIdx(), postChatReq.getSecondUserIdx()) == 1){
+            throw new BaseException(POST_FAIL_BLOCKED);
+        }
+
         try{
             result = chatDao.createChatRoom(postChatReq);
 
@@ -48,10 +52,14 @@ public class ChatService {
     /**
      *  채팅방 활성화
      * */
-    public void activeChatroom(int userIdx, String chatRoomIdx) throws BaseException {
+    public void activeChatroom(int firstIdx, int secondIdx, String chatRoomIdx) throws BaseException {
+
+        if(chatProvider.checkBlockedUser(firstIdx, secondIdx) == 1){
+            throw new BaseException(POST_FAIL_BLOCKED);
+        }
 
         try {
-            result = chatDao.activeChatroom(userIdx, chatRoomIdx);
+            result = chatDao.activeChatroom(secondIdx, chatRoomIdx);
 
         } catch (Exception exception) {
             System.out.println(exception);
@@ -65,9 +73,9 @@ public class ChatService {
 
 
 
-        /**
-         *  채팅방 나가기
-         * */
+    /**
+     *  채팅방 나가기
+     * */
     public void deleteChatRoom(int userIdx, String chatRoomIdx) throws BaseException {
 
         if(chatProvider.checkChatRoomExist(userIdx, chatRoomIdx) ==0){

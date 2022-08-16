@@ -45,6 +45,28 @@ public class PofolDao {
     }
 
     /**
+     * 포트폴리오 작성 유저 id 반환
+     * */
+    public int selectPofolUserIdx(int pofolIdx){
+        String selectPofolUserQuery = "SELECT userIdx FROM Pofol WHERE pofolIdx=?";
+        int selectPofolUserParams = pofolIdx;
+        return this.jdbcTemplate.queryForObject(selectPofolUserQuery,
+                                                int.class,
+                                                selectPofolUserParams);
+    }
+
+    /**
+     * 차단 당한 유저인지 확인
+     * */
+    public int checkBlockedUser(int firstIdx, int secondIdx){
+        String checkSecondExistQuery = "SELECT exists(SELECT blockIdx FROM Block WHERE blockedIdx = ? and blockerIdx= ?)";
+        Object[] checkSecondExistParams = new Object[]{ firstIdx, secondIdx };
+        return this.jdbcTemplate.queryForObject(checkSecondExistQuery,
+                                                int.class,
+                                                checkSecondExistParams);
+    }
+
+    /**
      * 포트폴리오 댓글 확인
      * */
     public int checkCommentExist(int pofolCommentIdx) {

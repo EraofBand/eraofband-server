@@ -1,6 +1,7 @@
 package com.example.demo.src.user;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.notice.model.PostReportReq;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.*;
@@ -332,6 +333,33 @@ public class UserController {
             GetFollowRes getFollowRes = userProvider.getFollow(userIdxByJwt, userIdx);
             return new BaseResponse<>(getFollowRes);
         } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 차단 API
+     * [POST] /user/block/{userIdx}
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PostMapping("/block/{userIdx}") // (post) https://eraofband.shop//user/block/2
+    @ApiOperation(value = "차단 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="userIdx", value="차단할 유저 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> insertBlock(@PathVariable("userIdx") int userIdx) {
+        try {
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+            userService.insertBlock(userIdxByJwt, userIdx);
+
+            String result = "차단을 완료했습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
