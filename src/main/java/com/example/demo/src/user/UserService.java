@@ -164,6 +164,23 @@ public class UserService {
         }
     }
 
+
+    /**
+     * 회원 로그아웃
+     */
+    public void logoutUser ( int userIdx) throws BaseException {
+        try {
+            result = userDao.logoutUser(userIdx);
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(LOGOUT_FAIL_USER);
+        }
+    }
+
+
     /**
      * 회원 삭제
      */

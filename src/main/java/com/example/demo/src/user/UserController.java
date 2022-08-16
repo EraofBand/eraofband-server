@@ -216,6 +216,39 @@ public class UserController {
         }
     }
 
+
+    /**
+     * 회원 로그아웃 API
+     * [PATCH] /users/logout/{userIdx}
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/logout/{userIdx}") // (PATCH) eraofband.shop/users/logout/2
+    @ApiOperation(value = "회원 로그아웃 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="userIdx", value="로그아웃할 유저 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다."),
+            @ApiResponse(code=4017, message="회원 로그아웃에 실패하였습니다.")
+    })
+    public BaseResponse<String> logoutUser(@PathVariable("userIdx") int userIdx){
+        try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx!= userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            userService.logoutUser(userIdx);
+
+            String result = "회원 로그아웃을 완료했습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
     /**
      * 회원 삭제 API
      * [PATCH] /users/status/{userIdx}
@@ -269,11 +302,16 @@ public class UserController {
             int userIdxByJwt = jwtService.getUserIdx();
 
             PostFollowRes postFollowRes = userService.followUser(userIdxByJwt,userIdx);
-            //userService.sendMessageTo(
-            //        userIdxByJwt,
-            //        userIdx,
-            //        "팔로우",
-            //        "님이 회원님을 팔로우 했습니다.");
+
+            //상대가 로그아웃 상태인지 확인
+            int log=userProvider.checkLogin(userIdx);
+            if(log==1) {
+                //userService.sendMessageTo(
+                //        userIdxByJwt,
+                //        userIdx,
+                //        "팔로우",
+                //        "님이 회원님을 팔로우 했습니다.");
+            }
 
             return new BaseResponse<>(postFollowRes);
         } catch (BaseException exception) {

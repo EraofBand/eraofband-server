@@ -33,6 +33,17 @@ public class UserDao {
     }
 
     /**
+     * 유저 로그인 상태 확인
+     */
+    public int checkLogin(int userIdx) {
+        String checkLoginQuery = "SELECT exists(SELECT userIdx FROM User WHERE userIdx = ? and status='ACTIVE')";
+        int checkLoginParams = userIdx;
+        return this.jdbcTemplate.queryForObject(checkLoginQuery,
+                int.class,
+                checkLoginParams);
+    }
+
+    /**
      * 다른 유저 페이지 조회
      */
     public GetUserInfoRes getUserByIdx(int myId, int userIdx) {
@@ -217,6 +228,17 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyUserSessionQuery, modifyUserSessionParams);
     }
 
+
+    /**
+     * 회원 로그아웃
+     */
+    public int logoutUser(int userIdx) {
+        String logoutUserQuery = "update User u set u.status='INACTIVE' where u.userIdx = ?";
+        Object[] logoutUserParams = new Object[]{userIdx};
+        return this.jdbcTemplate.update(logoutUserQuery, logoutUserParams);
+    }
+
+
     /**
      * 회원 삭제
      */
@@ -232,7 +254,7 @@ public class UserDao {
                 "    left join Pofol as p on (p.userIdx=u.userIdx)\n" +
                 "    left join PofolComment as pc on (pc.userIdx=u.userIdx)\n" +
                 "    left join PofolLike as pl on (pl.userIdx=u.userIdx)\n" +
-                "        set u.status='INACTIVE',\n" +
+                "        set u.status='DELETE',\n" +
                 "            b.status='INACTIVE',\n" +
                 "            bl.status='INACTIVE',\n" +
                 "            bu.status='INACTIVE',\n" +
