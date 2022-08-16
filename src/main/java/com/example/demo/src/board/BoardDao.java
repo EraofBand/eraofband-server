@@ -215,7 +215,7 @@ public class BoardDao {
                     "                            u.userIdx as userIdx,\n" +
                     "                            b.category as category,\n" +
                     "                            u.nickName as nickName,\n" +
-                    "                            bi.imgUrl as imgUrl,\n" +
+                    "                            IF(bi.imgUrl is null, 'null', imgUrl)as imgUrl,\n" +
                     "                            b.title as title,\n" +
                     "                            b.content as content,\n" +
                     "                            b.views as views,\n" +
