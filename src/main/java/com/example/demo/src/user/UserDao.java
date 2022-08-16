@@ -2,6 +2,7 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.src.GetUserTokenRes;
+import com.example.demo.src.notice.model.PostReportReq;
 import com.example.demo.src.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -375,4 +376,16 @@ public class UserDao {
                                                         rs.getString("token")),
                                                 getFCMParams);
     }
+
+    /**
+     * 차단 테이블에 추가
+     */
+    public int insertBlock(int blockerIdx, int blockedIdx) {
+        String insertBlockQuery = "INSERT INTO Block(blockerIdx, blockedIdx) VALUES (?,?)";
+        Object[] insertBlockParams = new Object[]{ blockerIdx, blockedIdx };
+
+        return this.jdbcTemplate.update(insertBlockQuery, insertBlockParams);
+    }
+
+
 }

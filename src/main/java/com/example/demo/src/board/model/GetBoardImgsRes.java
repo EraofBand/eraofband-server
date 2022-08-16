@@ -11,4 +11,5 @@ public class GetBoardImgsRes {
 
     private int boardImgIdx;
     private String imgUrl;
+
 }

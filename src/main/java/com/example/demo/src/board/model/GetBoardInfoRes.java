@@ -26,4 +26,5 @@ public class GetBoardInfoRes {
     private String updatedAt;
     private String likeOrNot;
     private List<GetBoardCommentRes> getBoardComments;
+
 }

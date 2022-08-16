@@ -24,7 +24,7 @@ public class BoardDao {
      * 유저 확인
      */
     public int checkUserExist(int userIdx) {
-        String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ? and status = 'ACTIVE')";
+        String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ? and (status='ACTIVE' or status='INACTIVE'))";
         int checkUserExistParams = userIdx;
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
                 int.class,
@@ -42,6 +42,28 @@ public class BoardDao {
                 int.class,
                 checkPostExistParams);
 
+    }
+
+    /**
+     * 게시물 작성 유저 id 반환
+     * */
+    public int selectBoardUserIdx(int boardIdx){
+        String selectBoardUserQuery = "SELECT userIdx FROM Board WHERE boardIdx=?";
+        int selectBoardUserParams = boardIdx;
+        return this.jdbcTemplate.queryForObject(selectBoardUserQuery,
+                                                int.class,
+                                                selectBoardUserParams);
+    }
+
+    /**
+     * 차단 당한 유저인지 확인
+     * */
+    public int checkBlockedUser(int firstIdx, int secondIdx){
+        String checkSecondExistQuery = "SELECT exists(SELECT blockIdx FROM Block WHERE blockedIdx = ? and blockerIdx= ?)";
+        Object[] checkSecondExistParams = new Object[]{ firstIdx, secondIdx };
+        return this.jdbcTemplate.queryForObject(checkSecondExistQuery,
+                                                int.class,
+                                                checkSecondExistParams);
     }
 
     /**
@@ -247,7 +269,7 @@ public class BoardDao {
                     "                            left join (select boardIdx, userIdx, count(boardLikeIdx) as boardLikeCount from BoardLike WHERE status = 'ACTIVE' group by boardIdx) blc on blc.boardIdx = b.boardIdx\n" +
                     "                            left join (select boardIdx, count(boardCommentIdx) as commentCount from BoardComment WHERE status = 'ACTIVE' group by boardIdx) c on c.boardIdx = b.boardIdx\n" +
                     "                            left join BoardImage as bi on bi.boardIdx=b.boardIdx and bi.status='ACTIVE'\n" +
-                    "                        WHERE b.category = ? and b.status = 'ACTIVE'\n" +
+                    "                        WHERE b.category = ? and b.status = 'ACTIVE' \n" +
                     "                        group by b.boardIdx order by b.boardIdx DESC LIMIT 20;";
 
             selectBoardListParam = new Object[]{category};

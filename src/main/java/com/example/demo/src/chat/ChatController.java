@@ -201,7 +201,7 @@ public class ChatController {
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
 
-            chatService.activeChatroom(postChatReq.getSecondUserIdx(), postChatReq.getChatRoomIdx());
+            chatService.activeChatroom(userIdxByJwt, postChatReq.getSecondUserIdx(), postChatReq.getChatRoomIdx());
 
             String result = "상대방이 채팅이 활성화 되었습니다.";
             return new BaseResponse<>(result);
