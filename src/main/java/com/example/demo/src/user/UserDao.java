@@ -239,6 +239,15 @@ public class UserDao {
         return this.jdbcTemplate.update(logoutUserQuery, logoutUserParams);
     }
 
+    /**
+     * 회원 로그인
+     */
+    public int loginUser(int userIdx) {
+        String loginUserQuery = "update User u set u.status='ACTIVE' where u.userIdx = ?";
+        Object[] loginUserParams = new Object[]{userIdx};
+        return this.jdbcTemplate.update(loginUserQuery, loginUserParams);
+    }
+
 
     /**
      * 회원 삭제

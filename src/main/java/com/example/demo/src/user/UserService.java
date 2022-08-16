@@ -121,6 +121,7 @@ public class UserService {
             if (userProvider.checkEmail(email) == 1) {
                 User user = userDao.getUserIdx(email);
                 int userIdx = user.getUserIdx();
+                userDao.loginUser(userIdx);
 
                 //새 jwt 발급
                 String jwt = jwtService.createJwt(userIdx);
