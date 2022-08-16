@@ -62,7 +62,7 @@ public class ChatDao {
         String getChatRoomQuery = "SELECT c.chatRoomIdx as chatRoomIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl,\n" +
                 "              (IF(exists(select chatIdx from ChatContent where secondUserIdx = ? and chatRoomIdx = c.chatRoomIdx and status='ACTIVE'), 1, 0)) as status\n" +
                 "FROM ChatContent as c\n" +
-                "JOIN User u on c.secondUserIdx=u.userIdx and u.status='ACTIVE'\n" +
+                "JOIN User u on c.secondUserIdx=u.userIdx and (u.status='ACTIVE' or u.status='INACTIVE')\n" +
                 "WHERE c.firstUserIdx=? and c.status='ACTIVE'\n" +
                 "group by c.chatIdx";
         Object[] getChatRoomParams = new Object[]{ userIdx, userIdx };

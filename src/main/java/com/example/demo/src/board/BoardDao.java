@@ -24,7 +24,7 @@ public class BoardDao {
      * 유저 확인
      */
     public int checkUserExist(int userIdx) {
-        String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ? and status = 'ACTIVE')";
+        String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ? and (status='ACTIVE' or status='INACTIVE'))";
         int checkUserExistParams = userIdx;
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
                 int.class,
