@@ -24,7 +24,7 @@ public class PofolDao {
      * 유저 확인
      * */
     public int checkUserExist(int userIdx) {
-        String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ? and status = 'ACTIVE')";
+        String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ? and (status = 'ACTIVE' or status = 'INACTIVE'))";
         int checkUserExistParams = userIdx;
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
                 int.class,
@@ -82,7 +82,7 @@ public class PofolDao {
      * 이메일 확인
      * */
     public int checkEmailExist(String email) {
-        String checkEmailQuery = "select exists(select email from User where email = ? and status='ACTIVE')";
+        String checkEmailQuery = "select exists(select email from User where email = ? and (status = 'ACTIVE' or status = 'INACTIVE'))";
         String checkEmailParams = email;
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,
