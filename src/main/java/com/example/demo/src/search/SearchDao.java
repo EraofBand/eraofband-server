@@ -32,7 +32,7 @@ public class SearchDao {
         String getSearchUserQuery = "\n"+
                 "select u.userIdx as userIdx, u.nickName as nickName,u.profileImgUrl as profileImgUrl,u.userSession as userSession" +
                 "        from User as u\n" +
-                "        where u.status='ACTIVE' and u.nickName LIKE CONCAT('%', ?, '%')\n" +
+                "        where (u.status='ACTIVE' or u.status='INACTIVE') and u.nickName LIKE CONCAT('%', ?, '%')\n" +
                 "        group by u.userIdx\n" +
                 "        order by u.userIdx";
 

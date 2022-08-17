@@ -193,7 +193,7 @@ public class SessionDao {
         String getSessionMemberQuery = "SELECT BU.buSession as buSession, BU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.introduction as introduction\n" +
                 "FROM BandUser as BU\n" +
                 "JOIN (SELECT userIdx, nickName, profileImgUrl, introduction FROM User) u on u.userIdx = BU.userIdx\n" +
-                "WHERE bandIdx = ? and status = 'ACTIVE'";
+                "WHERE BU.bandIdx = ? and BU.status = 'ACTIVE'";
         int getSessionMemberParams = bandIdx;
         return this.jdbcTemplate.query(getSessionMemberQuery,
                 (rs, rowNum) -> new GetSessionMemRes(
@@ -223,7 +223,7 @@ public class SessionDao {
                 "end as updatedAt\n" +
                 "FROM BandUser as BU\n" +
                 "JOIN(SELECT userIdx, nickName, profileImgUrl, introduction, token FROM User) u on u.userIdx = BU.userIdx\n" +
-                "WHERE bandIdx = ? and status = 'WAIT'";
+                "WHERE BU.bandIdx = ? and BU.status = 'WAIT'";
         int getBandByIdxParams = bandIdx;
         return this.jdbcTemplate.query(getApplicantsQuery,
                 (rs, rowNum) -> new GetSessionAppRes(

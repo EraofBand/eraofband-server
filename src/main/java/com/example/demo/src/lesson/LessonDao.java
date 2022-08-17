@@ -155,7 +155,7 @@ public class LessonDao {
         String getLessonMemberQuery = "SELECT u.userSession as mySession, LU.userIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, u.introduction as introduction\n" +
                 "                FROM LessonUser as LU JOIN User as u on u.userIdx = LU.userIdx\n" +
                 "                LEFT join Lesson as l on l.lessonIdx = LU.lessonIdx\n" +
-                "                WHERE LU.lessonIdx = ? and u.status = 'ACTIVE'";
+                "                WHERE LU.lessonIdx = ? and (u.status='ACTIVE' or u.status='INACTIVE')";
         int getLessonMemberParams = lessonIdx;
         return this.jdbcTemplate.query(getLessonMemberQuery,
                 (rs, rowNum) -> new GetMemberRes(
