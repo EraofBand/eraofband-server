@@ -111,7 +111,6 @@ public enum BaseResponseStatus {
     ADD_FAIL_BOARD(false,2104,"게시글 조회 수 증가에 실패했습니다."),
     POSTS_EMPTY_BOARD_COMMENT_ID(false,2105,"게시글 댓글 아이디 값을 확인해주세요."),
     DELETE_FAIL_BOARD_COMMENT(false,2106,"게시글 댓글 삭제에 실패했습니다."),
-    DELETE_FAIL_BOARD_COMMENT_REPLY(false,2107,"답글이 있는 댓글은 삭제할 수 없습니다."),
     DUPLICATED_BOARD_LIKE(false,2108,"이미 추천한 게시글입니다."),
     MODIFY_FAIL_BOARD_IMG(false,2109,"게시글 사진 수정에 실패했습니다."),
     DELETE_FAIL_BOARD_IMG(false,2110,"게시글 사진 삭제에 실패했습니다."),

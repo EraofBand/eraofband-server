@@ -161,28 +161,30 @@ public class BoardDao {
     public GetBoardCommentRes certainComment(int boardCommentIdx) {
 
         String selectCommentQuery = "SELECT b.boardCommentIdx as boardCommentIdx,\n" +
-                "b.boardIdx as boardIdx, \n" +
-                "b.userIdx as userIdx,\n" +
-                "u.nickName as nickName,\n" +
-                "u.profileImgUrl as profileImgUrl,\n" +
-                "b.content as content,\n" +
-                "b.classNum as classNum,\n" +
-                "b.groupNum as groupNum,\n" +
-                "case\n" +
-                "when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
-                "then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
-                "when timestampdiff(minute , b.createdAt, current_timestamp) < 60\n" +
-                "then concat(timestampdiff(minute, b.createdAt, current_timestamp), '분 전')\n" +
-                "when timestampdiff(hour , b.createdAt, current_timestamp) < 24\n" +
-                "then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
-                "when timestampdiff(day , b.createdAt, current_timestamp) < 7\n" +
-                "then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
-                "else date_format(b.createdAt, '%Y.%m.%d.')\n" +
-                "end as updatedAt\n" +
-                "FROM BoardComment as b\n" +
-                "join User as u on u.userIdx = b.userIdx\n" +
-                "WHERE b.boardCommentIdx = ? and b.status = 'ACTIVE'\n " +
-                "group by b.boardCommentIdx order by b.boardCommentIdx; \n";
+                "                b.boardIdx as boardIdx,\n" +
+                "                b.userIdx as userIdx,\n" +
+                "                u.nickName as nickName,\n" +
+                "                u.profileImgUrl as profileImgUrl,\n" +
+                "                b.content as content,\n" +
+                "                b.classNum as classNum,\n" +
+                "                b.groupNum as groupNum,\n" +
+                "                b.status as commentStatus,\n" +
+                "                u.status as userStatus,\n" +
+                "                case\n" +
+                "                when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
+                "                then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
+                "                when timestampdiff(minute , b.createdAt, current_timestamp) < 60\n" +
+                "                then concat(timestampdiff(minute, b.createdAt, current_timestamp), '분 전')\n" +
+                "                when timestampdiff(hour , b.createdAt, current_timestamp) < 24\n" +
+                "                then concat(timestampdiff(hour, b.createdAt, current_timestamp), '시간 전')\n" +
+                "                when timestampdiff(day , b.createdAt, current_timestamp) < 7\n" +
+                "                then concat(timestampdiff(day, b.createdAt, current_timestamp), '일 전')\n" +
+                "                else date_format(b.createdAt, '%Y.%m.%d.')\n" +
+                "                end as updatedAt\n" +
+                "                FROM BoardComment as b\n" +
+                "                join User as u on u.userIdx = b.userIdx\n" +
+                "                WHERE b.boardIdx = ? and not((b.status='INACTIVE' and b.classNum=1) or ((select(count(b.groupnum))=1) and b.classNum = 0 and b.status='INACTIVE'))\n" +
+                "                group by b.boardCommentIdx order by b.boardCommentIdx DESC;";
 
         int selectCommentParam = boardCommentIdx;
         return this.jdbcTemplate.queryForObject(selectCommentQuery,
