@@ -17,4 +17,7 @@ public class GetBoardCommentRes {
     private int classNum;
     private int groupNum;
     private String updatedAt;
+    private String commentStatus;
+    private String userStatus;
+
 }
