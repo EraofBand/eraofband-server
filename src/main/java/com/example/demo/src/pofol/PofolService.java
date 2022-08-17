@@ -177,7 +177,7 @@ public class PofolService {
             throw new BaseException(POSTS_EMPTY_POFOL_ID);
         }
         if(pofolProvider.checkBlockedUser(pofolIdx, userIdx) == 1){
-            throw new BaseException(POST_FAIL_BLOCKED);
+            throw new BaseException(COMMENT_FAIL_BLOCKED);
         }
 
         try{
