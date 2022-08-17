@@ -26,7 +26,7 @@ public class UserDao {
      * 유저 존재 유무 확인
      */
     public int checkUserExist(int userIdx) {
-        String checkUserExistQuery = "SELECT exists(SELECT userIdx FROM User WHERE userIdx = ? and status='ACTIVE')";
+        String checkUserExistQuery = "SELECT exists(SELECT userIdx FROM User WHERE userIdx = ? and (status='ACTIVE' or status='INACTIVE'))";
         int checkUserExistParams = userIdx;
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
                                                 int.class,
@@ -55,7 +55,7 @@ public class UserDao {
                 "left join (select followerIdx, count(followIdx) as followerCount from Follow where status='ACTIVE' group by followerIdx) fr on fr.followerIdx=u.userIdx\n" +
                 "left join (select followeeIdx, count(followIdx) as followeeCount from Follow where status='ACTIVE' group by followeeIdx) fe on fe.followeeIdx=u.userIdx\n" +
                 "left join (select exists(select followIdx from Follow where followerIdx=? and followeeIdx=?)as follow) fw on fw.follow\n" +
-                "where u.userIdx=? and u.status='ACTIVE'";
+                "where u.userIdx=? and (u.status='ACTIVE' or u.status='INACTIVE')";
         Object[] getUsersByIdxParams = new Object[]{myId, userIdx, userIdx};
         return this.jdbcTemplate.queryForObject(getUsersByIdxQuery,
                                                 (rs, rowNum) -> new GetUserInfoRes(
@@ -84,7 +84,7 @@ public class UserDao {
                 "left join (select userIdx, count(pofolIdx) as pofolCount from Pofol where status='ACTIVE' group by userIdx) p on p.userIdx=u.userIdx\n" +
                 "left join (select followerIdx, count(followIdx) as followerCount from Follow where status='ACTIVE' group by followerIdx) fr on fr.followerIdx=u.userIdx\n" +
                 "left join (select followeeIdx, count(followIdx) as followeeCount from Follow where status='ACTIVE' group by followeeIdx) fe on fe.followeeIdx=u.userIdx\n" +
-                "where u.userIdx=? and u.status='ACTIVE'";
+                "where u.userIdx=? and (u.status='ACTIVE' or u.status='INACTIVE')";
         int getUsersByIdxParams = userIdx;
         return this.jdbcTemplate.queryForObject(getUsersByIdxQuery,
                                                 (rs, rowNum) -> new GetMyInfoRes(
@@ -187,7 +187,7 @@ public class UserDao {
      * 기존 유저 정보 반환
      */
     public User getUserIdx(String email) {
-        String getIdQuery = "select userIdx, email from User where email=? and status='ACTIVE'";
+        String getIdQuery = "select userIdx, email from User where email=? and (status='ACTIVE' or status='INACTIVE')";
         String getIdParams = email;
         return this.jdbcTemplate.queryForObject(getIdQuery,
                                                 (rs, rowNum) -> new User(
@@ -200,7 +200,7 @@ public class UserDao {
      * 이메일 존재 유무 확인
      */
     public int checkEmail(String email) {
-        String checkEmailQuery = "select exists(select email from User where email = ? and status='ACTIVE')";
+        String checkEmailQuery = "select exists(select email from User where email = ? and (status='ACTIVE' or status='INACTIVE'))";
         String checkEmailParams = email;
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                                                 int.class,
@@ -298,7 +298,7 @@ public class UserDao {
      * 팔로우 요청자의 정보 얻기
      */
     public GetUserNotiInfoRes Noti(int myIdx) {
-        String getInfoQuery = "select userIdx, nickName, profileImgUrl from User where userIdx=? and status='ACTIVE'";
+        String getInfoQuery = "select userIdx, nickName, profileImgUrl from User where userIdx=? and (status='ACTIVE' or status='INACTIVE')";
         int getInfoParams = myIdx;
         return this.jdbcTemplate.queryForObject(getInfoQuery,
                                                 (rs, rowNum) -> new GetUserNotiInfoRes(
@@ -337,7 +337,7 @@ public class UserDao {
                 "       (IF(exists(select followIdx from Follow where followerIdx = ? and followeeIdx = u.userIdx), 1, 0)) as follow\n" +
                 "                from Follow as f\n" +
                 "                    left join User as u on u.userIdx=f.followeeIdx\n" +
-                "                where u.status='ACTIVE' and f.status='ACTIVE' and f.followerIdx=?\n" +
+                "                where (u.status='ACTIVE' or u.status='INACTIVE') and f.status='ACTIVE' and f.followerIdx=?\n" +
                 "                group by u.userIdx\n" +
                 "                order by u.userIdx";
         Object[] getFollowParams = new Object[]{userIdxByJwt, userIdx};
@@ -359,7 +359,7 @@ public class UserDao {
                 "       (IF(exists(select followIdx from Follow where followerIdx = ? and followeeIdx = u.userIdx), 1, 0)) as follow\n" +
                 "                from Follow as f\n" +
                 "                    left join User as u on u.userIdx=f.followerIdx\n" +
-                "                where u.status='ACTIVE' and f.status='ACTIVE' and f.followeeIdx=?\n" +
+                "                where (u.status='ACTIVE' or u.status='INACTIVE') and f.status='ACTIVE' and f.followeeIdx=?\n" +
                 "                group by u.userIdx\n" +
                 "                order by u.userIdx";
         Object[] getFollowParams = new Object[]{userIdxByJwt, userIdx};
