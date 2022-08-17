@@ -59,7 +59,7 @@ public class ChatDao {
      * 채팅방 리스트 조회
      */
     public List<GetChatRoomRes> getChatRoom(int userIdx) {
-        String getChatRoomQuery = "SELECT c.chatRoomIdx as chatRoomIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl,\n" +
+        String getChatRoomQuery = "SELECT c.chatRoomIdx as chatRoomIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl, c.secondUserIdx as otherUserIdx,\n" +
                 "              (IF(exists(select chatIdx from ChatContent where secondUserIdx = ? and chatRoomIdx = c.chatRoomIdx and status='ACTIVE'), 1, 0)) as status\n" +
                 "FROM ChatContent as c\n" +
                 "JOIN User u on c.secondUserIdx=u.userIdx and (u.status='ACTIVE' or u.status='INACTIVE')\n" +
@@ -71,7 +71,8 @@ public class ChatDao {
                                                rs.getString("chatRoomIdx"),
                                                rs.getString("nickName"),
                                                rs.getString("profileImgUrl"),
-                                               rs.getInt("status")
+                                               rs.getInt("status"),
+                                               rs.getInt("otherUserIdx")
                                        ),
                                        getChatRoomParams);
     }
