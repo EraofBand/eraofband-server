@@ -276,10 +276,27 @@ public class UserService {
     public void insertBlock(int blockerIdx, int blockedIdx) throws BaseException {
         try{
             userDao.insertBlock(blockerIdx, blockedIdx);
+            int check= userProvider.checkChatRoom(blockerIdx, blockedIdx);
+            if(check==1){userDao.outChat(blockerIdx, blockedIdx);}
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
 
+    /**
+     * 차단 해제 하기
+     */
+    public void unBlock(int myIdx, int userIdx) throws BaseException {
+        try{
+            result = userDao.unBlock(myIdx, userIdx);
+
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(UNBLOCK_FAIL_USER);
+        }
+
+    }
 }

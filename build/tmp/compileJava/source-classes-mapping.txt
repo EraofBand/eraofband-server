@@ -98,6 +98,8 @@ com/example/demo/src/chat/model/GetChatRoomExistReq.java
  com.example.demo.src.chat.model.GetChatRoomExistReq
 com/example/demo/src/pofol/PofolProvider.java
  com.example.demo.src.pofol.PofolProvider
+com/example/demo/src/user/model/GetBlockRes.java
+ com.example.demo.src.user.model.GetBlockRes
 com/example/demo/src/S33/S3Component.java
  com.example.demo.src.S33.S3Component
 com/example/demo/src/session/model/GetLikesBandRes.java

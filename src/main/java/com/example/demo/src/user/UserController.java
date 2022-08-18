@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexEmail;
@@ -377,7 +378,7 @@ public class UserController {
 
     /**
      * 차단 API
-     * [POST] /user/block/{userIdx}
+     * [POST] /users/block/{userIdx}
      * @return BaseResponse<String>
      */
     @ResponseBody
@@ -402,5 +403,57 @@ public class UserController {
         }
     }
 
+
+    /**
+     * 차단 해제 API
+     * [DELETE] /users/unblock/{userIdx}
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @DeleteMapping ("/unblock/{userIdx}") // (delete) eraofband.shop/users/unblock/2
+    @ApiOperation(value = "차단 해제 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiImplicitParam(name="userIdx", value="차단 해제할 유저 인덱스", required = true)
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2007, message="유저 차단 해제에 실패했습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> unBlock(@PathVariable("userIdx") int userIdx){
+        try {
+            //jwt에서 idx 추출
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            userService.unBlock(userIdxByJwt,userIdx);
+            String result = "해당 유저의 차단을 해제하였습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 차단 목록 조회 API
+     * [GET] /users/info/block
+     * @return BaseResponse<List<GetBlockRes>>
+     */
+    @ResponseBody
+    @GetMapping("/info/block") // (GET) eraofband.shop/users/info/block
+    @ApiOperation(value = "차단 목록 조회", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<List<GetBlockRes>> getBlock() {
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            List<GetBlockRes> getBlockRes = userProvider.getBlock(userIdxByJwt);
+            return new BaseResponse<>(getBlockRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 }
