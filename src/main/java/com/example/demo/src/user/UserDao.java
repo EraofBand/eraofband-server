@@ -2,6 +2,7 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.src.GetUserTokenRes;
+import com.example.demo.src.lesson.model.GetLikesLessonRes;
 import com.example.demo.src.notice.model.PostReportReq;
 import com.example.demo.src.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -397,6 +398,33 @@ public class UserDao {
         Object[] insertBlockParams = new Object[]{ blockerIdx, blockedIdx };
 
         return this.jdbcTemplate.update(insertBlockQuery, insertBlockParams);
+    }
+
+    /**
+     * 차단 해제하기
+     */
+    public int unBlock(int myIdx, int userIdx) {
+        String unBlockQuery = "DELETE FROM Block WHERE blockerIdx = ? and blockedIdx = ?";
+        Object[] unBlockParams = new Object[]{myIdx, userIdx};
+
+        return this.jdbcTemplate.update(unBlockQuery, unBlockParams);
+    }
+
+    /**
+     *  차단 목록 조회
+     * */
+    public List<GetBlockRes> getBlock(int userIdx){
+        String getBlockQuery = "SELECT b.blockedIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl\n"+
+                "        FROM Block as b\n"+
+                "        left join User as u on u.userIdx = b.blockedIdx\n"+
+                "        WHERE b.status='ACTIVE' and b.blockerIdx=?";
+        Object[] getBlockParams = new Object[]{userIdx};
+        return this.jdbcTemplate.query(getBlockQuery,
+                (rs, rowNum) -> new GetBlockRes(
+                        rs.getInt("userIdx"),
+                        rs.getString("nickName"),
+                        rs.getString("profileImgUrl")),
+                getBlockParams);
     }
 
     /**

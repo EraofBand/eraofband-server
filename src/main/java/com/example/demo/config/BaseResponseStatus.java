@@ -24,6 +24,7 @@ public enum BaseResponseStatus {
     CHAT_SEND_FAIL_BLOCKED(false,2004,"상대방이 회원님을 차단하여 채팅을 보낼 수 없습니다."),
     CHAT_FAIL_BLOCKED(false,2005,"회원님이 상대방을 차단하여 채팅을 보낼 수 없습니다."),
     COMMENT_FAIL_BLOCKED(false,2006,"상대방이 회원님을 차단하여 댓글을 등록할 수 없습니다."),
+    UNBLOCK_FAIL_USER(false,2077,"유저 차단 해제에 실패했습니다."),
 
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),

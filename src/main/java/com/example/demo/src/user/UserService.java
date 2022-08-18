@@ -284,4 +284,19 @@ public class UserService {
     }
 
 
+    /**
+     * 차단 해제 하기
+     */
+    public void unBlock(int myIdx, int userIdx) throws BaseException {
+        try{
+            result = userDao.unBlock(myIdx, userIdx);
+
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+        if(result == 0){
+            throw new BaseException(UNBLOCK_FAIL_USER);
+        }
+
+    }
 }
