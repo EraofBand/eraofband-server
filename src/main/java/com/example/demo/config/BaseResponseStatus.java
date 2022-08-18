@@ -21,8 +21,7 @@ public enum BaseResponseStatus {
     EMPTY_JWT(false, 2001, "JWT를 입력해주세요."),
     INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
     INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
-    CHAT_SEND_FAIL_BLOCKED(false,2004,"상대방이 회원님을 차단하여 채팅을 보낼 수 없습니다."),
-    CHAT_FAIL_BLOCKED(false,2005,"회원님이 상대방을 차단하여 채팅을 보낼 수 없습니다."),
+    CHAT_SEND_FAIL_BLOCKED(false,2004,"채팅을 보낼 수 없는 유저입니다."),
     COMMENT_FAIL_BLOCKED(false,2006,"상대방이 회원님을 차단하여 댓글을 등록할 수 없습니다."),
     UNBLOCK_FAIL_USER(false,2077,"유저 차단 해제에 실패했습니다."),
 
