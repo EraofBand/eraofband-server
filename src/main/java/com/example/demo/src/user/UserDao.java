@@ -414,7 +414,7 @@ public class UserDao {
      *  차단 목록 조회
      * */
     public List<GetBlockRes> getBlock(int userIdx){
-        String getBlockQuery = "SELECT b.blockedIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl\n"+
+        String getBlockQuery = "SELECT b.blockedIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl\n"+
                 "        FROM Block as b\n"+
                 "        left join User as u on u.userIdx = b.blockedIdx\n"+
                 "        WHERE b.status='ACTIVE' and b.blockerIdx=?";
