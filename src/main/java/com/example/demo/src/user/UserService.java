@@ -276,6 +276,8 @@ public class UserService {
     public void insertBlock(int blockerIdx, int blockedIdx) throws BaseException {
         try{
             userDao.insertBlock(blockerIdx, blockedIdx);
+            int check= userProvider.checkChatRoom(blockerIdx, blockedIdx);
+            if(check==1){userDao.outChat(blockerIdx, blockedIdx);}
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

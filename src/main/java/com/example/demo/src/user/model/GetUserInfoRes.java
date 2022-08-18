@@ -21,4 +21,5 @@ public class GetUserInfoRes {
     private int followeeCount;
     private int pofolCount;
     private int follow=0;
+    private int blockStatus;
 }

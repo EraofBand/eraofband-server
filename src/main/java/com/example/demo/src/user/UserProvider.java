@@ -111,4 +111,15 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    /**
+     * 채팅방 존재 확인
+     */
+    public int checkChatRoom(int myIdx, int userIdx) throws BaseException {
+        try{
+            return userDao.checkChatRoom(myIdx, userIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

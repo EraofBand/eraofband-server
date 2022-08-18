@@ -49,14 +49,16 @@ public class UserDao {
      */
     public GetUserInfoRes getUserByIdx(int myId, int userIdx) {
         String getUsersByIdxQuery = "select u.userIdx as userIdx, u.nickName as nickName,u.gender as gender,u.birth as birth,u.introduction as introduction,u.profileImgUrl as profileImgUrl,u.userSession as userSession,u.region as region," +
-                "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount, follow as follow\n" +
+                "IF(pofolCount is null, 0, pofolCount) as pofolCount,IF(followerCount is null, 0, followerCount) as followerCount,IF(followeeCount is null, 0, followeeCount) as followeeCount, follow as follow," +
+                "blockStatus as blockStatus\n" +
                 "from User as u\n" +
                 "left join (select userIdx, count(pofolIdx) as pofolCount from Pofol where status='ACTIVE' group by userIdx) p on p.userIdx=u.userIdx\n" +
                 "left join (select followerIdx, count(followIdx) as followerCount from Follow where status='ACTIVE' group by followerIdx) fr on fr.followerIdx=u.userIdx\n" +
                 "left join (select followeeIdx, count(followIdx) as followeeCount from Follow where status='ACTIVE' group by followeeIdx) fe on fe.followeeIdx=u.userIdx\n" +
                 "left join (select exists(select followIdx from Follow where followerIdx=? and followeeIdx=?)as follow) fw on fw.follow\n" +
+                "left join (select exists(select blockIdx from Block where blockerIdx=? and blockedIdx=?)as blockStatus) bl on bl.blockStatus\n" +
                 "where u.userIdx=? and (u.status='ACTIVE' or u.status='INACTIVE')";
-        Object[] getUsersByIdxParams = new Object[]{myId, userIdx, userIdx};
+        Object[] getUsersByIdxParams = new Object[]{myId, userIdx, myId, userIdx, userIdx};
         return this.jdbcTemplate.queryForObject(getUsersByIdxQuery,
                                                 (rs, rowNum) -> new GetUserInfoRes(
                                                         rs.getInt("userIdx"),
@@ -70,7 +72,8 @@ public class UserDao {
                                                         rs.getInt("followerCount"),
                                                         rs.getInt("followeeCount"),
                                                         rs.getInt("pofolCount"),
-                                                        rs.getInt("follow")),
+                                                        rs.getInt("follow"),
+                                                        rs.getInt("blockStatus")),
                                                 getUsersByIdxParams);
     }
 
@@ -396,5 +399,27 @@ public class UserDao {
         return this.jdbcTemplate.update(insertBlockQuery, insertBlockParams);
     }
 
+    /**
+     * 채팅방 존재 확인
+     */
+    public int checkChatRoom(int myIdx, int userIdx) {
+        String checkChatRoomQuery = "SELECT exists(SELECT chatIdx FROM ChatContent WHERE firstUserIdx = ? and secondUserIdx= ? and status='ACTIVE')";
+        Object[] checkChatRoomParams = new Object[]{ myIdx, userIdx };
+        return this.jdbcTemplate.queryForObject(checkChatRoomQuery,
+                int.class,
+                checkChatRoomParams);
+    }
+
+    /**
+     * 채팅방 나가기
+     * */
+    public int outChat(int myIdx, int userIdx){
+        String outChatQuery = "update ChatContent as c\n" +
+                "set c.status='INACTIVE'\n" +
+                "where c.firstUserIdx = ? and c.secondUserIdx = ?";
+        Object[] outChatParams = new Object[]{ myIdx, userIdx };
+
+        return this.jdbcTemplate.update(outChatQuery,outChatParams);
+    }
 
 }
