@@ -32,7 +32,7 @@ public class ChatService {
      * */
     public void createChatRoom(PostChatReq postChatReq) throws BaseException {
 
-        if(chatProvider.checkBlockedUser(postChatReq.getFirstUserIdx(), postChatReq.getSecondUserIdx()) == 1){
+        if(chatProvider.checkBlockState(postChatReq.getFirstUserIdx(), postChatReq.getSecondUserIdx()) == 1){
             throw new BaseException(CHAT_SEND_FAIL_BLOCKED);
         }
 
@@ -54,7 +54,7 @@ public class ChatService {
      * */
     public void activeChatroom(int firstIdx, int secondIdx, String chatRoomIdx) throws BaseException {
 
-        if(chatProvider.checkBlockedUser(firstIdx, secondIdx) == 1){
+        if(chatProvider.checkBlockState(firstIdx, secondIdx) == 1){
             throw new BaseException(CHAT_SEND_FAIL_BLOCKED);
         }
 

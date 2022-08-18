@@ -143,20 +143,20 @@ public class ChatDao {
      * 채팅방 활성화
      * */
     public int activeChatroom(int userIdx, String chatRoomIdx){
-        String deleteChatRoomQuery = "update ChatContent as c\n" +
+        String activeChatRoomQuery = "update ChatContent as c\n" +
                 "set c.status='ACTIVE'\n" +
                 "where (c.firstUserIdx =? or c.secondUserIdx = ?) and c.chatRoomIdx = ?";
-        Object[] deleteChatRoomParams = new Object[]{ userIdx, userIdx, chatRoomIdx };
+        Object[] activeChatRoomParams = new Object[]{ userIdx, userIdx, chatRoomIdx };
 
-        return this.jdbcTemplate.update(deleteChatRoomQuery,deleteChatRoomParams);
+        return this.jdbcTemplate.update(activeChatRoomQuery, activeChatRoomParams);
     }
 
     /**
-     * 차단 당한 유저인지 확인
+     * 차단 상태 확인
      * */
-    public int checkBlockedUser(int firstIdx, int secondIdx){
-        String checkSecondExistQuery = "SELECT exists(SELECT blockIdx FROM Block WHERE blockedIdx = ? and blockerIdx= ?)";
-        Object[] checkSecondExistParams = new Object[]{ firstIdx, secondIdx };
+    public int checkBlockState(int firstIdx, int secondIdx){
+        String checkSecondExistQuery = "SELECT exists(SELECT blockIdx FROM Block WHERE ( blockedIdx = ? AND blockerIdx= ?) OR (blockerIdx = ? AND blockedIdx = ?) );";
+        Object[] checkSecondExistParams = new Object[]{ firstIdx, secondIdx, firstIdx, secondIdx };
         return this.jdbcTemplate.queryForObject(checkSecondExistQuery,
                                                 int.class,
                                                 checkSecondExistParams);
