@@ -183,7 +183,7 @@ public class BoardDao {
                 "                end as updatedAt\n" +
                 "                FROM BoardComment as b\n" +
                 "                join User as u on u.userIdx = b.userIdx\n" +
-                "                WHERE b.boardIdx = ? and not((b.status='INACTIVE' and b.classNum=1) or ((select(count(b.groupnum))=1) and b.classNum = 0 and b.status='INACTIVE'))\n" +
+                "                WHERE b.boardCommentIdx = ? and not((b.status='INACTIVE' and b.classNum=1) or ((select(count(b.groupnum))=1) and b.classNum = 0 and b.status='INACTIVE'))\n" +
                 "                group by b.boardCommentIdx order by b.boardCommentIdx DESC;";
 
         int selectCommentParam = boardCommentIdx;
