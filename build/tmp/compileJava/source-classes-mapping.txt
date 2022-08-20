@@ -1,7 +1,7 @@
 com/example/demo/src/board/model/PostBoardCommentReq.java
  com.example.demo.src.board.model.PostBoardCommentReq
-com/example/demo/src/board/BoardProvider.java
- com.example.demo.src.board.BoardProvider
+com/example/demo/src/chat/ChatService.java
+ com.example.demo.src.chat.ChatService
 com/example/demo/src/lesson/LessonService.java
  com.example.demo.src.lesson.LessonService
 com/example/demo/src/lesson/model/GetLessonNotiInfoRes.java
@@ -12,8 +12,8 @@ com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/src/session/model/PatchBandReq.java
  com.example.demo.src.session.model.PatchBandReq
-com/example/demo/src/board/BoardDao.java
- com.example.demo.src.board.BoardDao
+com/example/demo/src/chat/ChatDao.java
+ com.example.demo.src.chat.ChatDao
 com/example/demo/src/notice/model/GetNoticeRes.java
  com.example.demo.src.notice.model.GetNoticeRes
 com/example/demo/src/session/SessionService.java
@@ -30,8 +30,8 @@ com/example/demo/src/pofol/model/PostCommentRes.java
  com.example.demo.src.pofol.model.PostCommentRes
 com/example/demo/src/user/model/PostUserRes.java
  com.example.demo.src.user.model.PostUserRes
-com/example/demo/src/chat/ChatDao.java
- com.example.demo.src.chat.ChatDao
+com/example/demo/src/session/model/GetBandNotiInfoRes.java
+ com.example.demo.src.session.model.GetBandNotiInfoRes
 com/example/demo/src/session/model/DeleteAlbumReq.java
  com.example.demo.src.session.model.DeleteAlbumReq
 com/example/demo/src/lesson/model/GetInfoLessonRes.java
@@ -122,8 +122,13 @@ com/example/demo/src/board/model/PostBoardLikeRes.java
  com.example.demo.src.board.model.PostBoardLikeRes
 com/example/demo/src/user/UserProvider.java
  com.example.demo.src.user.UserProvider
-com/example/demo/src/chat/ChatService.java
- com.example.demo.src.chat.ChatService
+com/example/demo/src/FcmMessage.java
+ com.example.demo.src.FcmMessage
+ com.example.demo.src.FcmMessage$FcmMessageBuilder
+ com.example.demo.src.FcmMessage$Message
+ com.example.demo.src.FcmMessage$Message$MessageBuilder
+ com.example.demo.src.FcmMessage$Notification
+ com.example.demo.src.FcmMessage$Notification$NotificationBuilder
 com/example/demo/src/S33/FileUploadService.java
  com.example.demo.src.S33.FileUploadService
 com/example/demo/src/pofol/model/PatchPofolReq.java
@@ -144,8 +149,8 @@ com/example/demo/src/lesson/model/PostLesLikeRes.java
  com.example.demo.src.lesson.model.PostLesLikeRes
 com/example/demo/src/pofol/PofolService.java
  com.example.demo.src.pofol.PofolService
-com/example/demo/src/chat/ChatController.java
- com.example.demo.src.chat.ChatController
+com/example/demo/DemoApplication.java
+ com.example.demo.DemoApplication
 com/example/demo/src/session/model/GetInfoBandRes.java
  com.example.demo.src.session.model.GetInfoBandRes
 com/example/demo/src/lesson/model/PostLessonRes.java
@@ -158,8 +163,8 @@ com/example/demo/src/user/model/GetUserNotiInfoRes.java
  com.example.demo.src.user.model.GetUserNotiInfoRes
 com/example/demo/src/session/model/GetSessionNotiInfoRes.java
  com.example.demo.src.session.model.GetSessionNotiInfoRes
-com/example/demo/src/chat/ChatProvider.java
- com.example.demo.src.chat.ChatProvider
+com/example/demo/src/lesson/model/PostSignUpRes.java
+ com.example.demo.src.lesson.model.PostSignUpRes
 com/example/demo/src/session/model/GetNewBandRes.java
  com.example.demo.src.session.model.GetNewBandRes
 com/example/demo/src/board/model/PostBoardReq.java
@@ -220,8 +225,8 @@ com/example/demo/src/lesson/LessonDao.java
  com.example.demo.src.lesson.LessonDao
 com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
-com/example/demo/src/board/BoardService.java
- com.example.demo.src.board.BoardService
+com/example/demo/src/chat/model/GetChatRoomRes.java
+ com.example.demo.src.chat.model.GetChatRoomRes
 com/example/demo/src/notice/NoticeProvider.java
  com.example.demo.src.notice.NoticeProvider
 com/example/demo/src/user/model/GetMyInfoRes.java
@@ -238,8 +243,8 @@ com/example/demo/src/session/model/DeleteBandReq.java
  com.example.demo.src.session.model.DeleteBandReq
 com/example/demo/src/WebSecurityConfig.java
  com.example.demo.src.WebSecurityConfig
-com/example/demo/src/chat/model/GetChatRoomRes.java
- com.example.demo.src.chat.model.GetChatRoomRes
+com/example/demo/src/user/model/User.java
+ com.example.demo.src.user.model.User
 com/example/demo/src/pofol/model/PostPofolRes.java
  com.example.demo.src.pofol.model.PostPofolRes
 com/example/demo/src/session/model/GetSessionAppRes.java
@@ -256,20 +261,15 @@ com/example/demo/src/lesson/model/PostLessonReq.java
  com.example.demo.src.lesson.model.PostLessonReq
 com/example/demo/src/pofol/model/PostLikeRes.java
  com.example.demo.src.pofol.model.PostLikeRes
+com/example/demo/src/chat/ChatController.java
+ com.example.demo.src.chat.ChatController
+com/example/demo/src/chat/ChatProvider.java
+ com.example.demo.src.chat.ChatProvider
+com/example/demo/src/board/BoardProvider.java
+ com.example.demo.src.board.BoardProvider
+com/example/demo/src/board/BoardService.java
+ com.example.demo.src.board.BoardService
+com/example/demo/src/board/BoardDao.java
+ com.example.demo.src.board.BoardDao
 com/example/demo/src/board/BoardController.java
  com.example.demo.src.board.BoardController
-com/example/demo/src/FcmMessage.java
- com.example.demo.src.FcmMessage
- com.example.demo.src.FcmMessage$FcmMessageBuilder
- com.example.demo.src.FcmMessage$Message
- com.example.demo.src.FcmMessage$Message$MessageBuilder
- com.example.demo.src.FcmMessage$Notification
- com.example.demo.src.FcmMessage$Notification$NotificationBuilder
-com/example/demo/src/user/model/User.java
- com.example.demo.src.user.model.User
-com/example/demo/src/session/model/GetBandNotiInfoRes.java
- com.example.demo.src.session.model.GetBandNotiInfoRes
-com/example/demo/DemoApplication.java
- com.example.demo.DemoApplication
-com/example/demo/src/lesson/model/PostSignUpRes.java
- com.example.demo.src.lesson.model.PostSignUpRes
