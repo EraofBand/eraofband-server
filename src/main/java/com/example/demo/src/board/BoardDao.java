@@ -107,7 +107,7 @@ public class BoardDao {
      */
     public int insertComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) {
 
-        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum) VALUES (?, ?, ?, 0)";
+        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum, groupNum) VALUES (?, ?, ?, 0,0)";
 
         Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent()};
 
@@ -134,11 +134,11 @@ public class BoardDao {
 
 
     /**
-     * 댓글 그룹 추가
+     * 원 댓글 그룹 추가
      */
-    public int insertCommentGroup(int boardCommentIdx) {
+    public int insertCommentGroup(int groupNum) {
         String insertCommentGroupQuery = "UPDATE BoardComment SET groupNum = ? WHERE boardCommentIdx = ? ";
-        Object[] insertCommentGroupParams = new Object[]{boardCommentIdx, boardCommentIdx};
+        Object[] insertCommentGroupParams = new Object[]{groupNum, groupNum};
 
         return this.jdbcTemplate.update(insertCommentGroupQuery, insertCommentGroupParams);
 
@@ -153,6 +153,29 @@ public class BoardDao {
 
         return this.jdbcTemplate.update(deleteCommentQuery, deleteCommentParams);
 
+    }
+
+    /**
+     * 원 댓글 그룹 변경
+     */
+    public int updateGroupNum(int boardCommentIdx) {
+        String updateGroupNumQuery = "UPDATE BoardComment SET groupNum=0 WHERE boardCommentIdx = ? ";
+        Object[] updateGroupNumParams = new Object[]{boardCommentIdx};
+
+        return this.jdbcTemplate.update(updateGroupNumQuery, updateGroupNumParams);
+
+    }
+
+    /**
+     * 원 댓글 조회
+     */
+    public GetOriginCommentRes getOriginal (int boardCommentIdx) {
+        String getOriginCommentQuery = "select groupNum as boardCommentIdx from BoardComment where boardCommentIdx=?";
+        int getOriginCommentParams = boardCommentIdx;
+        return this.jdbcTemplate.queryForObject(getOriginCommentQuery,
+                (rs, rowNum) -> new GetOriginCommentRes(
+                        rs.getInt("boardCommentIdx")),
+                getOriginCommentParams);
     }
 
     /**
@@ -183,7 +206,7 @@ public class BoardDao {
                 "                end as updatedAt\n" +
                 "                FROM BoardComment as b\n" +
                 "                join User as u on u.userIdx = b.userIdx\n" +
-                "                WHERE b.boardCommentIdx = ? and not((b.status='INACTIVE' and b.classNum=1) or ((select(count(b.groupnum))=1) and b.classNum = 0 and b.status='INACTIVE'))\n" +
+                "                WHERE b.boardCommentIdx = ? and not((b.status='INACTIVE' and b.classNum=1) or (b.groupNum=0 and b.classNum = 0 and b.status='INACTIVE'))\n" +
                 "                group by b.boardCommentIdx order by b.boardCommentIdx DESC;";
 
         int selectCommentParam = boardCommentIdx;
@@ -393,7 +416,7 @@ public class BoardDao {
                 "                end as updatedAt\n" +
                 "                FROM BoardComment as b\n" +
                 "                join User as u on u.userIdx = b.userIdx\n" +
-                "                WHERE b.boardIdx = ? and not((b.status='INACTIVE' and b.classNum=1) or ((select(count(b.groupnum))=1) and b.classNum = 0 and b.status='INACTIVE'))\n" +
+                "                WHERE b.boardIdx = ? and not((b.status='INACTIVE' and b.classNum=1) or (b.groupNum=0 and b.classNum = 0 and b.status='INACTIVE'))\n" +
                 "                group by b.boardCommentIdx order by b.boardCommentIdx DESC; \n";
         int selectCommentParam = boardIdx;
         return this.jdbcTemplate.query(selectCommentQuery,
@@ -468,9 +491,11 @@ public class BoardDao {
         String deleteBoardQuery = "update Board b" +
                 "    left join BoardComment as bc on (bc.boardIdx=b.boardIdx)\n" +
                 "    left join BoardLike as bl on (bl.boardIdx=b.boardIdx)\n" +
+                "    left join BoardImage as bi on (bi.boardIdx=b.boardIdx)\n" +
                 "        set b.status='INACTIVE',\n" +
                 "            bc.status='INACTIVE',\n" +
                 "            bl.status='INACTIVE'\n" +
+                "            bi.status='INACTIVE'\n" +
                 "   where b.boardIdx = ? ";
         Object[] deleteBoardParams = new Object[]{boardIdx};
 

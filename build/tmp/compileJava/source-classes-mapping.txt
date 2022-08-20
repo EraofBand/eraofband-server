@@ -236,6 +236,8 @@ com/example/demo/src/notice/NoticeService.java
  com.example.demo.src.notice.NoticeService
 com/example/demo/src/board/model/PostImgsUrlReq.java
  com.example.demo.src.board.model.PostImgsUrlReq
+com/example/demo/src/board/model/GetOriginCommentRes.java
+ com.example.demo.src.board.model.GetOriginCommentRes
 com/example/demo/src/session/model/DeleteBandReq.java
  com.example.demo.src.session.model.DeleteBandReq
 com/example/demo/src/WebSecurityConfig.java
