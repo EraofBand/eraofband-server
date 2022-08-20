@@ -261,6 +261,7 @@ public class UserDao {
                 "    left join Band as b on (b.userIdx=u.userIdx)\n" +
                 "    left join BandLike as bl on (bl.userIdx=u.userIdx)\n" +
                 "    left join BandUser as bu on (bu.userIdx=u.userIdx)\n" +
+                "    left join ChatContent as cc on (cc.firstUserIdx=u.userIdx)\n" +
                 "    left join Follow as f on (f.followerIdx=u.userIdx or f.followeeIdx=u.userIdx)\n" +
                 "    left join Lesson as l on (l.userIdx=u.userIdx)\n" +
                 "    left join LessonLike as ll on (ll.userIdx=u.userIdx)\n" +
@@ -268,10 +269,14 @@ public class UserDao {
                 "    left join Pofol as p on (p.userIdx=u.userIdx)\n" +
                 "    left join PofolComment as pc on (pc.userIdx=u.userIdx)\n" +
                 "    left join PofolLike as pl on (pl.userIdx=u.userIdx)\n" +
+                "    left join Board as bd on (bd.userIdx=u.userIdx)\n" +
+                "    left join BoardComment as bdc on (bdc.userIdx=u.userIdx)\n" +
+                "    left join BoardLike as bdl on (bdl.userIdx=u.userIdx)\n" +
                 "        set u.status='DELETE',\n" +
                 "            b.status='INACTIVE',\n" +
                 "            bl.status='INACTIVE',\n" +
                 "            bu.status='INACTIVE',\n" +
+                "            cc.status='INACTIVE',\n" +
                 "            f.status='INACTIVE',\n" +
                 "            l.status='INACTIVE',\n" +
                 "            ll.status='INACTIVE',\n" +
@@ -279,6 +284,9 @@ public class UserDao {
                 "            p.status='INACTIVE',\n" +
                 "            pc.status='INACTIVE',\n" +
                 "            pl.status='INACTIVE'\n" +
+                "            bd.status='INACTIVE',\n" +
+                "            bdc.status='INACTIVE',\n" +
+                "            bdl.status='INACTIVE'\n" +
                 "    where u.userIdx = ?";
         Object[] deleteUserParams = new Object[]{userIdx};
 

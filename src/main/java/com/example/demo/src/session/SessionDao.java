@@ -469,9 +469,11 @@ public class SessionDao {
         String deleteBandQuery = "update Band b" +
                 "    left join BandUser as bu on (bu.bandIdx=b.bandIdx)\n" +
                 "    left join BandLike as bl on (bl.bandIdx=b.bandIdx)\n" +
+                "    left join BandAlbum as ba on (ba.bandIdx=b.bandIdx)\n" +
                 "        set b.status='INACTIVE',\n" +
                 "            bu.status='INACTIVE',\n" +
                 "            bl.status='INACTIVE'\n" +
+                "            ba.status='INACTIVE'\n" +
                 "   where b.bandIdx = ? ";
         Object[] deleteBandParams = new Object[]{bandIdx};
 

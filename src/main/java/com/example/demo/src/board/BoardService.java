@@ -255,15 +255,15 @@ public class BoardService {
 
 
     /**
-     * 댓글 그룹 추가
+     * 원 댓글 그룹 추가
      */
-    public void addGroupNum(int boardCommentIdx) throws BaseException {
+    public void addGroupNum(int groupNum) throws BaseException {
 
-        if(boardProvider.checkCommentExist(boardCommentIdx) == 0){
+        if(boardProvider.checkCommentExist(groupNum) == 0){
             throw new BaseException(POSTS_EMPTY_BOARD_COMMENT_ID);
         }
         try{
-            result = boardDao.insertCommentGroup(boardCommentIdx);
+            result = boardDao.insertCommentGroup(groupNum);
 
         } catch(Exception exception){
             System.out.println(exception);
@@ -326,6 +326,11 @@ public class BoardService {
 
         try{
             result = boardDao.deleteComment(boardCommentIdx);
+            GetOriginCommentRes groupNum=boardDao.getOriginal(boardCommentIdx);
+            int exist=boardDao.checkReplyExist(groupNum.getBoardCommentIdx());;
+            if(exist==0){
+                boardDao.updateGroupNum(groupNum.getBoardCommentIdx());
+            }
 
         } catch(Exception exception){
             System.out.println(exception);
