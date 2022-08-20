@@ -98,12 +98,13 @@ public class ChatProvider {
     }
 
     /**
-     *  차단 당한 유저인지 확인
+     *  전송 또는 수신자의 차단 상태 확인
      * */
-    public int checkBlockedUser(int firstIdx, int secondIdx) throws BaseException {
+    public int checkBlockState(int firstIdx, int secondIdx) throws BaseException {
         try {
-            return chatDao.checkBlockedUser(firstIdx, secondIdx);
+            return chatDao.checkBlockState(firstIdx, secondIdx);
         } catch (Exception exception) {
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
