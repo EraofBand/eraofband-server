@@ -19,5 +19,6 @@ public class GetBoardCommentRes {
     private String updatedAt;
     private String commentStatus;
     private String userStatus;
+    private int hasReply;
 
 }

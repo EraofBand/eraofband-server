@@ -79,14 +79,26 @@ public class BoardDao {
     }
 
     /**
-     * 게시글 대댓글 여부 확인
+     * 게시글 대댓글 존재 여부 확인
      */
     public int checkReplyExist(int boardCommentIdx) {
-        String checkReplyExistQuery = "SELECT exists(SELECT boardCommentIdx FROM BoardComment WHERE groupNum=? and classNum=1 and status='ACTIVE')";
+        String checkReplyExistQuery = "SELECT exists(SELECT boardCommentIdx FROM BoardComment WHERE boardCommentIdx=? and classNum=0 and hasReply=0 and status='ACTIVE')";
         int checkReplyExistParams = boardCommentIdx;
         return this.jdbcTemplate.queryForObject(checkReplyExistQuery,
                 int.class,
                 checkReplyExistParams);
+
+    }
+
+    /**
+     * 게시글 대댓글 존재 여부 확인 2
+     */
+    public int checkReply(int boardCommentIdx) {
+        String checkReplyQuery = "SELECT exists(SELECT boardCommentIdx FROM BoardComment WHERE groupNum=? and classNum=1 and status='ACTIVE')";
+        int checkReplyParams = boardCommentIdx;
+        return this.jdbcTemplate.queryForObject(checkReplyQuery,
+                int.class,
+                checkReplyParams);
 
     }
 
@@ -103,11 +115,22 @@ public class BoardDao {
     }
 
     /**
+     * 원 댓글 답글 여부 활성화
+     */
+    public int activeHasReply(int boardCommentIdx) {
+        String activeQuery = "UPDATE BoardComment SET hasReply = 1 WHERE boardCommentIdx = ? ";
+        Object[] activeParams = new Object[]{boardCommentIdx};
+
+        return this.jdbcTemplate.update(activeQuery, activeParams);
+
+    }
+
+    /**
      * 댓글 작성
      */
     public int insertComment(int boardIdx, int userIdx, PostBoardCommentReq postBoardCommentReq) {
 
-        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum, groupNum) VALUES (?, ?, ?, 0,0)";
+        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum, hasReply) VALUES (?, ?, ?, 0,0)";
 
         Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardCommentReq.getContent()};
 
@@ -122,7 +145,7 @@ public class BoardDao {
      * */
     public int insertReComment(int boardIdx, int userIdx, PostBoardReCommentReq postBoardReCommentReq) {
 
-        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum, groupNum) VALUES (?, ?, ?, 1, ?)";
+        String insertCommentQuery = "INSERT INTO BoardComment(boardIdx, userIdx, content, classNum, groupNum, hasReply) VALUES (?, ?, ?, 1, ?, 0)";
 
         Object[] insertCommentParams = new Object[]{boardIdx, userIdx, postBoardReCommentReq.getContent(), postBoardReCommentReq.getGroupNum()};
 
@@ -136,9 +159,9 @@ public class BoardDao {
     /**
      * 원 댓글 그룹 추가
      */
-    public int insertCommentGroup(int groupNum) {
+    public int insertCommentGroup(int boardCommentIdx) {
         String insertCommentGroupQuery = "UPDATE BoardComment SET groupNum = ? WHERE boardCommentIdx = ? ";
-        Object[] insertCommentGroupParams = new Object[]{groupNum, groupNum};
+        Object[] insertCommentGroupParams = new Object[]{boardCommentIdx, boardCommentIdx};
 
         return this.jdbcTemplate.update(insertCommentGroupQuery, insertCommentGroupParams);
 
@@ -156,13 +179,13 @@ public class BoardDao {
     }
 
     /**
-     * 원 댓글 그룹 변경
+     * 원 댓글 답글 여부 비활성화
      */
-    public int updateGroupNum(int boardCommentIdx) {
-        String updateGroupNumQuery = "UPDATE BoardComment SET groupNum=0 WHERE boardCommentIdx = ? ";
-        Object[] updateGroupNumParams = new Object[]{boardCommentIdx};
+    public int inactiveHasReply(int boardCommentIdx) {
+        String inactiveQuery = "UPDATE BoardComment SET hasReply=0 WHERE boardCommentIdx = ? ";
+        Object[] inactiveParams = new Object[]{boardCommentIdx};
 
-        return this.jdbcTemplate.update(updateGroupNumQuery, updateGroupNumParams);
+        return this.jdbcTemplate.update(inactiveQuery, inactiveParams);
 
     }
 
@@ -193,6 +216,7 @@ public class BoardDao {
                 "                b.groupNum as groupNum,\n" +
                 "                b.status as commentStatus,\n" +
                 "                u.status as userStatus,\n" +
+                "                b.hasReply as hasReply,\n" +
                 "                case\n" +
                 "                when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
                 "                then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
@@ -206,7 +230,7 @@ public class BoardDao {
                 "                end as updatedAt\n" +
                 "                FROM BoardComment as b\n" +
                 "                join User as u on u.userIdx = b.userIdx\n" +
-                "                WHERE b.boardCommentIdx = ? and not((b.status='INACTIVE' and b.classNum=1) or (b.groupNum=0 and b.classNum = 0 and b.status='INACTIVE'))\n" +
+                "                WHERE b.boardCommentIdx = ? and not((b.status='INACTIVE' and b.classNum=1) or (b.hasReply=0 and b.classNum = 0 and b.status='INACTIVE'))\n" +
                 "                group by b.boardCommentIdx order by b.boardCommentIdx DESC;";
 
         int selectCommentParam = boardCommentIdx;
@@ -222,7 +246,8 @@ public class BoardDao {
                         rs.getInt("groupNum"),
                         rs.getString("updatedAt"),
                         rs.getString("commentStatus"),
-                        rs.getString("userStatus")
+                        rs.getString("userStatus"),
+                        rs.getInt("hasReply")
                 ), selectCommentParam);
 
     }
@@ -403,6 +428,7 @@ public class BoardDao {
                 "                b.groupNum as groupNum,\n" +
                 "                b.status as commentStatus,\n" +
                 "                u.status as userStatus,\n" +
+                "                b.hasReply as hasReply,\n" +
                 "                case\n" +
                 "                when timestampdiff(second, b.createdAt, current_timestamp) < 60\n" +
                 "                then concat(timestampdiff(second, b.createdAt, current_timestamp), '초 전')\n" +
@@ -416,7 +442,7 @@ public class BoardDao {
                 "                end as updatedAt\n" +
                 "                FROM BoardComment as b\n" +
                 "                join User as u on u.userIdx = b.userIdx\n" +
-                "                WHERE b.boardIdx = ? and not((b.status='INACTIVE' and b.classNum=1) or (b.groupNum=0 and b.classNum = 0 and b.status='INACTIVE'))\n" +
+                "                WHERE b.boardIdx = ? and not((b.status='INACTIVE' and b.classNum=1) or (b.hasReply=0 and b.classNum = 0 and b.status='INACTIVE'))\n" +
                 "                group by b.boardCommentIdx order by b.boardCommentIdx DESC; \n";
         int selectCommentParam = boardIdx;
         return this.jdbcTemplate.query(selectCommentQuery,
@@ -431,7 +457,8 @@ public class BoardDao {
                         rs.getInt("groupNum"),
                         rs.getString("updatedAt"),
                         rs.getString("commentStatus"),
-                        rs.getString("userStatus")
+                        rs.getString("userStatus"),
+                        rs.getInt("hasReply")
                 ), selectCommentParam);
 
     }
