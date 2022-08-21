@@ -257,13 +257,13 @@ public class BoardService {
     /**
      * 원 댓글 그룹 추가
      */
-    public void addGroupNum(int groupNum) throws BaseException {
+    public void addGroupNum(int boardCommentIdx) throws BaseException {
 
-        if(boardProvider.checkCommentExist(groupNum) == 0){
+        if(boardProvider.checkCommentExist(boardCommentIdx) == 0){
             throw new BaseException(POSTS_EMPTY_BOARD_COMMENT_ID);
         }
         try{
-            result = boardDao.insertCommentGroup(groupNum);
+            result = boardDao.insertCommentGroup(boardCommentIdx);
 
         } catch(Exception exception){
             System.out.println(exception);
@@ -295,6 +295,11 @@ public class BoardService {
 
         try{
             boardReCommentIdx = boardDao.insertReComment(boardIdx, userIdx, postBoardReCommentReq);
+            int hasReply=boardDao.checkReplyExist(postBoardReCommentReq.getGroupNum());
+            if(hasReply==1){
+                boardDao.activeHasReply(postBoardReCommentReq.getGroupNum());
+            }
+
             //게시글 댓글의 정보 얻기
             GetBoardComNotiInfoRes getBoardComNotiInfoRes =boardDao.NotiRe(boardReCommentIdx, postBoardReCommentReq.getGroupNum());
 
@@ -327,9 +332,9 @@ public class BoardService {
         try{
             result = boardDao.deleteComment(boardCommentIdx);
             GetOriginCommentRes groupNum=boardDao.getOriginal(boardCommentIdx);
-            int exist=boardDao.checkReplyExist(groupNum.getBoardCommentIdx());;
+            int exist=boardDao.checkReply(groupNum.getBoardCommentIdx());;
             if(exist==0){
-                boardDao.updateGroupNum(groupNum.getBoardCommentIdx());
+                boardDao.inactiveHasReply(groupNum.getBoardCommentIdx());
             }
 
         } catch(Exception exception){
