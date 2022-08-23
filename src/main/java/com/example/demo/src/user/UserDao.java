@@ -283,7 +283,7 @@ public class UserDao {
                 "            lu.status='INACTIVE',\n" +
                 "            p.status='INACTIVE',\n" +
                 "            pc.status='INACTIVE',\n" +
-                "            pl.status='INACTIVE'\n" +
+                "            pl.status='INACTIVE',\n" +
                 "            bd.status='INACTIVE',\n" +
                 "            bdc.status='INACTIVE',\n" +
                 "            bdl.status='INACTIVE'\n" +
