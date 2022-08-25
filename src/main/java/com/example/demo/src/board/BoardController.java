@@ -45,11 +45,11 @@ public class BoardController {
 
     /**
      * 게시물 리스트 조회 API
-     * [GET] /board/list/info/12
+     * [GET] /board/list/info/1/12
      * @return BaseResponse<List<GetBoardRes>>
      */
     @ResponseBody
-    @GetMapping("/list/info/{category}/{boardIdx}")   // (get) https://eraofband.shop/board/list/info/1
+    @GetMapping("/list/info/{category}/{boardIdx}")   // (get) https://eraofband.shop/board/list/info/1/12
     @ApiOperation(value = "게시물 리스트 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name="category", value="게시 유형 인덱스", required = true),
@@ -188,6 +188,7 @@ public class BoardController {
         }
     }
 
+
     /**
      * 게시판 게시물 삭제 API
      * [PATCH] /board/status/2
@@ -222,6 +223,7 @@ public class BoardController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
 
     /**
      * 게시판 게시물 사진 수정 API
@@ -323,6 +325,7 @@ public class BoardController {
 
     }
 
+
     /**
      * 게시물 대댓글 등록 API
      * [POST] /board/re-comment/2
@@ -370,6 +373,7 @@ public class BoardController {
 
     }
 
+
     /**
      * 게시물 댓글 삭제 API
      * [PATCH] /board/comment/status/2
@@ -408,6 +412,7 @@ public class BoardController {
         }
     }
 
+
     /**
      * 게시물 좋아요 API
      * [POST] /board/likes/{boardIdx}
@@ -438,6 +443,7 @@ public class BoardController {
         }
     }
 
+
     /**
      * 작성 게시물 리스트 조회 API
      * [GET] /board/my
@@ -463,6 +469,7 @@ public class BoardController {
         }
     }
 
+
     /**
      * 댓글 단 게시물 리스트 조회 API
      * [GET] /board/my-comment
@@ -487,6 +494,7 @@ public class BoardController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
 
     /**
      * 게시물 좋아요 취소 API

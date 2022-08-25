@@ -116,6 +116,9 @@ public class LessonService {
         }
     }
 
+    /**
+     *  레슨 신청 푸쉬알림
+     * */
     private final ObjectMapper objectMapper;
     public void sendMessageTo(String title, String body) throws IOException {
         String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";

@@ -10,6 +10,7 @@ import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -98,6 +99,7 @@ public class BoardProvider {
         try{
             GetBoardCommentRes getCommentRes = boardDao.certainComment(boardCommentIdx);
             return getCommentRes;
+
         } catch(Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);

@@ -69,10 +69,6 @@ public class ChatService {
     }
 
 
-
-
-
-
     /**
      *  채팅방 나가기
      * */

@@ -202,6 +202,9 @@ public class BoardService {
         }
     }
 
+    /**
+     * 댓글 푸쉬알림
+     */
     private final ObjectMapper objectMapper;
     public void sendMessageTo(String title, String body) throws IOException {
         String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
@@ -228,6 +231,9 @@ public class BoardService {
         //System.out.println(response.body().string());
     }
 
+    /**
+     * 대댓글 푸쉬알림
+     */
     public void sendReMessageTo(String title, String body, PostBoardReCommentReq postBoardReCommentReq) throws IOException {
         String API_URL = "https://fcm.googleapis.com/v1/projects/eraofband-5bbf4/messages:send";
         //게시글 댓글의 정보 얻기
