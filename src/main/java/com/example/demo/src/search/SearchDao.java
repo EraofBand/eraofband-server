@@ -56,7 +56,7 @@ public class SearchDao {
         String getSearchBandQuery = "\n"+
                 "SELECT b.bandIdx as bandIdx, b.bandImgUrl as bandImgUrl, b.bandTitle as bandTitle,\n" +
                     "                        b.bandIntroduction as bandIntroduction, b.bandRegion as bandRegion,\n" +
-                    "                        IF(memberCount is null, 0, memberCount) as memberCount, b.vocal+b.guitar+b.base+b.keyboard+b.drum+1 as capacity\n" +
+                    "                        IF(memberCount is null, 0, memberCount) as memberCount+1, b.vocal+b.guitar+b.base+b.keyboard+b.drum+1 as capacity\n" +
                     "                        FROM BandUser as bu\n" +
                     "                        join Band as b\n" +
                     "                        left join (select bandIdx, count(bandUserIdx) as memberCount from BandUser where status='ACTIVE' group by bandIdx) bm on bm.bandIdx=b.bandIdx\n" +

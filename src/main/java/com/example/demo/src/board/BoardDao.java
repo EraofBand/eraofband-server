@@ -290,7 +290,7 @@ public class BoardDao {
                     "                            left join (select boardIdx, count(boardCommentIdx) as commentCount from BoardComment WHERE status = 'ACTIVE' group by boardIdx) c on c.boardIdx = b.boardIdx\n" +
                     "                            left join BoardImage as bi on bi.boardIdx=b.boardIdx and bi.status='ACTIVE'\n" +
                     "                        WHERE b.category = ? and b.status = 'ACTIVE' and b.boardIdx<?\n" +
-                    "                        group by b.boardIdx order by b.boardIdx DESC LIMIT 20;";
+                    "                        group by b.boardIdx LIMIT 20;";
 
             selectBoardListParam = new Object[]{category, boardIdx};
         } else {
