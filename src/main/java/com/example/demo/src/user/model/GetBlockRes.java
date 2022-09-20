@@ -14,4 +14,5 @@ public class GetBlockRes {
     private int userIdx;
     private String nickName;
     private String profileImgUrl;
+    private int blockChecked;
 }

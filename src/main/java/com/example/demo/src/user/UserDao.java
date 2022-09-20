@@ -422,16 +422,19 @@ public class UserDao {
      *  차단 목록 조회
      * */
     public List<GetBlockRes> getBlock(int userIdx){
-        String getBlockQuery = "SELECT b.blockedIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl\n"+
-                "        FROM Block as b\n"+
-                "        left join User as u on u.userIdx = b.blockedIdx\n"+
-                "        WHERE b.status='ACTIVE' and b.blockerIdx=?";
-        Object[] getBlockParams = new Object[]{userIdx};
+        String getBlockQuery = "SELECT b.blockedIdx as userIdx, u.nickName as nickName, u.profileImgUrl as profileImgUrl,\n" +
+                "       (IF(exists(select blockIdx from Block where blockerIdx = ? and blockedIdx = u.userIdx), 1, 0)) as blockChecked\n" +
+                "                        FROM Block as b\n" +
+                "                        left join User as u on u.userIdx = b.blockedIdx\n" +
+                "                        WHERE (u.status='ACTIVE' or u.status='INACTIVE') and b.status='ACTIVE' and b.blockerIdx=?\n" +
+                "                        order by b.blockedIdx";
+        Object[] getBlockParams = new Object[]{userIdx, userIdx};
         return this.jdbcTemplate.query(getBlockQuery,
                 (rs, rowNum) -> new GetBlockRes(
                         rs.getInt("userIdx"),
                         rs.getString("nickName"),
-                        rs.getString("profileImgUrl")),
+                        rs.getString("profileImgUrl"),
+                        rs.getInt("blockChecked")),
                 getBlockParams);
     }
 
