@@ -4,6 +4,7 @@ package com.example.demo.src.chat;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.chat.model.GetChatRoomExistReq;
 import com.example.demo.src.chat.model.GetChatRoomExistRes;
+import com.example.demo.src.chat.model.GetChatRoomInRes;
 import com.example.demo.src.chat.model.GetChatRoomRes;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,19 @@ public class ChatProvider {
         }
     }
 
+    /**
+     * 채팅방 들어가기
+     */
+    public GetChatRoomInRes getChatRoomIn(int userIdx, String chatRoomIdx) throws BaseException {
+
+        try{
+            GetChatRoomInRes getChatRoomInRes = chatDao.getChatRoomIn(userIdx, chatRoomIdx);
+            return getChatRoomInRes;
+        } catch(Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
     /**
      *  첫 번째 유저가 속해 있는 채팅방 반환
