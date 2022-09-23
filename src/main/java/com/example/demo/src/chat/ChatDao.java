@@ -3,10 +3,7 @@ package com.example.demo.src.chat;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.GetUserTokenRes;
-import com.example.demo.src.chat.model.GetChatRoomExistReq;
-import com.example.demo.src.chat.model.GetChatRoomExistRes;
-import com.example.demo.src.chat.model.GetChatRoomRes;
-import com.example.demo.src.chat.model.PostChatReq;
+import com.example.demo.src.chat.model.*;
 import com.example.demo.src.lesson.model.GetMemberRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -78,13 +75,13 @@ public class ChatDao {
     }
 
     /**
-     * 채팅방 삭제
+     * 채팅방 나가기
      * */
-    public int updateChatRoomStatus(int userIdx, String chatRoomIdx){
+    public int updateChatRoomStatus(int userIdx, String chatRoomIdx, int lastChatIdx){
         String deleteChatRoomQuery = "update ChatContent as c\n" +
-                "set c.status='INACTIVE'\n" +
+                "set c.status='INACTIVE', c.lastChatIdx=?\n" +
                 "where c.firstUserIdx = ? and c.chatRoomIdx = ?";
-        Object[] deleteChatRoomParams = new Object[]{ userIdx, chatRoomIdx };
+        Object[] deleteChatRoomParams = new Object[]{ lastChatIdx, userIdx, chatRoomIdx };
 
         return this.jdbcTemplate.update(deleteChatRoomQuery,deleteChatRoomParams);
     }
@@ -149,6 +146,19 @@ public class ChatDao {
         Object[] activeChatRoomParams = new Object[]{ userIdx, userIdx, chatRoomIdx };
 
         return this.jdbcTemplate.update(activeChatRoomQuery, activeChatRoomParams);
+    }
+
+    /**
+     * 채팅방 들어가기, 마지막 채팅 인덱스 반환
+     * */
+    public GetChatRoomInRes getChatRoomIn(int userIdx, int chatRoomIdx){
+        String getChatRoomInQuery = "select lastChatIdx from ChatContent where chatRoomIdx=? and firstUserIdx=?";
+        Object[] getChatRoomInParams = new Object[]{chatRoomIdx, userIdx};
+
+        return this.jdbcTemplate.queryForObject(getChatRoomInQuery,
+                (rs, rowNum) -> new GetChatRoomInRes(
+                        rs.getInt("lastChatIdx")),
+                getChatRoomInParams);
     }
 
     /**
