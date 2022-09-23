@@ -209,11 +209,11 @@ public class ChatController {
 
     /**
      * 채팅방 들어가기 API
-     * [GET] /chat/chatroom-in
+     * [PATCH] /chat/chatroom-in
      * @return BaseResponse<GetChatRoomInRes>>
      */
     @ResponseBody
-    @GetMapping("/chatroom-in") // (get) https://eraofband.shop/chat/chatroom-in
+    @PatchMapping("/chatroom-in") // (patch) https://eraofband.shop/chat/chatroom-in
     @ApiOperation(value = "채팅방 들어가기", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),

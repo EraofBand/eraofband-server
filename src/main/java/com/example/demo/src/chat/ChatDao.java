@@ -151,7 +151,7 @@ public class ChatDao {
     /**
      * 채팅방 들어가기, 마지막 채팅 인덱스 반환
      * */
-    public GetChatRoomInRes getChatRoomIn(int userIdx, int chatRoomIdx){
+    public GetChatRoomInRes getChatRoomIn(int userIdx, String chatRoomIdx){
         String getChatRoomInQuery = "select lastChatIdx from ChatContent where chatRoomIdx=? and firstUserIdx=?";
         Object[] getChatRoomInParams = new Object[]{chatRoomIdx, userIdx};
 

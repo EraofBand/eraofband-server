@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetChatRoomInReq {
-    private int chatRoomIdx;
+    private String chatRoomIdx;
 
     public GetChatRoomInReq(){
 

@@ -56,7 +56,7 @@ public class ChatProvider {
     /**
      * 채팅방 들어가기
      */
-    public GetChatRoomInRes getChatRoomIn(int userIdx, int chatRoomIdx) throws BaseException {
+    public GetChatRoomInRes getChatRoomIn(int userIdx, String chatRoomIdx) throws BaseException {
 
         try{
             GetChatRoomInRes getChatRoomInRes = chatDao.getChatRoomIn(userIdx, chatRoomIdx);
