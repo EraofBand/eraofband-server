@@ -104,6 +104,7 @@ public class BoardService {
         try{
             result = boardDao.updateBoardStatus(boardIdx);
         } catch(Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
         if(result == 0){

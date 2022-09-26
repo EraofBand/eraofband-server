@@ -521,7 +521,7 @@ public class BoardDao {
                 "    left join BoardImage as bi on (bi.boardIdx=b.boardIdx)\n" +
                 "        set b.status='INACTIVE',\n" +
                 "            bc.status='INACTIVE',\n" +
-                "            bl.status='INACTIVE'\n" +
+                "            bl.status='INACTIVE',\n" +
                 "            bi.status='INACTIVE'\n" +
                 "   where b.boardIdx = ? ";
         Object[] deleteBoardParams = new Object[]{boardIdx};
