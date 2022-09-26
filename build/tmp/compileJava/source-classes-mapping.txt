@@ -80,8 +80,8 @@ com/example/demo/src/user/model/PostLoginRes.java
  com.example.demo.src.user.model.PostLoginRes
 com/example/demo/src/board/model/PostBoardRes.java
  com.example.demo.src.board.model.PostBoardRes
-com/example/demo/src/board/BoardController.java
- com.example.demo.src.board.BoardController
+com/example/demo/src/user/UserController.java
+ com.example.demo.src.user.UserController
 com/example/demo/src/session/model/PostBandLikeRes.java
  com.example.demo.src.session.model.PostBandLikeRes
 com/example/demo/src/user/model/PatchUserReq.java
@@ -110,8 +110,8 @@ com/example/demo/src/session/model/PostBandReq.java
  com.example.demo.src.session.model.PostBandReq
 com/example/demo/src/lesson/model/PatchLesComReq.java
  com.example.demo.src.lesson.model.PatchLesComReq
-com/example/demo/src/board/BoardService.java
- com.example.demo.src.board.BoardService
+com/example/demo/src/user/UserProvider.java
+ com.example.demo.src.user.UserProvider
 com/example/demo/src/user/model/GetFollowRes.java
  com.example.demo.src.user.model.GetFollowRes
 com/example/demo/src/lesson/model/PostSignUpRes.java
@@ -197,8 +197,8 @@ com/example/demo/src/lesson/model/PatchLessonReq.java
  com.example.demo.src.lesson.model.PatchLessonReq
 com/example/demo/src/search/model/GetSearchUserRes.java
  com.example.demo.src.search.model.GetSearchUserRes
-com/example/demo/src/board/BoardDao.java
- com.example.demo.src.board.BoardDao
+com/example/demo/src/user/UserService.java
+ com.example.demo.src.user.UserService
 com/example/demo/src/chat/model/GetChatRoomExistRes.java
  com.example.demo.src.chat.model.GetChatRoomExistRes
 com/example/demo/src/lesson/model/GetMemberRes.java
@@ -263,17 +263,17 @@ com/example/demo/src/pofol/PofolDao.java
  com.example.demo.src.pofol.PofolDao
 com/example/demo/src/search/SearchController.java
  com.example.demo.src.search.SearchController
-com/example/demo/src/board/BoardProvider.java
- com.example.demo.src.board.BoardProvider
+com/example/demo/src/user/UserDao.java
+ com.example.demo.src.user.UserDao
 com/example/demo/src/search/SearchService.java
  com.example.demo.src.search.SearchService
 com/example/demo/src/user/model/GetBlockRes.java
  com.example.demo.src.user.model.GetBlockRes
-com/example/demo/src/user/UserDao.java
- com.example.demo.src.user.UserDao
-com/example/demo/src/user/UserService.java
- com.example.demo.src.user.UserService
-com/example/demo/src/user/UserController.java
- com.example.demo.src.user.UserController
-com/example/demo/src/user/UserProvider.java
- com.example.demo.src.user.UserProvider
+com/example/demo/src/board/BoardProvider.java
+ com.example.demo.src.board.BoardProvider
+com/example/demo/src/board/BoardService.java
+ com.example.demo.src.board.BoardService
+com/example/demo/src/board/BoardDao.java
+ com.example.demo.src.board.BoardDao
+com/example/demo/src/board/BoardController.java
+ com.example.demo.src.board.BoardController
