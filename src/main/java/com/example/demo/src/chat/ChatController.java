@@ -2,10 +2,7 @@ package com.example.demo.src.chat;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.chat.model.GetChatRoomExistReq;
-import com.example.demo.src.chat.model.GetChatRoomExistRes;
-import com.example.demo.src.chat.model.GetChatRoomRes;
-import com.example.demo.src.chat.model.PostChatReq;
+import com.example.demo.src.chat.model.*;
 import com.example.demo.src.lesson.model.PostLessonReq;
 import com.example.demo.src.lesson.model.PostLessonRes;
 import com.example.demo.utils.JwtService;
@@ -101,12 +98,12 @@ public class ChatController {
             @ApiResponse(code=2091, message="채팅방 삭제에 실패했습니다."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<String> deleteChatRoom(@PathVariable("chatRoomIdx") String chatRoomIdx){
+    public BaseResponse<String> deleteChatRoom(@PathVariable("chatRoomIdx") String chatRoomIdx, @RequestBody PatchChatOutReq patchChatOutReq){
         try {
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
 
-            chatService.deleteChatRoom(userIdxByJwt, chatRoomIdx);
+            chatService.deleteChatRoom(userIdxByJwt, chatRoomIdx, patchChatOutReq.getLastChatIdx());
 
             String result = "채팅방 나가기가 완료되었습니다.";
             return new BaseResponse<>(result);
@@ -207,6 +204,32 @@ public class ChatController {
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 채팅방 들어가기 API
+     * [PATCH] /chat/chatroom-in
+     * @return BaseResponse<GetChatRoomInRes>>
+     */
+    @ResponseBody
+    @PatchMapping("/chatroom-in") // (patch) https://eraofband.shop/chat/chatroom-in
+    @ApiOperation(value = "채팅방 들어가기", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<GetChatRoomInRes> getChatRoomIn(@RequestBody GetChatRoomInReq getChatRoomInReq){
+        try{
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+
+            GetChatRoomInRes getChatRoomInRes = chatProvider.getChatRoomIn(userIdxByJwt, getChatRoomInReq.getChatRoomIdx());
+            return new BaseResponse<>(getChatRoomInRes);
+
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
         }
     }
 }

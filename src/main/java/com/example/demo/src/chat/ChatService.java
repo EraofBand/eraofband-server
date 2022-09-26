@@ -72,14 +72,14 @@ public class ChatService {
     /**
      *  채팅방 나가기
      * */
-    public void deleteChatRoom(int userIdx, String chatRoomIdx) throws BaseException {
+    public void deleteChatRoom(int userIdx, String chatRoomIdx, int lastChatIdx) throws BaseException {
 
         if(chatProvider.checkChatRoomExist(userIdx, chatRoomIdx) ==0){
             throw new BaseException(POSTS_EMPTY_CHAT_ID);
         }
 
         try{
-            result = chatDao.updateChatRoomStatus(userIdx, chatRoomIdx);
+            result = chatDao.updateChatRoomStatus(userIdx, chatRoomIdx, lastChatIdx);
 
         } catch(Exception exception){
             //System.out.println(exception);
