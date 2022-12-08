@@ -288,7 +288,7 @@ public class BoardDao {
                     "                            join User as u on u.userIdx = b.userIdx\n" +
                     "                            left join (select boardIdx, userIdx, count(boardLikeIdx) as boardLikeCount from BoardLike WHERE status = 'ACTIVE' group by boardIdx) blc on blc.boardIdx = b.boardIdx\n" +
                     "                            left join (select boardIdx, count(boardCommentIdx) as commentCount from BoardComment WHERE status = 'ACTIVE' group by boardIdx) c on c.boardIdx = b.boardIdx\n" +
-                    "                            left join BoardImage as bi on bi.boardIdx=b.boardIdx and bi.status='ACTIVE'\n" +
+                    "                            left join BoardImage as bi on bi.boardImgIdx=(select boardImgIdx from BoardImage as bbi where bbi.boardIdx=b.boardIdx and bbi.status='ACTIVE' order by bbi.boardImgIdx limit 1) and bi.status='ACTIVE'\n" +
                     "                        WHERE b.category = ? and b.status = 'ACTIVE' and b.boardIdx<?\n" +
                     "                        group by b.boardIdx LIMIT 20;";
 
@@ -320,7 +320,7 @@ public class BoardDao {
                     "                            join User as u on u.userIdx = b.userIdx\n" +
                     "                            left join (select boardIdx, userIdx, count(boardLikeIdx) as boardLikeCount from BoardLike WHERE status = 'ACTIVE' group by boardIdx) blc on blc.boardIdx = b.boardIdx\n" +
                     "                            left join (select boardIdx, count(boardCommentIdx) as commentCount from BoardComment WHERE status = 'ACTIVE' group by boardIdx) c on c.boardIdx = b.boardIdx\n" +
-                    "                            left join BoardImage as bi on bi.boardIdx=b.boardIdx and bi.status='ACTIVE'\n" +
+                    "                            left join BoardImage as bi on bi.boardImgIdx=(select boardImgIdx from BoardImage as bbi where bbi.boardIdx=b.boardIdx and bbi.status='ACTIVE' order by bbi.boardImgIdx limit 1) and bi.status='ACTIVE'\n" +
                     "                        WHERE b.category = ? and b.status = 'ACTIVE' \n" +
                     "                        group by b.boardIdx order by b.boardIdx DESC LIMIT 20;";
 

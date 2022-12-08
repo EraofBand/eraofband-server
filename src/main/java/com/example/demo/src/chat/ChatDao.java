@@ -61,7 +61,7 @@ public class ChatDao {
                 "FROM ChatContent as c\n" +
                 "JOIN User u on c.secondUserIdx=u.userIdx and (u.status='ACTIVE' or u.status='INACTIVE')\n" +
                 "WHERE c.firstUserIdx=? and c.status='ACTIVE'\n" +
-                "group by c.chatIdx";
+                "order by c.updatedAt desc";
         Object[] getChatRoomParams = new Object[]{ userIdx, userIdx };
         return this.jdbcTemplate.query(getChatRoomQuery,
                                        (rs, rowNum) -> new GetChatRoomRes(
