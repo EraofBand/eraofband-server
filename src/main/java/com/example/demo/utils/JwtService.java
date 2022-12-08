@@ -30,8 +30,24 @@ public class JwtService {
                 .setHeaderParam("type","jwt")
                 .claim("userIdx",userIdx)
                 .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*60*24*365)))
+                .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*30)))
                 .signWith(SignatureAlgorithm.HS256, Secret.JWT_SECRET_KEY)
+                .compact();
+    }
+
+    /*
+    Refresh token 생성
+    @param userIdx
+    @return String
+     */
+    public String createRef(int userIdx){
+        Date now = new Date();
+        return Jwts.builder()
+                .setHeaderParam("type","jwt")
+                .claim("userIdx",userIdx)
+                .setIssuedAt(now)
+                .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*60*24*7)))
+                .signWith(SignatureAlgorithm.HS256, Secret.REF_SECRET_KEY)
                 .compact();
     }
 
@@ -68,6 +84,33 @@ public class JwtService {
 
         // 3. userIdx 추출
         return claims.getBody().get("userIdx",Integer.class);
+    }
+
+    /*
+    Refresh token에서 유효시간 추출
+    @return int
+    @throws BaseException
+     */
+    public int getRefExp() throws BaseException{
+        //1. JWT 추출
+        String refreshToken = getJwt();
+        if(refreshToken == null || refreshToken.length() == 0){
+            throw new BaseException(EMPTY_JWT);
+        }
+
+        // 2. JWT parsing
+        Jws<Claims> claims;
+        try{
+            claims = Jwts.parser()
+                    .setSigningKey(Secret.REF_SECRET_KEY)
+                    .parseClaimsJws(refreshToken);
+        } catch (Exception ignored) {
+            throw new BaseException(INVALID_JWT);
+        }
+
+        // 3. 유효시간 추출
+        int exp=(int)claims.getBody().getExpiration().getTime();
+        return exp;
     }
 
 }

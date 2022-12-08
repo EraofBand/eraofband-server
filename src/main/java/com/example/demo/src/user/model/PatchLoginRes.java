@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostLoginRes {
+public class PatchLoginRes {
     private String jwt;
     private int expiration;
-    private String refresh;
-    private int userIdx;
 }

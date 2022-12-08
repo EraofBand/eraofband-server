@@ -51,6 +51,18 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    /**
+     * 유저 로그인 상태 확인
+     */
+    public int checkUserRef(int userIdx, String ref) throws BaseException {
+        try{
+            return userDao.checkUserRef(userIdx, ref);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     /**
      * 다른 유저 페이지 조회
      */
