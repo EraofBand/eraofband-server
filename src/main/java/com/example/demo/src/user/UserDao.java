@@ -188,6 +188,28 @@ public class UserDao {
     }
 
     /**
+     * 유저 리프레시 토큰 변경
+     */
+    public int modifyUserRef(int userIdx, String ref) {
+        String modifyUserRefQuery = "update User set refreshToken=? where userIdx = ?";
+        Object[] modifyUserRefParams = new Object[]{ref, userIdx};
+
+        return this.jdbcTemplate.update(modifyUserRefQuery, modifyUserRefParams);
+    }
+
+    /**
+     * 유저 리프레시 토큰 확인
+     */
+    public int checkUserRef(int userIdx, String ref) {
+        String checkUserRefQuery = "SELECT exists(SELECT userIdx FROM User WHERE userIdx = ? and refreshToken=?)";
+        Object[] checkUserRefParams = new Object[]{userIdx, ref};
+        return this.jdbcTemplate.queryForObject(checkUserRefQuery,
+                int.class,
+                checkUserRefParams);
+    }
+
+
+    /**
      * 기존 유저 정보 반환
      */
     public User getUserIdx(String email) {

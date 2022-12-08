@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -123,8 +124,42 @@ public class UserController {
         }
     }
 
+//    /**
+//     * 카카오 로그인(가입 여부 확인) API
+//     * [POST] /users/login/{access-token}
+//     * @return BaseResponse<PostLoginRes>
+//     */
+//    @ResponseBody
+//    @PostMapping("/login/{access-token}") // (POST) eraofband.sop/users/login/dsfdsbfuewhiuwf...
+//    @ApiImplicitParam(name="access-token", value="접근 가능 토큰", required = true)
+//    @ApiResponses({
+//            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+//            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+//            @ApiResponse(code=2015, message="이메일을 입력해주세요."),
+//            @ApiResponse(code=2016, message="이메일 형식을 확인해주세요."),
+//            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+//    })
+//    public BaseResponse<PostLoginRes> UserLogin(@PathVariable("access-token") String token){
+//        try {
+//            String email=userService.getKakaoInfo(token);
+//            //이메일 필수 처리
+//            if(email.length()==0){
+//                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+//            }
+//            // 이메일 정규표현
+//            if(!isRegexEmail(email)){
+//                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+//            }
+//            PostLoginRes postLoginRes = userService.logIn(email);
+//            return new BaseResponse<>(postLoginRes);
+//
+//        } catch (BaseException exception) {
+//            return new BaseResponse<>((exception.getStatus()));
+//        }
+//    }
+
     /**
-     * 로그인(가입 여부 확인) API
+     * 카카오 로그인(가입 여부 확인) API
      * [POST] /users/login/{kakao-email}
      * @return BaseResponse<PostLoginRes>
      */
@@ -151,6 +186,95 @@ public class UserController {
             PostLoginRes postLoginRes = userService.logIn(email);
             return new BaseResponse<>(postLoginRes);
 
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 자동 로그인 api
+     * [PATCH] /users/auto-login/{userIdx}
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/auto-login/{userIdx}") // (PATCH) eraofband.sop/users/auto-login/12
+    @ApiOperation(value = "자동 로그인 처리", notes = "헤더에 jwt 필요(key: X-ACCESS-TOKEN, value: jwt 값)")
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2007, message="유저가 로그아웃 상태입니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> autoLogin(@PathVariable("userIdx") int userIdx){
+        try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            //로그인 상태인지 확인
+            int log=userProvider.checkLogin(userIdx);
+            if(log==0){
+                return new BaseResponse<>(INVALID_USER_STATUS);
+            }
+
+            String result="자동 로그인 가능합니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * refresh token으로 jwt 재발급 api
+     * [PATCH] /users/refresh/{userIdx}
+     * @return BaseResponse<PatchLoginRes>
+     */
+    @ResponseBody
+    @PatchMapping("/refresh/{userIdx}") // (PATCH) eraofband.sop/users/refresh
+    @ApiOperation(value = "jwt 재발급 처리", notes = "헤더에 refresh token 필요(key: X-ACCESS-TOKEN, value: refresh token 값)")
+    @ApiResponses({
+            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+            @ApiResponse(code=2008, message="유효 시간이 지나 로그아웃 처리되었습니다."),
+            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<PatchLoginRes> reJwt(@PathVariable("userIdx") int userIdx){
+        try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            //refresh token 유효시간 검사
+            int expTime=jwtService.getRefExp();
+            Date current=new Date(System.currentTimeMillis());
+            int cur=(int)current.getTime();
+            if(cur>expTime){
+                //로그아웃 처리
+                userService.logoutUser(userIdx);
+                return  new BaseResponse<>(PATCH_USER_STATUS);
+            }
+
+            //refresh token 값 db와 비교
+            String ref=jwtService.getJwt();
+            int check=userProvider.checkUserRef(userIdx,ref);
+            if(check==0){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            //jwt 유효시간
+            Date time=new Date(System.currentTimeMillis()+1*(1000*60*60*24*365));
+            int exp= (int) time.getTime();
+            //새 jwt 발급
+            String jwt = jwtService.createJwt(userIdx);
+            PatchLoginRes patchLoginRes = new PatchLoginRes(jwt, exp);
+
+            return new BaseResponse<>(patchLoginRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -104,16 +105,23 @@ public class UserService {
     public PostUserRes createUser(PostUserReq postUserReq, String email) throws BaseException {
         try {
             int userIdx = userDao.createUser(postUserReq, email);
+            //jwt 유효시간
+            Date time=new Date(System.currentTimeMillis()+1*(1000*60*60*24*365));
+            int exp= (int) time.getTime();
             //jwt 발급
             String jwt = jwtService.createJwt(userIdx);
-            return new PostUserRes(jwt, userIdx);
+            //refresh token 발급
+            String refresh=jwtService.createRef(userIdx);
+            //db에 refresh token 저장
+            userDao.modifyUserRef(userIdx, refresh);
+            return new PostUserRes(jwt, exp, refresh, userIdx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
     /**
-     * 로그인 및 jwt 생성
+     * 카카오 로그인 및 jwt 생성
      */
     public PostLoginRes logIn(String email) throws BaseException {
         try {
@@ -123,13 +131,20 @@ public class UserService {
                 int userIdx = user.getUserIdx();
                 userDao.loginUser(userIdx);
 
+                //jwt 유효시간
+                Date time=new Date(System.currentTimeMillis()+1*(1000*60*60*24*365));
+                int exp= (int) time.getTime();
                 //새 jwt 발급
                 String jwt = jwtService.createJwt(userIdx);
-                return new PostLoginRes(userIdx, jwt);
+                //refresh token 발급
+                String refresh=jwtService.createRef(userIdx);
+                //db에 refresh token 저장
+                userDao.modifyUserRef(userIdx, refresh);
+                return new PostLoginRes(jwt, exp, refresh, userIdx);
             }
 
             //회원가입이 되어 있지 않은 경우
-            return new PostLoginRes(0, "NULL");
+            return new PostLoginRes("NULL",0,"NULL",0);
 
         }catch(Exception exception){
                 System.out.println(exception);

@@ -23,6 +23,8 @@ public enum BaseResponseStatus {
     INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
     CHAT_SEND_FAIL_BLOCKED(false,2004,"채팅을 보낼 수 없는 유저입니다."),
     COMMENT_FAIL_BLOCKED(false,2006,"상대방이 회원님을 차단하여 댓글을 등록할 수 없습니다."),
+    INVALID_USER_STATUS(false,2007,"유저가 로그아웃 상태입니다."),
+    PATCH_USER_STATUS(false, 2008, "유효 시간이 지나 로그아웃 처리되었습니다."),
     UNBLOCK_FAIL_USER(false,2077,"유저 차단 해제에 실패했습니다."),
 
     // users
