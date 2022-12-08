@@ -4,6 +4,8 @@ com/example/demo/src/board/BoardProvider.java
  com.example.demo.src.board.BoardProvider
 com/example/demo/src/lesson/LessonService.java
  com.example.demo.src.lesson.LessonService
+com/example/demo/src/user/model/PatchLoginRes.java
+ com.example.demo.src.user.model.PatchLoginRes
 com/example/demo/src/lesson/model/GetLessonNotiInfoRes.java
  com.example.demo.src.lesson.model.GetLessonNotiInfoRes
 com/example/demo/src/pofol/model/GetCommentRes.java

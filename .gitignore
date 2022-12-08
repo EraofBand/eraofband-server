@@ -5,5 +5,8 @@ build/
 .iml
 
 aws.yml
+rds.yml
+
+Secret.java
 
 firebase_service_key.json
