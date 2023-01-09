@@ -217,9 +217,9 @@ public class LessonController {
             }
 
             PostSignUpRes postSignUpRes = lessonService.applyLesson(userIdxByJwt, lessonIdx);
-            //lessonService.sendMessageTo(
-            //        "레슨 등록",
-            //        "에 등록하셨습니다.");
+            lessonService.sendMessageTo(
+                    "레슨 등록",
+                    "에 등록하셨습니다.");
 
             return new BaseResponse<>(postSignUpRes);
         } catch(BaseException exception){
