@@ -312,9 +312,9 @@ public class BoardController {
             boardService.addGroupNum(boardCommentIdx);
             //생성한 댓글 조회
             GetBoardCommentRes getComment = boardProvider.certainComment(boardCommentIdx);
-            //boardService.sendMessageTo(
-            //        "게시물 댓글",
-            //        "에 댓글을 남기셨습니다.");
+            boardService.sendMessageTo(
+                    "게시물 댓글",
+                    "에 댓글을 남기셨습니다.");
             return new BaseResponse<>(getComment);
 
 
@@ -360,9 +360,9 @@ public class BoardController {
 
             //생성한 댓글 조회
             GetBoardCommentRes getComment = boardProvider.certainComment(boardCommentIdx);
-//            boardService.sendReMessageTo(
-//                    "게시물 답글",
-//                    "회원님의 댓글에 답글을 달았습니다.", postBoardCommentReq);
+            boardService.sendReMessageTo(
+                    "게시물 답글",
+                    "회원님의 댓글에 답글을 달았습니다.", postBoardReCommentReq);
             return new BaseResponse<>(getComment);
 
 

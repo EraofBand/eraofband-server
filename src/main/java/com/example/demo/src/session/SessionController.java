@@ -285,9 +285,9 @@ public class SessionController {
             }
 
             PostApplyRes postApplyRes = sessionService.applySession(userIdxByJwt, bandIdx, postApplyReq);
-            //sessionService.sendMessageTo(
-            //        "밴드 지원",
-            //        "에 지원하셨습니다.");
+            sessionService.sendMessageTo(
+                    "밴드 지원",
+                    "에 지원하셨습니다.");
 
             return new BaseResponse<>(postApplyRes);
         } catch (BaseException exception) {
@@ -352,11 +352,11 @@ public class SessionController {
             sessionService.acceptSession(bandIdx, userIdx);
 
             String result = "세션 지원이 수락되었습니다.";
-            //sessionService.sendMessage(
-            //        bandIdx,
-            //        userIdx,
-            //        "밴드 가입 수락",
-            //        "의 가입이 수락되었습니다.");
+            sessionService.sendMessage(
+                    bandIdx,
+                    userIdx,
+                    "밴드 가입 수락",
+                    "의 가입이 수락되었습니다.");
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -384,11 +384,11 @@ public class SessionController {
             sessionService.rejectSession(bandIdx, userIdx);
 
             String result = "세션 지원이 거절되었습니다.";
-            //sessionService.sendMessage(
-            //        bandIdx,
-            //        userIdx,
-            //        "밴드 가입 거절",
-            //        "의 가입이 거절되었습니다.");
+            sessionService.sendMessage(
+                    bandIdx,
+                    userIdx,
+                    "밴드 가입 거절",
+                    "의 가입이 거절되었습니다.");
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

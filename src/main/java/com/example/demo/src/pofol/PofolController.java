@@ -338,9 +338,9 @@ public class PofolController {
             int pofolCommentIdx = pofolService.createComment(pofolIdx, userIdxByJwt,postCommentReq);
 
             GetCommentRes getComment = pofolProvider.certainComment(pofolCommentIdx);
-            //pofolService.sendMessageTo(
-            //        "포트폴리오 댓글",
-            //        "에 댓글을 남기셨습니다.");
+            pofolService.sendMessageTo(
+                    "포트폴리오 댓글",
+                    "에 댓글을 남기셨습니다.");
             return new BaseResponse<>(getComment);
 
 

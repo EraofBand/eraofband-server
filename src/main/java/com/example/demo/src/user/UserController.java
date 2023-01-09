@@ -98,6 +98,7 @@ public class UserController {
     // Body
     @ResponseBody
     @PostMapping("/signin/{access-token}") // (POST) eraofband.shop/users/signin/dsfdsbfuewhiuwf...
+    @ApiOperation(value = "카카오 회원가입")
     @ApiImplicitParam(name="access-token", value="접근 가능 토큰", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
@@ -124,48 +125,15 @@ public class UserController {
         }
     }
 
-//    /**
-//     * 카카오 로그인(가입 여부 확인) API
-//     * [POST] /users/login/{access-token}
-//     * @return BaseResponse<PostLoginRes>
-//     */
-//    @ResponseBody
-//    @PostMapping("/login/{access-token}") // (POST) eraofband.sop/users/login/dsfdsbfuewhiuwf...
-//    @ApiImplicitParam(name="access-token", value="접근 가능 토큰", required = true)
-//    @ApiResponses({
-//            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
-//            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
-//            @ApiResponse(code=2015, message="이메일을 입력해주세요."),
-//            @ApiResponse(code=2016, message="이메일 형식을 확인해주세요."),
-//            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
-//    })
-//    public BaseResponse<PostLoginRes> UserLogin(@PathVariable("access-token") String token){
-//        try {
-//            String email=userService.getKakaoInfo(token);
-//            //이메일 필수 처리
-//            if(email.length()==0){
-//                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-//            }
-//            // 이메일 정규표현
-//            if(!isRegexEmail(email)){
-//                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
-//            }
-//            PostLoginRes postLoginRes = userService.logIn(email);
-//            return new BaseResponse<>(postLoginRes);
-//
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
-
     /**
      * 카카오 로그인(가입 여부 확인) API
-     * [POST] /users/login/{kakao-email}
+     * [POST] /users/login/{access-token}
      * @return BaseResponse<PostLoginRes>
      */
     @ResponseBody
-    @PostMapping("/login/{kakao-email}") // (POST) eraofband.sop/users/login/jdshkf@gmail.com
-    @ApiImplicitParam(name="kakao-email", value="회원가입용 이메일", required = true)
+    @PostMapping("/login/{access-token}") // (POST) eraofband.sop/users/login/dsfdsbfuewhiuwf...
+    @ApiOperation(value = "카카오 로그인")
+    @ApiImplicitParam(name="access-token", value="접근 가능 토큰", required = true)
     @ApiResponses({
             @ApiResponse(code=2001, message="JWT를 입력해주세요."),
             @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
@@ -173,8 +141,9 @@ public class UserController {
             @ApiResponse(code=2016, message="이메일 형식을 확인해주세요."),
             @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
     })
-    public BaseResponse<PostLoginRes> UserLogin(@PathVariable("kakao-email") String email){
+    public BaseResponse<PostLoginRes> UserLogin(@PathVariable("access-token") String token){
         try {
+            String email=userService.getKakaoInfo(token);
             //이메일 필수 처리
             if(email.length()==0){
                 return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
@@ -190,6 +159,40 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+//    /**
+//     * 카카오 로그인(가입 여부 확인) API
+//     * [POST] /users/login/{kakao-email}
+//     * @return BaseResponse<PostLoginRes>
+//     */
+//    @ResponseBody
+//    @PostMapping("/login/{kakao-email}") // (POST) eraofband.sop/users/login/jdshkf@gmail.com
+//    @ApiOperation(value = "카카오 로그인")
+//    @ApiImplicitParam(name="kakao-email", value="회원가입용 이메일", required = true)
+//    @ApiResponses({
+//            @ApiResponse(code=2001, message="JWT를 입력해주세요."),
+//            @ApiResponse(code=2002, message="유효하지 않은 JWT입니다."),
+//            @ApiResponse(code=2015, message="이메일을 입력해주세요."),
+//            @ApiResponse(code=2016, message="이메일 형식을 확인해주세요."),
+//            @ApiResponse(code=4000, message="데이터베이스 연결에 실패하였습니다.")
+//    })
+//    public BaseResponse<PostLoginRes> UserLogin(@PathVariable("kakao-email") String email){
+//        try {
+//            //이메일 필수 처리
+//            if(email.length()==0){
+//                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+//            }
+//            // 이메일 정규표현
+//            if(!isRegexEmail(email)){
+//                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+//            }
+//            PostLoginRes postLoginRes = userService.logIn(email);
+//            return new BaseResponse<>(postLoginRes);
+//
+//        } catch (BaseException exception) {
+//            return new BaseResponse<>((exception.getStatus()));
+//        }
+//    }
 
     /**
      * 자동 로그인 api
@@ -432,11 +435,11 @@ public class UserController {
             //상대가 로그아웃 상태인지 확인
             int log=userProvider.checkLogin(userIdx);
             if(log==1) {
-                //userService.sendMessageTo(
-                //        userIdxByJwt,
-                //        userIdx,
-                //        "팔로우",
-                //        "님이 회원님을 팔로우 했습니다.");
+                userService.sendMessageTo(
+                        userIdxByJwt,
+                        userIdx,
+                        "팔로우",
+                        "님이 회원님을 팔로우 했습니다.");
             }
 
             return new BaseResponse<>(postFollowRes);
