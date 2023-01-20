@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostUserRes {
     private String jwt;
-    private int expiration;
+    private long expiration;
     private String refresh;
     private int userIdx;
 }

@@ -271,8 +271,7 @@ public class UserController {
             }
 
             //jwt 유효시간
-            Date time=new Date(System.currentTimeMillis()+1*(1000*60*60*24*365));
-            int exp= (int) time.getTime();
+            long exp= System.currentTimeMillis()+1*(1000*60*30);
             //새 jwt 발급
             String jwt = jwtService.createJwt(userIdx);
             PatchLoginRes patchLoginRes = new PatchLoginRes(jwt, exp);

@@ -106,8 +106,7 @@ public class UserService {
         try {
             int userIdx = userDao.createUser(postUserReq, email);
             //jwt 유효시간
-            Date time=new Date(System.currentTimeMillis()+1*(1000*60*60*24*365));
-            int exp= (int) time.getTime();
+            long exp= System.currentTimeMillis()+1*(1000*60*30);
             //jwt 발급
             String jwt = jwtService.createJwt(userIdx);
             //refresh token 발급
@@ -132,8 +131,7 @@ public class UserService {
                 userDao.loginUser(userIdx);
 
                 //jwt 유효시간
-                Date time=new Date(System.currentTimeMillis()+1*(1000*60*60*24*365));
-                int exp= (int) time.getTime();
+                long exp= System.currentTimeMillis()+1*(1000*60*30);
                 //새 jwt 발급
                 String jwt = jwtService.createJwt(userIdx);
                 //refresh token 발급

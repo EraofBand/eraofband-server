@@ -9,5 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PatchLoginRes {
     private String jwt;
-    private int expiration;
+    private long expiration;
 }
